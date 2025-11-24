@@ -73,17 +73,17 @@ Após traduzir cada arquivo, marque o checkpoint com `[x]`.
 - [x] `_content/solutions/webdev.md` - Web Development
 
 ### 3.3 Estudos de Caso - Empresas (A-C)
-- [ ] `_content/solutions/allegro.md` - Allegro
-- [ ] `_content/solutions/americanexpress.md` - American Express
-- [ ] `_content/solutions/armut.md` - Armut
-- [ ] `_content/solutions/bitly.md` - Bitly
-- [ ] `_content/solutions/bytedance.md` - ByteDance
-- [ ] `_content/solutions/capital-one.md` - Capital One
-- [ ] `_content/solutions/chrome.md` - Chrome
-- [ ] `_content/solutions/cloudflare.md` - Cloudflare
-- [ ] `_content/solutions/cockroachlabs.md` - CockroachLabs
-- [ ] `_content/solutions/coredata.md` - CoreData
-- [ ] `_content/solutions/curve.md` - Curve
+- [x] `_content/solutions/allegro.md` - Allegro
+- [x] `_content/solutions/americanexpress.md` - American Express
+- [x] `_content/solutions/armut.md` - Armut
+- [x] `_content/solutions/bitly.md` - Bitly
+- [x] `_content/solutions/bytedance.md` - ByteDance
+- [x] `_content/solutions/capital-one.md` - Capital One
+- [x] `_content/solutions/chrome.md` - Chrome
+- [x] `_content/solutions/cloudflare.md` - Cloudflare
+- [x] `_content/solutions/cockroachlabs.md` - CockroachLabs
+- [x] `_content/solutions/coredata.md` - CoreData
+- [x] `_content/solutions/curve.md` - Curve
 
 ### 3.4 Estudos de Caso - Empresas (D-M)
 - [ ] `_content/solutions/dropbox.md` - Dropbox
@@ -156,7 +156,7 @@ Após traduzir cada arquivo, marque o checkpoint com `[x]`.
 | Tour Templates | 5 | 0 | 0% |
 | Learn | 8 | 8 | 100% |
 | Solutions Principal | 7 | 7 | 100% |
-| Solutions A-C | 11 | 0 | 0% |
+| Solutions A-C | 11 | 11 | 100% |
 | Solutions D-M | 7 | 1 | 14% |
 | Solutions N-Z | 12 | 2 | 17% |
 | Google Solutions | 5 | 0 | 0% |
@@ -164,7 +164,7 @@ Após traduzir cada arquivo, marque o checkpoint com `[x]`.
 | gopls | 2 | 0 | 0% |
 | ref | 1 | 0 | 0% |
 | Wiki | 1 | 0 | 0% |
-| **TOTAL** | **73** | **25** | **34%** |
+| **TOTAL** | **73** | **36** | **49%** |
 
 ---
 
