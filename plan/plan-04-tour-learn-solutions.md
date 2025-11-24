@@ -23,10 +23,10 @@ Após traduzir cada arquivo, marque o checkpoint com `[x]`.
 - [x] `_content/tour/welcome.article` - Boas-vindas
 - [x] `_content/tour/basics.article` - Básicos
 - [x] `_content/tour/flowcontrol.article` - Controle de fluxo
-- [ ] `_content/tour/moretypes.article` - Mais tipos
-- [ ] `_content/tour/methods.article` - Métodos
-- [ ] `_content/tour/concurrency.article` - Concorrência
-- [ ] `_content/tour/generics.article` - Generics
+- [x] `_content/tour/moretypes.article` - Mais tipos
+- [x] `_content/tour/methods.article` - Métodos
+- [x] `_content/tour/concurrency.article` - Concorrência
+- [x] `_content/tour/generics.article` - Generics
 
 ### 1.2 Templates e Partials (Opcional)
 
@@ -152,7 +152,7 @@ Após traduzir cada arquivo, marque o checkpoint com `[x]`.
 
 | Seção | Total | Traduzidos | Progresso |
 |-------|-------|------------|-----------|
-| Tour Articles | 7 | 3 | 43% |
+| Tour Articles | 7 | 7 | 100% |
 | Tour Templates | 5 | 0 | 0% |
 | Learn | 8 | 0 | 0% |
 | Solutions Principal | 7 | 0 | 0% |
@@ -164,7 +164,7 @@ Após traduzir cada arquivo, marque o checkpoint com `[x]`.
 | gopls | 2 | 0 | 0% |
 | ref | 1 | 0 | 0% |
 | Wiki | 1 | 0 | 0% |
-| **TOTAL** | **73** | **6** | **8%** |
+| **TOTAL** | **73** | **10** | **14%** |
 
 ---
 

@@ -1,309 +1,310 @@
-Methods and interfaces
-This lesson covers methods and interfaces, the constructs that define objects and their behavior.
+ia-translated: true
+Methods e interfaces
+Esta lição cobre methods e interfaces, as construções que definem objetos e seu comportamento.
 
 The Go Authors
 https://golang.org
 
 * Methods
 
-Go does not have classes.
-However, you can define methods on types.
+Go não possui classes.
+No entanto, você pode definir methods em tipos.
 
-A method is a function with a special _receiver_ argument.
+Um method é uma função com um argumento especial _receiver_.
 
-The receiver appears in its own argument list between the `func` keyword and
-the method name.
+O receiver aparece em sua própria lista de argumentos entre a palavra-chave `func` e
+o nome do method.
 
-In this example, the `Abs` method has a receiver of type `Vertex` named `v`.
+Neste exemplo, o method `Abs` tem um receiver do tipo `Vertex` chamado `v`.
 
 .play methods/methods.go
 
-* Methods are functions
+* Methods são funções
 
-Remember: a method is just a function with a receiver argument.
+Lembre-se: um method é apenas uma função com um argumento receiver.
 
-Here's `Abs` written as a regular function with no change in functionality.
+Aqui está `Abs` escrito como uma função regular sem mudança na funcionalidade.
 
 .play methods/methods-funcs.go
 
-* Methods continued
+* Methods continuação
 
-You can declare a method on non-struct types, too.
+Você pode declarar um method em tipos não-struct também.
 
-In this example we see a numeric type `MyFloat` with an `Abs` method.
+Neste exemplo, vemos um tipo numérico `MyFloat` com um method `Abs`.
 
-You can only declare a method with a receiver whose type is defined in the same
-package as the method.
-You cannot declare a method with a receiver whose type is defined in another
-package (which includes the built-in types such as `int`).
+Você só pode declarar um method com um receiver cujo tipo é definido no mesmo
+package que o method.
+Você não pode declarar um method com um receiver cujo tipo é definido em outro
+package (o que inclui os tipos built-in como `int`).
 
 .play methods/methods-continued.go
 
 * Pointer receivers
 
-You can declare methods with pointer receivers.
+Você pode declarar methods com pointer receivers.
 
-This means the receiver type has the literal syntax `*T` for some type `T`.
-(Also, `T` cannot itself be a pointer such as `*int`.)
+Isso significa que o tipo do receiver tem a sintaxe literal `*T` para algum tipo `T`.
+(Além disso, `T` não pode ser um pointer como `*int`.)
 
-For example, the `Scale` method here is defined on `*Vertex`.
+Por exemplo, o method `Scale` aqui é definido em `*Vertex`.
 
-Methods with pointer receivers can modify the value to which the receiver
-points (as `Scale` does here).
-Since methods often need to modify their receiver, pointer receivers are more
-common than value receivers.
+Methods com pointer receivers podem modificar o valor para o qual o receiver
+aponta (como `Scale` faz aqui).
+Como methods frequentemente precisam modificar seu receiver, pointer receivers são mais
+comuns do que value receivers.
 
-Try removing the `*` from the declaration of the `Scale` function on line 16
-and observe how the program's behavior changes.
+Tente remover o `*` da declaração da função `Scale` na linha 16
+e observe como o comportamento do programa muda.
 
-With a value receiver, the `Scale` method operates on a copy of the original
-`Vertex` value.
-(This is the same behavior as for any other function argument.)
-The `Scale` method must have a pointer receiver to change the `Vertex` value
-declared in the `main` function.
+Com um value receiver, o method `Scale` opera em uma cópia do valor original
+`Vertex`.
+(Este é o mesmo comportamento de qualquer outro argumento de função.)
+O method `Scale` deve ter um pointer receiver para alterar o valor `Vertex`
+declarado na função `main`.
 
 .play methods/methods-pointers.go
 
-* Pointers and functions
+* Pointers e funções
 
-Here we see the `Abs` and `Scale` methods rewritten as functions.
+Aqui vemos os methods `Abs` e `Scale` reescritos como funções.
 
-Again, try removing the `*` from line 16.
-Can you see why the behavior changes?
-What else did you need to change for the example to compile?
+Novamente, tente remover o `*` da linha 16.
+Você consegue ver por que o comportamento muda?
+O que mais você precisou mudar para o exemplo compilar?
 
-(If you're not sure, continue to the next page.)
+(Se você não tem certeza, continue para a próxima página.)
 
 .play methods/methods-pointers-explained.go
 
-* Methods and pointer indirection
+* Methods e indireção de pointer
 
-Comparing the previous two programs, you might notice that
-functions with a pointer argument must take a pointer:
+Comparando os dois programas anteriores, você pode perceber que
+funções com um argumento pointer devem receber um pointer:
 
 	var v Vertex
-	ScaleFunc(v, 5)  // Compile error!
+	ScaleFunc(v, 5)  // Erro de compilação!
 	ScaleFunc(&v, 5) // OK
 
-while methods with pointer receivers take either a value or a pointer as the
-receiver when they are called:
+enquanto methods com pointer receivers aceitam tanto um valor quanto um pointer como
+receiver quando são chamados:
 
 	var v Vertex
 	v.Scale(5)  // OK
 	p := &v
 	p.Scale(10) // OK
 
-For the statement `v.Scale(5)`, even though `v` is a value and not a pointer,
-the method with the pointer receiver is called automatically.
-That is, as a convenience, Go interprets the statement `v.Scale(5)` as
-`(&v).Scale(5)` since the `Scale` method has a pointer receiver.
+Para a instrução `v.Scale(5)`, mesmo que `v` seja um valor e não um pointer,
+o method com o pointer receiver é chamado automaticamente.
+Ou seja, como uma conveniência, Go interpreta a instrução `v.Scale(5)` como
+`(&v).Scale(5)` já que o method `Scale` tem um pointer receiver.
 
 .play methods/indirection.go
 
-* Methods and pointer indirection (2)
+* Methods e indireção de pointer (2)
 
-The equivalent thing happens in the reverse direction.
+A coisa equivalente acontece na direção reversa.
 
-Functions that take a value argument must take a value of that specific type:
+Funções que recebem um argumento de valor devem receber um valor daquele tipo específico:
 
 	var v Vertex
 	fmt.Println(AbsFunc(v))  // OK
-	fmt.Println(AbsFunc(&v)) // Compile error!
+	fmt.Println(AbsFunc(&v)) // Erro de compilação!
 
-while methods with value receivers take either a value or a pointer as the
-receiver when they are called:
+enquanto methods com value receivers aceitam tanto um valor quanto um pointer como
+receiver quando são chamados:
 
 	var v Vertex
 	fmt.Println(v.Abs()) // OK
 	p := &v
 	fmt.Println(p.Abs()) // OK
 
-In this case, the method call `p.Abs()` is interpreted as `(*p).Abs()`.
+Neste caso, a chamada do method `p.Abs()` é interpretada como `(*p).Abs()`.
 
 .play methods/indirection-values.go
 
-* Choosing a value or pointer receiver
+* Escolhendo um value ou pointer receiver
 
-There are two reasons to use a pointer receiver.
+Existem duas razões para usar um pointer receiver.
 
-The first is so that the method can modify the value that its receiver points to.
+A primeira é para que o method possa modificar o valor para o qual seu receiver aponta.
 
-The second is to avoid copying the value on each method call.
-This can be more efficient if the receiver is a large struct, for example.
+A segunda é para evitar copiar o valor em cada chamada do method.
+Isso pode ser mais eficiente se o receiver for uma struct grande, por exemplo.
 
-In this example, both `Scale` and `Abs` are methods with receiver type `*Vertex`,
-even though the `Abs` method needn't modify its receiver.
+Neste exemplo, tanto `Scale` quanto `Abs` são methods com tipo de receiver `*Vertex`,
+mesmo que o method `Abs` não precise modificar seu receiver.
 
-In general, all methods on a given type should have either value or pointer
-receivers, but not a mixture of both.
-(We'll see why over the next few pages.)
+Em geral, todos os methods em um determinado tipo devem ter value ou pointer
+receivers, mas não uma mistura de ambos.
+(Veremos o porquê nas próximas páginas.)
 
 .play methods/methods-with-pointer-receivers.go
 
 * Interfaces
 
-An _interface_type_ is defined as a set of method signatures.
+Um _tipo_interface_ é definido como um conjunto de assinaturas de methods.
 
-A value of interface type can hold any value that implements those methods.
+Um valor do tipo interface pode conter qualquer valor que implemente esses methods.
 
-*Note:* There is an error in the example code on line 22.
-`Vertex` (the value type) doesn't implement `Abser` because
-the `Abs` method is defined only on `*Vertex` (the pointer type).
+*Nota:* Há um erro no código de exemplo na linha 22.
+`Vertex` (o tipo de valor) não implementa `Abser` porque
+o method `Abs` é definido apenas em `*Vertex` (o tipo pointer).
 
 .play methods/interfaces.go
 
-* Interfaces are implemented implicitly
+* Interfaces são implementadas implicitamente
 
-A type implements an interface by implementing its methods.
-There is no explicit declaration of intent, no "implements" keyword.
+Um tipo implementa uma interface implementando seus methods.
+Não há declaração explícita de intenção, nenhuma palavra-chave "implements".
 
-Implicit interfaces decouple the definition of an interface from its
-implementation, which could then appear in any package without prearrangement.
+Interfaces implícitas desacoplam a definição de uma interface de sua
+implementação, que pode então aparecer em qualquer package sem prévio acordo.
 
 .play methods/interfaces-are-satisfied-implicitly.go
 
-* Interface values
+* Valores de interface
 
-Under the hood, interface values can be thought of as a tuple of a value and a
-concrete type:
+Por baixo dos panos, valores de interface podem ser pensados como uma tupla de um valor e um
+tipo concreto:
 
 	(value, type)
 
-An interface value holds a value of a specific underlying concrete type.
+Um valor de interface contém um valor de um tipo concreto subjacente específico.
 
-Calling a method on an interface value executes the method of the same name on
-its underlying type.
+Chamar um method em um valor de interface executa o method de mesmo nome em
+seu tipo subjacente.
 
 .play methods/interface-values.go
 
-* Interface values with nil underlying values
+* Valores de interface com valores subjacentes nil
 
-If the concrete value inside the interface itself is nil,
-the method will be called with a nil receiver.
+Se o valor concreto dentro da interface em si é nil,
+o method será chamado com um receiver nil.
 
-In some languages this would trigger a null pointer exception,
-but in Go it is common to write methods that gracefully handle being called
-with a nil receiver (as with the method `M` in this example.)
+Em algumas linguagens isso dispararia uma exceção de pointer nulo,
+mas em Go é comum escrever methods que tratam graciosamente sendo chamados
+com um receiver nil (como com o method `M` neste exemplo.)
 
-Note that an interface value that holds a nil concrete value is itself non-nil.
+Note que um valor de interface que contém um valor concreto nil é em si não-nil.
 
 .play methods/interface-values-with-nil.go
 
-* Nil interface values
+* Valores de interface nil
 
-A nil interface value holds neither value nor concrete type.
+Um valor de interface nil não contém nem valor nem tipo concreto.
 
-Calling a method on a nil interface is a run-time error because there is no
-type inside the interface tuple to indicate which _concrete_ method to call.
+Chamar um method em uma interface nil é um erro de tempo de execução porque não há
+tipo dentro da tupla de interface para indicar qual method _concreto_ chamar.
 
 .play methods/nil-interface-values.go
 
-* The empty interface
+* A interface vazia
 
-The interface type that specifies zero methods is known as the _empty_interface_:
+O tipo de interface que especifica zero methods é conhecido como _interface_vazia_:
 
 	interface{}
 
-An empty interface may hold values of any type.
-(Every type implements at least zero methods.)
+Uma interface vazia pode conter valores de qualquer tipo.
+(Todo tipo implementa pelo menos zero methods.)
 
-Empty interfaces are used by code that handles values of unknown type.
-For example, `fmt.Print` takes any number of arguments of type `interface{}`.
+Interfaces vazias são usadas por código que manipula valores de tipo desconhecido.
+Por exemplo, `fmt.Print` recebe qualquer número de argumentos do tipo `interface{}`.
 
 .play methods/empty-interface.go
 
 * Type assertions
 
-A _type_assertion_ provides access to an interface value's underlying concrete value.
+Uma _type_assertion_ fornece acesso ao valor concreto subjacente de um valor de interface.
 
 	t := i.(T)
 
-This statement asserts that the interface value `i` holds the concrete type `T`
-and assigns the underlying `T` value to the variable `t`.
+Esta instrução afirma que o valor de interface `i` contém o tipo concreto `T`
+e atribui o valor `T` subjacente à variável `t`.
 
-If `i` does not hold a `T`, the statement will trigger a panic.
+Se `i` não contém um `T`, a instrução disparará um panic.
 
-To _test_ whether an interface value holds a specific type,
-a type assertion can return two values: the underlying value
-and a boolean value that reports whether the assertion succeeded.
+Para _testar_ se um valor de interface contém um tipo específico,
+uma type assertion pode retornar dois valores: o valor subjacente
+e um valor booleano que informa se a assertion teve sucesso.
 
 	t, ok := i.(T)
 
-If `i` holds a `T`, then `t` will be the underlying value and `ok` will be true.
+Se `i` contém um `T`, então `t` será o valor subjacente e `ok` será true.
 
-If not, `ok` will be false and `t` will be the zero value of type `T`,
-and no panic occurs.
+Caso contrário, `ok` será false e `t` será o valor zero do tipo `T`,
+e nenhum panic ocorre.
 
-Note the similarity between this syntax and that of reading from a map.
+Note a similaridade entre esta sintaxe e a de ler de um map.
 
 .play methods/type-assertions.go
 
 * Type switches
 
-A _type_switch_ is a construct that permits several type assertions in series.
+Um _type_switch_ é uma construção que permite várias type assertions em série.
 
-A type switch is like a regular switch statement, but the cases in a type
-switch specify types (not values), and those values are compared against
-the type of the value held by the given interface value.
+Um type switch é como uma instrução switch regular, mas os cases em um type
+switch especificam tipos (não valores), e esses valores são comparados com
+o tipo do valor contido pelo valor de interface dado.
 
 	switch v := i.(type) {
 	case T:
-		// here v has type T
+		// aqui v tem tipo T
 	case S:
-		// here v has type S
+		// aqui v tem tipo S
 	default:
-		// no match; here v has the same type as i
+		// sem correspondência; aqui v tem o mesmo tipo que i
 	}
 
-The declaration in a type switch has the same syntax as a type assertion `i.(T)`,
-but the specific type `T` is replaced with the keyword `type`.
+A declaração em um type switch tem a mesma sintaxe de uma type assertion `i.(T)`,
+mas o tipo específico `T` é substituído pela palavra-chave `type`.
 
-This switch statement tests whether the interface value `i`
-holds a value of type `T` or `S`.
-In each of the `T` and `S` cases, the variable `v` will be of type
-`T` or `S` respectively and hold the value held by `i`.
-In the default case (where there is no match), the variable `v` is
-of the same interface type and value as `i`.
+Esta instrução switch testa se o valor de interface `i`
+contém um valor do tipo `T` ou `S`.
+Em cada um dos cases `T` e `S`, a variável `v` será do tipo
+`T` ou `S` respectivamente e conterá o valor contido por `i`.
+No case default (onde não há correspondência), a variável `v` é
+do mesmo tipo de interface e valor que `i`.
 
 .play methods/type-switches.go
 
 * Stringers
 
-One of the most ubiquitous interfaces is [[/pkg/fmt/#Stringer][`Stringer`]] defined by the [[/pkg/fmt/][`fmt`]] package.
+Uma das interfaces mais ubíquas é [[/pkg/fmt/#Stringer][`Stringer`]] definida pelo package [[/pkg/fmt/][`fmt`]].
 
 	type Stringer interface {
 		String() string
 	}
 
-A `Stringer` is a type that can describe itself as a string. The `fmt` package
-(and many others) look for this interface to print values.
+Um `Stringer` é um tipo que pode descrever a si mesmo como uma string. O package `fmt`
+(e muitos outros) procuram por esta interface para imprimir valores.
 
 .play methods/stringer.go
 
-* Exercise: Stringers
+* Exercício: Stringers
 
-Make the `IPAddr` type implement `fmt.Stringer` to print the address as
-a dotted quad.
+Faça o tipo `IPAddr` implementar `fmt.Stringer` para imprimir o endereço como
+um quad pontuado.
 
-For instance, `IPAddr{1,`2,`3,`4}` should print as `"1.2.3.4"`.
+Por exemplo, `IPAddr{1,`2,`3,`4}` deve imprimir como `"1.2.3.4"`.
 
 .play methods/exercise-stringer.go
 
 * Errors
 
-Go programs express error state with `error` values.
+Programas Go expressam estado de erro com valores `error`.
 
-The `error` type is a built-in interface similar to `fmt.Stringer`:
+O tipo `error` é uma interface built-in similar a `fmt.Stringer`:
 
 	type error interface {
 		Error() string
 	}
 
-(As with `fmt.Stringer`, the `fmt` package looks for the `error` interface when
-printing values.)
+(Assim como com `fmt.Stringer`, o package `fmt` procura pela interface `error` ao
+imprimir valores.)
 
-Functions often return an `error` value, and calling code should handle errors
-by testing whether the error equals `nil`.
+Funções frequentemente retornam um valor `error`, e o código que chama deve tratar erros
+testando se o error é igual a `nil`.
 
 	i, err := strconv.Atoi("42")
 	if err != nil {
@@ -312,76 +313,76 @@ by testing whether the error equals `nil`.
 	}
 	fmt.Println("Converted integer:", i)
 
-A nil `error` denotes success; a non-nil `error` denotes failure.
+Um `error` nil denota sucesso; um `error` não-nil denota falha.
 
 .play methods/errors.go
 
-* Exercise: Errors
+* Exercício: Errors
 
-Copy your `Sqrt` function from the [[/tour/flowcontrol/8][earlier exercise]] and modify it to return an `error` value.
+Copie sua função `Sqrt` do [[/tour/flowcontrol/8][exercício anterior]] e modifique-a para retornar um valor `error`.
 
-`Sqrt` should return a non-nil error value when given a negative number, as it doesn't support complex numbers.
+`Sqrt` deve retornar um valor de error não-nil quando receber um número negativo, pois não suporta números complexos.
 
-Create a new type
+Crie um novo tipo
 
 	type ErrNegativeSqrt float64
 
-and make it an `error` by giving it a
+e faça dele um `error` dando a ele um
 
 	func (e ErrNegativeSqrt) Error() string
 
-method such that `ErrNegativeSqrt(-2).Error()` returns `"cannot`Sqrt`negative`number:`-2"`.
+method de forma que `ErrNegativeSqrt(-2).Error()` retorne `"cannot`Sqrt`negative`number:`-2"`.
 
-*Note:* A call to `fmt.Sprint(e)` inside the `Error` method will send the program into an infinite loop. You can avoid this by converting `e` first: `fmt.Sprint(float64(e))`. Why?
+*Nota:* Uma chamada a `fmt.Sprint(e)` dentro do method `Error` enviará o programa para um loop infinito. Você pode evitar isso convertendo `e` primeiro: `fmt.Sprint(float64(e))`. Por quê?
 
-Change your `Sqrt` function to return an `ErrNegativeSqrt` value when given a negative number.
+Altere sua função `Sqrt` para retornar um valor `ErrNegativeSqrt` quando receber um número negativo.
 
 .play methods/exercise-errors.go
 
 * Readers
 
-The `io` package specifies the `io.Reader` interface,
-which represents the read end of a stream of data.
+O package `io` especifica a interface `io.Reader`,
+que representa a extremidade de leitura de um fluxo de dados.
 
-The Go standard library contains [[https://cs.opensource.google/search?q=Read%5C(%5Cw%2B%5Cs%5C%5B%5C%5Dbyte%5C)&ss=go%2Fgo][many implementations]] of this interface, including files, network connections, compressors, ciphers, and others.
+A biblioteca padrão do Go contém [[https://cs.opensource.google/search?q=Read%5C(%5Cw%2B%5Cs%5C%5B%5C%5Dbyte%5C)&ss=go%2Fgo][muitas implementações]] desta interface, incluindo arquivos, conexões de rede, compressores, cifras e outros.
 
-The `io.Reader` interface has a `Read` method:
+A interface `io.Reader` tem um method `Read`:
 
 	func (T) Read(b []byte) (n int, err error)
 
-`Read` populates the given byte slice with data and returns the number of bytes
-populated and an error value. It returns an `io.EOF` error when the stream
-ends.
+`Read` popula a slice de bytes dada com dados e retorna o número de bytes
+populados e um valor de error. Retorna um error `io.EOF` quando o fluxo
+termina.
 
-The example code creates a
+O código de exemplo cria um
 [[/pkg/strings/#Reader][`strings.Reader`]]
-and consumes its output 8 bytes at a time.
+e consome sua saída 8 bytes por vez.
 
 .play methods/reader.go
 
-* Exercise: Readers
+* Exercício: Readers
 
-Implement a `Reader` type that emits an infinite stream of the ASCII character
+Implemente um tipo `Reader` que emite um fluxo infinito do caractere ASCII
 `'A'`.
 
 .play methods/exercise-reader.go
 
-* Exercise: rot13Reader
+* Exercício: rot13Reader
 
-A common pattern is an [[/pkg/io/#Reader][io.Reader]] that wraps another `io.Reader`, modifying the stream in some way.
+Um padrão comum é um [[/pkg/io/#Reader][io.Reader]] que envolve outro `io.Reader`, modificando o fluxo de alguma forma.
 
-For example, the [[/pkg/compress/gzip/#NewReader][gzip.NewReader]] function takes an `io.Reader` (a stream of compressed data) and returns a `*gzip.Reader` that also implements `io.Reader` (a stream of the decompressed data).
+Por exemplo, a função [[/pkg/compress/gzip/#NewReader][gzip.NewReader]] recebe um `io.Reader` (um fluxo de dados comprimidos) e retorna um `*gzip.Reader` que também implementa `io.Reader` (um fluxo dos dados descomprimidos).
 
-Implement a `rot13Reader` that implements `io.Reader` and reads from an `io.Reader`, modifying the stream by applying the [[https://en.wikipedia.org/wiki/ROT13][rot13]] substitution cipher to all alphabetical characters.
+Implemente um `rot13Reader` que implementa `io.Reader` e lê de um `io.Reader`, modificando o fluxo aplicando a cifra de substituição [[https://en.wikipedia.org/wiki/ROT13][rot13]] a todos os caracteres alfabéticos.
 
-The `rot13Reader` type is provided for you.
-Make it an `io.Reader` by implementing its `Read` method.
+O tipo `rot13Reader` é fornecido para você.
+Faça dele um `io.Reader` implementando seu method `Read`.
 
 .play methods/exercise-rot-reader.go
 
 * Images
 
-[[/pkg/image/#Image][Package image]] defines the `Image` interface:
+[[/pkg/image/#Image][Package image]] define a interface `Image`:
 
 	package image
 
@@ -391,32 +392,32 @@ Make it an `io.Reader` by implementing its `Read` method.
 		At(x, y int) color.Color
 	}
 
-*Note*: the `Rectangle` return value of the `Bounds` method is actually an
-[[/pkg/image/#Rectangle][`image.Rectangle`]], as the
-declaration is inside package `image`.
+*Nota*: o valor de retorno `Rectangle` do method `Bounds` é na verdade um
+[[/pkg/image/#Rectangle][`image.Rectangle`]], já que a
+declaração está dentro do package `image`.
 
-(See [[/pkg/image/#Image][the documentation]] for all the details.)
+(Veja [[/pkg/image/#Image][a documentação]] para todos os detalhes.)
 
-The `color.Color` and `color.Model` types are also interfaces, but we'll ignore that by using the predefined implementations `color.RGBA` and `color.RGBAModel`. These interfaces and types are specified by the [[/pkg/image/color/][image/color package]].
+Os tipos `color.Color` e `color.Model` também são interfaces, mas vamos ignorar isso usando as implementações predefinidas `color.RGBA` e `color.RGBAModel`. Essas interfaces e tipos são especificados pelo [[/pkg/image/color/][package image/color]].
 
 .play methods/images.go
 
-* Exercise: Images
+* Exercício: Images
 
-Remember the [[/tour/moretypes/18][picture generator]] you wrote earlier? Let's write another one, but this time it will return an implementation of `image.Image` instead of a slice of data.
+Lembra do [[/tour/moretypes/18][gerador de imagens]] que você escreveu anteriormente? Vamos escrever outro, mas desta vez ele retornará uma implementação de `image.Image` em vez de uma slice de dados.
 
-Define your own `Image` type, implement [[/pkg/image/#Image][the necessary methods]], and call `pic.ShowImage`.
+Defina seu próprio tipo `Image`, implemente [[/pkg/image/#Image][os methods necessários]], e chame `pic.ShowImage`.
 
-`Bounds` should return a `image.Rectangle`, like `image.Rect(0,`0,`w,`h)`.
+`Bounds` deve retornar um `image.Rectangle`, como `image.Rect(0,`0,`w,`h)`.
 
-`ColorModel` should return `color.RGBAModel`.
+`ColorModel` deve retornar `color.RGBAModel`.
 
-`At` should return a color; the value `v` in the last picture generator corresponds to `color.RGBA{v,`v,`255,`255}` in this one.
+`At` deve retornar uma cor; o valor `v` no último gerador de imagens corresponde a `color.RGBA{v,`v,`255,`255}` neste.
 
 .play methods/exercise-images.go
 
-* Congratulations!
+* Parabéns!
 
-You finished this lesson!
+Você terminou esta lição!
 
-You can go back to the list of [[/tour/list][modules]] to find what to learn next, or continue with the [[javascript:click('.next-page')][next lesson]].
+Você pode voltar para a lista de [[/tour/list][módulos]] para encontrar o que aprender a seguir, ou continuar com a [[javascript:click('.next-page')][próxima lição]].
