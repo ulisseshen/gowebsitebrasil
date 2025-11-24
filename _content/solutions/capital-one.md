@@ -1,6 +1,7 @@
 ---
-linkTitle: "Capital One - A Serverless and Go Journey"
-description: "At the time, no single team member knew Go, but within a month, everyone was writing in Go and we were building out the endpoints. It was the flexibility, how easy it was to use, and the really cool concept behind Go (how Go handles native concurrency, garbage collection, and of course safety+speed.) that helped engage us during the build. Also, who can beat that cute mascot!"
+ia-translated: true
+linkTitle: "Capital One - Uma Jornada Serverless e Go"
+description: "Na época, nenhum membro da equipe conhecia Go, mas em um mês, todos estavam escrevendo em Go e construindo os endpoints. Foi a flexibilidade, a facilidade de uso e o conceito realmente interessante por trás do Go (como Go lida com concorrência nativa, garbage collection e, claro, segurança+velocidade) que nos engajou durante a construção. Além disso, quem pode resistir àquele mascote fofo!"
 company: Capital One
 logoSrc: capitalone_light.svg
 logoSrcDark: capitalone_dark.svg

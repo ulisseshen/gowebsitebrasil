@@ -1,7 +1,8 @@
 ---
-linkTitle: How Curve is getting ahead with Golang
-description: Curve shares how Go's efficiency, standard library, and thriving community
-  help them move banking to the cloud.
+ia-translated: true
+linkTitle: Como a Curve está se destacando com Golang
+description: A Curve compartilha como a eficiência do Go, biblioteca padrão e comunidade
+  próspera os ajudam a mover o setor bancário para a nuvem.
 company: Curve
 logoSrc: curve.png
 logoSrcDark: curve.png
