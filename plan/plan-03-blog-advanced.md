@@ -148,7 +148,7 @@ Após traduzir cada arquivo, marque o checkpoint com `[x]`.
 - [ ] `_content/blog/go1.25.md` - Go 1.25
 - [x] `_content/blog/go1.24.md` - Go 1.24
 - [x] `_content/blog/go1.23.md` - Go 1.23
-- [ ] `_content/blog/go1.22.md` - Go 1.22
+- [x] `_content/blog/go1.22.md` - Go 1.22
 - [ ] `_content/blog/go1.21.md` - Go 1.21
 - [ ] `_content/blog/go1.21rc.md` - Go 1.21 RC
 - [ ] `_content/blog/go1.20.md` - Go 1.20
