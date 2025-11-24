@@ -1,101 +1,102 @@
 <!--{
   "Title": "Accessing relational databases",
-  "Breadcrumb": true
+  "Breadcrumb": true,
+  "ia-translated": true
 }-->
 
-Using Go, you can incorporate a wide variety of databases and data access
-approaches into your applications. Topics in this section describe how to use
-the standard library's [`database/sql`](https://pkg.go.dev/database/sql)
-package to access relational databases.
+Usando Go, você pode incorporar uma grande variedade de bancos de dados e abordagens de acesso a dados
+em suas aplicações. Os tópicos nesta seção descrevem como usar
+o package [`database/sql`](https://pkg.go.dev/database/sql) da biblioteca padrão
+para acessar bancos de dados relacionais.
 
-For an introductory tutorial to data access with Go, please see
+Para um tutorial introdutório sobre acesso a dados com Go, consulte
 [Tutorial: Accessing a relational database](/doc/tutorial/database-access).
 
-Go supports other data access technologies as well, including ORM libraries
-for higher-level access to relational databases, and also non-relational
-NoSQL data stores.
+Go também suporta outras tecnologias de acesso a dados, incluindo bibliotecas ORM
+para acesso de nível mais alto a bancos de dados relacionais, e também data stores
+NoSQL não relacionais.
 
-*   **Object-relational mapping (ORM) libraries.** While the `database/sql`
-    package includes functions for lower-level data access logic, you can
-    also use Go to access data stores at a higher abstraction level. For more
-    about two popular object-relational mapping (ORM) libraries for Go, see
-    [GORM](https://gorm.io/index.html) ([package reference](https://pkg.go.dev/gorm.io/gorm))
-    and [ent](https://entgo.io/) ([package reference](https://pkg.go.dev/entgo.io/ent)).
-*   **NoSQL data stores.** The Go community has developed drivers for the
-    majority of NoSQL data stores, including [MongoDB](https://docs.mongodb.com/drivers/go/)
-    and [Couchbase](https://docs.couchbase.com/go-sdk/current/hello-world/overview.html).
-    You can search [pkg.go.dev](https://pkg.go.dev/) for more.
+*   **Bibliotecas de mapeamento objeto-relacional (ORM).** Embora o package `database/sql`
+    inclua funções para lógica de acesso a dados de nível mais baixo, você também pode
+    usar Go para acessar data stores em um nível de abstração mais alto. Para mais
+    sobre duas bibliotecas populares de mapeamento objeto-relacional (ORM) para Go, consulte
+    [GORM](https://gorm.io/index.html) ([referência do package](https://pkg.go.dev/gorm.io/gorm))
+    e [ent](https://entgo.io/) ([referência do package](https://pkg.go.dev/entgo.io/ent)).
+*   **Data stores NoSQL.** A comunidade Go desenvolveu drivers para a
+    maioria dos data stores NoSQL, incluindo [MongoDB](https://docs.mongodb.com/drivers/go/)
+    e [Couchbase](https://docs.couchbase.com/go-sdk/current/hello-world/overview.html).
+    Você pode pesquisar em [pkg.go.dev](https://pkg.go.dev/) para mais.
 
-### Supported database management systems {#supported_dbms}
+### Sistemas de gerenciamento de banco de dados suportados {#supported_dbms}
 
-Go supports all of the most common relational database management systems,
-including MySQL, Oracle, Postgres, SQL Server, SQLite, and more.
+Go suporta todos os sistemas de gerenciamento de banco de dados relacional mais comuns,
+incluindo MySQL, Oracle, Postgres, SQL Server, SQLite, e mais.
 
-You'll find a complete list of drivers at the
-[SQLDrivers](/wiki/SQLDrivers) page.
+Você encontrará uma lista completa de drivers na
+página [SQLDrivers](/wiki/SQLDrivers).
 
-### Functions to execute queries or make database changes {#functions}
+### Funções para executar queries ou fazer mudanças no banco de dados {#functions}
 
-The `database/sql` package includes functions specifically designed for the
-kind of database operation you're executing. For example, while you can use
-`Query` or `QueryRow` to execute queries, `QueryRow` is designed for the case
-when you're expecting only a single row, omitting the overhead of returning
-an `sql.Rows` that includes only one row. You can use the `Exec` function
-to make database changes with SQL statements such as `INSERT`, `UPDATE`, or
+O package `database/sql` inclui funções especificamente projetadas para o
+tipo de operação de banco de dados que você está executando. Por exemplo, embora você possa usar
+`Query` ou `QueryRow` para executar queries, `QueryRow` é projetado para o caso
+quando você está esperando apenas uma única linha, omitindo a sobrecarga de retornar
+um `sql.Rows` que inclui apenas uma linha. Você pode usar a função `Exec`
+para fazer mudanças no banco de dados com statements SQL como `INSERT`, `UPDATE`, ou
 `DELETE`.
 
-For more, see the following:
+Para mais, consulte o seguinte:
 
 *   [Executing SQL statements that don't return data](/doc/database/change-data)
 *   [Querying for data](/doc/database/querying)
 
-### Transactions {#transactions}
+### Transações {#transactions}
 
-Through `sql.Tx`, you can write code to execute database operations in a
-transaction. In a transaction, multiple operations can be performed together
-and conclude with a final commit, to apply all the changes in one atomic
-step, or a rollback, to discard them.
+Através de `sql.Tx`, você pode escrever código para executar operações de banco de dados em uma
+transação. Em uma transação, múltiplas operações podem ser executadas juntas
+e concluir com um commit final, para aplicar todas as mudanças em um único passo
+atômico, ou um rollback, para descartá-las.
 
-For more about transactions, see [Executing transactions](/doc/database/execute-transactions).
+Para mais sobre transações, consulte [Executing transactions](/doc/database/execute-transactions).
 
-### Query cancellation {#query_cancellation}
+### Cancelamento de query {#query_cancellation}
 
-You can use `context.Context` when you want the ability to cancel a database
-operation, such as when the client's connection closes or the operation runs
-longer than you want it to.
+Você pode usar `context.Context` quando quiser a capacidade de cancelar uma operação
+de banco de dados, como quando a conexão do cliente fecha ou a operação executa
+por mais tempo do que você gostaria.
 
-For any database operation, you can use a `database/sql` package function
-that takes `Context` as an argument. Using the `Context`, you can specify a
-timeout or deadline for the operation. You can also use the `Context` to
-propagate a cancellation request through your application to the function
-executing an SQL statement, ensuring that resources are freed up if they're
-no longer needed.
+Para qualquer operação de banco de dados, você pode usar uma função do package `database/sql`
+que recebe `Context` como argumento. Usando o `Context`, você pode especificar um
+timeout ou deadline para a operação. Você também pode usar o `Context` para
+propagar uma solicitação de cancelamento através da sua aplicação para a função
+executando um statement SQL, garantindo que recursos sejam liberados se não forem
+mais necessários.
 
-For more, see [Canceling in-progress operations](/doc/database/cancel-operations).
+Para mais, consulte [Canceling in-progress operations](/doc/database/cancel-operations).
 
-### Managed connection pool {#connection_pool}
+### Pool de conexões gerenciado {#connection_pool}
 
-When you use the `sql.DB` database handle, you're connecting with a built-in
-connection pool that creates and disposes of connections according to your
-code's needs. A handle through `sql.DB` is the most common way to do
-database access with Go. For more, see
+Quando você usa o database handle `sql.DB`, você está se conectando com um
+pool de conexões embutido que cria e descarta conexões de acordo com as
+necessidades do seu código. Um handle através de `sql.DB` é a maneira mais comum de fazer
+acesso a banco de dados com Go. Para mais, consulte
 [Opening a database handle](/doc/database/open-handle).
 
-The `database/sql` package manages the connection pool for you. However, for
-more advanced needs, you can set connection pool properties as described in
+O package `database/sql` gerencia o pool de conexões para você. No entanto, para
+necessidades mais avançadas, você pode definir propriedades do pool de conexões como descrito em
 [Setting connection pool properties](/doc/database/manage-connections#connection_pool_properties).
 
-For those operations in which you need a single reserved connection, the
-`database/sql` package provides [`sql.Conn`](https://pkg.go.dev/database/sql#Conn).
-`Conn` is especially useful when a transaction with `sql.Tx` would be a
-poor choice.
+Para aquelas operações em que você precisa de uma única conexão reservada, o
+package `database/sql` fornece [`sql.Conn`](https://pkg.go.dev/database/sql#Conn).
+`Conn` é especialmente útil quando uma transação com `sql.Tx` seria uma
+má escolha.
 
-For example, your code might need to:
+Por exemplo, seu código pode precisar:
 
-*   Make schema changes through a DDL, including logic that contains its
-    own transaction semantics. Mixing `sql` package transaction functions with
-    SQL transaction statements is a poor practice, as described in
+*   Fazer mudanças de schema através de DDL, incluindo lógica que contém sua
+    própria semântica de transação. Misturar funções de transação do package `sql` com
+    statements de transação SQL é uma prática ruim, como descrito em
     [Executing transactions](/doc/database/execute-transactions).
-*   Perform query locking operations that create temporary tables.
+*   Executar operações de bloqueio de query que criam tabelas temporárias.
 
-For more, see [Using dedicated connections](/doc/database/manage-connections#dedicated_connections).
+Para mais, consulte [Using dedicated connections](/doc/database/manage-connections#dedicated_connections).

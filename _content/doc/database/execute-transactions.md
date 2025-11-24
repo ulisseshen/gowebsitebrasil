@@ -1,112 +1,113 @@
 <!--{
-  "Title": "Executing transactions"
+  "Title": "Executing transactions",
+  "ia-translated": true
 }-->
 
-You can execute database transactions using an
-[`sql.Tx,`](https://pkg.go.dev/database/sql#Tx) which represents a transaction.
-In addition to `Commit` and `Rollback` methods representing transaction-specific
-semantics, `sql.Tx` has all of the methods you use to perform common database
-operations. To get the `sql.Tx`, you call `DB.Begin` or `DB.BeginTx`.
+Você pode executar transações de banco de dados usando um
+[`sql.Tx,`](https://pkg.go.dev/database/sql#Tx) que representa uma transação.
+Além dos métodos `Commit` e `Rollback` representando semântica específica de transação,
+`sql.Tx` tem todos os métodos que você usa para executar operações comuns de banco de
+dados. Para obter o `sql.Tx`, você chama `DB.Begin` ou `DB.BeginTx`.
 
-A [database transaction](https://en.wikipedia.org/wiki/Database_transaction)
-groups multiple operations as part of a larger goal. All of the operations must
-succeed or none can, with the data's integrity preserved in either case.
-Typically, a transaction workflow includes:
+Uma [transação de banco de dados](https://en.wikipedia.org/wiki/Database_transaction)
+agrupa múltiplas operações como parte de um objetivo maior. Todas as operações devem
+ter sucesso ou nenhuma pode, com a integridade dos dados preservada em qualquer caso.
+Tipicamente, um workflow de transação inclui:
 
-1. Beginning the transaction.
-2. Performing a set of database operations.
-3. If no error occurs, committing the transaction to make database changes.
-4. If an error occurs, rolling back the transaction to leave the database
-    unchanged.
+1. Iniciar a transação.
+2. Executar um conjunto de operações de banco de dados.
+3. Se nenhum erro ocorrer, fazer commit da transação para fazer mudanças no banco de dados.
+4. Se um erro ocorrer, fazer rollback da transação para deixar o banco de dados
+    inalterado.
 
-The `sql` package provides methods for beginning and concluding a transaction,
-as well as methods for performing the intervening database operations. These
-methods correspond to the four steps in the workflow above.
+O package `sql` fornece métodos para iniciar e concluir uma transação,
+bem como métodos para executar as operações de banco de dados intermediárias. Esses
+métodos correspondem aos quatro passos no workflow acima.
 
-*   Begin a transaction.
+*   Iniciar uma transação.
 
-    [`DB.Begin`](https://pkg.go.dev/database/sql#DB.Begin) or
-    [`DB.BeginTx`](https://pkg.go.dev/database/sql#DB.BeginTx) begin a new
-    database transaction, returning an `sql.Tx` that represents it.
-*   Perform database operations.
+    [`DB.Begin`](https://pkg.go.dev/database/sql#DB.Begin) ou
+    [`DB.BeginTx`](https://pkg.go.dev/database/sql#DB.BeginTx) iniciam uma nova
+    transação de banco de dados, retornando um `sql.Tx` que a representa.
+*   Executar operações de banco de dados.
 
-    Using an `sql.Tx`, you can query or update the database in a series of
-    operations that use a single connection. To support this, `Tx` exports the
-    following methods:
+    Usando um `sql.Tx`, você pode fazer query ou atualizar o banco de dados em uma série de
+    operações que usam uma única conexão. Para suportar isso, `Tx` exporta os
+    seguintes métodos:
 
-    *   [`Exec`](https://pkg.go.dev/database/sql#Tx.Exec) and
-        [`ExecContext`](https://pkg.go.dev/database/sql#Tx.ExecContext) for making
-        database changes through SQL statements such as `INSERT`, `UPDATE`, and
+    *   [`Exec`](https://pkg.go.dev/database/sql#Tx.Exec) e
+        [`ExecContext`](https://pkg.go.dev/database/sql#Tx.ExecContext) para fazer
+        mudanças no banco de dados através de statements SQL como `INSERT`, `UPDATE`, e
         `DELETE`.
 
-        For more, see [Executing SQL statements that don't return data](/doc/database/change-data).
+        Para mais, consulte [Executing SQL statements that don't return data](/doc/database/change-data).
 
     *   [`Query`](https://pkg.go.dev/database/sql#Tx.Query),
         [`QueryContext`](https://pkg.go.dev/database/sql#Tx.QueryContext),
-        [`QueryRow`](https://pkg.go.dev/database/sql#Tx.QueryRow), and
+        [`QueryRow`](https://pkg.go.dev/database/sql#Tx.QueryRow), e
         [`QueryRowContext`](https://pkg.go.dev/database/sql#Tx.QueryRowContext)
-        for operations that return rows.
+        para operações que retornam linhas.
 
-        For more, see [Querying for data](/doc/database/querying).
+        Para mais, consulte [Querying for data](/doc/database/querying).
 
     *   [`Prepare`](https://pkg.go.dev/database/sql#Tx.Prepare),
         [`PrepareContext`](https://pkg.go.dev/database/sql#Tx.PrepareContext),
-        [`Stmt`](https://pkg.go.dev/database/sql#Tx.Stmt), and
-        [`StmtContext`](https://pkg.go.dev/database/sql#Tx.StmtContext) for
-        pre-defining prepared statements.
+        [`Stmt`](https://pkg.go.dev/database/sql#Tx.Stmt), e
+        [`StmtContext`](https://pkg.go.dev/database/sql#Tx.StmtContext) para
+        pré-definir prepared statements.
 
-        For more, see [Using prepared statements](/doc/database/prepared-statements).
+        Para mais, consulte [Using prepared statements](/doc/database/prepared-statements).
 
-*   End the transaction with _one_ of the following:
-    *   Commit the transaction using
+*   Finalizar a transação com _um_ dos seguintes:
+    *   Fazer commit da transação usando
         [`Tx.Commit`](https://pkg.go.dev/database/sql#Tx.Commit).
 
-        If `Commit` succeeds (returns a `nil` error), then all the query results
-        are confirmed as valid and all the executed updates are applied to the
-        database as a single atomic change. If `Commit` fails, then all the
-        results from `Query` and `Exec` on the `Tx` should be discarded as
-        invalid.
-    *   Roll back the transaction using
+        Se `Commit` tiver sucesso (retornar um erro `nil`), então todos os resultados de query
+        são confirmados como válidos e todas as atualizações executadas são aplicadas ao
+        banco de dados como uma única mudança atômica. Se `Commit` falhar, então todos os
+        resultados de `Query` e `Exec` no `Tx` devem ser descartados como
+        inválidos.
+    *   Fazer rollback da transação usando
         [`Tx.Rollback`](https://pkg.go.dev/database/sql#Tx.Rollback).
 
-        Even if `Tx.Rollback` fails, the transaction will no longer be valid,
-        nor will it have been committed to the database.
+        Mesmo se `Tx.Rollback` falhar, a transação não será mais válida,
+        nem terá sido commitada no banco de dados.
 
-### Best practices {#best_practices}
+### Melhores práticas {#best_practices}
 
-Follow the best practices below to better navigate the complicated semantics
-and connection management that transactions sometimes require.
+Siga as melhores práticas abaixo para navegar melhor pelas semânticas complicadas
+e gerenciamento de conexão que transações às vezes requerem.
 
-*   Use the APIs described in this section to manage transactions. Do _not_
-    use transaction-related SQL statements such as `BEGIN` and `COMMIT`
-    directly—doing so can leave your database in an unpredictable state,
-    especially in concurrent programs.
-*   When using a transaction, take care not to call the non-transaction
-    `sql.DB` methods directly, too, as those will execute outside the
-    transaction, giving your code an inconsistent view of the state of the
-    database or even causing deadlocks.
+*   Use as APIs descritas nesta seção para gerenciar transações. _Não_
+    use statements SQL relacionados a transação como `BEGIN` e `COMMIT`
+    diretamente—fazer isso pode deixar seu banco de dados em um estado imprevisível,
+    especialmente em programas concorrentes.
+*   Ao usar uma transação, tome cuidado para não chamar os métodos
+    `sql.DB` não-transacionais diretamente também, pois esses executarão fora da
+    transação, dando ao seu código uma visão inconsistente do estado do
+    banco de dados ou mesmo causando deadlocks.
 
-### Example {#example}
+### Exemplo {#example}
 
-Code in the following example uses a transaction to create a new customer order
-for an album. Along the way, the code will:
+O código no exemplo a seguir usa uma transação para criar um novo pedido de cliente
+para um álbum. Ao longo do caminho, o código irá:
 
-1. Begin a transaction.
-2. Defer the transaction's rollback. If the transaction succeeds, it will be
-    committed before the function exits, making the deferred rollback call a
-    no-op. If the transaction fails it won't be committed, meaning that the
-    rollback will be called as the function exits.
-3. Confirm that there's sufficient inventory for the album the customer is
-    ordering.
-4. If there's enough, update the inventory count, reducing it by the number
-    of albums ordered.
-5. Create a new order and retrieve the new order's generated ID for the client.
-6. Commit the transaction and return the ID.
+1. Iniciar uma transação.
+2. Adiar o rollback da transação. Se a transação tiver sucesso, ela será
+    commitada antes da função sair, tornando a chamada de rollback adiada uma
+    no-op. Se a transação falhar não será commitada, significando que o
+    rollback será chamado conforme a função sai.
+3. Confirmar que há inventory suficiente para o álbum que o cliente está
+    pedindo.
+4. Se houver o suficiente, atualizar a contagem de inventory, reduzindo-a pelo número
+    de álbuns pedidos.
+5. Criar um novo pedido e recuperar o ID gerado do novo pedido para o cliente.
+6. Fazer commit da transação e retornar o ID.
 
-This example uses `Tx` methods that take a `context.Context` argument. This
-makes it possible for the function's execution – including database operations
--- to be canceled if it runs too long or the client connection closes. For
-more, see [Canceling in-progress operations](/doc/database/cancel-operations).
+Este exemplo usa métodos `Tx` que recebem um argumento `context.Context`. Isso
+torna possível que a execução da função – incluindo operações de banco de dados
+-- seja cancelada se executar por muito tempo ou a conexão do cliente fechar. Para
+mais, consulte [Canceling in-progress operations](/doc/database/cancel-operations).
 
 ```
 // CreateOrder creates an order for an album and returns the new order ID.

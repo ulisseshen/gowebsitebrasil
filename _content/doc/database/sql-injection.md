@@ -1,47 +1,48 @@
 <!--{
-  "Title": "Avoiding SQL injection risk"
+  "Title": "Avoiding SQL injection risk",
+  "ia-translated": true
 }-->
 
-You can avoid an SQL injection risk by providing SQL parameter values as `sql`
-package function arguments. Many functions in the `sql` package provide
-parameters for the SQL statement and for values to be used in that statement's
-parameters (others provide a parameter for a prepared statement and parameters).
+Você pode evitar um risco de SQL injection fornecendo valores de parâmetro SQL como argumentos de
+função do package `sql`. Muitas funções no package `sql` fornecem
+parâmetros para o statement SQL e para valores a serem usados nos parâmetros desse statement
+(outras fornecem um parâmetro para um prepared statement e parâmetros).
 
-Code in the following example uses the `?` symbol as a placeholder for the
-`id` parameter, which is provided as a function argument:
+O código no exemplo a seguir usa o símbolo `?` como um placeholder para o
+parâmetro `id`, que é fornecido como um argumento de função:
 
 ```
 // Correct format for executing an SQL statement with parameters.
 rows, err := db.Query("SELECT * FROM user WHERE id = ?", id)
 ```
 
-`sql` package functions that perform database operations create prepared
-statements from the arguments you supply. At run time, the `sql` package turns
-the SQL statement into a prepared statement and sends it along with the
-parameter, which is separate.
+Funções do package `sql` que executam operações de banco de dados criam prepared
+statements a partir dos argumentos que você fornece. Em tempo de execução, o package `sql` transforma
+o statement SQL em um prepared statement e o envia junto com o
+parâmetro, que é separado.
 
-**Note:** Parameter placeholders vary depending on the DBMS and driver
-you're using. For example, [pq driver](https://pkg.go.dev/github.com/lib/pq)
-for Postgres accepts a placeholder form such as `$1` instead of `?`.
+**Nota:** Placeholders de parâmetro variam dependendo do DBMS e driver
+que você está usando. Por exemplo, o [driver pq](https://pkg.go.dev/github.com/lib/pq)
+para Postgres aceita uma forma de placeholder como `$1` em vez de `?`.
 
-You might be tempted to use a function from the `fmt` package to assemble the
-SQL statement as a string with parameters included – like this:
+Você pode ser tentado a usar uma função do package `fmt` para montar o
+statement SQL como uma string com parâmetros incluídos – assim:
 
 ```
 // SECURITY RISK!
 rows, err := db.Query(fmt.Sprintf("SELECT * FROM user WHERE id = %s", id))
 ```
 
-This is not secure! When you do this, Go assembles the entire SQL statement,
-replacing the `%s` format verb with the parameter value, before sending the
-full statement to the DBMS. This poses an
-[SQL injection](https://en.wikipedia.org/wiki/SQL_injection) risk because the
-code's caller could send an unexpected SQL snippet as the `id` argument. That
-snippet could complete the SQL statement in unpredictable ways that are
-dangerous to your application.
+Isso não é seguro! Quando você faz isso, Go monta o statement SQL inteiro,
+substituindo o verbo de formato `%s` com o valor do parâmetro, antes de enviar o
+statement completo para o DBMS. Isso representa um
+risco de [SQL injection](https://en.wikipedia.org/wiki/SQL_injection) porque o
+chamador do código poderia enviar um snippet SQL inesperado como o argumento `id`. Esse
+snippet poderia completar o statement SQL de maneiras imprevisíveis que são
+perigosas para sua aplicação.
 
-For example, by passing a certain `%s` value, you might end up with something
-like the following, which could return all user records in your database:
+Por exemplo, passando um certo valor `%s`, você pode acabar com algo
+como o seguinte, que poderia retornar todos os registros de usuários no seu banco de dados:
 
 ```
 SELECT * FROM user WHERE id = 1 OR 1=1;

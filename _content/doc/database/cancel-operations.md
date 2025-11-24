@@ -1,36 +1,36 @@
 <!--{
-  "Title": "Canceling in-progress operations"
+  "Title": "Canceling in-progress operations",
+  "ia-translated": true
 }-->
 
-You can manage in-progress operations by using Go
-[`context.Context`](https://pkg.go.dev/context#Context). A `Context` is a
-standard Go data value that can report whether the overall operation it
-represents has been canceled and is no longer needed. By passing a
-`context.Context` across function calls and services in your application, those
-can stop working early and return an error when their processing is no longer
-needed. For more about `Context`, see
+Você pode gerenciar operações em andamento usando Go
+[`context.Context`](https://pkg.go.dev/context#Context). Um `Context` é um
+valor de dados padrão do Go que pode reportar se a operação geral que ele
+representa foi cancelada e não é mais necessária. Passando um
+`context.Context` através de chamadas de função e serviços na sua aplicação, esses
+podem parar de trabalhar cedo e retornar um erro quando seu processamento não é mais
+necessário. Para mais sobre `Context`, consulte
 [Go Concurrency Patterns: Context](/blog/context).
 
-For example, you might want to:
+Por exemplo, você pode querer:
 
-*   End long-running operations, including database operations that are
-    taking too long to complete.
-*   Propagate cancellation requests from elsewhere, such as when a client
-    closes a connection.
+*   Finalizar operações de longa duração, incluindo operações de banco de dados que estão
+    levando muito tempo para completar.
+*   Propagar solicitações de cancelamento de outros lugares, como quando um cliente
+    fecha uma conexão.
 
-Many APIs for Go developers include methods that take a `Context` argument,
-making it easier for you to use `Context` throughout your application.
+Muitas APIs para desenvolvedores Go incluem métodos que recebem um argumento `Context`,
+tornando mais fácil para você usar `Context` em toda sua aplicação.
 
-### Canceling database operations after a timeout {#timeout_cancel}
+### Cancelando operações de banco de dados após um timeout {#timeout_cancel}
 
-You can use a `Context` to set a timeout or deadline after which an operation
-will be canceled. To derive a `Context` with a timeout or deadline, call
-[`context.WithTimeout`](https://pkg.go.dev/context#WithTimeout) or
+Você pode usar um `Context` para definir um timeout ou deadline após o qual uma operação
+será cancelada. Para derivar um `Context` com um timeout ou deadline, chame
+[`context.WithTimeout`](https://pkg.go.dev/context#WithTimeout) ou
 [`context.WithDeadline`](https://pkg.go.dev/context#WithDeadline).
 
-Code in the following timeout example derives a `Context` and passes it into
-the `sql.DB` [`QueryContext`](https://pkg.go.dev/database/sql#DB.QueryContext)
-method.
+O código no exemplo de timeout a seguir deriva um `Context` e o passa para
+o método `sql.DB` [`QueryContext`](https://pkg.go.dev/database/sql#DB.QueryContext).
 
 ```
 func QueryWithTimeout(ctx context.Context) {
@@ -49,19 +49,18 @@ func QueryWithTimeout(ctx context.Context) {
 }
 ```
 
-When one context is derived from an outer context, as `queryCtx` is derived
-from `ctx` in this example, if the outer context is canceled, then the derived
-context is automatically canceled as well. For example, in HTTP servers, the
-`http.Request.Context` method returns a context associated with the request.
-That context is canceled if the HTTP client disconnects or cancels the HTTP
-request (possible in HTTP/2). Passing an HTTP request’s context to
-`QueryWithTimeout` above would cause the database query to stop early _either_
-if the overall HTTP request was canceled or if the query took more than five
-seconds.
+Quando um context é derivado de um context externo, como `queryCtx` é derivado
+de `ctx` neste exemplo, se o context externo for cancelado, então o context derivado
+é automaticamente cancelado também. Por exemplo, em servidores HTTP, o
+método `http.Request.Context` retorna um context associado com a requisição.
+Esse context é cancelado se o cliente HTTP desconectar ou cancelar a requisição
+HTTP (possível em HTTP/2). Passar o context de uma requisição HTTP para
+`QueryWithTimeout` acima faria a query de banco de dados parar cedo _ou_
+se a requisição HTTP geral for cancelada ou se a query levar mais de cinco
+segundos.
 
-**Note:** Always defer a call to the `cancel` function that's returned when you
-create a new `Context` with a timeout or deadline. This releases resources held
-by the new `Context` when the containing function exits. It also cancels
-`queryCtx`, but by the time the function returns, nothing should be using
-`queryCtx` anymore.
-
+**Nota:** Sempre adie uma chamada à função `cancel` que é retornada quando você
+cria um novo `Context` com um timeout ou deadline. Isso libera recursos mantidos
+pelo novo `Context` quando a função que o contém sai. Também cancela
+`queryCtx`, mas quando a função retorna, nada deveria estar usando
+`queryCtx` mais.

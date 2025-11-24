@@ -1,69 +1,70 @@
 <!--{
   "Title": "Opening a database handle",
-  "Breadcrumb": true
+  "Breadcrumb": true,
+  "ia-translated": true
 }-->
 
-The [`database/sql`](https://pkg.go.dev/database/sql) package simplifies
-database access by reducing the need
-for you to manage connections. Unlike many data access APIs, with
-`database/sql` you don't explicitly open a connection, do work, then close
-the connection. Instead, your code opens a database handle that represents
-a connection pool, then executes data access operations with the handle,
-calling a `Close` method only when needed to free resources, such as those
-held by retrieved rows or a prepared statement.
+O package [`database/sql`](https://pkg.go.dev/database/sql) simplifica
+o acesso a banco de dados reduzindo a necessidade
+de você gerenciar conexões. Ao contrário de muitas APIs de acesso a dados, com
+`database/sql` você não abre explicitamente uma conexão, faz o trabalho, e depois fecha
+a conexão. Em vez disso, seu código abre um database handle que representa
+um pool de conexões, depois executa operações de acesso a dados com o handle,
+chamando um método `Close` apenas quando necessário para liberar recursos, como aqueles
+mantidos por linhas recuperadas ou um prepared statement.
 
-In other words, it's the database handle, represented by an
-[`sql.DB`](https://pkg.go.dev/database/sql#DB), that
-handles connections, opening and closing them on your code's behalf. As your
-code uses the handle to execute database operations, those operations have
-concurrent access to the database. For more, see
+Em outras palavras, é o database handle, representado por um
+[`sql.DB`](https://pkg.go.dev/database/sql#DB), que
+lida com conexões, abrindo e fechando-as em nome do seu código. Conforme seu
+código usa o handle para executar operações de banco de dados, essas operações têm
+acesso concorrente ao banco de dados. Para mais, consulte
 [Managing connections](/doc/database/manage-connections).
 
-**Note:** You can also reserve a database connection. For more
-information, see
+**Nota:** Você também pode reservar uma conexão de banco de dados. Para mais
+informações, consulte
 [Using dedicated connections](/doc/database/manage-connections#dedicated_connections).
 
-In addition to the APIs available in the `database/sql` package, the Go
-community has developed drivers for all of the most common (and many uncommon)
-database management systems (DBMSes).
+Além das APIs disponíveis no package `database/sql`, a comunidade
+Go desenvolveu drivers para todos os sistemas de gerenciamento de banco de dados (DBMSes)
+mais comuns (e muitos incomuns).
 
-When opening a database handle, you follow these high-level steps:
+Ao abrir um database handle, você segue estes passos de alto nível:
 
-1. Locate a driver.
+1. Localizar um driver.
 
-    A driver translates requests and responses between your Go code and the
-    database. For more, see [Locating and importing a database driver](#database_driver).
+    Um driver traduz requisições e respostas entre seu código Go e o
+    banco de dados. Para mais, consulte [Locating and importing a database driver](#database_driver).
 
-2. Open a database handle.
+2. Abrir um database handle.
 
-    After you've imported the driver, you can open a handle for a specific
-    database. For more, see [Opening a database handle](#opening_handle).
+    Depois de importar o driver, você pode abrir um handle para um
+    banco de dados específico. Para mais, consulte [Opening a database handle](#opening_handle).
 
-3. Confirm a connection.
+3. Confirmar uma conexão.
 
-    Once you've opened a database handle, your code can check that a
-    connection is available. For more, see [Confirming a connection](#confirm_connection).
+    Uma vez que você abriu um database handle, seu código pode verificar que uma
+    conexão está disponível. Para mais, consulte [Confirming a connection](#confirm_connection).
 
-Your code typically won’t explicitly open or close database connections -- that's
-done by the database handle. However, your code should free resources it
-obtains along the way, such as an `sql.Rows` containing query results. For
-more, see [Freeing resources](#free_resources).
+Seu código tipicamente não abrirá ou fechará conexões de banco de dados explicitamente -- isso é
+feito pelo database handle. No entanto, seu código deve liberar recursos que
+obtém ao longo do caminho, como um `sql.Rows` contendo resultados de query. Para
+mais, consulte [Freeing resources](#free_resources).
 
-### Locating and importing a database driver {#database_driver}
+### Localizando e importando um driver de banco de dados {#database_driver}
 
-You'll need a database driver that supports the DBMS you're using. To locate
-a driver for your database, see [SQLDrivers](/wiki/SQLDrivers).
+Você precisará de um driver de banco de dados que suporte o DBMS que você está usando. Para localizar
+um driver para seu banco de dados, consulte [SQLDrivers](/wiki/SQLDrivers).
 
-To make the driver available to your code, you import it as you would
-another Go package. Here's an example:
+Para tornar o driver disponível para seu código, você o importa como faria com
+qualquer outro package Go. Aqui está um exemplo:
 
 ```
 import "github.com/go-sql-driver/mysql"
 ```
 
-Note that if you're not calling any functions directly from the driver
-package –- such as when it's being used implicitly by the `sql` package --
-you'll need to use a blank import, which prefixes the import path with an
+Observe que se você não está chamando nenhuma função diretamente do package do driver
+-- como quando ele está sendo usado implicitamente pelo package `sql` --
+você precisará usar um blank import, que prefixa o caminho de import com um
 underscore:
 
 
@@ -71,30 +72,30 @@ underscore:
 import _ "github.com/go-sql-driver/mysql"
 ```
 
-**Note:** As a best practice, avoid using the database driver's own API
-for database operations. Instead, use functions in the `database/sql`
-package. This will help keep your code loosely coupled with the DBMS,
-making it easier to switch to a different DBMS if you need to.
+**Nota:** Como melhor prática, evite usar a própria API do driver de banco de dados
+para operações de banco de dados. Em vez disso, use funções no package `database/sql`.
+Isso ajudará a manter seu código fracamente acoplado com o DBMS,
+tornando mais fácil mudar para um DBMS diferente se você precisar.
 
-### Opening a database handle {#opening_handle}
+### Abrindo um database handle {#opening_handle}
 
-An `sql.DB` database handle provides the ability to read from and write to a
-database, either individually or in a transaction.
+Um database handle `sql.DB` fornece a capacidade de ler e escrever em um
+banco de dados, tanto individualmente quanto em uma transação.
 
-You can get a database handle by calling either `sql.Open` (which takes a
-connection string) or `sql.OpenDB` (which takes a `driver.Connector`). Both
-return a pointer to an [`sql.DB`](https://pkg.go.dev/database/sql#DB).
+Você pode obter um database handle chamando ou `sql.Open` (que recebe uma
+connection string) ou `sql.OpenDB` (que recebe um `driver.Connector`). Ambos
+retornam um ponteiro para um [`sql.DB`](https://pkg.go.dev/database/sql#DB).
 
-**Note:** Be sure to keep your database credentials out of your Go source.
-For more, see [Storing database credentials](#store_credentials).
+**Nota:** Certifique-se de manter suas credenciais de banco de dados fora do seu código fonte Go.
+Para mais, consulte [Storing database credentials](#store_credentials).
 
-#### Opening with a connection string {#open_connection_string}
+#### Abrindo com uma connection string {#open_connection_string}
 
-Use the [`sql.Open` function](https://pkg.go.dev/database/sql#Open) when you
-want to connect using a connection string. The format for the string will vary
-depending on the driver you're using. 
+Use a função [`sql.Open`](https://pkg.go.dev/database/sql#Open) quando você
+quiser se conectar usando uma connection string. O formato da string variará
+dependendo do driver que você está usando.
 
-Here's an example for MySQL:
+Aqui está um exemplo para MySQL:
 
 ```
 db, err = sql.Open("mysql", "username:password@tcp(127.0.0.1:3306)/jazzrecords")
@@ -103,15 +104,15 @@ if err != nil {
 }
 ```
 
-However, you'll likely find that capturing connection properties in a more
-structured way gives you code that's more readable. The details will vary by
+No entanto, você provavelmente descobrirá que capturar propriedades de conexão de uma maneira mais
+estruturada lhe dá código que é mais legível. Os detalhes variarão por
 driver.
 
-For example, you could replace the preceding example with the following, which
-uses the MySQL driver's [`Config`](https://pkg.go.dev/github.com/go-sql-driver/mysql#Config)
-to specify properties and its
-[`FormatDSN method`](https://pkg.go.dev/github.com/go-sql-driver/mysql#Config.FormatDSN)
-to build a connection string.
+Por exemplo, você poderia substituir o exemplo anterior pelo seguinte, que
+usa a [`Config`](https://pkg.go.dev/github.com/go-sql-driver/mysql#Config) do driver MySQL
+para especificar propriedades e seu
+[`método FormatDSN`](https://pkg.go.dev/github.com/go-sql-driver/mysql#Config.FormatDSN)
+para construir uma connection string.
 
 ```
 // Specify connection properties.
@@ -129,16 +130,16 @@ if err != nil {
 }
 ```
 
-#### Opening with a Connector {#open_connector}
+#### Abrindo com um Connector {#open_connector}
 
-Use the [`sql.OpenDB function`](https://pkg.go.dev/database/sql#OpenDB) when
-you want to take advantage of driver-specific connection features that aren't
-available in a connection string. Each driver supports its own set of
-connection properties, often providing ways to customize the connection request
-specific to the DBMS.
+Use a função [`sql.OpenDB`](https://pkg.go.dev/database/sql#OpenDB) quando
+você quiser aproveitar recursos de conexão específicos do driver que não estão
+disponíveis em uma connection string. Cada driver suporta seu próprio conjunto de
+propriedades de conexão, frequentemente fornecendo maneiras de customizar a requisição de conexão
+específica para o DBMS.
 
-Adapting the preceding `sql.Open` example to use `sql.OpenDB`, you could
-create a handle with code such as the following:
+Adaptando o exemplo anterior de `sql.Open` para usar `sql.OpenDB`, você poderia
+criar um handle com código como o seguinte:
 
 ```
 // Specify connection properties.
@@ -159,23 +160,23 @@ if err != nil {
 db = sql.OpenDB(connector)
 ```
 
-#### Handling errors {#handle_errors}
+#### Tratando erros {#handle_errors}
 
-Your code should check for an error from attempting to create a handle, such
-as with `sql.Open`. This won't be a connection error. Instead, you'll get an
-error if `sql.Open` was unable to initialize the handle. This could happen,
-for example, if it's unable to parse the DSN you specified.
+Seu código deve verificar por um erro ao tentar criar um handle, como
+com `sql.Open`. Este não será um erro de conexão. Em vez disso, você receberá um
+erro se `sql.Open` foi incapaz de inicializar o handle. Isso poderia acontecer,
+por exemplo, se ele for incapaz de fazer parse do DSN que você especificou.
 
-### Confirming a connection {#confirm_connection}
+### Confirmando uma conexão {#confirm_connection}
 
-When you open a database handle, the `sql` package may not create a new
-database connection itself right away. Instead, it may create the connection
-when your code needs it. If you won't be using the database right away and
-want to confirm that a connection could be established, call
-[`Ping`](https://pkg.go.dev/database/sql#DB.Ping) or
+Quando você abre um database handle, o package `sql` pode não criar uma nova
+conexão de banco de dados imediatamente. Em vez disso, ele pode criar a conexão
+quando seu código precisar dela. Se você não for usar o banco de dados imediatamente e
+quiser confirmar que uma conexão poderia ser estabelecida, chame
+[`Ping`](https://pkg.go.dev/database/sql#DB.Ping) ou
 [`PingContext`](https://pkg.go.dev/database/sql#DB.PingContext).
 
-Code in the following example pings the database to confirm a connection.
+O código no exemplo a seguir faz ping no banco de dados para confirmar uma conexão.
 
 ```
 db, err = sql.Open("mysql", connString)
@@ -186,38 +187,38 @@ if err := db.Ping(); err != nil {
 }
 ```
 
-### Storing database credentials {#store_credentials}
+### Armazenando credenciais de banco de dados {#store_credentials}
 
-Avoid storing database credentials in your Go source, which could expose the
-contents of your database to others. Instead, find a way to store them in a
-location outside your code but available to it. For example, consider a
-secret keeper app that stores credentials and provides an API your code can
-use to retrieve credentials for authenticating with your DBMS.
+Evite armazenar credenciais de banco de dados no seu código fonte Go, o que poderia expor o
+conteúdo do seu banco de dados para outros. Em vez disso, encontre uma maneira de armazená-las em um
+local fora do seu código mas disponível para ele. Por exemplo, considere uma
+aplicação de gerenciamento de segredos que armazena credenciais e fornece uma API que seu código pode
+usar para recuperar credenciais para autenticação com seu DBMS.
 
-One popular approach is to store the secrets in the environment before the
-program starts, perhaps loaded from a secret manager, and then your Go program
-can read them using [`os.Getenv`](https://pkg.go.dev/os#Getenv):
+Uma abordagem popular é armazenar os segredos no ambiente antes do
+programa iniciar, talvez carregados de um gerenciador de segredos, e então seu programa Go
+pode lê-los usando [`os.Getenv`](https://pkg.go.dev/os#Getenv):
 
 ```
 username := os.Getenv("DB_USER")
 password := os.Getenv("DB_PASS")
 ```
 
-This approach also lets you set the environment variables yourself for local
-testing. 
+Esta abordagem também permite que você defina as variáveis de ambiente você mesmo para
+testes locais.
 
-### Freeing resources {#free_resources}
+### Liberando recursos {#free_resources}
 
-Although you don't manage or close connections explicitly with the
-`database/sql` package, your code should free resources it has obtained when
-they're no longer needed. Those can include resources held by an `sql.Rows`
-representing data returned from a query or an `sql.Stmt` representing a
+Embora você não gerencie ou feche conexões explicitamente com o
+package `database/sql`, seu código deve liberar recursos que obteve quando
+eles não forem mais necessários. Esses podem incluir recursos mantidos por um `sql.Rows`
+representando dados retornados de uma query ou um `sql.Stmt` representando um
 prepared statement.
 
-Typically, you close resources by deferring a call to a `Close` function so
-that resources are released before the enclosing function exits.
+Tipicamente, você fecha recursos adiando uma chamada a uma função `Close` para que
+recursos sejam liberados antes da função envolvente sair.
 
-Code in the following example defers `Close` to free the resource held by
+O código no exemplo a seguir adia `Close` para liberar o recurso mantido por
 [`sql.Rows`](https://pkg.go.dev/database/sql#Rows).
 
 ```

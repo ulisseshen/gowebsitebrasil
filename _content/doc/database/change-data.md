@@ -1,21 +1,22 @@
 <!--{
-  "Title": "Executing SQL statements that don't return data"
+  "Title": "Executing SQL statements that don't return data",
+  "ia-translated": true
 }-->
 
-When you perform database actions that don't return data, use an `Exec` or
-`ExecContext` method from the `database/sql` package. SQL statements you'd
-execute this way include `INSERT`, `DELETE`, and `UPDATE`.
+Quando você executa ações de banco de dados que não retornam dados, use um método `Exec` ou
+`ExecContext` do package `database/sql`. Statements SQL que você
+executaria desta maneira incluem `INSERT`, `DELETE`, e `UPDATE`.
 
-When your query might return rows, use a `Query` or `QueryContext` method
-instead. For more, see [Querying a database](/doc/database/querying).
+Quando sua query pode retornar linhas, use um método `Query` ou `QueryContext`
+em vez disso. Para mais, consulte [Querying a database](/doc/database/querying).
 
-An `ExecContext` method works as an `Exec` method does, but with an additional
-`context.Context` argument, as described in
+Um método `ExecContext` funciona como um método `Exec`, mas com um
+argumento `context.Context` adicional, como descrito em
 [Canceling in-progress operations](/doc/database/cancel-operations).
 
-Code in the following example uses
-[`DB.Exec`](https://pkg.go.dev/database/sql#DB.Exec) to execute a
-statement to add a new record album to an `album` table.
+O código no exemplo a seguir usa
+[`DB.Exec`](https://pkg.go.dev/database/sql#DB.Exec) para executar um
+statement para adicionar um novo álbum de disco a uma tabela `album`.
 
 ```
 func AddAlbum(alb Album) (int64, error) {
@@ -34,25 +35,25 @@ func AddAlbum(alb Album) (int64, error) {
 }
 ```
 
-`DB.Exec` returns values: an [`sql.Result`](https://pkg.go.dev/database/sql#Result)
-and an error. When the error is `nil`, you can use the `Result` to get the ID
-of the last inserted item (as in the example) or to retrieve the number of rows
-affected by the operation.
+`DB.Exec` retorna valores: um [`sql.Result`](https://pkg.go.dev/database/sql#Result)
+e um erro. Quando o erro é `nil`, você pode usar o `Result` para obter o ID
+do último item inserido (como no exemplo) ou para recuperar o número de linhas
+afetadas pela operação.
 
-**Note:** Parameter placeholders in prepared statements vary depending on
-the DBMS and driver you're using. For example, the
-[pq driver](https://pkg.go.dev/github.com/lib/pq) for Postgres requires a
-placeholder like `$1` instead of `?`.
+**Nota:** Placeholders de parâmetro em prepared statements variam dependendo
+do DBMS e driver que você está usando. Por exemplo, o
+[driver pq](https://pkg.go.dev/github.com/lib/pq) para Postgres requer um
+placeholder como `$1` em vez de `?`.
 
-If your code will be executing the same SQL statement repeatedly, consider
-using an `sql.Stmt` to create a reusable prepared statement from the SQL
-statement. For more, see [Using prepared statements](/doc/database/prepared-statements).
+Se seu código executará o mesmo statement SQL repetidamente, considere
+usar um `sql.Stmt` para criar um prepared statement reutilizável a partir do statement
+SQL. Para mais, consulte [Using prepared statements](/doc/database/prepared-statements).
 
-**Caution:** Don't use string formatting functions such as `fmt.Sprintf`
-to assemble an SQL statement! You could introduce an SQL injection risk.
-For more, see [Avoiding SQL injection risk](/doc/database/sql-injection).
+**Cuidado:** Não use funções de formatação de string como `fmt.Sprintf`
+para montar um statement SQL! Você poderia introduzir um risco de SQL injection.
+Para mais, consulte [Avoiding SQL injection risk](/doc/database/sql-injection).
 
-#### Functions for executing SQL statements that don't return rows {#no_rows_functions}
+#### Funções para executar statements SQL que não retornam linhas {#no_rows_functions}
 
 <table id="no-rows-functions-list" class="DocTable">
   <thead>
@@ -67,14 +68,14 @@ For more, see [Avoiding SQL injection risk](/doc/database/sql-injection).
         <code><a href="https://pkg.go.dev/database/sql#DB.Exec">DB.Exec</a></code><br/>
         <code><a href="https://pkg.go.dev/database/sql#DB.ExecContext">DB.ExecContext</a></code>
       </td>
-      <td class="DocTable-cell">Execute a single SQL statement in isolation.</td>
+      <td class="DocTable-cell">Executar um único statement SQL isoladamente.</td>
     </tr>
     <tr class="DocTable-row">
       <td class="DocTable-cell">
         <code><a href="https://pkg.go.dev/database/sql#Tx.Exec">Tx.Exec</a></code><br/>
         <code><a href="https://pkg.go.dev/database/sql#Tx.ExecContext">Tx.ExecContext</a></code>
       </td>
-      <td class="DocTable-cell">Execute a SQL statement within a larger transaction. For more, see
+      <td class="DocTable-cell">Executar um statement SQL dentro de uma transação maior. Para mais, consulte
           <a href="/doc/database/execute-transactions">Executing transactions</a>.
       </td>
     </tr>
@@ -83,7 +84,7 @@ For more, see [Avoiding SQL injection risk](/doc/database/sql-injection).
         <code><a href="https://pkg.go.dev/database/sql#Stmt.Exec">Stmt.Exec</a></code><br/>
         <code><a href="https://pkg.go.dev/database/sql#Stmt.ExecContext">Stmt.ExecContext</a></code>
       </td>
-      <td class="DocTable-cell">Execute an already-prepared SQL statement. For more, see
+      <td class="DocTable-cell">Executar um statement SQL já preparado. Para mais, consulte
           <a href="/doc/database/prepared-statements">Using prepared statements</a>.
       </td>
     </tr>
@@ -91,7 +92,7 @@ For more, see [Avoiding SQL injection risk](/doc/database/sql-injection).
       <td class="DocTable-cell">
         <code><a href="https://pkg.go.dev/database/sql#Conn.ExecContext">Conn.ExecContext</a></code>
       </td>
-      <td class="DocTable-cell">For use with reserved connections. For more, see
+      <td class="DocTable-cell">Para uso com conexões reservadas. Para mais, consulte
           <a href="/doc/database/manage-connections">Managing connections</a>.
       </td>
     </tr>

@@ -1,45 +1,46 @@
 <!--{
-  "Title": "Querying for data"
+  "Title": "Querying for data",
+  "ia-translated": true
 }-->
 
-When executing an SQL statement that returns data, use one of the `Query`
-methods provided in the `database/sql` package. Each of these returns a `Row`
-or `Rows` whose data you can copy to variables using the `Scan` method.
-You'd use these methods to, for example, execute `SELECT` statements.
+Ao executar um statement SQL que retorna dados, use um dos métodos `Query`
+fornecidos no package `database/sql`. Cada um deles retorna um `Row`
+ou `Rows` cujos dados você pode copiar para variáveis usando o método `Scan`.
+Você usaria esses métodos para, por exemplo, executar statements `SELECT`.
 
-When executing a statement that doesn’t return data, you can use an `Exec` or
-`ExecContext` method instead. For more, see
+Ao executar um statement que não retorna dados, você pode usar um método `Exec` ou
+`ExecContext` em vez disso. Para mais, consulte
 [Executing statements that don't return data](/doc/database/change-data).
 
-The `database/sql` package provides two ways to execute a query for results.
+O package `database/sql` fornece duas maneiras de executar uma query para resultados.
 
-*   **Querying for a single row** – `QueryRow` returns at most a single `Row`
-    from the database. For more, see [Querying for a single row](#single_row).
-*   **Querying for multiple rows** – `Query` returns all matching rows as a
-    `Rows` struct your code can loop over. For more, see
+*   **Querying para uma única linha** – `QueryRow` retorna no máximo um único `Row`
+    do banco de dados. Para mais, consulte [Querying for a single row](#single_row).
+*   **Querying para múltiplas linhas** – `Query` retorna todas as linhas correspondentes como um
+    struct `Rows` que seu código pode percorrer. Para mais, consulte
     [Querying for multiple rows](#multiple_rows).
 
-If your code will be executing the same SQL statement repeatedly, consider
-using a prepared statement. For more, see
+Se seu código executará o mesmo statement SQL repetidamente, considere
+usar um prepared statement. Para mais, consulte
 [Using prepared statements](/doc/database/prepared-statements).
 
-**Caution:** Don't use string formatting functions such as `fmt.Sprintf` to
-assemble an SQL statement! You could introduce an SQL injection risk. For more,
-see [Avoiding SQL injection risk](/doc/database/sql-injection).
+**Cuidado:** Não use funções de formatação de string como `fmt.Sprintf` para
+montar um statement SQL! Você poderia introduzir um risco de SQL injection. Para mais,
+consulte [Avoiding SQL injection risk](/doc/database/sql-injection).
 
-### Querying for a single row {#single_row}
+### Querying para uma única linha {#single_row}
 
-`QueryRow` retrieves at most a single database row, such as when you want to
-look up data by a unique ID. If multiple rows are returned by the query, the
-`Scan` method discards all but the first.
+`QueryRow` recupera no máximo uma única linha de banco de dados, como quando você quer
+procurar dados por um ID único. Se múltiplas linhas forem retornadas pela query, o
+método `Scan` descarta todas exceto a primeira.
 
-`QueryRowContext` works like `QueryRow` but with a `context.Context` argument.
-For more, see [Canceling in-progress operations](/doc/database/cancel-operations).
+`QueryRowContext` funciona como `QueryRow` mas com um argumento `context.Context`.
+Para mais, consulte [Canceling in-progress operations](/doc/database/cancel-operations).
 
-The following example uses a query to find out if there's enough inventory to
-support a purchase. The SQL statement returns `true` if there's enough, `false`
-if not. [`Row.Scan`](https://pkg.go.dev/database/sql#Row.Scan) copies the
-boolean return value into the `enough` variable through a pointer.
+O exemplo a seguir usa uma query para descobrir se há inventory suficiente para
+suportar uma compra. O statement SQL retorna `true` se houver o suficiente, `false`
+caso contrário. [`Row.Scan`](https://pkg.go.dev/database/sql#Row.Scan) copia o
+valor boolean retornado para a variável `enough` através de um ponteiro.
 
 ```
 func canPurchase(id int, quantity int) (bool, error) {
@@ -56,19 +57,19 @@ func canPurchase(id int, quantity int) (bool, error) {
 }
 ```
 
-**Note:** Parameter placeholders in prepared statements vary depending on the
-DBMS and driver you're using. For example, the
-[pq driver](https://pkg.go.dev/github.com/lib/pq) for Postgres requires a
-placeholder like `$1` instead of `?`.
+**Nota:** Placeholders de parâmetro em prepared statements variam dependendo do
+DBMS e driver que você está usando. Por exemplo, o
+[driver pq](https://pkg.go.dev/github.com/lib/pq) para Postgres requer um
+placeholder como `$1` em vez de `?`.
 
-#### Handling errors {#single_row_errors}
+#### Tratando erros {#single_row_errors}
 
-`QueryRow` itself returns no error. Instead, `Scan` reports any error from the
-combined lookup and scan. It returns
-[`sql.ErrNoRows`](https://pkg.go.dev/database/sql#ErrNoRows) when the query
-finds no rows.
+`QueryRow` em si não retorna erro. Em vez disso, `Scan` reporta qualquer erro da
+busca e scan combinados. Ele retorna
+[`sql.ErrNoRows`](https://pkg.go.dev/database/sql#ErrNoRows) quando a query
+não encontra linhas.
 
-#### Functions for returning a single row {#single_row_functions}
+#### Funções para retornar uma única linha {#single_row_functions}
 
 <table id="single-row-functions-list" class="DocTable">
   <thead>
@@ -83,14 +84,14 @@ finds no rows.
         <code><a href="https://pkg.go.dev/database/sql#DB.QueryRow">DB.QueryRow</a></code><br />
         <code><a href="https://pkg.go.dev/database/sql#DB.QueryRowContext">DB.QueryRowContext</a></code>
       </td>
-      <td class="DocTable-cell">Run a single-row query in isolation.</td>
+      <td class="DocTable-cell">Executar uma query de linha única isoladamente.</td>
     </tr>
     <tr class="DocTable-row">
       <td class="DocTable-cell">
         <code><a href="https://pkg.go.dev/database/sql#Tx.QueryRow">Tx.QueryRow</a></code><br />
         <code><a href="https://pkg.go.dev/database/sql#Tx.QueryRowContext">Tx.QueryRowContext</a></code>
       </td>
-      <td class="DocTable-cell">Run a single-row query inside a larger transaction. For more, see
+      <td class="DocTable-cell">Executar uma query de linha única dentro de uma transação maior. Para mais, consulte
         <a href="/doc/database/execute-transactions">Executing transactions</a>.
       </td>
     </tr>
@@ -99,35 +100,35 @@ finds no rows.
         <code><a href="https://pkg.go.dev/database/sql#Stmt.QueryRow">Stmt.QueryRow</a></code><br />
         <code><a href="https://pkg.go.dev/database/sql#Stmt.QueryRowContext">Stmt.QueryRowContext</a></code>
       </td>
-      <td class="DocTable-cell">Run a single-row query using an already-prepared statement. For more,
-        see <a href="/doc/database/prepared-statements">Using prepared statements</a>.
+      <td class="DocTable-cell">Executar uma query de linha única usando um statement já preparado. Para mais,
+        consulte <a href="/doc/database/prepared-statements">Using prepared statements</a>.
       </td>
     </tr>
     <tr class="DocTable-row">
         <td class="DocTable-cell">
   <code><a href="https://pkg.go.dev/database/sql#Conn.QueryRowContext">Conn.QueryRowContext</a></code>
       </td>
-      <td class="DocTable-cell">For use with reserved connections. For more, see
+      <td class="DocTable-cell">Para uso com conexões reservadas. Para mais, consulte
         <a href="/doc/database/manage-connections">Managing connections</a>.
       </td>
     </tr>
   </tbody>
 </table>
 
-### Querying for multiple rows {#multiple_rows}
+### Querying para múltiplas linhas {#multiple_rows}
 
-You can query for multiple rows using `Query` or `QueryContext`, which return
-a `Rows` representing the query results. Your code iterates over the returned
-rows using [`Rows.Next`](https://pkg.go.dev/database/sql#Rows.Next). Each
-iteration calls `Scan` to copy column values into variables. 
+Você pode fazer query para múltiplas linhas usando `Query` ou `QueryContext`, que retornam
+um `Rows` representando os resultados da query. Seu código itera sobre as linhas retornadas
+usando [`Rows.Next`](https://pkg.go.dev/database/sql#Rows.Next). Cada
+iteração chama `Scan` para copiar valores de coluna em variáveis.
 
-`QueryContext` works like `Query` but with a `context.Context` argument. For
-more, see [Canceling in-progress operations](/doc/database/cancel-operations).
+`QueryContext` funciona como `Query` mas com um argumento `context.Context`. Para
+mais, consulte [Canceling in-progress operations](/doc/database/cancel-operations).
 
-The following example executes a query to return the albums by a specified
-artist. The albums are returned in an `sql.Rows`. The code uses
-[`Rows.Scan`](https://pkg.go.dev/database/sql#Rows.Scan) to copy column values
-into variables represented by pointers.
+O exemplo a seguir executa uma query para retornar os álbuns de um artista especificado.
+Os álbuns são retornados em um `sql.Rows`. O código usa
+[`Rows.Scan`](https://pkg.go.dev/database/sql#Rows.Scan) para copiar valores de coluna
+em variáveis representadas por ponteiros.
 
 ```
 func albumsByArtist(artist string) ([]Album, error) {
@@ -156,22 +157,22 @@ func albumsByArtist(artist string) ([]Album, error) {
 }
 ```
 
-Note the deferred call to [`rows.Close`](https://pkg.go.dev/database/sql#Rows.Close).
-This releases any resources held by the rows no matter how the function
-returns. Looping all the way through the rows also closes it implicitly,
-but it is better to use `defer` to make sure `rows` is closed no matter what.
+Observe a chamada adiada para [`rows.Close`](https://pkg.go.dev/database/sql#Rows.Close).
+Isso libera quaisquer recursos mantidos pelas linhas não importa como a função
+retorna. Percorrer todas as linhas também o fecha implicitamente,
+mas é melhor usar `defer` para garantir que `rows` seja fechado não importa o que aconteça.
 
-**Note:** Parameter placeholders in prepared statements vary depending on
-the DBMS and driver you're using. For example, the
-[pq driver](https://pkg.go.dev/github.com/lib/pq) for Postgres requires a
-placeholder like `$1` instead of `?`.
+**Nota:** Placeholders de parâmetro em prepared statements variam dependendo
+do DBMS e driver que você está usando. Por exemplo, o
+[driver pq](https://pkg.go.dev/github.com/lib/pq) para Postgres requer um
+placeholder como `$1` em vez de `?`.
 
-#### Handling errors {#multiple_rows_errors}
+#### Tratando erros {#multiple_rows_errors}
 
-Be sure to check for an error from `sql.Rows` after looping over query results.
-If the query failed, this is how your code finds out.
+Certifique-se de verificar por um erro de `sql.Rows` após percorrer os resultados da query.
+Se a query falhar, é assim que seu código descobre.
 
-#### Functions for returning multiple rows {#multiple_rows_functions}
+#### Funções para retornar múltiplas linhas {#multiple_rows_functions}
 
 <table id="multiple-row-functions-list" class="DocTable">
   <thead>
@@ -186,14 +187,14 @@ If the query failed, this is how your code finds out.
         <code><a href="https://pkg.go.dev/database/sql#DB.Query">DB.Query</a></code><br />
         <code><a href="https://pkg.go.dev/database/sql#DB.QueryContext">DB.QueryContext</a></code>
       </td>
-      <td class="DocTable-cell">Run a query in isolation.</td>
+      <td class="DocTable-cell">Executar uma query isoladamente.</td>
     </tr>
     <tr class="DocTable-row">
       <td class="DocTable-cell">
         <code><a href="https://pkg.go.dev/database/sql#Tx.Query">Tx.Query</a></code><br />
         <code><a href="https://pkg.go.dev/database/sql#Tx.QueryContext">Tx.QueryContext</a></code>
       </td>
-      <td class="DocTable-cell">Run a query inside a larger transaction. For more, see
+      <td class="DocTable-cell">Executar uma query dentro de uma transação maior. Para mais, consulte
         <a href="/doc/database/execute-transactions">Executing transactions</a>.
       </td>
     </tr>
@@ -202,7 +203,7 @@ If the query failed, this is how your code finds out.
         <code><a href="https://pkg.go.dev/database/sql#Stmt.Query">Stmt.Query</a></code><br />
         <code><a href="https://pkg.go.dev/database/sql#Stmt.QueryContext">Stmt.QueryContext</a></code>
       </td>
-      <td class="DocTable-cell">Run a query using an already-prepared statement. For more, see
+      <td class="DocTable-cell">Executar uma query usando um statement já preparado. Para mais, consulte
         <a href="/doc/database/prepared-statements">Using prepared
           statements</a>.
     </td>
@@ -211,22 +212,22 @@ If the query failed, this is how your code finds out.
       <td class="DocTable-cell">
         <code><a href="https://pkg.go.dev/database/sql#Conn.QueryContext">Conn.QueryContext</a></code>
       </td>
-      <td class="DocTable-cell">For use with reserved connections. For more, see
+      <td class="DocTable-cell">Para uso com conexões reservadas. Para mais, consulte
         <a href="/doc/database/manage-connections">Managing connections</a>.
       </td>
     </tr>
   </tbody>
 </table>
 
-### Handling nullable column values {#nullable_columns}
+### Tratando valores de coluna nullable {#nullable_columns}
 
-The `database/sql` package provides several special types you can use as
-arguments for the `Scan` function when a column's value might be null. Each
-includes a `Valid` field that reports whether the value is non-null, and a
-field holding the value if so.
+O package `database/sql` fornece vários tipos especiais que você pode usar como
+argumentos para a função `Scan` quando o valor de uma coluna pode ser null. Cada
+um inclui um campo `Valid` que reporta se o valor é não-null, e um
+campo contendo o valor se for o caso.
 
-Code in the following example queries for a customer name. If the name value
-is null, the code substitutes another value for use in the application.
+O código no exemplo a seguir faz query para um nome de cliente. Se o valor do nome
+for null, o código substitui outro valor para uso na aplicação.
 
 ```
 var s sql.NullString
@@ -242,7 +243,7 @@ if s.Valid {
 }
 ```
 
-See more about each type in the `sql` package reference:
+Veja mais sobre cada tipo na referência do package `sql`:
 
 *    [`NullBool`](https://pkg.go.dev/database/sql#NullBool)
 *    [`NullFloat64`](https://pkg.go.dev/database/sql#NullFloat64)
@@ -251,42 +252,42 @@ See more about each type in the `sql` package reference:
 *    [`NullString`](https://pkg.go.dev/database/sql#NullString)
 *    [`NullTime`](https://pkg.go.dev/database/sql#NullTime)
 
-### Getting data from columns {#column_data}
+### Obtendo dados das colunas {#column_data}
 
-When looping over the rows returned by a query, you use `Scan` to copy a row’s
-column values into Go values, as described in the
-[`Rows.Scan`](https://pkg.go.dev/database/sql#Rows.Scan) reference.
+Ao percorrer as linhas retornadas por uma query, você usa `Scan` para copiar os valores de coluna de uma linha
+em valores Go, como descrito na
+referência [`Rows.Scan`](https://pkg.go.dev/database/sql#Rows.Scan).
 
-There is a base set of data conversions supported by all drivers, such as
-converting SQL `INT` to Go `int`. Some drivers extend this set of conversions;
-see each individual driver's documentation for details.
+Há um conjunto base de conversões de dados suportado por todos os drivers, como
+converter SQL `INT` para Go `int`. Alguns drivers estendem esse conjunto de conversões;
+consulte a documentação de cada driver individual para detalhes.
 
-As you might expect, `Scan` will convert from column types to Go types that
-are similar. For example, `Scan` will convert from SQL `CHAR`, `VARCHAR`, and
-`TEXT` to Go `string`. However, `Scan` will also perform a conversion to
-another Go type that is a good fit for the column value. For example, if the
-column is a `VARCHAR` that will always contain a number, you can specify a
-numeric Go type, such as `int`, to receive the value, and `Scan` will convert
-it using `strconv.Atoi` for you.
+Como você pode esperar, `Scan` converterá de tipos de coluna para tipos Go que
+são similares. Por exemplo, `Scan` converterá de SQL `CHAR`, `VARCHAR`, e
+`TEXT` para Go `string`. No entanto, `Scan` também executará uma conversão para
+outro tipo Go que seja uma boa escolha para o valor da coluna. Por exemplo, se a
+coluna é um `VARCHAR` que sempre conterá um número, você pode especificar um
+tipo numérico Go, como `int`, para receber o valor, e `Scan` converterá
+usando `strconv.Atoi` para você.
 
-For more detail about conversions made by the `Scan` function, see the [`Rows.Scan`](https://pkg.go.dev/database/sql#Rows.Scan) reference.
+Para mais detalhes sobre conversões feitas pela função `Scan`, consulte a referência [`Rows.Scan`](https://pkg.go.dev/database/sql#Rows.Scan).
 
-### Handling multiple result sets {#multiple_result_sets}
+### Tratando múltiplos result sets {#multiple_result_sets}
 
-When your database operation might return multiple result sets, you can
-retrieve those by using
+Quando sua operação de banco de dados pode retornar múltiplos result sets, você pode
+recuperá-los usando
 [`Rows.NextResultSet`](https://pkg.go.dev/database/sql#Rows.NextResultSet).
-This can be useful, for example, when you're sending SQL that separately queries
-multiple tables, returning a result set for each.
+Isso pode ser útil, por exemplo, quando você está enviando SQL que faz query separadamente em
+múltiplas tabelas, retornando um result set para cada.
 
-`Rows.NextResultSet` prepares the next result set so that a call to
-`Rows.Next` retrieves the first row from that next set. It returns a boolean
-indicating whether there is a next result set at all.
+`Rows.NextResultSet` prepara o próximo result set para que uma chamada a
+`Rows.Next` recupere a primeira linha daquele próximo set. Ele retorna um boolean
+indicando se há um próximo result set.
 
-Code in the following example uses `DB.Query` to execute two SQL statements.
-The first result set is from the first query in the procedure, retrieving all
-of the rows in the `album` table. The next result set is from the second query,
-retrieving rows from the `song` table.
+O código no exemplo a seguir usa `DB.Query` para executar dois statements SQL.
+O primeiro result set é da primeira query no procedimento, recuperando todas
+as linhas da tabela `album`. O próximo result set é da segunda query,
+recuperando linhas da tabela `song`.
 
 ```
 rows, err := db.Query("SELECT * from album; SELECT * from song;")
