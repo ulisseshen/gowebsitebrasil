@@ -59,7 +59,7 @@ Após traduzir cada arquivo, marque o checkpoint com `[x]`.
 - [x] `_content/doc/tutorial/module-conclusion.html` - Conclusão do módulo
 
 ### 2.2 Tutoriais Avançados (Markdown)
-- [ ] `_content/doc/tutorial/database-access.md` - Acesso a banco de dados
+- [x] `_content/doc/tutorial/database-access.md` - Acesso a banco de dados
 - [ ] `_content/doc/tutorial/web-service-gin.md` - Web service com Gin
 - [ ] `_content/doc/tutorial/generics.md` - Generics
 - [ ] `_content/doc/tutorial/fuzz.md` - Fuzzing

@@ -1,70 +1,72 @@
+---
+ia-translated: true
+---
 <!--{
-  "Title": "Tutorial: Accessing a relational database",
+  "Title": "Tutorial: Acessando um banco de dados relacional",
   "Breadcrumb": true
 }-->
 
-This tutorial introduces the basics of accessing a relational database with
-Go and the `database/sql` package in its standard library.
+Este tutorial introduz os fundamentos de acessar um banco de dados relacional com
+Go e o pacote `database/sql` em sua biblioteca padrão.
 
-You'll get the most out of this tutorial if you have a basic familiarity with
-Go and its tooling. If this is your first exposure to Go, please see
-[Tutorial: Get started with Go](/doc/tutorial/getting-started)
-for a quick introduction.
+Você aproveitará mais este tutorial se tiver familiaridade básica com
+Go e suas ferramentas. Se esta é sua primeira exposição ao Go, por favor veja
+[Tutorial: Começando com Go](/doc/tutorial/getting-started)
+para uma rápida introdução.
 
-The [`database/sql`](https://pkg.go.dev/database/sql) package you'll
-be using includes types and functions for connecting to databases, executing
-transactions, canceling an operation in progress, and more. For more details
-on using the package, see
-[Accessing databases](/doc/database/index).
+O pacote [`database/sql`](https://pkg.go.dev/database/sql) que você
+usará inclui tipos e funções para conectar a bancos de dados, executar
+transações, cancelar uma operação em andamento, e mais. Para mais detalhes
+sobre o uso do pacote, veja
+[Acessando bancos de dados](/doc/database/index).
 
-In this tutorial, you'll create a database, then write code to access the
-database. Your example project will be a repository of data about vintage
-jazz records.
+Neste tutorial, você criará um banco de dados, então escreverá código para acessar o
+banco de dados. Seu projeto exemplo será um repositório de dados sobre discos
+de jazz vintage.
 
-In this tutorial, you'll progress through the following sections:
+Neste tutorial, você progredirá através das seguintes seções:
 
-1. Create a folder for your code.
-2. Set up a database.
-3. Import the database driver.
-4. Get a database handle and connect.
-5. Query for multiple rows.
-6. Query for a single row.
-7. Add data.
+1. Criar uma pasta para seu código.
+2. Configurar um banco de dados.
+3. Importar o driver do banco de dados.
+4. Obter um handle de banco de dados e conectar.
+5. Consultar múltiplas linhas.
+6. Consultar uma única linha.
+7. Adicionar dados.
 
-**Note:** For other tutorials, see [Tutorials](/doc/tutorial/index.html).
+**Nota:** Para outros tutoriais, veja [Tutoriais](/doc/tutorial/index.html).
 
-## Prerequisites {#prerequisites}
+## Pré-requisitos {#prerequisites}
 
-*   **An installation of the [MySQL](https://dev.mysql.com/doc/mysql-installation-excerpt/5.7/en/)
-    relational database management system (DBMS).**
-*   **An installation of Go.** For installation instructions, see
-    [Installing Go](/doc/install).
-*   **A tool to edit your code.** Any text editor you have will work fine.
-*   **A command terminal.** Go works well using any terminal on Linux and Mac,
-    and on PowerShell or cmd in Windows.
+*   **Uma instalação do sistema de gerenciamento de banco de dados relacional (DBMS) [MySQL](https://dev.mysql.com/doc/mysql-installation-excerpt/5.7/en/).**
+*   **Uma instalação do Go.** Para instruções de instalação, veja
+    [Instalando Go](/doc/install).
+*   **Uma ferramenta para editar seu código.** Qualquer editor de texto que você tenha funcionará bem.
+*   **Um terminal de comando.** Go funciona bem usando qualquer terminal no Linux e Mac,
+    e no PowerShell ou cmd no Windows.
 
-## Create a folder for your code {#create_folder}
+## Criar uma pasta para seu código {#create_folder}
 
-To begin, create a folder for the code you'll write.
+Para começar, crie uma pasta para o código que você escreverá.
 
-1. Open a command prompt and change to your home directory.
+1. Abra um prompt de comando e mude para seu diretório home.
 
-    On Linux or Mac:
+    No Linux ou Mac:
 
     ```
     $ cd
     ```
 
-    On Windows:
+    No Windows:
 
     ```
     C:\> cd %HOMEPATH%
     ```
 
-    For the rest of the tutorial we will show a $ as the prompt. The
-    commands we use will work on Windows too.
+    Para o resto do tutorial mostraremos um $ como o prompt. Os
+    comandos que usamos funcionarão no Windows também.
 
-2. From the command prompt, create a directory for your code called
+2. Do prompt de comando, crie um diretório para seu código chamado
     data-access.
 
     ```
@@ -73,39 +75,39 @@ To begin, create a folder for the code you'll write.
     ```
 
 
-3. Create a module in which you can manage dependencies you will add during
-    this tutorial.
+3. Crie um módulo no qual você pode gerenciar dependências que adicionará durante
+    este tutorial.
 
-    Run the `go mod init` command, giving it your new code's module path.
+    Execute o comando `go mod init`, dando a ele o caminho do módulo do seu novo código.
 
     ```
     $ go mod init example/data-access
     go: creating new go.mod: module example/data-access
     ```
 
-    This command creates a go.mod file in which dependencies you add will be
-    listed for tracking. For more, be sure to see
-    [Managing dependencies](/doc/modules/managing-dependencies).
+    Este comando cria um arquivo go.mod no qual dependências que você adicionar serão
+    listadas para rastreamento. Para mais, certifique-se de ver
+    [Gerenciando dependências](/doc/modules/managing-dependencies).
 
-    **Note:** In actual development, you'd specify a module path that's
-    more specific to your own needs. For more, see
-    [Managing dependencies](/doc/modules/managing-dependencies#naming_module).
+    **Nota:** No desenvolvimento real, você especificaria um caminho de módulo que é
+    mais específico para suas próprias necessidades. Para mais, veja
+    [Gerenciando dependências](/doc/modules/managing-dependencies#naming_module).
 
-Next, you'll create a database.
+A seguir, você criará um banco de dados.
 
-## Set up a database {#set_up_database}
+## Configurar um banco de dados {#set_up_database}
 
-In this step, you'll create the database you'll be working with. You'll use
-the CLI for the DBMS itself to create the database and table, as well as to
-add data.
+Neste passo, você criará o banco de dados com o qual trabalhará. Você usará
+a CLI para o próprio DBMS para criar o banco de dados e tabela, assim como para
+adicionar dados.
 
-You'll be creating a database with data about vintage jazz recordings on vinyl.
+Você criará um banco de dados com dados sobre gravações de jazz vintage em vinil.
 
-The code here uses the [MySQL CLI](https://dev.mysql.com/doc/refman/8.0/en/mysql.html),
-but most DBMSes have their own CLI with similar features.
+O código aqui usa a [CLI MySQL](https://dev.mysql.com/doc/refman/8.0/en/mysql.html),
+mas a maioria dos DBMSes tem sua própria CLI com recursos similares.
 
-1. Open a new command prompt.
-2. At the command line, log into your DBMS, as in the following example for
+1. Abra um novo prompt de comando.
+2. Na linha de comando, faça login em seu DBMS, como no seguinte exemplo para
     MySQL.
 
     ```
@@ -115,22 +117,22 @@ but most DBMSes have their own CLI with similar features.
     mysql>
     ```
 
-3. At the `mysql` command prompt, create a database.
+3. No prompt de comando `mysql`, crie um banco de dados.
 
     ```
     mysql> create database recordings;
     ```
 
-4. Change to the database you just created so you can add tables.
+4. Mude para o banco de dados que você acabou de criar para poder adicionar tabelas.
 
     ```
     mysql> use recordings;
     Database changed
     ```
 
-5. In your text editor, in the data-access folder, create a file called
-    create-tables.sql to hold SQL script for adding tables.
-6. Into the file, paste the following SQL code, then save the file.
+5. No seu editor de texto, na pasta data-access, crie um arquivo chamado
+    create-tables.sql para manter script SQL para adicionar tabelas.
+6. No arquivo, cole o seguinte código SQL, então salve o arquivo.
 
     ```
     DROP TABLE IF EXISTS album;
@@ -151,27 +153,27 @@ but most DBMSes have their own CLI with similar features.
       ('Sarah Vaughan', 'Sarah Vaughan', 34.98);
     ```
 
-    In this SQL code, you:
+    Neste código SQL, você:
 
-    *   Delete (drop) a table called `album`. Executing this command first makes
-        it easier for you to re-run the script later if you want to start over
-        with the table.
+    *   Deleta (drop) uma tabela chamada `album`. Executar este comando primeiro torna
+        mais fácil para você re-executar o script mais tarde se quiser começar de novo
+        com a tabela.
 
-    *   Create an `album` table with four columns: `title`, `artist`, and `price`.
-        Each row's `id` value is created automatically by the DBMS.
+    *   Cria uma tabela `album` com quatro colunas: `title`, `artist` e `price`.
+        O valor `id` de cada linha é criado automaticamente pelo DBMS.
 
-    *   Add four rows with values.
+    *   Adiciona quatro linhas com valores.
 
-7. From the `mysql` command prompt, run the script you just created.
+7. Do prompt de comando `mysql`, execute o script que você acabou de criar.
 
-    You'll use the `source` command in the following form:
+    Você usará o comando `source` na seguinte forma:
 
     ```
     mysql> source /path/to/create-tables.sql
     ```
 
-8. At your DBMS command prompt, use a `SELECT` statement to verify you've
-    successfully created the table with data.
+8. No seu prompt de comando DBMS, use uma instrução `SELECT` para verificar que você
+    criou com sucesso a tabela com dados.
 
     ```
     mysql> select * from album;
@@ -186,29 +188,29 @@ but most DBMSes have their own CLI with similar features.
     4 rows in set (0.00 sec)
     ```
 
-Next, you'll write some Go code to connect so you can query.
+A seguir, você escreverá algum código Go para conectar para que possa consultar.
 
-## Find and import a database driver {#import_driver}
+## Encontrar e importar um driver de banco de dados {#import_driver}
 
-Now that you've got a database with some data, get your Go code started.
+Agora que você tem um banco de dados com alguns dados, comece seu código Go.
 
-Locate and import a database driver that will translate requests you make
-through functions in the `database/sql` package into requests the database
-understands.
+Localize e importe um driver de banco de dados que traduzirá requisições que você faz
+através de funções no pacote `database/sql` em requisições que o banco de dados
+entende.
 
-1. In your browser, visit the [SQLDrivers](/wiki/SQLDrivers)
-    wiki page to identify a driver you can use.
+1. No seu navegador, visite a página wiki [SQLDrivers](/wiki/SQLDrivers)
+    para identificar um driver que você pode usar.
 
-    Use the list on the page to identify the driver you'll use. For accessing
-    MySQL in this tutorial, you'll use
+    Use a lista na página para identificar o driver que você usará. Para acessar
+    MySQL neste tutorial, você usará
     [Go-MySQL-Driver](https://github.com/go-sql-driver/mysql/).
 
-2. Note the package name for the driver -- here, `github.com/go-sql-driver/mysql`.
+2. Note o nome do pacote para o driver -- aqui, `github.com/go-sql-driver/mysql`.
 
-3. Using your text editor, create a file in which to write your Go code and
-    save the file as main.go in the data-access directory you created earlier.
+3. Usando seu editor de texto, crie um arquivo no qual escrever seu código Go e
+    salve o arquivo como main.go no diretório data-access que você criou anteriormente.
 
-4. Into main.go, paste the following code to import the driver package.
+4. Em main.go, cole o seguinte código para importar o pacote driver.
 
     ```
     package main
@@ -216,25 +218,25 @@ understands.
     import "github.com/go-sql-driver/mysql"
     ```
 
-    In this code, you:
+    Neste código, você:
 
-    *   Add your code to a `main` package so you can execute it independently.
+    *   Adiciona seu código a um pacote `main` para que possa executá-lo independentemente.
 
-    *   Import the MySQL driver `github.com/go-sql-driver/mysql`.
+    *   Importa o driver MySQL `github.com/go-sql-driver/mysql`.
 
-With the driver imported, you'll start writing code to access the database.
+Com o driver importado, você começará a escrever código para acessar o banco de dados.
 
-## Get a database handle and connect {#get_handle}
+## Obter um handle de banco de dados e conectar {#get_handle}
 
-Now write some Go code that gives you database access with a database handle.
+Agora escreva algum código Go que lhe dá acesso ao banco de dados com um handle de banco de dados.
 
-You'll use a pointer to an `sql.DB` struct, which represents access to a
-specific database.
+Você usará um ponteiro para uma struct `sql.DB`, que representa acesso a um
+banco de dados específico.
 
-#### Write the code
+#### Escrever o código
 
-1. Into main.go, beneath the `import` code you just added, paste the following
-    Go code to create a database handle.
+1. Em main.go, abaixo do código `import` que você acabou de adicionar, cole o seguinte
+    código Go para criar um handle de banco de dados.
 
     ```
     var db *sql.DB
@@ -263,47 +265,47 @@ specific database.
     }
     ```
 
-    In this code, you:
+    Neste código, você:
 
-    *   Declare a `db` variable of type [`*sql.DB`](https://pkg.go.dev/database/sql#DB).
-        This is your database handle.
+    *   Declara uma variável `db` do tipo [`*sql.DB`](https://pkg.go.dev/database/sql#DB).
+        Este é seu handle de banco de dados.
 
-        Making `db` a global variable simplifies this example. In
-        production, you'd avoid the global variable, such as by passing the
-        variable to functions that need it or by wrapping it in a struct.
+        Fazer `db` uma variável global simplifica este exemplo. Em
+        produção, você evitaria a variável global, como passando a
+        variável para funções que precisam dela ou envolvendo-a em uma struct.
 
-    *   Use the MySQL driver's [`Config`](https://pkg.go.dev/github.com/go-sql-driver/mysql#Config)
-        -- and the type's [`FormatDSN`](https://pkg.go.dev/github.com/go-sql-driver/mysql#Config.FormatDSN)
-        -– to collect connection properties and format them into a DSN for a connection string.
+    *   Usa o [`Config`](https://pkg.go.dev/github.com/go-sql-driver/mysql#Config) do driver MySQL
+        -- e o [`FormatDSN`](https://pkg.go.dev/github.com/go-sql-driver/mysql#Config.FormatDSN) do tipo
+        -– para coletar propriedades de conexão e formatá-las em um DSN para uma string de conexão.
 
-        The `Config` struct makes for code that's easier to read than a
-        connection string would be.
+        A struct `Config` torna o código mais fácil de ler do que uma
+        string de conexão seria.
 
-    *   Call [`sql.Open`](https://pkg.go.dev/database/sql#Open)
-        to initialize the `db` variable, passing the return value of
+    *   Chama [`sql.Open`](https://pkg.go.dev/database/sql#Open)
+        para inicializar a variável `db`, passando o valor de retorno de
         `FormatDSN`.
 
-    *   Check for an error from `sql.Open`. It could fail if, for
-        example, your database connection specifics weren't well-formed.
+    *   Verifica se há um erro de `sql.Open`. Pode falhar se, por
+        exemplo, os detalhes de conexão do seu banco de dados não estiverem bem formados.
 
-        To simplify the code, you're calling `log.Fatal` to end
-        execution and print the error to the console. In production code, you'll
-        want to handle errors in a more graceful way.
+        Para simplificar o código, você está chamando `log.Fatal` para encerrar
+        a execução e imprimir o erro no console. Em código de produção, você
+        vai querer tratar erros de forma mais elegante.
 
-    *   Call [`DB.Ping`](https://pkg.go.dev/database/sql#DB.Ping) to
-        confirm that connecting to the database works. At run time,
-        `sql.Open` might not immediately connect, depending on the
-        driver. You're using `Ping` here to confirm that the
-        `database/sql` package can connect when it needs to.
+    *   Chama [`DB.Ping`](https://pkg.go.dev/database/sql#DB.Ping) para
+        confirmar que a conexão ao banco de dados funciona. Em tempo de execução,
+        `sql.Open` pode não conectar imediatamente, dependendo do
+        driver. Você está usando `Ping` aqui para confirmar que o
+        pacote `database/sql` pode conectar quando necessário.
 
-    *   Check for an error from `Ping`, in case the connection failed.
+    *   Verifica se há um erro de `Ping`, caso a conexão tenha falhado.
 
-    *   Print a message if `Ping` connects successfully.
+    *   Imprime uma mensagem se `Ping` conectar com sucesso.
 
-2. Near the top of the main.go file, just beneath the package declaration,
-    import the packages you'll need to support the code you've just written.
+2. Próximo ao topo do arquivo main.go, logo abaixo da declaração de pacote,
+    importe os pacotes que você precisará para suportar o código que você acabou de escrever.
 
-    The top of the file should now look like this:
+    O topo do arquivo agora deve ficar assim:
 
     ```
     package main
@@ -318,16 +320,16 @@ specific database.
     )
     ```
 
-3. Save main.go.
+3. Salve main.go.
 
-#### Run the code
+#### Executar o código
 
-1. Begin tracking the MySQL driver module as a dependency.
+1. Comece a rastrear o módulo do driver MySQL como uma dependência.
 
-    Use the [`go get`](/cmd/go/#hdr-Add_dependencies_to_current_module_and_install_them)
-    to add the github.com/go-sql-driver/mysql module as a dependency for your
-    own module. Use a dot argument to mean "get dependencies for code in the
-    current directory."
+    Use o [`go get`](/cmd/go/#hdr-Add_dependencies_to_current_module_and_install_them)
+    para adicionar o módulo github.com/go-sql-driver/mysql como uma dependência para seu
+    próprio módulo. Use um argumento ponto para significar "obter dependências para código no
+    diretório atual."
 
     ```
     $ go get .
@@ -335,52 +337,52 @@ specific database.
     go: added github.com/go-sql-driver/mysql v1.8.1
     ```
 
-    Go downloaded this dependency because you added it to the `import`
-    declaration in the previous step. For more about dependency tracking,
-    see [Adding a dependency](/doc/modules/managing-dependencies#adding_dependency).
+    Go baixou esta dependência porque você a adicionou à declaração `import`
+    no passo anterior. Para mais sobre rastreamento de dependências,
+    veja [Adicionando uma dependência](/doc/modules/managing-dependencies#adding_dependency).
 
-2. From the command prompt, set the `DBUSER` and `DBPASS` environment variables
-    for use by the Go program.
+2. Do prompt de comando, defina as variáveis de ambiente `DBUSER` e `DBPASS`
+    para uso pelo programa Go.
 
-    On Linux or Mac:
+    No Linux ou Mac:
 
     ```
     $ export DBUSER=username
     $ export DBPASS=password
     ```
 
-    On Windows:
+    No Windows:
 
     ```
     C:\Users\you\data-access> set DBUSER=username
     C:\Users\you\data-access> set DBPASS=password
     ```
 
-3. From the command line in the directory containing main.go, run the code by
-    typing `go run` with a dot argument to mean "run the package in the
-    current directory."
+3. Da linha de comando no diretório contendo main.go, execute o código digitando
+    `go run` com um argumento ponto para significar "executar o pacote no
+    diretório atual."
 
     ```
     $ go run .
     Connected!
     ```
 
-You can connect! Next, you'll query for some data.
+Você pode conectar! A seguir, você consultará alguns dados.
 
-## Query for multiple rows {#multiple_rows}
+## Consultar múltiplas linhas {#multiple_rows}
 
-In this section, you'll use Go to execute an SQL query designed to return
-multiple rows.
+Nesta seção, você usará Go para executar uma consulta SQL projetada para retornar
+múltiplas linhas.
 
-For SQL statements that might return multiple rows, you use the `Query` method
-from the `database/sql` package, then loop through the rows it returns. (You'll
-learn how to query for a single row later, in the section
-[Query for a single row](#single_row).)
-#### Write the code
+Para instruções SQL que podem retornar múltiplas linhas, você usa o método `Query`
+do pacote `database/sql`, então itera através das linhas que ele retorna. (Você
+aprenderá como consultar uma única linha mais tarde, na seção
+[Consultar uma única linha](#single_row).)
+#### Escrever o código
 
-1. Into main.go, immediately above `func main`, paste the following definition
-    of an `Album` struct. You'll use this to hold row data returned from the
-    query.
+1. Em main.go, imediatamente acima de `func main`, cole a seguinte definição
+    de uma struct `Album`. Você usará isso para manter dados de linha retornados da
+    consulta.
 
     ```
     type Album struct {
@@ -391,8 +393,8 @@ learn how to query for a single row later, in the section
     }
     ```
 
-2. Beneath `func main`, paste the following `albumsByArtist` function to query
-    the database.
+2. Abaixo de `func main`, cole a seguinte função `albumsByArtist` para consultar
+    o banco de dados.
 
     ```
     // albumsByArtist queries for albums that have the specified artist name.
@@ -420,48 +422,48 @@ learn how to query for a single row later, in the section
     }
     ```
 
-    In this code, you:
+    Neste código, você:
 
-    *   Declare an `albums` slice of the `Album` type you defined. This will hold
-        data from returned rows. Struct field names and types correspond to
-        database column names and types.
+    *   Declara um slice `albums` do tipo `Album` que você definiu. Isso manterá
+        dados de linhas retornadas. Nomes e tipos de campos de struct correspondem a
+        nomes e tipos de colunas do banco de dados.
 
-    *   Use [`DB.Query`](https://pkg.go.dev/database/sql#DB.Query) to
-        execute a `SELECT` statement to query for albums with the
-        specified artist name.
+    *   Usa [`DB.Query`](https://pkg.go.dev/database/sql#DB.Query) para
+        executar uma instrução `SELECT` para consultar álbuns com o
+        nome de artista especificado.
 
-        `Query`'s first parameter is the SQL statement. After the
-        parameter, you can pass zero or more parameters of any type. These provide
-        a place for you to specify the values for parameters in your SQL statement.
-        By separating the SQL statement from parameter values (rather than
-        concatenating them with, say, `fmt.Sprintf`), you enable the
-        `database/sql` package to send the values separate from the SQL
-        text, removing any SQL injection risk.
+        O primeiro parâmetro de `Query` é a instrução SQL. Após o
+        parâmetro, você pode passar zero ou mais parâmetros de qualquer tipo. Estes fornecem
+        um lugar para você especificar os valores para parâmetros na sua instrução SQL.
+        Separando a instrução SQL dos valores de parâmetro (em vez de
+        concatená-los com, digamos, `fmt.Sprintf`), você habilita o
+        pacote `database/sql` a enviar os valores separados do texto SQL,
+        removendo qualquer risco de injeção SQL.
 
-    *   Defer closing `rows` so that any resources it holds will be released when
-        the function exits.
+    *   Adia o fechamento de `rows` para que quaisquer recursos que ela mantenha sejam liberados quando
+        a função sair.
 
-    *   Loop through the returned rows, using
-        [`Rows.Scan`](https://pkg.go.dev/database/sql#Rows.Scan) to
-        assign each row’s column values to `Album` struct fields.
+    *   Itera através das linhas retornadas, usando
+        [`Rows.Scan`](https://pkg.go.dev/database/sql#Rows.Scan) para
+        atribuir valores de coluna de cada linha a campos da struct `Album`.
 
-        `Scan` takes a list of pointers to Go values, where the column
-        values will be written. Here, you pass pointers to fields in the
-        `alb` variable, created using the `&` operator.
-        `Scan` writes through the pointers to update the struct fields.
+        `Scan` recebe uma lista de ponteiros para valores Go, onde os valores de coluna
+        serão escritos. Aqui, você passa ponteiros para campos na
+        variável `alb`, criados usando o operador `&`.
+        `Scan` escreve através dos ponteiros para atualizar os campos da struct.
 
-    *   Inside the loop, check for an error from scanning column values into the
-        struct fields.
+    *   Dentro do loop, verifica se há um erro ao escanear valores de coluna para os
+        campos da struct.
 
-    *   Inside the loop, append the new `alb` to the `albums` slice.
+    *   Dentro do loop, anexa o novo `alb` ao slice `albums`.
 
-    *   After the loop, check for an error from the overall query, using
-        `rows.Err`. Note that if the query itself fails, checking for an error
-        here is the only way to find out that the results are incomplete.
+    *   Após o loop, verifica se há um erro da consulta geral, usando
+        `rows.Err`. Note que se a consulta em si falhar, verificar se há um erro
+        aqui é a única maneira de descobrir que os resultados estão incompletos.
 
-3. Update your `main` function to call `albumsByArtist`.
+3. Atualize sua função `main` para chamar `albumsByArtist`.
 
-    To the end of `func main`, add the following code.
+    No final de `func main`, adicione o seguinte código.
 
     ```
     albums, err := albumsByArtist("John Coltrane")
@@ -471,16 +473,16 @@ learn how to query for a single row later, in the section
     fmt.Printf("Albums found: %v\n", albums)
     ```
 
-    In the new code, you now:
+    No novo código, você agora:
 
-    *   Call the `albumsByArtist` function you added, assigning its return value to
-        a new `albums` variable.
+    *   Chama a função `albumsByArtist` que você adicionou, atribuindo seu valor de retorno a
+        uma nova variável `albums`.
 
-    *   Print the result.
+    *   Imprime o resultado.
 
-#### Run the code
+#### Executar o código
 
-From the command line in the directory containing main.go, run the code.
+Da linha de comando no diretório contendo main.go, execute o código.
 
 ```
 $ go run .
@@ -488,18 +490,18 @@ Connected!
 Albums found: [{1 Blue Train John Coltrane 56.99} {2 Giant Steps John Coltrane 63.99}]
 ```
 
-Next, you'll query for a single row.
+A seguir, você consultará uma única linha.
 
-## Query for a single row {#single_row}
+## Consultar uma única linha {#single_row}
 
-In this section, you'll use Go to query for a single row in the database.
+Nesta seção, você usará Go para consultar uma única linha no banco de dados.
 
-For SQL statements you know will return at most a single row, you can use
-`QueryRow`, which is simpler than using a `Query` loop.
+Para instruções SQL que você sabe que retornarão no máximo uma única linha, você pode usar
+`QueryRow`, que é mais simples do que usar um loop `Query`.
 
-#### Write the code
+#### Escrever o código
 
-1. Beneath `albumsByArtist`, paste the following `albumByID` function.
+1. Abaixo de `albumsByArtist`, cole a seguinte função `albumByID`.
 
     ```
     // albumByID queries for the album with the specified ID.
@@ -518,29 +520,29 @@ For SQL statements you know will return at most a single row, you can use
     }
     ```
 
-    In this code, you:
+    Neste código, você:
 
-    *   Use [`DB.QueryRow`](https://pkg.go.dev/database/sql#DB.QueryRow)
-        to execute a `SELECT` statement to query for an album with the
-        specified ID.
+    *   Usa [`DB.QueryRow`](https://pkg.go.dev/database/sql#DB.QueryRow)
+        para executar uma instrução `SELECT` para consultar um álbum com o
+        ID especificado.
 
-        It returns an `sql.Row`. To simplify the calling code
-        (your code!), `QueryRow` doesn't return an error. Instead,
-        it arranges to return any query error (such as `sql.ErrNoRows`)
-        from `Rows.Scan` later.
+        Ela retorna um `sql.Row`. Para simplificar o código chamador
+        (seu código!), `QueryRow` não retorna um erro. Em vez disso,
+        ela arranja para retornar qualquer erro de consulta (como `sql.ErrNoRows`)
+        de `Rows.Scan` mais tarde.
 
-    *   Use [`Row.Scan`](https://pkg.go.dev/database/sql#Row.Scan) to copy
-        column values into struct fields.
+    *   Usa [`Row.Scan`](https://pkg.go.dev/database/sql#Row.Scan) para copiar
+        valores de coluna para campos de struct.
 
-    *   Check for an error from `Scan`.
+    *   Verifica se há um erro de `Scan`.
 
-        The special error `sql.ErrNoRows` indicates that the query returned no
-        rows. Typically that error is worth replacing with more specific text,
-        such as “no such album” here.
+        O erro especial `sql.ErrNoRows` indica que a consulta não retornou
+        linhas. Tipicamente esse erro vale a pena substituir com texto mais específico,
+        como "no such album" aqui.
 
-2. Update `main` to call `albumByID`.
+2. Atualize `main` para chamar `albumByID`.
 
-    To the end of `func main`, add the following code.
+    No final de `func main`, adicione o seguinte código.
 
     ```
     // Hard-code ID 2 here to test the query.
@@ -551,15 +553,15 @@ For SQL statements you know will return at most a single row, you can use
     fmt.Printf("Album found: %v\n", alb)
     ```
 
-    In the new code, you now:
+    No novo código, você agora:
 
-    *   Call the `albumByID` function you added.
+    *   Chama a função `albumByID` que você adicionou.
 
-    *   Print the album ID returned.
+    *   Imprime o ID do álbum retornado.
 
-#### Run the code
+#### Executar o código
 
-From the command line in the directory containing main.go, run the code.
+Da linha de comando no diretório contendo main.go, execute o código.
 
 
 ```
@@ -569,20 +571,20 @@ Albums found: [{1 Blue Train John Coltrane 56.99} {2 Giant Steps John Coltrane 6
 Album found: {2 Giant Steps John Coltrane 63.99}
 ```
 
-Next, you'll add an album to the database.
+A seguir, você adicionará um álbum ao banco de dados.
 
-## Add data {#add_data}
+## Adicionar dados {#add_data}
 
-In this section, you'll use Go to execute an SQL `INSERT` statement to add a
-new row to the database.
+Nesta seção, você usará Go para executar uma instrução SQL `INSERT` para adicionar uma
+nova linha ao banco de dados.
 
-You’ve seen how to use `Query` and `QueryRow` with SQL statements that
-return data. To execute SQL statements that _don't_ return data, you use `Exec`.
+Você viu como usar `Query` e `QueryRow` com instruções SQL que
+retornam dados. Para executar instruções SQL que _não_ retornam dados, você usa `Exec`.
 
-#### Write the code
+#### Escrever o código
 
-1. Beneath `albumByID`, paste the following `addAlbum` function to insert a new
-    album in the database, then save the main.go.
+1. Abaixo de `albumByID`, cole a seguinte função `addAlbum` para inserir um novo
+    álbum no banco de dados, então salve o main.go.
 
     ```
     // addAlbum adds the specified album to the database,
@@ -600,24 +602,24 @@ return data. To execute SQL statements that _don't_ return data, you use `Exec`.
     }
     ```
 
-    In this code, you:
+    Neste código, você:
 
-    *   Use [`DB.Exec`](https://pkg.go.dev/database/sql#DB.Exec) to
-        execute an `INSERT` statement.
+    *   Usa [`DB.Exec`](https://pkg.go.dev/database/sql#DB.Exec) para
+        executar uma instrução `INSERT`.
 
-        Like `Query`, `Exec` takes an SQL statement followed
-        by parameter values for the SQL statement.
+        Como `Query`, `Exec` recebe uma instrução SQL seguida
+        de valores de parâmetro para a instrução SQL.
 
-    *   Check for an error from the attempt to `INSERT`.
+    *   Verifica se há um erro da tentativa de `INSERT`.
 
-    *   Retrieve the ID of the inserted database row using
+    *   Recupera o ID da linha do banco de dados inserida usando
         [`Result.LastInsertId`](https://pkg.go.dev/database/sql#Result.LastInsertId).
 
-    *   Check for an error from the attempt to retrieve the ID.
+    *   Verifica se há um erro da tentativa de recuperar o ID.
 
-2. Update `main` to call the new `addAlbum` function.
+2. Atualize `main` para chamar a nova função `addAlbum`.
 
-    To the end of `func main`, add the following code.
+    No final de `func main`, adicione o seguinte código.
 
     ```
     albID, err := addAlbum(Album{
@@ -631,14 +633,14 @@ return data. To execute SQL statements that _don't_ return data, you use `Exec`.
     fmt.Printf("ID of added album: %v\n", albID)
     ```
 
-    In the new code, you now:
+    No novo código, você agora:
 
-    *   Call `addAlbum` with a new album, assigning the ID of the album you're
-        adding to an `albID` variable.
+    *   Chama `addAlbum` com um novo álbum, atribuindo o ID do álbum que você está
+        adicionando a uma variável `albID`.
 
-#### Run the code
+#### Executar o código
 
-From the command line in the directory containing main.go, run the code.
+Da linha de comando no diretório contendo main.go, execute o código.
 
 ```
 $ go run .
@@ -648,25 +650,25 @@ Album found: {2 Giant Steps John Coltrane 63.99}
 ID of added album: 5
 ```
 
-## Conclusion {#conclusion}
+## Conclusão {#conclusion}
 
-Congratulations! You've just used Go to perform simple actions with a
-relational database.
+Parabéns! Você acabou de usar Go para realizar ações simples com um
+banco de dados relacional.
 
-Suggested next topics:
+Próximos tópicos sugeridos:
 
-*   Take a look at the data access guide, which includes more information
-    about the subjects only touched on here.
+*   Dê uma olhada no guia de acesso a dados, que inclui mais informações
+    sobre os assuntos apenas tocados aqui.
 
-*   If you're new to Go, you'll find useful best practices described in
-    [Effective Go](/doc/effective_go) and [How to write Go code](/doc/code).
+*   Se você é novo em Go, você encontrará práticas recomendadas úteis descritas em
+    [Effective Go](/doc/effective_go) e [Como escrever código Go](/doc/code).
 
-*   The [Go Tour](/tour/) is a great step-by-step
-    introduction to Go fundamentals.
+*   O [Go Tour](/tour/) é uma ótima introdução passo a passo
+    aos fundamentos do Go.
 
-## Completed code {#completed_code}
+## Código completo {#completed_code}
 
-This section contains the code for the application you build with this tutorial.
+Esta seção contém o código para o aplicativo que você constrói com este tutorial.
 
 ```
 package main
