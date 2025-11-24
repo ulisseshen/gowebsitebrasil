@@ -1,5 +1,6 @@
 ---
-title: Error handling and Go
+ia-translated: true
+title: Error handling e Go
 date: 2011-07-12
 by:
 - Andrew Gerrand
@@ -8,20 +9,20 @@ tags:
 - interface
 - type
 - technical
-summary: An introduction to Go errors.
+summary: Uma introdução aos errors em Go.
 ---
 
-## Introduction
+## Introdução
 
-If you have written any Go code you have probably encountered the built-in `error` type.
-Go code uses `error` values to indicate an abnormal state.
-For example, the `os.Open` function returns a non-nil `error` value when
-it fails to open a file.
+Se você já escreveu código Go, provavelmente encontrou o tipo `error` built-in.
+O código Go usa valores `error` para indicar um estado anormal.
+Por exemplo, a função `os.Open` retorna um valor `error` não-nil quando
+falha ao abrir um arquivo.
 
 	func Open(name string) (file *File, err error)
 
-The following code uses `os.Open` to open a file.
-If an error occurs it calls `log.Fatal` to print the error message and stop.
+O código a seguir usa `os.Open` para abrir um arquivo.
+Se ocorrer um erro, ele chama `log.Fatal` para imprimir a mensagem de erro e parar.
 
 	f, err := os.Open("filename.ext")
 	if err != nil {
@@ -29,26 +30,26 @@ If an error occurs it calls `log.Fatal` to print the error message and stop.
 	}
 	// do something with the open *File f
 
-You can get a lot done in Go knowing just this about the `error` type,
-but in this article we'll take a closer look at `error` and discuss some
-good practices for error handling in Go.
+Você pode fazer muitas coisas em Go sabendo apenas isso sobre o tipo `error`,
+mas neste artigo vamos analisar mais de perto o `error` e discutir algumas
+boas práticas para error handling em Go.
 
-## The error type
+## O tipo error
 
-The `error` type is an interface type. An `error` variable represents any
-value that can describe itself as a string.
-Here is the interface's declaration:
+O tipo `error` é um tipo interface. Uma variável `error` representa qualquer
+valor que possa se descrever como uma string.
+Aqui está a declaração da interface:
 
 	type error interface {
 	    Error() string
 	}
 
-The `error` type, as with all built in types,
-is [predeclared](/doc/go_spec.html#Predeclared_identifiers)
-in the [universe block](/doc/go_spec.html#Blocks).
+O tipo `error`, assim como todos os tipos built-in,
+é [predeclared](/doc/go_spec.html#Predeclared_identifiers)
+no [universe block](/doc/go_spec.html#Blocks).
 
-The most commonly-used `error` implementation is the [errors](/pkg/errors/)
-package's unexported `errorString` type.
+A implementação de `error` mais comumente usada é o tipo `errorString`
+não-exportado do pacote [errors](/pkg/errors/).
 
 	// errorString is a trivial implementation of error.
 	type errorString struct {
@@ -59,16 +60,16 @@ package's unexported `errorString` type.
 	    return e.s
 	}
 
-You can construct one of these values with the `errors.New` function.
-It takes a string that it converts to an `errors.errorString` and returns
-as an `error` value.
+Você pode construir um desses valores com a função `errors.New`.
+Ela recebe uma string que converte para um `errors.errorString` e retorna
+como um valor `error`.
 
 	// New returns an error that formats as the given text.
 	func New(text string) error {
 	    return &errorString{text}
 	}
 
-Here's how you might use `errors.New`:
+Aqui está como você pode usar `errors.New`:
 
 {{raw `
 	func Sqrt(f float64) (float64, error) {
@@ -79,27 +80,27 @@ Here's how you might use `errors.New`:
 	}
 `}}
 
-A caller passing a negative argument to `Sqrt` receives a non-nil `error`
-value (whose concrete representation is an `errors.errorString` value).
-The caller can access the error string ("math:
-square root of...") by calling the `error`'s `Error` method,
-or by just printing it:
+Um chamador passando um argumento negativo para `Sqrt` recebe um valor `error`
+não-nil (cuja representação concreta é um valor `errors.errorString`).
+O chamador pode acessar a string de erro ("math:
+square root of...") chamando o método `Error` do `error`,
+ou simplesmente imprimindo-o:
 
 	f, err := Sqrt(-1)
 	if err != nil {
 	    fmt.Println(err)
 	}
 
-The [fmt](/pkg/fmt/) package formats an `error` value by calling its `Error() string` method.
+O pacote [fmt](/pkg/fmt/) formata um valor `error` chamando seu método `Error() string`.
 
-It is the error implementation's responsibility to summarize the context.
-The error returned by `os.Open` formats as "open /etc/passwd:
-permission denied," not just "permission denied."  The error returned by
-our `Sqrt` is missing information about the invalid argument.
+É responsabilidade da implementação do error resumir o contexto.
+O erro retornado por `os.Open` é formatado como "open /etc/passwd:
+permission denied," não apenas "permission denied." O erro retornado por
+nossa função `Sqrt` está faltando informação sobre o argumento inválido.
 
-To add that information, a useful function is the `fmt` package's `Errorf`.
-It formats a string according to `Printf`'s rules and returns it as an `error`
-created by `errors.New`.
+Para adicionar essa informação, uma função útil é o `Errorf` do pacote `fmt`.
+Ela formata uma string de acordo com as regras do `Printf` e a retorna como um `error`
+criado por `errors.New`.
 
 {{raw `
 	if f < 0 {
@@ -107,13 +108,13 @@ created by `errors.New`.
 	}
 `}}
 
-In many cases `fmt.Errorf` is good enough,
-but since `error` is an interface, you can use arbitrary data structures as error values,
-to allow callers to inspect the details of the error.
+Em muitos casos `fmt.Errorf` é suficiente,
+mas como `error` é uma interface, você pode usar estruturas de dados arbitrárias como valores de error,
+para permitir que os chamadores inspecionem os detalhes do erro.
 
-For instance, our hypothetical callers might want to recover the invalid
-argument passed to `Sqrt`.
-We can enable that by defining a new error implementation instead of using
+Por exemplo, nossos chamadores hipotéticos podem querer recuperar o argumento
+inválido passado para `Sqrt`.
+Podemos habilitar isso definindo uma nova implementação de error em vez de usar
 `errors.errorString`:
 
 	type NegativeSqrtError float64
@@ -122,14 +123,14 @@ We can enable that by defining a new error implementation instead of using
 	    return fmt.Sprintf("math: square root of negative number %g", float64(f))
 	}
 
-A sophisticated caller can then use a [type assertion](/doc/go_spec.html#Type_assertions)
-to check for a `NegativeSqrtError` and handle it specially,
-while callers that just pass the error to `fmt.Println` or `log.Fatal` will
-see no change in behavior.
+Um chamador sofisticado pode então usar uma [type assertion](/doc/go_spec.html#Type_assertions)
+para verificar se há um `NegativeSqrtError` e tratá-lo de forma especial,
+enquanto chamadores que apenas passam o erro para `fmt.Println` ou `log.Fatal` não
+verão mudança no comportamento.
 
-As another example, the [json](/pkg/encoding/json/)
-package specifies a `SyntaxError` type that the `json.Decode` function returns
-when it encounters a syntax error parsing a JSON blob.
+Como outro exemplo, o pacote [json](/pkg/encoding/json/)
+especifica um tipo `SyntaxError` que a função `json.Decode` retorna
+quando encontra um erro de sintaxe ao analisar um blob JSON.
 
 	type SyntaxError struct {
 	    msg    string // description of error
@@ -138,8 +139,8 @@ when it encounters a syntax error parsing a JSON blob.
 
 	func (e *SyntaxError) Error() string { return e.msg }
 
-The `Offset` field isn't even shown in the default formatting of the error,
-but callers can use it to add file and line information to their error messages:
+O campo `Offset` nem é mostrado na formatação padrão do erro,
+mas os chamadores podem usá-lo para adicionar informações de arquivo e linha às suas mensagens de erro:
 
 	if err := dec.Decode(&val); err != nil {
 	    if serr, ok := err.(*json.SyntaxError); ok {
@@ -149,14 +150,14 @@ but callers can use it to add file and line information to their error messages:
 	    return err
 	}
 
-(This is a slightly simplified version of some [actual code](https://github.com/camlistore/go4/blob/03efcb870d84809319ea509714dd6d19a1498483/jsonconfig/eval.go#L123-L135)
-from the [Camlistore](http://camlistore.org) project.)
+(Esta é uma versão ligeiramente simplificada de algum [actual code](https://github.com/camlistore/go4/blob/03efcb870d84809319ea509714dd6d19a1498483/jsonconfig/eval.go#L123-L135)
+do projeto [Camlistore](http://camlistore.org).)
 
-The `error` interface requires only a `Error` method;
-specific error implementations might have additional methods.
-For instance, the [net](/pkg/net/) package returns errors of type `error`,
-following the usual convention, but some of the error implementations have
-additional methods defined by the `net.Error` interface:
+A interface `error` requer apenas um método `Error`;
+implementações de error específicas podem ter métodos adicionais.
+Por exemplo, o pacote [net](/pkg/net/) retorna erros do tipo `error`,
+seguindo a convenção usual, mas algumas das implementações de error têm
+métodos adicionais definidos pela interface `net.Error`:
 
 	package net
 
@@ -166,10 +167,10 @@ additional methods defined by the `net.Error` interface:
 	    Temporary() bool // Is the error temporary?
 	}
 
-Client code can test for a `net.Error` with a type assertion and then distinguish
-transient network errors from permanent ones.
-For instance, a web crawler might sleep and retry when it encounters a temporary
-error and give up otherwise.
+O código cliente pode testar por um `net.Error` com uma type assertion e então distinguir
+erros de rede transitórios dos permanentes.
+Por exemplo, um web crawler pode dormir e tentar novamente quando encontra um erro
+temporário e desistir caso contrário.
 
 	if nerr, ok := err.(net.Error); ok && nerr.Temporary() {
 	    time.Sleep(1e9)
@@ -179,17 +180,17 @@ error and give up otherwise.
 	    log.Fatal(err)
 	}
 
-## Simplifying repetitive error handling
+## Simplificando o error handling repetitivo
 
-In Go, error handling is important. The language's design and conventions
-encourage you to explicitly check for errors where they occur (as distinct
-from the convention in other languages of throwing exceptions and sometimes catching them).
-In some cases this makes Go code verbose,
-but fortunately there are some techniques you can use to minimize repetitive error handling.
+Em Go, error handling é importante. O design e convenções da linguagem
+encorajam você a verificar explicitamente erros onde eles ocorrem (em contraste
+com a convenção em outras linguagens de lançar exceptions e às vezes capturá-las).
+Em alguns casos isso torna o código Go verboso,
+mas felizmente existem algumas técnicas que você pode usar para minimizar o error handling repetitivo.
 
-Consider an [App Engine](https://cloud.google.com/appengine/docs/go/)
-application with an HTTP handler that retrieves a record from the datastore
-and formats it with a template.
+Considere uma aplicação [App Engine](https://cloud.google.com/appengine/docs/go/)
+com um handler HTTP que recupera um registro do datastore
+e o formata com um template.
 
 	func init() {
 	    http.HandleFunc("/view", viewRecord)
@@ -208,19 +209,19 @@ and formats it with a template.
 	    }
 	}
 
-This function handles errors returned by the `datastore.Get` function and
-`viewTemplate`'s `Execute` method.
-In both cases, it presents a simple error message to the user with the HTTP
-status code 500 ("Internal Server Error").
-This looks like a manageable amount of code,
-but add some more HTTP handlers and you quickly end up with many copies
-of identical error handling code.
+Esta função trata erros retornados pela função `datastore.Get` e
+pelo método `Execute` do `viewTemplate`.
+Em ambos os casos, ela apresenta uma mensagem de erro simples ao usuário com o código
+de status HTTP 500 ("Internal Server Error").
+Isso parece uma quantidade gerenciável de código,
+mas adicione mais alguns handlers HTTP e você rapidamente acaba com muitas cópias
+de código idêntico de error handling.
 
-To reduce the repetition we can define our own HTTP `appHandler` type that includes an `error` return value:
+Para reduzir a repetição, podemos definir nosso próprio tipo `appHandler` HTTP que inclui um valor de retorno `error`:
 
 	type appHandler func(http.ResponseWriter, *http.Request) error
 
-Then we can change our `viewRecord` function to return errors:
+Então podemos mudar nossa função `viewRecord` para retornar errors:
 
 	func viewRecord(w http.ResponseWriter, r *http.Request) error {
 	    c := appengine.NewContext(r)
@@ -232,11 +233,11 @@ Then we can change our `viewRecord` function to return errors:
 	    return viewTemplate.Execute(w, record)
 	}
 
-This is simpler than the original version,
-but the [http](/pkg/net/http/) package doesn't understand
-functions that return `error`.
-To fix this we can implement the `http.Handler` interface's `ServeHTTP`
-method on `appHandler`:
+Isso é mais simples que a versão original,
+mas o pacote [http](/pkg/net/http/) não entende
+funções que retornam `error`.
+Para corrigir isso, podemos implementar o método `ServeHTTP`
+da interface `http.Handler` em `appHandler`:
 
 	func (fn appHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	    if err := fn(w, r); err != nil {
@@ -244,27 +245,27 @@ method on `appHandler`:
 	    }
 	}
 
-The `ServeHTTP` method calls the `appHandler` function and displays the
-returned error (if any) to the user.
-Notice that the method's receiver, `fn`, is a function.
-(Go can do that!) The method invokes the function by calling the receiver
-in the expression `fn(w, r)`.
+O método `ServeHTTP` chama a função `appHandler` e exibe o
+erro retornado (se houver) para o usuário.
+Observe que o receiver do método, `fn`, é uma função.
+(Go pode fazer isso!) O método invoca a função chamando o receiver
+na expressão `fn(w, r)`.
 
-Now when registering `viewRecord` with the http package we use the `Handle`
-function (instead of `HandleFunc`) as `appHandler` is an `http.Handler`
-(not an `http.HandlerFunc`).
+Agora, ao registrar `viewRecord` com o pacote http, usamos a função `Handle`
+(em vez de `HandleFunc`) pois `appHandler` é um `http.Handler`
+(não um `http.HandlerFunc`).
 
 	func init() {
 	    http.Handle("/view", appHandler(viewRecord))
 	}
 
-With this basic error handling infrastructure in place,
-we can make it more user friendly.
-Rather than just displaying the error string,
-it would be better to give the user a simple error message with an appropriate HTTP status code,
-while logging the full error to the App Engine developer console for debugging purposes.
+Com esta infraestrutura básica de error handling em vigor,
+podemos torná-la mais amigável ao usuário.
+Em vez de apenas exibir a string de erro,
+seria melhor dar ao usuário uma mensagem de erro simples com um código de status HTTP apropriado,
+enquanto registramos o erro completo no console do desenvolvedor do App Engine para fins de debugging.
 
-To do this we create an `appError` struct containing an `error` and some other fields:
+Para fazer isso, criamos uma struct `appError` contendo um `error` e alguns outros campos:
 
 	type appError struct {
 	    Error   error
@@ -272,18 +273,18 @@ To do this we create an `appError` struct containing an `error` and some other f
 	    Code    int
 	}
 
-Next we modify the appHandler type to return `*appError` values:
+Em seguida, modificamos o tipo appHandler para retornar valores `*appError`:
 
 	type appHandler func(http.ResponseWriter, *http.Request) *appError
 
-(It's usually a mistake to pass back the concrete type of an error rather than `error`,
-for reasons discussed in [the Go FAQ](/doc/go_faq.html#nil_error),
-but it's the right thing to do here because `ServeHTTP` is the only place
-that sees the value and uses its contents.)
+(Geralmente é um erro retornar o tipo concreto de um erro em vez de `error`,
+pelas razões discutidas na [the Go FAQ](/doc/go_faq.html#nil_error),
+mas é a coisa certa a fazer aqui porque `ServeHTTP` é o único lugar
+que vê o valor e usa seu conteúdo.)
 
-And make `appHandler`'s `ServeHTTP` method display the `appError`'s `Message`
-to the user with the correct HTTP status `Code` and log the full `Error`
-to the developer console:
+E fazemos o método `ServeHTTP` do `appHandler` exibir a `Message` do `appError`
+para o usuário com o `Code` de status HTTP correto e registrar o `Error` completo
+no console do desenvolvedor:
 
 	func (fn appHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	    if e := fn(w, r); e != nil { // e is *appError, not os.Error.
@@ -293,8 +294,8 @@ to the developer console:
 	    }
 	}
 
-Finally, we update `viewRecord` to the new function signature and have it
-return more context when it encounters an error:
+Finalmente, atualizamos `viewRecord` para a nova assinatura de função e fazemos com que ela
+retorne mais contexto quando encontra um erro:
 
 	func viewRecord(w http.ResponseWriter, r *http.Request) *appError {
 	    c := appengine.NewContext(r)
@@ -309,27 +310,27 @@ return more context when it encounters an error:
 	    return nil
 	}
 
-This version of `viewRecord` is the same length as the original,
-but now each of those lines has specific meaning and we are providing a
-friendlier user experience.
+Esta versão de `viewRecord` tem o mesmo tamanho da original,
+mas agora cada uma dessas linhas tem significado específico e estamos fornecendo uma
+experiência de usuário mais amigável.
 
-It doesn't end there; we can further improve the error handling in our application. Some ideas:
+Não termina aí; podemos melhorar ainda mais o error handling em nossa aplicação. Algumas ideias:
 
-  - give the error handler a pretty HTML template,
+  - dar ao error handler um template HTML bonito,
 
-  - make debugging easier by writing the stack trace to the HTTP response when the user is an administrator,
+  - facilitar o debugging escrevendo o stack trace na resposta HTTP quando o usuário é um administrador,
 
-  - write a constructor function for `appError` that stores the stack trace for easier debugging,
+  - escrever uma função construtora para `appError` que armazene o stack trace para facilitar o debugging,
 
-  - recover from panics inside the `appHandler`,
-    logging the error to the console as "Critical," while telling the user "a
-    serious error has occurred." This is a nice touch to avoid exposing the
-    user to inscrutable error messages caused by programming errors.
-    See the [Defer, Panic, and Recover](/doc/articles/defer_panic_recover.html)
-    article for more details.
+  - recuperar de panics dentro do `appHandler`,
+    registrando o erro no console como "Critical," enquanto diz ao usuário que "um
+    erro sério ocorreu." Este é um toque agradável para evitar expor o
+    usuário a mensagens de erro inescrutáveis causadas por erros de programação.
+    Veja o artigo [Defer, Panic, and Recover](/doc/articles/defer_panic_recover.html)
+    para mais detalhes.
 
-## Conclusion
+## Conclusão
 
-Proper error handling is an essential requirement of good software.
-By employing the techniques described in this post you should be able to
-write more reliable and succinct Go code.
+O error handling adequado é um requisito essencial de um bom software.
+Ao empregar as técnicas descritas neste post, você deve ser capaz de
+escrever código Go mais confiável e sucinto.
