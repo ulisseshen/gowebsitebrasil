@@ -1,5 +1,6 @@
 ---
-title: Gobs of data
+ia-translated: true
+title: Gobs de dados
 date: 2011-03-24
 by:
 - Rob Pike
@@ -9,250 +10,249 @@ tags:
 - protobuf
 - xml
 - technical
-summary: Introducing gob, a high-speed Go-to-Go wire encoding format.
+summary: Apresentando gob, um formato de codificação de alta velocidade de Go para Go.
 ---
 
-## Introduction
+## Introdução
 
-To transmit a data structure across a network or to store it in a file,
-it must be encoded and then decoded again.
-There are many encodings available, of course:
+Para transmitir uma estrutura de dados através de uma rede ou armazená-la em um arquivo,
+ela deve ser codificada e depois decodificada novamente.
+Existem muitas codificações disponíveis, é claro:
 [JSON](http://www.json.org/), [XML](http://www.w3.org/XML/),
-Google's [protocol buffers](http://code.google.com/p/protobuf), and more.
-And now there's another, provided by Go's [gob](/pkg/encoding/gob/) package.
+[protocol buffers](http://code.google.com/p/protobuf) do Google, e mais.
+E agora há outra, fornecida pelo package [gob](/pkg/encoding/gob/) de Go.
 
-Why define a new encoding? It's a lot of work and redundant at that.
-Why not just use one of the existing formats? Well,
-for one thing, we do!
-Go has [packages](/pkg/) supporting all the encodings
-just mentioned (the [protocol buffer package](https://github.com/golang/protobuf)
-is in a separate repository but it's one of the most frequently downloaded).
-And for many purposes, including communicating with tools and systems written in other languages,
-they're the right choice.
+Por que definir uma nova codificação? Dá muito trabalho e é redundante.
+Por que não usar apenas um dos formatos existentes? Bem,
+na verdade, usamos!
+Go tem [packages](/pkg/) que suportam todas as codificações
+mencionadas (o [package protocol buffer](https://github.com/golang/protobuf)
+está em um repositório separado, mas é um dos mais frequentemente baixados).
+E para muitos propósitos, incluindo comunicação com ferramentas e sistemas escritos em outras linguagens,
+eles são a escolha certa.
 
-But for a Go-specific environment, such as communicating between two servers written in Go,
-there's an opportunity to build something much easier to use and possibly more efficient.
+Mas para um ambiente específico de Go, como comunicação entre dois servidores escritos em Go,
+há uma oportunidade de construir algo muito mais fácil de usar e possivelmente mais eficiente.
 
-Gobs work with the language in a way that an externally-defined,
-language-independent encoding cannot.
-At the same time, there are lessons to be learned from the existing systems.
+Gobs funcionam com a linguagem de uma forma que uma codificação externamente definida,
+independente de linguagem, não pode.
+Ao mesmo tempo, há lições a serem aprendidas com os sistemas existentes.
 
-## Goals
+## Objetivos
 
-The gob package was designed with a number of goals in mind.
+O package gob foi projetado com vários objetivos em mente.
 
-First, and most obvious, it had to be very easy to use.
-First, because Go has reflection, there is no need for a separate interface
-definition language or "protocol compiler".
-The data structure itself is all the package should need to figure out how
-to encode and decode it.
-On the other hand, this approach means that gobs will never work as well
-with other languages, but that's OK:
-gobs are unashamedly Go-centric.
+Primeiro, e mais óbvio, tinha que ser muito fácil de usar.
+Primeiro, porque Go tem reflection, não há necessidade de uma linguagem de
+definição de interface separada ou "compilador de protocolo".
+A própria estrutura de dados é tudo que o package precisa para descobrir como
+codificá-la e decodificá-la.
+Por outro lado, essa abordagem significa que gobs nunca funcionarão tão bem
+com outras linguagens, mas tudo bem:
+gobs são descaradamente Go-cêntricos.
 
-Efficiency is also important. Textual representations,
-exemplified by XML and JSON, are too slow to put at the center of an efficient
-communications network.
-A binary encoding is necessary.
+Eficiência também é importante. Representações textuais,
+exemplificadas por XML e JSON, são muito lentas para colocar no centro de uma
+rede de comunicações eficiente.
+Uma codificação binária é necessária.
 
-Gob streams must be self-describing. Each gob stream,
-read from the beginning, contains sufficient information that the entire
-stream can be parsed by an agent that knows nothing a priori about its contents.
-This property means that you will always be able to decode a gob stream stored in a file,
-even long after you've forgotten what data it represents.
+Streams gob devem ser auto-descritivos. Cada stream gob,
+lido desde o início, contém informação suficiente para que todo o
+stream possa ser analisado por um agente que não sabe nada a priori sobre seu conteúdo.
+Essa propriedade significa que você sempre será capaz de decodificar um stream gob armazenado em um arquivo,
+mesmo muito tempo depois de ter esquecido quais dados ele representa.
 
-There were also some things to learn from our experiences with Google protocol buffers.
+Também havia algumas coisas para aprender com nossas experiências com protocol buffers do Google.
 
-## Protocol buffer misfeatures
+## Problemas dos protocol buffers
 
-Protocol buffers had a major effect on the design of gobs,
-but have three features that were deliberately avoided.
-(Leaving aside the property that protocol buffers aren't self-describing:
-if you don't know the data definition used to encode a protocol buffer,
-you might not be able to parse it.)
+Protocol buffers tiveram um grande efeito no design de gobs,
+mas têm três recursos que foram deliberadamente evitados.
+(Deixando de lado a propriedade de que protocol buffers não são auto-descritivos:
+se você não conhece a definição de dados usada para codificar um protocol buffer,
+você pode não ser capaz de analisá-lo.)
 
-First, protocol buffers only work on the data type we call a struct in Go.
-You can't encode an integer or array at the top level,
-only a struct with fields inside it.
-That seems a pointless restriction, at least in Go.
-If all you want to send is an array of integers,
-why should you have to put it into a struct first?
+Primeiro, protocol buffers só funcionam no tipo de dados que chamamos de struct em Go.
+Você não pode codificar um inteiro ou array no nível superior,
+apenas um struct com campos dentro dele.
+Isso parece uma restrição sem sentido, pelo menos em Go.
+Se tudo que você quer enviar é um array de inteiros,
+por que você deveria ter que colocá-lo em um struct primeiro?
 
-Next, a protocol buffer definition may specify that fields `T.x` and `T.y`
-are required to be present whenever a value of type `T` is encoded or decoded.
-Although such required fields may seem like a good idea,
-they are costly to implement because the codec must maintain a separate
-data structure while encoding and decoding,
-to be able to report when required fields are missing.
-They're also a maintenance problem. Over time,
-one may want to modify the data definition to remove a required field,
-but that may cause existing clients of the data to crash.
-It's better not to have them in the encoding at all.
-(Protocol buffers also have optional fields.
-But if we don't have required fields, all fields are optional and that's that.
-There will be more to say about optional fields a little later.)
+Segundo, uma definição de protocol buffer pode especificar que os campos `T.x` e `T.y`
+são obrigatórios de estarem presentes sempre que um valor do tipo `T` é codificado ou decodificado.
+Embora tais campos obrigatórios possam parecer uma boa ideia,
+eles são custosos de implementar porque o codec deve manter uma estrutura
+de dados separada durante a codificação e decodificação,
+para poder reportar quando campos obrigatórios estão faltando.
+Eles também são um problema de manutenção. Com o tempo,
+pode-se querer modificar a definição de dados para remover um campo obrigatório,
+mas isso pode fazer com que clientes existentes dos dados travem.
+É melhor não tê-los na codificação.
+(Protocol buffers também têm campos opcionais.
+Mas se não temos campos obrigatórios, todos os campos são opcionais e pronto.
+Haverá mais a dizer sobre campos opcionais um pouco mais tarde.)
 
-The third protocol buffer misfeature is default values.
-If a protocol buffer omits the value for a "defaulted" field,
-then the decoded structure behaves as if the field were set to that value.
-This idea works nicely when you have getter and setter methods to control
-access to the field,
-but is harder to handle cleanly when the container is just a plain idiomatic struct.
-Required fields are also tricky to implement:
-where does one define the default values,
-what types do they have (is text UTF-8? uninterpreted bytes? how many bits
-in a float?) and despite the apparent simplicity,
-there were a number of complications in their design and implementation
-for protocol buffers.
-We decided to leave them out of gobs and fall back to Go's trivial but effective defaulting rule:
-unless you set something otherwise, it has the "zero value" for that type -
-and it doesn't need to be transmitted.
+O terceiro problema dos protocol buffers são valores padrão.
+Se um protocol buffer omite o valor para um campo "com valor padrão",
+então a estrutura decodificada se comporta como se o campo tivesse sido definido com aquele valor.
+Essa ideia funciona bem quando você tem métodos getter e setter para controlar
+o acesso ao campo,
+mas é mais difícil de lidar de forma limpa quando o container é apenas uma struct idiomática simples.
+Campos obrigatórios também são complicados de implementar:
+onde se define os valores padrão,
+que tipos eles têm (é texto UTF-8? bytes não interpretados? quantos bits
+em um float?) e apesar da aparente simplicidade,
+houve uma série de complicações em seu design e implementação
+para protocol buffers.
+Decidimos deixá-los de fora dos gobs e voltar à regra trivial mas efetiva de valor padrão de Go:
+a menos que você defina algo diferente, ele tem o "valor zero" para aquele tipo -
+e não precisa ser transmitido.
 
-So gobs end up looking like a sort of generalized, simplified protocol buffer. How do they work?
+Então gobs acabam parecendo uma espécie de protocol buffer generalizado e simplificado. Como eles funcionam?
 
-## Values
+## Valores
 
-The encoded gob data isn't about types like `int8` and `uint16`.
-Instead, somewhat analogous to constants in Go,
-its integer values are abstract, sizeless numbers,
-either signed or unsigned.
-When you encode an `int8`, its value is transmitted as an unsized,
-variable-length integer.
-When you encode an `int64`, its value is also transmitted as an unsized,
-variable-length integer.
-(Signed and unsigned are treated distinctly,
-but the same unsized-ness applies to unsigned values too.) If both have the value 7,
-the bits sent on the wire will be identical.
-When the receiver decodes that value, it puts it into the receiver's variable,
-which may be of arbitrary integer type.
-Thus an encoder may send a 7 that came from an `int8`,
-but the receiver may store it in an `int64`.
-This is fine: the value is an integer and as a long as it fits, everything works.
-(If it doesn't fit, an error results.) This decoupling from the size of
-the variable gives some flexibility to the encoding:
-we can expand the type of the integer variable as the software evolves,
-but still be able to decode old data.
+Os dados gob codificados não são sobre tipos como `int8` e `uint16`.
+Em vez disso, de forma análoga às constantes em Go,
+seus valores inteiros são números abstratos, sem tamanho,
+assinados ou não assinados.
+Quando você codifica um `int8`, seu valor é transmitido como um inteiro sem tamanho,
+de comprimento variável.
+Quando você codifica um `int64`, seu valor também é transmitido como um inteiro sem tamanho,
+de comprimento variável.
+(Assinados e não assinados são tratados distintamente,
+mas a mesma ausência de tamanho se aplica aos valores não assinados também.) Se ambos têm o valor 7,
+os bits enviados no fio serão idênticos.
+Quando o receptor decodifica aquele valor, ele o coloca na variável do receptor,
+que pode ser de qualquer tipo inteiro.
+Assim, um encoder pode enviar um 7 que veio de um `int8`,
+mas o receptor pode armazená-lo em um `int64`.
+Isso é bom: o valor é um inteiro e desde que caiba, tudo funciona.
+(Se não couber, resulta em um erro.) Esse desacoplamento do tamanho da
+variável dá alguma flexibilidade à codificação:
+podemos expandir o tipo da variável inteira conforme o software evolui,
+mas ainda ser capaz de decodificar dados antigos.
 
-This flexibility also applies to pointers.
-Before transmission, all pointers are flattened.
-Values of type `int8`, `*int8`, `**int8`,
-`****int8`, etc. are all transmitted as an integer value,
-which may then be stored in `int` of any size,
-or `*int`, or `******int`, etc.
-Again, this allows for flexibility.
+Essa flexibilidade também se aplica a ponteiros.
+Antes da transmissão, todos os ponteiros são achatados.
+Valores do tipo `int8`, `*int8`, `**int8`,
+`****int8`, etc. são todos transmitidos como um valor inteiro,
+que pode então ser armazenado em `int` de qualquer tamanho,
+ou `*int`, ou `******int`, etc.
+Novamente, isso permite flexibilidade.
 
-Flexibility also happens because, when decoding a struct,
-only those fields that are sent by the encoder are stored in the destination. Given the value
+A flexibilidade também acontece porque, ao decodificar um struct,
+apenas os campos que são enviados pelo encoder são armazenados no destino. Dado o valor
 
-	type T struct{ X, Y, Z int } // Only exported fields are encoded and decoded.
+	type T struct{ X, Y, Z int } // Apenas campos exportados são codificados e decodificados.
 	var t = T{X: 7, Y: 0, Z: 8}
 
-the encoding of `t` sends only the 7 and 8.
-Because it's zero, the value of `Y` isn't even sent;
-there's no need to send a zero value.
+a codificação de `t` envia apenas o 7 e 8.
+Como é zero, o valor de `Y` nem é enviado;
+não há necessidade de enviar um valor zero.
 
-The receiver could instead decode the value into this structure:
+O receptor poderia, em vez disso, decodificar o valor nesta estrutura:
 
-	type U struct{ X, Y *int8 } // Note: pointers to int8s
+	type U struct{ X, Y *int8 } // Nota: ponteiros para int8s
 	var u U
 
-and acquire a value of `u` with only `X` set (to the address of an `int8` variable set to 7);
-the `Z` field is ignored - where would you put it? When decoding structs,
-fields are matched by name and compatible type,
-and only fields that exist in both are affected.
-This simple approach finesses the "optional field" problem:
-as the type `T` evolves by adding fields,
-out of date receivers will still function with the part of the type they recognize.
-Thus gobs provide the important result of optional fields - extensibility -
-without any additional mechanism or notation.
+e adquirir um valor de `u` com apenas `X` definido (para o endereço de uma variável `int8` definida como 7);
+o campo `Z` é ignorado - onde você o colocaria? Ao decodificar structs,
+campos são combinados por nome e tipo compatível,
+e apenas campos que existem em ambos são afetados.
+Essa abordagem simples resolve o problema de "campo opcional":
+conforme o tipo `T` evolui adicionando campos,
+receptores desatualizados ainda funcionarão com a parte do tipo que reconhecem.
+Assim, gobs fornecem o resultado importante de campos opcionais - extensibilidade -
+sem qualquer mecanismo ou notação adicional.
 
-From integers we can build all the other types:
-bytes, strings, arrays, slices, maps, even floats.
-Floating-point values are represented by their IEEE 754 floating-point bit pattern,
-stored as an integer, which works fine as long as you know their type, which we always do.
-By the way, that integer is sent in byte-reversed order because common values
-of floating-point numbers,
-such as small integers, have a lot of zeros at the low end that we can avoid transmitting.
+De inteiros podemos construir todos os outros tipos:
+bytes, strings, arrays, slices, maps, até floats.
+Valores de ponto flutuante são representados por seu padrão de bits de ponto flutuante IEEE 754,
+armazenado como um inteiro, o que funciona bem desde que você conheça seu tipo, o que sempre conhecemos.
+A propósito, esse inteiro é enviado em ordem de bytes invertida porque valores comuns
+de números de ponto flutuante,
+como inteiros pequenos, têm muitos zeros na extremidade inferior que podemos evitar transmitir.
 
-One nice feature of gobs that Go makes possible is that they allow you to
-define your own encoding by having your type satisfy the [GobEncoder](/pkg/encoding/gob/#GobEncoder)
-and [GobDecoder](/pkg/encoding/gob/#GobDecoder) interfaces,
-in a manner analogous to the [JSON](/pkg/encoding/json/)
-package's [Marshaler](/pkg/encoding/json/#Marshaler)
-and [Unmarshaler](/pkg/encoding/json/#Unmarshaler) and
-also to the [Stringer](/pkg/fmt/#Stringer) interface
-from [package fmt](/pkg/fmt/).
-This facility makes it possible to represent special features,
-enforce constraints, or hide secrets when you transmit data.
-See the [documentation](/pkg/encoding/gob/) for details.
+Um recurso interessante de gobs que Go torna possível é que eles permitem que você
+defina sua própria codificação fazendo com que seu tipo satisfaça as interfaces [GobEncoder](/pkg/encoding/gob/#GobEncoder)
+e [GobDecoder](/pkg/encoding/gob/#GobDecoder),
+de maneira análoga às interfaces [Marshaler](/pkg/encoding/json/#Marshaler)
+e [Unmarshaler](/pkg/encoding/json/#Unmarshaler) do package [JSON](/pkg/encoding/json/)
+e também à interface [Stringer](/pkg/fmt/#Stringer)
+do [package fmt](/pkg/fmt/).
+Essa facilidade torna possível representar recursos especiais,
+aplicar restrições, ou ocultar segredos quando você transmite dados.
+Veja a [documentação](/pkg/encoding/gob/) para detalhes.
 
-## Types on the wire
+## Tipos no fio
 
-The first time you send a given type, the gob package includes in the data
-stream a description of that type.
-In fact, what happens is that the encoder is used to encode,
-in the standard gob encoding format, an internal struct that describes the
-type and gives it a unique number.
-(Basic types, plus the layout of the type description structure,
-are predefined by the software for bootstrapping.) After the type is described,
-it can be referenced by its type number.
+Na primeira vez que você envia um determinado tipo, o package gob inclui no stream
+de dados uma descrição daquele tipo.
+Na verdade, o que acontece é que o encoder é usado para codificar,
+no formato de codificação gob padrão, um struct interno que descreve o
+tipo e lhe dá um número único.
+(Tipos básicos, mais o layout da estrutura de descrição de tipo,
+são predefinidos pelo software para bootstrapping.) Depois que o tipo é descrito,
+ele pode ser referenciado por seu número de tipo.
 
-Thus when we send our first type `T`, the gob encoder sends a description
-of `T` and tags it with a type number, say 127.
-All values, including the first, are then prefixed by that number,
-so a stream of `T` values looks like:
+Assim, quando enviamos nosso primeiro tipo `T`, o encoder gob envia uma descrição
+de `T` e o marca com um número de tipo, digamos 127.
+Todos os valores, incluindo o primeiro, são então prefixados por esse número,
+então um stream de valores `T` se parece com:
 
 	("define type id" 127, definition of type T)(127, T value)(127, T value), ...
 
-These type numbers make it possible to describe recursive types and send
-values of those types.
-Thus gobs can encode types such as trees:
+Esses números de tipo tornam possível descrever tipos recursivos e enviar
+valores desses tipos.
+Assim, gobs podem codificar tipos como árvores:
 
 	type Node struct {
 	    Value       int
 	    Left, Right *Node
 	}
 
-(It's an exercise for the reader to discover how the zero-defaulting rule makes this work,
-even though gobs don't represent pointers.)
+(É um exercício para o leitor descobrir como a regra de valor padrão zero faz isso funcionar,
+mesmo que gobs não representem ponteiros.)
 
-With the type information, a gob stream is fully self-describing except
-for the set of bootstrap types,
-which is a well-defined starting point.
+Com a informação de tipo, um stream gob é totalmente auto-descritivo exceto
+pelo conjunto de tipos de bootstrap,
+que é um ponto de partida bem definido.
 
-## Compiling a machine
+## Compilando uma máquina
 
-The first time you encode a value of a given type,
-the gob package builds a little interpreted machine specific to that data type.
-It uses reflection on the type to construct that machine,
-but once the machine is built it does not depend on reflection.
-The machine uses package unsafe and some trickery to convert the data into
-the encoded bytes at high speed.
-It could use reflection and avoid unsafe,
-but would be significantly slower.
-(A similar high-speed approach is taken by the protocol buffer support for Go,
-whose design was influenced by the implementation of gobs.) Subsequent values
-of the same type use the already-compiled machine,
-so they can be encoded right away.
+Na primeira vez que você codifica um valor de um determinado tipo,
+o package gob constrói uma pequena máquina interpretada específica para aquele tipo de dados.
+Ele usa reflection no tipo para construir aquela máquina,
+mas uma vez que a máquina está construída, ela não depende de reflection.
+A máquina usa o package unsafe e alguns truques para converter os dados em
+bytes codificados em alta velocidade.
+Ela poderia usar reflection e evitar unsafe,
+mas seria significativamente mais lenta.
+(Uma abordagem de alta velocidade similar é adotada pelo suporte a protocol buffer para Go,
+cujo design foi influenciado pela implementação de gobs.) Valores subsequentes
+do mesmo tipo usam a máquina já compilada,
+então eles podem ser codificados imediatamente.
 
-[Update: As of Go 1.4, package unsafe is no longer use by the gob package, with a modest performance drop.]
+[Atualização: A partir do Go 1.4, o package unsafe não é mais usado pelo package gob, com uma queda modesta de desempenho.]
 
-Decoding is similar but harder. When you decode a value,
-the gob package holds a byte slice representing a value of a given encoder-defined type to decode,
-plus a Go value into which to decode it.
-The gob package builds a machine for that pair:
-the gob type sent on the wire crossed with the Go type provided for decoding.
-Once that decoding machine is built, though,
-it's again a reflectionless engine that uses unsafe methods to get maximum speed.
+A decodificação é similar mas mais difícil. Quando você decodifica um valor,
+o package gob mantém um slice de bytes representando um valor de um tipo definido pelo encoder a ser decodificado,
+mais um valor Go no qual decodificá-lo.
+O package gob constrói uma máquina para aquele par:
+o tipo gob enviado no fio cruzado com o tipo Go fornecido para decodificação.
+Uma vez que aquela máquina de decodificação é construída, no entanto,
+é novamente um motor sem reflection que usa métodos unsafe para obter velocidade máxima.
 
-## Use
+## Uso
 
-There's a lot going on under the hood, but the result is an efficient,
-easy-to-use encoding system for transmitting data.
-Here's a complete example showing differing encoded and decoded types.
-Note how easy it is to send and receive values;
-all you need to do is present values and variables to the [gob package](/pkg/encoding/gob/)
-and it does all the work.
+Há muita coisa acontecendo por baixo dos panos, mas o resultado é um sistema de codificação eficiente,
+fácil de usar para transmitir dados.
+Aqui está um exemplo completo mostrando tipos codificados e decodificados diferentes.
+Note como é fácil enviar e receber valores;
+tudo que você precisa fazer é apresentar valores e variáveis ao [package gob](/pkg/encoding/gob/)
+e ele faz todo o trabalho.
 
 	package main
 
@@ -294,17 +294,17 @@ and it does all the work.
 	    fmt.Printf("%q: {%d,%d}\n", q.Name, *q.X, *q.Y)
 	}
 
-You can compile and run this example code in the [Go Playground](/play/p/_-OJV-rwMq).
+Você pode compilar e executar este código de exemplo no [Go Playground](/play/p/_-OJV-rwMq).
 
-The [rpc package](/pkg/net/rpc/) builds on gobs to turn
-this encode/decode automation into transport for method calls across the network.
-That's a subject for another article.
+O [package rpc](/pkg/net/rpc/) é construído sobre gobs para transformar
+esta automação de encode/decode em transporte para chamadas de método através da rede.
+Esse é um assunto para outro artigo.
 
-## Details
+## Detalhes
 
-The [gob package documentation](/pkg/encoding/gob/),
-especially the file [doc.go](/src/pkg/encoding/gob/doc.go),
-expands on many of the details described here and includes a full worked
-example showing how the encoding represents data.
-If you are interested in the innards of the gob implementation,
-that's a good place to start.
+A [documentação do package gob](/pkg/encoding/gob/),
+especialmente o arquivo [doc.go](/src/pkg/encoding/gob/doc.go),
+expande muitos dos detalhes descritos aqui e inclui um exemplo completo
+mostrando como a codificação representa dados.
+Se você está interessado nas entranhas da implementação de gob,
+esse é um bom lugar para começar.
