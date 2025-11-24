@@ -1,97 +1,98 @@
 ---
-title: Go maps in action
+ia-translated: true
+title: Maps do Go em ação
 date: 2013-02-06
 by:
 - Andrew Gerrand
 tags:
 - map
 - technical
-summary: How and when to use Go maps.
+summary: Como e quando usar maps do Go.
 ---
 
-## Introduction
+## Introdução
 
-One of the most useful data structures in computer science is the hash table.
-Many hash table implementations exist with varying properties,
-but in general they offer fast lookups, adds, and deletes.
-Go provides a built-in map type that implements a hash table.
+Uma das estruturas de dados mais úteis em ciência da computação é a hash table.
+Existem muitas implementações de hash table com propriedades variadas,
+mas em geral elas oferecem buscas, adições e remoções rápidas.
+Go fornece um tipo map integrado que implementa uma hash table.
 
-## Declaration and initialization
+## Declaração e inicialização
 
-A Go map type looks like this:
+Um tipo map do Go se parece com isto:
 
 	map[KeyType]ValueType
 
-where `KeyType` may be any type that is [comparable](/ref/spec#Comparison_operators)
-(more on this later),
-and `ValueType` may be any type at all, including another map!
+onde `KeyType` pode ser qualquer tipo que seja [comparable](/ref/spec#Comparison_operators)
+(mais sobre isso adiante),
+e `ValueType` pode ser qualquer tipo, incluindo outro map!
 
-This variable `m` is a map of string keys to int values:
+Esta variável `m` é um map de keys string para values int:
 
 	var m map[string]int
 
-Map types are reference types, like pointers or slices,
-and so the value of `m` above is `nil`;
-it doesn't point to an initialized map.
-A nil map behaves like an empty map when reading,
-but attempts to write to a nil map will cause a runtime panic; don't do that.
-To initialize a map, use the built in `make` function:
+Tipos map são tipos de referência, como pointers ou slices,
+e então o valor de `m` acima é `nil`;
+ele não aponta para um map inicializado.
+Um map nil se comporta como um map vazio ao ler,
+mas tentativas de escrever em um map nil causarão um runtime panic; não faça isso.
+Para inicializar um map, use a função integrada `make`:
 
 	m = make(map[string]int)
 
-The `make` function allocates and initializes a hash map data structure
-and returns a map value that points to it.
-The specifics of that data structure are an implementation detail of the
-runtime and are not specified by the language itself.
-In this article we will focus on the _use_ of maps,
-not their implementation.
+A função `make` aloca e inicializa uma estrutura de dados de hash map
+e retorna um valor map que aponta para ela.
+As especificidades dessa estrutura de dados são um detalhe de implementação do
+runtime e não são especificadas pela própria linguagem.
+Neste artigo vamos focar no _uso_ de maps,
+não em sua implementação.
 
-## Working with maps
+## Trabalhando com maps
 
-Go provides a familiar syntax for working with maps. This statement sets the key `"route"` to the value `66`:
+Go fornece uma sintaxe familiar para trabalhar com maps. Esta declaração define a key `"route"` para o value `66`:
 
 	m["route"] = 66
 
-This statement retrieves the value stored under the key `"route"` and assigns it to a new variable i:
+Esta declaração recupera o value armazenado sob a key `"route"` e o atribui a uma nova variável i:
 
 	i := m["route"]
 
-If the requested key doesn't exist, we get the value type's _zero value_.
-In this case the value type is `int`, so the zero value is `0`:
+Se a key solicitada não existir, obtemos o _zero value_ do tipo do value.
+Neste caso, o tipo do value é `int`, então o zero value é `0`:
 
 	j := m["root"]
 	// j == 0
 
-The built in `len` function returns on the number of items in a map:
+A função integrada `len` retorna o número de itens em um map:
 
 	n := len(m)
 
-The built in `delete` function removes an entry from the map:
+A função integrada `delete` remove uma entrada do map:
 
 	delete(m, "route")
 
-The `delete` function doesn't return anything, and will do nothing if the specified key doesn't exist.
+A função `delete` não retorna nada e não fará nada se a key especificada não existir.
 
-A two-value assignment tests for the existence of a key:
+Uma atribuição de dois valores testa a existência de uma key:
 
 	i, ok := m["route"]
 
-In this statement, the first value (`i`) is assigned the value stored under the key `"route"`.
-If that key doesn't exist, `i` is the value type's zero value (`0`).
-The second value (`ok`) is a `bool` that is `true` if the key exists in
-the map, and `false` if not.
+Nesta declaração, o primeiro value (`i`) recebe o value armazenado sob a key `"route"`.
+Se essa key não existir, `i` é o zero value do tipo do value (`0`).
+O segundo value (`ok`) é um `bool` que é `true` se a key existir no
+map, e `false` caso contrário.
 
-To test for a key without retrieving the value, use an underscore in place of the first value:
+Para testar uma key sem recuperar o value, use um underscore no lugar do primeiro value:
 
 	_, ok := m["route"]
 
-To iterate over the contents of a map, use the `range` keyword:
+Para iterar sobre o conteúdo de um map, use a palavra-chave `range`:
 
 	for key, value := range m {
 	    fmt.Println("Key:", key, "Value:", value)
 	}
 
-To initialize a map with some data, use a map literal:
+Para inicializar um map com alguns dados, use um map literal:
 
 	commits := map[string]int{
 	    "rsc": 3711,
@@ -100,77 +101,77 @@ To initialize a map with some data, use a map literal:
 	    "adg": 912,
 	}
 
-The same syntax may be used to initialize an empty map, which is functionally identical to using the `make` function:
+A mesma sintaxe pode ser usada para inicializar um map vazio, que é funcionalmente idêntico a usar a função `make`:
 
 	m = map[string]int{}
 
-## Exploiting zero values
+## Explorando zero values
 
-It can be convenient that a map retrieval yields a zero value when the key is not present.
+Pode ser conveniente que uma recuperação de map produza um zero value quando a key não está presente.
 
-For instance, a map of boolean values can be used as a set-like data structure
-(recall that the zero value for the boolean type is false).
-This example traverses a linked list of `Nodes` and prints their values.
-It uses a map of `Node` pointers to detect cycles in the list.
+Por exemplo, um map de valores boolean pode ser usado como uma estrutura de dados semelhante a um set
+(lembre-se de que o zero value para o tipo boolean é false).
+Este exemplo percorre uma lista encadeada de `Nodes` e imprime seus valores.
+Ele usa um map de pointers `Node` para detectar ciclos na lista.
 
 {{code "maps/list.go" `/START/` `/END/`}}
 
-The expression `visited[n]` is `true` if `n` has been visited,
-or `false` if `n` is not present.
-There's no need to use the two-value form to test for the presence of `n` in the map;
-the zero value default does it for us.
+A expressão `visited[n]` é `true` se `n` foi visitado,
+ou `false` se `n` não está presente.
+Não há necessidade de usar a forma de dois valores para testar a presença de `n` no map;
+o zero value padrão faz isso por nós.
 
-Another instance of helpful zero values is a map of slices.
-Appending to a nil slice just allocates a new slice,
-so it's a one-liner to append a value to a map of slices;
-there's no need to check if the key exists.
-In the following example, the slice people is populated with `Person` values.
-Each `Person` has a `Name` and a slice of Likes.
-The example creates a map to associate each like with a slice of people that like it.
+Outro exemplo de zero values úteis é um map de slices.
+Fazer append em um slice nil apenas aloca um novo slice,
+então é uma linha única fazer append de um value a um map de slices;
+não há necessidade de verificar se a key existe.
+No exemplo a seguir, o slice people é populado com values `Person`.
+Cada `Person` tem um `Name` e um slice de Likes.
+O exemplo cria um map para associar cada like com um slice de pessoas que gostam dele.
 
 {{code "maps/people.go" `/START1/` `/END1/`}}
 
-To print a list of people who like cheese:
+Para imprimir uma lista de pessoas que gostam de queijo:
 
 {{code "maps/people.go" `/START2/` `/END2/`}}
 
-To print the number of people who like bacon:
+Para imprimir o número de pessoas que gostam de bacon:
 
 {{code "maps/people.go" `/bacon/`}}
 
-Note that since both range and len treat a nil slice as a zero-length slice,
-these last two examples will work even if nobody likes cheese or bacon (however
-unlikely that may be).
+Note que, como tanto range quanto len tratam um slice nil como um slice de comprimento zero,
+esses dois últimos exemplos funcionarão mesmo se ninguém gostar de queijo ou bacon (por mais
+improvável que isso possa ser).
 
-## Key types
+## Tipos de key
 
-As mentioned earlier, map keys may be of any type that is comparable.
-The [language spec](/ref/spec#Comparison_operators)
-defines this precisely,
-but in short, comparable types are boolean,
-numeric, string, pointer, channel, and interface types,
-and structs or arrays that contain only those types.
-Notably absent from the list are slices, maps, and functions;
-these types cannot be compared using `==`,
-and may not be used as map keys.
+Como mencionado anteriormente, keys de map podem ser de qualquer tipo que seja comparável.
+A [language spec](/ref/spec#Comparison_operators)
+define isso com precisão,
+mas em resumo, tipos comparáveis são boolean,
+numérico, string, pointer, channel e tipos interface,
+e structs ou arrays que contenham apenas esses tipos.
+Notavelmente ausentes da lista estão slices, maps e funções;
+esses tipos não podem ser comparados usando `==`,
+e não podem ser usados como keys de map.
 
-It's obvious that strings, ints, and other basic types should be available as map keys,
-but perhaps unexpected are struct keys.
-Struct can be used to key data by multiple dimensions.
-For example, this map of maps could be used to tally web page hits by country:
+É óbvio que strings, ints e outros tipos básicos devem estar disponíveis como keys de map,
+mas talvez inesperadas sejam keys struct.
+Struct pode ser usado para indexar dados por múltiplas dimensões.
+Por exemplo, este map de maps poderia ser usado para contar acessos a páginas web por país:
 
 	hits := make(map[string]map[string]int)
 
-This is map of string to (map of `string` to `int`).
-Each key of the outer map is the path to a web page with its own inner map.
-Each inner map key is a two-letter country code.
-This expression retrieves the number of times an Australian has loaded the documentation page:
+Este é um map de string para (map de `string` para `int`).
+Cada key do map externo é o caminho para uma página web com seu próprio map interno.
+Cada key do map interno é um código de país de duas letras.
+Esta expressão recupera o número de vezes que um australiano carregou a página de documentação:
 
 	n := hits["/doc/"]["au"]
 
-Unfortunately, this approach becomes unwieldy when adding data,
-as for any given outer key you must check if the inner map exists,
-and create it if needed:
+Infelizmente, essa abordagem se torna complicada ao adicionar dados,
+pois para qualquer key externa você deve verificar se o map interno existe,
+e criá-lo se necessário:
 
 	func add(m map[string]map[string]int, path, country string) {
 	    mm, ok := m[path]
@@ -182,58 +183,58 @@ and create it if needed:
 	}
 	add(hits, "/doc/", "au")
 
-On the other hand, a design that uses a single map with a struct key does away with all that complexity:
+Por outro lado, um design que usa um único map com uma key struct elimina toda essa complexidade:
 
 	type Key struct {
 	    Path, Country string
 	}
 	hits := make(map[Key]int)
 
-When a Vietnamese person visits the home page,
-incrementing (and possibly creating) the appropriate counter is a one-liner:
+Quando uma pessoa vietnamita visita a página inicial,
+incrementar (e possivelmente criar) o contador apropriado é uma linha única:
 
 	hits[Key{"/", "vn"}]++
 
-And it's similarly straightforward to see how many Swiss people have read the spec:
+E é igualmente direto ver quantas pessoas suíças leram a especificação:
 
 	n := hits[Key{"/ref/spec", "ch"}]
 
-## Concurrency
+## Concorrência
 
-[Maps are not safe for concurrent use](/doc/faq#atomic_maps):
-it's not defined what happens when you read and write to them simultaneously.
-If you need to read from and write to a map from concurrently executing goroutines,
-the accesses must be mediated by some kind of synchronization mechanism.
-One common way to protect maps is with [sync.RWMutex](/pkg/sync/#RWMutex).
+[Maps não são seguros para uso concurrent](/doc/faq#atomic_maps):
+não está definido o que acontece quando você lê e escreve neles simultaneamente.
+Se você precisa ler e escrever em um map a partir de goroutines executando concorrentemente,
+os acessos devem ser mediados por algum tipo de mecanismo de sincronização.
+Uma maneira comum de proteger maps é com [sync.RWMutex](/pkg/sync/#RWMutex).
 
-This statement declares a `counter` variable that is an anonymous struct
-containing a map and an embedded `sync.RWMutex`.
+Esta declaração declara uma variável `counter` que é um struct anônimo
+contendo um map e um `sync.RWMutex` embutido.
 
 	var counter = struct{
 	    sync.RWMutex
 	    m map[string]int
 	}{m: make(map[string]int)}
 
-To read from the counter, take the read lock:
+Para ler do counter, adquira o read lock:
 
 	counter.RLock()
 	n := counter.m["some_key"]
 	counter.RUnlock()
 	fmt.Println("some_key:", n)
 
-To write to the counter, take the write lock:
+Para escrever no counter, adquira o write lock:
 
 	counter.Lock()
 	counter.m["some_key"]++
 	counter.Unlock()
 
-## Iteration order
+## Ordem de iteração
 
-When iterating over a map with a range loop,
-the iteration order is not specified and is not guaranteed to be the same
-from one iteration to the next.
-If you require a stable iteration order you must maintain a separate data structure that specifies that order.
-This example uses a separate sorted slice of keys to print a `map[int]string` in key order:
+Ao iterar sobre um map com um loop range,
+a ordem de iteração não é especificada e não há garantia de que será a mesma
+de uma iteração para a próxima.
+Se você requer uma ordem de iteração estável, deve manter uma estrutura de dados separada que especifique essa ordem.
+Este exemplo usa um slice separado ordenado de keys para imprimir um `map[int]string` em ordem de key:
 
 	import "sort"
 
