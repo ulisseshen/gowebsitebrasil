@@ -43,19 +43,19 @@ Após traduzir cada arquivo, marque o checkpoint com `[x]`.
 ## Seção 2: Learn (Recursos de Aprendizado)
 
 ### 2.1 Página Principal
-- [ ] `_content/learn/index.md` - Página principal Learn
+- [x] `_content/learn/index.md` - Página principal Learn
 
 ### 2.2 Arquivos YAML (Descrições de Recursos)
 
 > Traduzir títulos e descrições dentro dos YAMLs
 
-- [ ] `_content/learn/books.yaml` - Livros recomendados
-- [ ] `_content/learn/courses.yaml` - Cursos online
-- [ ] `_content/learn/guided.yaml` - Guias de aprendizado
-- [ ] `_content/learn/quickstart.yaml` - Início rápido
-- [ ] `_content/learn/training.yaml` - Treinamentos
-- [ ] `_content/learn/tutorials.yaml` - Tutoriais
-- [ ] `_content/learn/cloud.yaml` - Cloud
+- [x] `_content/learn/books.yaml` - Livros recomendados
+- [x] `_content/learn/courses.yaml` - Cursos online
+- [x] `_content/learn/guided.yaml` - Guias de aprendizado
+- [x] `_content/learn/quickstart.yaml` - Início rápido
+- [x] `_content/learn/training.yaml` - Treinamentos
+- [x] `_content/learn/tutorials.yaml` - Tutoriais
+- [x] `_content/learn/cloud.yaml` - Cloud
 
 ---
 
@@ -154,7 +154,7 @@ Após traduzir cada arquivo, marque o checkpoint com `[x]`.
 |-------|-------|------------|-----------|
 | Tour Articles | 7 | 7 | 100% |
 | Tour Templates | 5 | 0 | 0% |
-| Learn | 8 | 0 | 0% |
+| Learn | 8 | 8 | 100% |
 | Solutions Principal | 7 | 0 | 0% |
 | Solutions A-C | 11 | 0 | 0% |
 | Solutions D-M | 7 | 1 | 14% |
@@ -164,7 +164,7 @@ Após traduzir cada arquivo, marque o checkpoint com `[x]`.
 | gopls | 2 | 0 | 0% |
 | ref | 1 | 0 | 0% |
 | Wiki | 1 | 0 | 0% |
-| **TOTAL** | **73** | **10** | **14%** |
+| **TOTAL** | **73** | **18** | **25%** |
 
 ---
 

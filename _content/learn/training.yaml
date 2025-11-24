@@ -1,20 +1,21 @@
-  - title: Ardan Labs
-    url: https://www.ardanlabs.com/
-    thumbnail:
-    blurb: Offering customized on-site live training classes.
-  - title: Gopher Guides
-    url: https://www.gopherguides.com/
-    thumbnail:
-    blurb: Customized In-person, remote, and online training classes. Training for Developers by Developers.
-  - title: Boss Sauce Creative
-    url: https://bosssauce.it/services/training
-    thumbnail:
-    blurb: Personalized or track-based Go training for teams.
-  - title: Shiju Varghese
-    url: https://github.com/shijuvar/gokit/tree/master/training
-    thumbnail:
-    blurb: On-site classroom training on Go and consulting on distributed systems architectures, in India.
-  - title: kkoehler
-    url: https://golang.kkoehler.com/
-    thumbnail:
-    blurb: In-Person class trainings for Go in Germany, Austria and Switzerland.
+# ia-translated: true
+- title: Ardan Labs
+  url: https://www.ardanlabs.com/
+  thumbnail:
+  blurb: Oferecendo aulas de treinamento ao vivo personalizadas no local.
+- title: Gopher Guides
+  url: https://www.gopherguides.com/
+  thumbnail:
+  blurb: Aulas de treinamento personalizadas presenciais, remotas e online. Treinamento para desenvolvedores por desenvolvedores.
+- title: Boss Sauce Creative
+  url: https://bosssauce.it/services/training
+  thumbnail:
+  blurb: Treinamento Go personalizado ou baseado em trilhas para equipes.
+- title: Shiju Varghese
+  url: https://github.com/shijuvar/gokit/tree/master/training
+  thumbnail:
+  blurb: Treinamento presencial em sala de aula sobre Go e consultoria em arquiteturas de sistemas distribuídos, na Índia.
+- title: kkoehler
+  url: https://golang.kkoehler.com/
+  thumbnail:
+  blurb: Treinamentos presenciais em Go na Alemanha, Áustria e Suíça.

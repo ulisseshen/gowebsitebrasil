@@ -1,4 +1,5 @@
 ---
+ia-translated: true
 title: "Get Started"
 breadcrumbTitle: "Learn"
 ---
@@ -8,12 +9,12 @@ breadcrumbTitle: "Learn"
     <div class="Learn-heroInner">
       <div class="Learn-heroContent">
         {{breadcrumbs .}}
-        <h1>Install the latest version of Go</h1>
+        <h1>Instale a versão mais recente do Go</h1>
         <p>
-          Install the latest version of Go. For instructions to download and install
-          the Go compilers, tools, and libraries,
+          Instale a versão mais recente do Go. Para instruções sobre como baixar e instalar
+          os compiladores, ferramentas e bibliotecas do Go,
           <a href="/doc/install" target="_blank" rel="noopener">
-            view the install documentation.
+            consulte a documentação de instalação.
           </a>
         </p>
         <div class="Learn-heroAction">
@@ -33,7 +34,7 @@ breadcrumbTitle: "Learn"
         </div>
       </div>
       <div class="Learn-heroGopher">
-        <img src="/images/gophers/motorcycle.svg" alt="Go Gopher riding a motorcycle">
+        <img src="/images/gophers/motorcycle.svg" alt="Go Gopher pilotando uma motocicleta">
       </div>
     </div>
   </div>
@@ -44,11 +45,11 @@ breadcrumbTitle: "Learn"
     <nav class="LearnNav">
       <a class="active" href="#selected-tutorials">
         <svg width="5" height="5" viewBox="0 0 5 5" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="2.5" cy="2.5" r="2.5" fill="#007F9F"/></svg>
-        <span>Selected tutorials</span>
+        <span>Tutoriais selecionados</span>
       </a>
       <a href="#guided-learning-journeys">
       <svg width="5" height="5" viewBox="0 0 5 5" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="2.5" cy="2.5" r="2.5" fill="#007F9F"/></svg>
-      <span>Guided journeys</span>
+      <span>Jornadas guiadas</span>
       </a>
       <a href="#self-paced-labs">
       <svg width="5" height="5" viewBox="0 0 5 5" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="2.5" cy="2.5" r="2.5" fill="#007F9F"/></svg>
@@ -56,15 +57,15 @@ breadcrumbTitle: "Learn"
       </a>
       <a href="#tutorials">
       <svg width="5" height="5" viewBox="0 0 5 5" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="2.5" cy="2.5" r="2.5" fill="#007F9F"/></svg>
-      <span>Tutorials</span>
+      <span>Tutoriais</span>
       </a>
       <a href="#training">
       <svg width="5" height="5" viewBox="0 0 5 5" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="2.5" cy="2.5" r="2.5" fill="#007F9F"/></svg>
-      <span>Training</span>
+      <span>Treinamentos</span>
       </a>
       <a href="#featured-books">
       <svg width="5" height="5" viewBox="0 0 5 5" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="2.5" cy="2.5" r="2.5" fill="#007F9F"/></svg>
-      <span>Books</span>
+      <span>Livros</span>
       </a>
     </nav>
   </aside>
@@ -72,8 +73,8 @@ breadcrumbTitle: "Learn"
   <section id="selected-tutorials" class="Learn-tutorials">
     <div class="Container">
       <div class="Learn-learningResourcesHeader">
-          <h3>Selected tutorials</h3>
-          <p>New to Go and don't know where to start?</p>
+          <h3>Tutoriais selecionados</h3>
+          <p>Novo no Go e não sabe por onde começar?</p>
       </div>
       <div class="LearnGo-gridContainer">
         <ul class="Learn-cardList">
@@ -90,8 +91,8 @@ breadcrumbTitle: "Learn"
   <section id="guided-learning-journeys" class="Learn-guided">
     <div class="Container">
       <div class="Learn-learningResourcesHeader">
-        <h3>Guided learning journeys</h3>
-        <p>Got the basics and want to learn more?</p>
+        <h3>Jornadas de aprendizado guiado</h3>
+        <p>Já tem o básico e quer aprender mais?</p>
       </div>
       <div class="LearnGo-gridContainer">
         <ul class="Learn-cardList">
@@ -109,7 +110,7 @@ breadcrumbTitle: "Learn"
     <div class="Container">
       <div class="Learn-learningResourcesHeader">
         <h3>Qwiklabs</h3>
-        <p>Guided tours of Go programs</p>
+        <p>Tours guiados de programas Go</p>
       </div>
       <div class="LearnGo-gridContainer">
         <ul class="Learn-cardList">
@@ -127,7 +128,7 @@ breadcrumbTitle: "Learn"
   <section id="tutorials" class="Learn-tutorials">
     <div class="Container">
       <div class="Learn-learningResourcesHeader">
-        <h3>Tutorials</h3>
+        <h3>Tutoriais</h3>
         <p></p>
       </div>
       <div class="LearnGo-gridContainer">
@@ -145,8 +146,8 @@ breadcrumbTitle: "Learn"
   <section id="training" class="Learn-inPersonTraining">
     <div class="Container">
       <div class="Learn-learningResourcesHeader">
-        <h3>Training</h3>
-        <p>Guided tours of Go programs</p>
+        <h3>Treinamentos</h3>
+        <p>Tours guiados de programas Go</p>
       </div>
       <div class="LearnGo-gridContainer">
         <ul class="Learn-inPersonList">
@@ -166,7 +167,7 @@ breadcrumbTitle: "Learn"
   <section id="featured-books" class="Learn-books">
     <div class="Container">
       <div class="Learn-learningResourcesHeader">
-        <h3>Books</h3>
+        <h3>Livros</h3>
         <p></p>
       </div>
       <div class="LearnGo-gridContainer">
@@ -259,7 +260,7 @@ breadcrumbTitle: "Learn"
         <p class="Book-title">{{.title}}</p>
         <p class="Book-description">{{.description}}</p>
         <div class="Book-cta">
-          <span>view book</span>
+          <span>ver livro</span>
         </div>
       </div>
     </div>
