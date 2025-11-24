@@ -1,5 +1,6 @@
 ---
-title: PayPal Taps Go to Modernize and Scale
+ia-translated: true
+title: PayPal Adota Go para Modernizar e Escalar
 date: 2020-06-01
 company: PayPal
 logoSrc: paypal.svg
@@ -7,7 +8,7 @@ logoSrcDark: paypal.svg
 heroImgSrc: go_paypal_case_study_logo.png
 carouselImgSrc: go_paypal_case_study.png
 series: Case Studies
-quote: Go’s value in producing clean, efficient code that readily scales as software deployment scales made the language a strong fit to support PayPal’s goals.
+quote: O valor do Go em produzir código limpo e eficiente que escala prontamente conforme a implantação de software cresce tornou a linguagem uma escolha forte para apoiar os objetivos do PayPal.
 ---
 
 {{pullquote `
@@ -15,27 +16,27 @@ quote: Go’s value in producing clean, efficient code that readily scales as so
   title: <span class="NoWrapSpan">Sr. Director of Engineering,</span>&nbsp;<span class="NoWrapSpan">Developer Experience</span>
   company: PayPal
   quote: |
-    Since our NoSQL and DB proxy used quite a bit of system details in a multi-threaded mode, the code got complex managing the different conditions, given that Go provides channels and routines to deal with complexity, we were able to structure the code to meet our requirements.
+    Como nosso NoSQL e proxy de DB usavam bastante detalhes do sistema em um modo multi-threaded, o código ficou complexo gerenciando as diferentes condições. Dado que Go fornece channels e rotinas para lidar com complexidade, conseguimos estruturar o código para atender nossos requisitos.
 `}}
 
-## New code infrastructure built on Go
+## Nova infraestrutura de código construída em Go
 
-PayPal was created to democratize financial services and empower people and businesses to join and thrive in the global economy. Central to this effort is PayPal’s Payments Platform, which uses a combination of proprietary and third-party technologies to efficiently and securely facilitate transactions between millions of merchants and consumers worldwide. As the Payments Platform grew larger and more complicated, PayPal sought to modernize its systems and reduce time-to-market for new applications.
+O PayPal foi criado para democratizar serviços financeiros e capacitar pessoas e empresas a se juntarem e prosperarem na economia global. Central para esse esforço está a Plataforma de Pagamentos do PayPal, que usa uma combinação de tecnologias proprietárias e de terceiros para facilitar de forma eficiente e segura transações entre milhões de comerciantes e consumidores em todo o mundo. À medida que a Plataforma de Pagamentos cresceu e se tornou mais complicada, o PayPal buscou modernizar seus sistemas e reduzir o tempo de lançamento de novas aplicações.
 
-Go’s value in producing clean, efficient code that readily scales as software deployment scales made the language a strong fit to support PayPal’s goals.
+O valor do Go em produzir código limpo e eficiente que escala prontamente conforme a implantação de software cresce tornou a linguagem uma escolha forte para apoiar os objetivos do PayPal.
 
-Central to the Payment Processing Platform is a proprietary NoSQL database that PayPal had developed in C++. The complexity of the code, however, was substantially decreasing its developers’ ability to evolve the platform. Go’s simple code layouts, goroutines (lightweight threads of execution) and channels (which serve as the pipes that connect concurrent goroutines), made Go a natural choice for the NoSQL development team to simplify and modernize the platform.
+Central para a Plataforma de Processamento de Pagamentos está um banco de dados NoSQL proprietário que o PayPal havia desenvolvido em C++. A complexidade do código, no entanto, estava substancialmente diminuindo a capacidade de seus desenvolvedores de evoluir a plataforma. Os layouts de código simples do Go, goroutines (threads leves de execução) e channels (que servem como os canais que conectam goroutines concorrentes), fizeram do Go uma escolha natural para a equipe de desenvolvimento NoSQL simplificar e modernizar a plataforma.
 
-As a proof of concept, a development team spent six months learning Go and reimplementing the NoSQL system from the ground up in Go, during which they also provided insights on how Go could be implemented more broadly at PayPal. As of today, thirty percent of the clusters have been migrated to use the new NoSQL database.
+Como prova de conceito, uma equipe de desenvolvimento passou seis meses aprendendo Go e reimplementando o sistema NoSQL do zero em Go, durante o qual eles também forneceram insights sobre como Go poderia ser implementado mais amplamente no PayPal. Até hoje, trinta por cento dos clusters foram migrados para usar o novo banco de dados NoSQL.
 
 
-## Using Go to simplify for scale
+## Usando Go para simplificar em escala
 
-As PayPal’s platform becomes more intricate, Go provides a way to readily simplify the complexity of creating and running software at scale. The language provides PayPal with great libraries and fast tools, plus concurrency, garbage collection, and type safety.
+À medida que a plataforma do PayPal se torna mais intricada, Go fornece uma maneira de simplificar prontamente a complexidade de criar e executar software em escala. A linguagem fornece ao PayPal ótimas bibliotecas e ferramentas rápidas, além de concorrência, coleta de lixo e segurança de tipos.
 
-With Go, PayPal enables its developers to spend more time looking at code and thinking strategically, by freeing them from the noise of C++ and Java development.
+Com Go, o PayPal permite que seus desenvolvedores gastem mais tempo olhando código e pensando estrategicamente, liberando-os do ruído do desenvolvimento em C++ e Java.
 
-After the success of this newly re-written NoSQL system, more platform and content teams within PayPal began adopting Go. Natarajan’s current team is responsible for PayPal’s build, test, and release pipelines—all built in Go. The company has a large build and test farm which is completely managed using Go infrastructure to support builds-as-a-service (and tests-as-a-service) for developers across the company.
+Após o sucesso deste sistema NoSQL recém-reescrito, mais equipes de plataforma e conteúdo dentro do PayPal começaram a adotar Go. A equipe atual de Natarajan é responsável pelos pipelines de build, teste e release do PayPal—todos construídos em Go. A empresa tem uma grande fazenda de build e teste que é completamente gerenciada usando infraestrutura Go para apoiar builds-as-a-service (e tests-as-a-service) para desenvolvedores em toda a empresa.
 
   <img
     loading="lazy"
@@ -45,44 +46,44 @@ After the success of this newly re-written NoSQL system, more platform and conte
     alt="Go gopher factory"
     src="/images/gophers/factory.png">
 
-## Modernizing PayPal systems with Go
+## Modernizando sistemas do PayPal com Go
 
-With the distributed computing capabilities required by PayPal, Go was the right language to refresh their systems. PayPal needed programming that is concurrent and parallel, compiled for high performance and highly portable, and that brings developers the benefits of a modular, composable open-source architecture—Go has delivered all that and more to help PayPal modernize its systems.
+Com as capacidades de computação distribuída exigidas pelo PayPal, Go foi a linguagem certa para atualizar seus sistemas. O PayPal precisava de programação que fosse concurrent e paralela, compilada para alta performance e altamente portável, e que trouxesse aos desenvolvedores os benefícios de uma arquitetura open-source modular e componível—Go entregou tudo isso e mais para ajudar o PayPal a modernizar seus sistemas.
 
-Security and supportability are key matters at PayPal, and the company’s operational pipelines are increasingly dominated by Go because the language’s cleanliness and modularity help them achieve these goals. PayPal’s deployment of Go engenders a platform of creativity for developers, allowing them to produce simple, efficient, and reliable software at scale for PayPal’s worldwide markets.
+Segurança e suportabilidade são questões-chave no PayPal, e os pipelines operacionais da empresa são cada vez mais dominados por Go porque a limpeza e modularidade da linguagem os ajudam a alcançar esses objetivos. A implantação de Go pelo PayPal gera uma plataforma de criatividade para desenvolvedores, permitindo-lhes produzir software simples, eficiente e confiável em escala para os mercados mundiais do PayPal.
 
-As PayPal continues to modernize their software-defined networking (SDN) infrastructure with Go, they are seeing performance benefits in addition to more maintainable code. For example, Go now powers routers, load balances, and an increasing number of production systems.
+À medida que o PayPal continua a modernizar sua infraestrutura de rede definida por software (SDN) com Go, eles estão vendo benefícios de performance além de código mais manutenível. Por exemplo, Go agora alimenta roteadores, balanceadores de carga e um número crescente de sistemas de produção.
 
 {{backgroundquote `
   author: Bala Natarajan
   title: Sr. Director of Engineering
   quote: |
-    In our tightly managed environments where we run Go code, we have seen a CPU reduction of approximately ten percent with cleaner and maintainable code.
+    Em nossos ambientes rigidamente gerenciados onde executamos código Go, vimos uma redução de CPU de aproximadamente dez por cento com código mais limpo e manutenível.
 `}}
 
-## Go increases developer productivity
+## Go aumenta a produtividade dos desenvolvedores
 
-As a global operation, PayPal needs its development teams to be effective at managing two kinds of scale: production scale, especially concurrent systems interacting with many other servers (such as cloud services); and development scale, especially large codebases developed by many programmers in coordination (such as open-source development)
+Como uma operação global, o PayPal precisa que suas equipes de desenvolvimento sejam eficazes em gerenciar dois tipos de escala: escala de produção, especialmente sistemas concorrentes interagindo com muitos outros servidores (como serviços em nuvem); e escala de desenvolvimento, especialmente grandes bases de código desenvolvidas por muitos programadores em coordenação (como desenvolvimento open-source)
 
-PayPal leverages Go to address these issues of scale. The company’s developers benefit from Go’s ability to combine the ease of programming of an interpreted, dynamically typed language with the efficiency and safety of a statically typed, compiled language. As PayPal modernizes its system, support for networked and multicore computing is critical. Go not only delivers such support but delivers quickly—it takes at most a few seconds to compile a large executable on a single computer.
+O PayPal aproveita Go para abordar essas questões de escala. Os desenvolvedores da empresa se beneficiam da capacidade do Go de combinar a facilidade de programação de uma linguagem interpretada, dinamicamente tipada, com a eficiência e segurança de uma linguagem estaticamente tipada e compilada. À medida que o PayPal moderniza seu sistema, o suporte para computação em rede e multicore é crítico. Go não apenas entrega tal suporte, mas entrega rapidamente—leva no máximo alguns segundos para compilar um grande executável em um único computador.
 
-There are currently over 100 Go developers at PayPal, and future developers who choose to adopt Go will have an easier time getting the language approved thanks to the many successful implementations already in production at the company.
+Atualmente existem mais de 100 desenvolvedores Go no PayPal, e futuros desenvolvedores que escolherem adotar Go terão mais facilidade em obter a aprovação da linguagem graças às muitas implementações bem-sucedidas já em produção na empresa.
 
-Most importantly, PayPal developers have increased their productivity with Go. Go’s concurrency mechanisms have made it easy to write programs that get the most out of PayPal’s multicore and networked machines. Developers using Go also benefit from the fact that it compiles quickly to machine code and their apps gain the convenience of garbage collection and the power of run-time reflection.
+Mais importante, os desenvolvedores do PayPal aumentaram sua produtividade com Go. Os mecanismos de concorrência do Go tornaram fácil escrever programas que tiram o máximo proveito das máquinas multicore e em rede do PayPal. Desenvolvedores usando Go também se beneficiam do fato de que ele compila rapidamente para código de máquina e seus aplicativos ganham a conveniência de coleta de lixo e o poder de reflexão em tempo de execução.
 
-## Speeding PayPal’s time to market
+## Acelerando o tempo de lançamento do PayPal
 
-The first-class languages at PayPal today are Java and Node, with Go primarily used as an infrastructure language. While Go may never replace Node.js for certain applications, Natarajan is pushing to make Go a first-class language at PayPal.
+As linguagens de primeira classe no PayPal hoje são Java e Node, com Go usado principalmente como uma linguagem de infraestrutura. Embora Go possa nunca substituir Node.js para certas aplicações, Natarajan está se esforçando para tornar Go uma linguagem de primeira classe no PayPal.
 
-Through his efforts, PayPal is also evaluating moving to the Google Kubernetes Engine (GKE) to speed their new products’ time-to-market. The GKE is a managed, production-ready environment for deploying containerized applications, and brings Google's latest innovations in developer productivity, automated operations, and open source flexibility.
+Através de seus esforços, o PayPal também está avaliando a mudança para o Google Kubernetes Engine (GKE) para acelerar o tempo de lançamento de seus novos produtos. O GKE é um ambiente gerenciado e pronto para produção para implantar aplicações em contêineres, e traz as mais recentes inovações do Google em produtividade de desenvolvedores, operações automatizadas e flexibilidade open source.
 
-For PayPal, deploying to GKE would enable rapid development and iteration by making it easier for PayPal to deploy, update, and manage its applications and services. Plus PayPal will find it easier to run Machine Learning, General Purpose GPU, High-Performance Computing, and other workloads that benefit from specialized hardware accelerators supported by the GKE.
+Para o PayPal, implantar no GKE permitiria desenvolvimento e iteração rápidos, facilitando a implantação, atualização e gerenciamento de suas aplicações e serviços. Além disso, o PayPal achará mais fácil executar Machine Learning, GPU de Uso Geral, Computação de Alto Desempenho e outras cargas de trabalho que se beneficiam de aceleradores de hardware especializados suportados pelo GKE.
 
-Most importantly for PayPal, the combination of Go development and the GKE allows the company to scale effortless to meet demand, as Kubernetes autoscaling will allow PayPal to handle increased user demand for services—keeping them available when it matters most, then scale back in the quiet periods to save money.
+Mais importante para o PayPal, a combinação de desenvolvimento Go e o GKE permite que a empresa escale sem esforço para atender à demanda, já que o autoscaling do Kubernetes permitirá ao PayPal lidar com o aumento da demanda dos usuários por serviços—mantendo-os disponíveis quando mais importa, e então reduzir nos períodos de baixa demanda para economizar dinheiro.
 
 
-## Getting your enterprise started with Go
+## Começando sua empresa com Go
 
-PayPal’s story is not unique; dozens of other large enterprises are discovering how Go can help them ship reliable software faster. There are over one million developers using Go worldwide—spanning banking and commerce, gaming and media, technology, and other industries, at enterprises as diverse as [American Express](/solutions/americanexpress), [Mercado Libre](/solutions/mercadolibre), Capital One, Dropbox, IBM, Monzo, New York Times, Salesforce, Square, Target, Twitch, Uber, and of course Google.
+A história do PayPal não é única; dezenas de outras grandes empresas estão descobrindo como Go pode ajudá-las a entregar software confiável mais rapidamente. Existem mais de um milhão de desenvolvedores usando Go em todo o mundo—abrangendo bancos e comércio, jogos e mídia, tecnologia e outras indústrias, em empresas tão diversas quanto [American Express](/solutions/americanexpress), [Mercado Libre](/solutions/mercadolibre), Capital One, Dropbox, IBM, Monzo, New York Times, Salesforce, Square, Target, Twitch, Uber e, é claro, Google.
 
-To learn more about how Go can help your enterprise build reliable, scalable software as it does at PayPal, visit [go.dev](/) today.
+Para saber mais sobre como Go pode ajudar sua empresa a construir software confiável e escalável como faz no PayPal, visite [go.dev](/) hoje.
