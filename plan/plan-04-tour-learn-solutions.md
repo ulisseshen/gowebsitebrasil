@@ -130,8 +130,8 @@ Após traduzir cada arquivo, marque o checkpoint com `[x]`.
 
 ## Seção 5: gopls Documentation
 
-- [ ] `_content/gopls/doc/index.md` - Gopls Index
-- [ ] `_content/gopls/doc/settings.md` - Gopls Settings
+- [x] `_content/gopls/doc/index.md` - Gopls Index
+- [x] `_content/gopls/doc/settings.md` - Gopls Settings
 
 ---
 
@@ -143,7 +143,7 @@ Após traduzir cada arquivo, marque o checkpoint com `[x]`.
 
 ## Seção 7: Wiki
 
-- [ ] `_content/wiki/Comments.md` - Comentários Wiki
+- [x] `_content/wiki/Comments.md` - Comentários Wiki
 
 ---
 
@@ -160,10 +160,10 @@ Após traduzir cada arquivo, marque o checkpoint com `[x]`.
 | Solutions N-Z | 12 | 12 | 100% |
 | Google Solutions | 5 | 5 | 100% |
 | Root Pages | 6 | 6 | 100% |
-| gopls | 2 | 0 | 0% |
+| gopls | 2 | 2 | 100% |
 | ref | 1 | 0 | 0% |
-| Wiki | 1 | 0 | 0% |
-| **TOTAL** | **72** | **63** | **88%** |
+| Wiki | 1 | 1 | 100% |
+| **TOTAL** | **72** | **66** | **92%** |
 
 ---
 
