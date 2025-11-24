@@ -1,103 +1,106 @@
+---
+ia-translated: true
+---
 <!--{
-  "Title": "Tutorial: Getting started with generics",
+  "Title": "Tutorial: Começando com generics",
   "Breadcrumb": true
 }-->
 
-This tutorial introduces the basics of generics in Go. With generics, you can
-declare and use functions or types that are written to work with any of a set
-of types provided by calling code.
+Este tutorial introduz os fundamentos de generics em Go. Com generics, você pode
+declarar e usar funções ou tipos que são escritos para funcionar com qualquer conjunto
+de tipos fornecidos pelo código chamador.
 
-In this tutorial, you'll declare two simple non-generic functions, then capture
-the same logic in a single generic function.
+Neste tutorial, você declarará duas funções simples não-genéricas, então capturará
+a mesma lógica em uma única função genérica.
 
-You'll progress through the following sections:
+Você progredirá através das seguintes seções:
 
-1. Create a folder for your code.
-2. Add non-generic functions.
-3. Add a generic function to handle multiple types.
-4. Remove type arguments when calling the generic function.
-5. Declare a type constraint.
+1. Criar uma pasta para seu código.
+2. Adicionar funções não-genéricas.
+3. Adicionar uma função genérica para lidar com múltiplos tipos.
+4. Remover argumentos de tipo ao chamar a função genérica.
+5. Declarar uma type constraint.
 
-**Note:** For other tutorials, see [Tutorials](/doc/tutorial/index.html).
+**Nota:** Para outros tutoriais, veja [Tutoriais](/doc/tutorial/index.html).
 
-**Note:** If you prefer, you can use
-[the Go playground in “Go dev branch” mode](/play/?v=gotip)
-to edit and run your program instead.
+**Nota:** Se você preferir, pode usar
+[o Go playground no modo "Go dev branch"](/play/?v=gotip)
+para editar e executar seu programa em vez disso.
 
-## Prerequisites
+## Pré-requisitos
 
-*   **An installation of Go 1.18 or later.** For installation instructions, see
-    [Installing Go](/doc/install).
-*   **A tool to edit your code.** Any text editor you have will work fine.
-*   **A command terminal.** Go works well using any terminal on Linux and Mac,
-    and on PowerShell or cmd in Windows.
+*   **Uma instalação do Go 1.18 ou posterior.** Para instruções de instalação, veja
+    [Instalando Go](/doc/install).
+*   **Uma ferramenta para editar seu código.** Qualquer editor de texto que você tenha funcionará bem.
+*   **Um terminal de comando.** Go funciona bem usando qualquer terminal no Linux e Mac,
+    e no PowerShell ou cmd no Windows.
 
-## Create a folder for your code {#create_folder}
+## Criar uma pasta para seu código {#create_folder}
 
-To begin, create a folder for the code you’ll write.
+Para começar, crie uma pasta para o código que você escreverá.
 
-1. Open a command prompt and change to your home directory.
+1. Abra um prompt de comando e mude para seu diretório home.
 
-    On Linux or Mac:
+    No Linux ou Mac:
 
     ```
     $ cd
     ```
 
-    On Windows:
+    No Windows:
 
     ```
     C:\> cd %HOMEPATH%
     ```
 
-    The rest of the tutorial will show a $ as the prompt. The commands you use
-    will work on Windows too.
+    O resto do tutorial mostrará um $ como o prompt. Os comandos que você usa
+    funcionarão no Windows também.
 
-2. From the command prompt, create a directory for your code called generics.
+2. Do prompt de comando, crie um diretório para seu código chamado generics.
 
     ```
     $ mkdir generics
     $ cd generics
     ```
 
-3. Create a module to hold your code.
+3. Crie um módulo para manter seu código.
 
-    Run the `go mod init` command, giving it your new code’s module path.
+    Execute o comando `go mod init`, dando a ele o caminho do módulo do seu novo código.
 
     ```
     $ go mod init example/generics
     go: creating new go.mod: module example/generics
     ```
 
-    **Note:** For production code, you’d specify a module path that’s more specific
-    to your own needs. For more, be sure to see
-    [Managing dependencies](/doc/modules/managing-dependencies).
+    **Nota:** Para código de produção, você especificaria um caminho de módulo que é mais específico
+    para suas próprias necessidades. Para mais, certifique-se de ver
+    [Gerenciando dependências](/doc/modules/managing-dependencies).
 
-Next, you'll add some simple code to work with maps.
+A seguir, você adicionará algum código simples para trabalhar com maps.
 
-## Add non-generic functions {#non_generic_functions}
+## Adicionar funções não-genéricas {#non_generic_functions}
 
-In this step, you'll add two functions that each add together the values of a
-map and return the total.
+Neste passo, você adicionará duas funções que cada uma soma os valores de um
+map e retorna o total.
 
-You're declaring two functions instead of one because you're working with two
-different types of maps: one that stores `int64` values, and one that stores `float64` values.
+Você está declarando duas funções em vez de uma porque está trabalhando com dois
+tipos diferentes de maps: um que armazena valores `int64`, e um que armazena valores `float64`.
 
-#### Write the code
+#### Escrever o código
 
-1. Using your text editor, create a file called main.go in the generics
-    directory. You’ll write your Go code in this file.
-2. Into main.go, at the top of the file, paste the following package
-    declaration.
+1. Usando seu editor de texto, crie um arquivo chamado main.go no diretório
+    generics. Você escreverá seu código Go neste arquivo.
+2. Em main.go, no topo do arquivo, cole a seguinte declaração de
+    package.
 
     ```
     package main
     ```
 
-    A standalone program (as opposed to a library) is always in package `main`.
+    Um programa standalone (ao contrário de uma biblioteca) está sempre no package `main`.
 
-3. Beneath the package declaration, paste the following two function
-    declarations.
+3. Abaixo da declaração de package, cole as seguintes duas declarações de
+    função.
 
     ```
     // SumInts adds together the values of m.
@@ -119,16 +122,16 @@ different types of maps: one that stores `int64` values, and one that stores `fl
     }
     ```
 
-    In this code, you:
+    Neste código, você:
 
-    *   Declare two functions to add together the values of a map and return
-        the sum.
-        *   `SumFloats` takes a map of `string` to `float64` values.
-        *   `SumInts` takes a map of `string` to `int64` values.
+    *   Declara duas funções para somar os valores de um map e retornar
+        a soma.
+        *   `SumFloats` recebe um map de `string` para valores `float64`.
+        *   `SumInts` recebe um map de `string` para valores `int64`.
 
-4. At the top of main.go, beneath the package declaration, paste the following
-    `main` function to initialize the two maps and use them as arguments when
-    calling the functions you declared in the preceding step.
+4. No topo de main.go, abaixo da declaração de package, cole a seguinte
+    função `main` para inicializar os dois maps e usá-los como argumentos ao
+    chamar as funções que você declarou no passo anterior.
 
     ```
     func main() {
@@ -150,18 +153,18 @@ different types of maps: one that stores `int64` values, and one that stores `fl
     }
     ```
 
-    In this code, you:
+    Neste código, você:
 
-    *   Initialize a map of `float64` values and a map of `int64` values, each
-        with two entries.
-    *   Call the two functions you declared earlier to find the sum of each
-        map's values.
-    *   Print the result.
+    *   Inicializa um map de valores `float64` e um map de valores `int64`, cada
+        um com duas entradas.
+    *   Chama as duas funções que você declarou anteriormente para encontrar a soma dos
+        valores de cada map.
+    *   Imprime o resultado.
 
-5. Near the top of main.go, just beneath the package declaration, import the
-    package you’ll need to support the code you’ve just written.
+5. Próximo ao topo de main.go, logo abaixo da declaração de package, importe o
+    pacote que você precisará para suportar o código que você acabou de escrever.
 
-    The first lines of code should look like this:
+    As primeiras linhas de código devem ficar assim:
 
     ```
     package main
@@ -169,56 +172,56 @@ different types of maps: one that stores `int64` values, and one that stores `fl
     import "fmt"
     ```
 
-6. Save main.go.
+6. Salve main.go.
 
-#### Run the code
+#### Executar o código
 
-From the command line in the directory containing main.go, run the code.
+Da linha de comando no diretório contendo main.go, execute o código.
 
 ```
 $ go run .
 Non-Generic Sums: 46 and 62.97
 ```
 
-With generics, you can write one function here instead of two. Next, you’ll
-add a single generic function for maps containing either integer or float values.
+Com generics, você pode escrever uma função aqui em vez de duas. A seguir, você
+adicionará uma única função genérica para maps contendo valores integer ou float.
 
-## Add a generic function to handle multiple types {#add_generic_function}
+## Adicionar uma função genérica para lidar com múltiplos tipos {#add_generic_function}
 
-In this section, you'll add a single generic function that can receive a map
-containing either integer or float values, effectively replacing the two
-functions you just wrote with a single function.
+Nesta seção, você adicionará uma única função genérica que pode receber um map
+contendo valores integer ou float, efetivamente substituindo as duas
+funções que você acabou de escrever com uma única função.
 
-To support values of either type, that single function will need a way to
-declare what types it supports. Calling code, on the other hand, will need a
-way to specify whether it is calling with an integer or float map.
+Para suportar valores de qualquer tipo, essa única função precisará de uma maneira de
+declarar quais tipos ela suporta. O código chamador, por outro lado, precisará de uma
+maneira de especificar se está chamando com um map integer ou float.
 
-To support this, you'll write a function that declares _type parameters_ in
-addition to its ordinary function parameters. These type parameters make the
-function generic, enabling it to work with arguments of different types. You'll
-call the function with _type arguments_ and ordinary function arguments.
+Para suportar isso, você escreverá uma função que declara _type parameters_ além
+de seus parâmetros de função ordinários. Esses type parameters tornam a
+função genérica, permitindo que ela funcione com argumentos de diferentes tipos. Você
+chamará a função com _type arguments_ e argumentos de função ordinários.
 
-Each type parameter has a _type constraint_ that acts as a kind of meta-type
-for the type parameter. Each type constraint specifies the permissible type
-arguments that calling code can use for the respective type parameter.
+Cada type parameter tem uma _type constraint_ que age como uma espécie de meta-tipo
+para o type parameter. Cada type constraint especifica os argumentos de tipo
+permitidos que o código chamador pode usar para o respectivo type parameter.
 
-While a type parameter's constraint typically represents a set of types, at
-compile time the type parameter stands for a single type – the type provided
-as a type argument by the calling code. If the type argument's type isn't
-allowed by the type parameter's constraint, the code won't compile.
+Embora a constraint de um type parameter tipicamente represente um conjunto de tipos, em
+tempo de compilação o type parameter representa um único tipo – o tipo fornecido
+como um type argument pelo código chamador. Se o tipo do type argument não é
+permitido pela constraint do type parameter, o código não compilará.
 
-Keep in mind that a type parameter must support all the operations the generic
-code is performing on it. For example, if your function's code were to try to
-perform `string` operations (such as indexing) on a type parameter whose
-constraint included numeric types, the code wouldn't compile.
+Tenha em mente que um type parameter deve suportar todas as operações que o código genérico
+está realizando nele. Por exemplo, se o código da sua função tentasse
+realizar operações de `string` (como indexação) em um type parameter cuja
+constraint incluísse tipos numéricos, o código não compilaria.
 
-In the code you're about to write, you'll use a constraint that allows either
-integer or float types.
+No código que você está prestes a escrever, você usará uma constraint que permite
+tipos integer ou float.
 
-#### Write the code
+#### Escrever o código
 
-1. Beneath the two functions you added previously, paste the following generic
-    function.
+1. Abaixo das duas funções que você adicionou anteriormente, cole a seguinte função
+    genérica.
 
     ```
     // SumIntsOrFloats sums the values of map m. It supports both int64 and float64
@@ -232,30 +235,30 @@ integer or float types.
     }
     ```
 
-    In this code, you:
+    Neste código, você:
 
-    *   Declare a `SumIntsOrFloats` function with two type parameters (inside
-        the square brackets), `K` and `V`, and one argument that uses the type
-        parameters, `m` of type `map[K]V`. The function returns a value of
-        type `V`.
-    *   Specify for the `K` type parameter the type constraint `comparable`.
-        Intended specifically for cases like these, the `comparable` constraint
-        is predeclared in Go. It allows any type whose values may be used as an
-        operand of the comparison operators `==` and `!=`. Go requires that map
-        keys be comparable. So declaring `K` as `comparable` is necessary so you
-        can use `K` as the key in the map variable. It also ensures that calling
-        code uses an allowable type for map keys.
-    *   Specify for the `V` type parameter a constraint that is a union of two
-        types: `int64` and `float64`. Using `|` specifies a union of the two
-        types, meaning that this constraint allows either type. Either type
-        will be permitted by the compiler as an argument in the calling code.
-    *   Specify that the `m` argument is of type `map[K]V`, where `K` and `V`
-        are the types already specified for the type parameters. Note that we
-        know `map[K]V` is a valid map type because `K` is a comparable type. If
-        we hadn’t declared `K` comparable, the compiler would reject the
-        reference to `map[K]V`.
+    *   Declara uma função `SumIntsOrFloats` com dois type parameters (dentro
+        dos colchetes), `K` e `V`, e um argumento que usa os type
+        parameters, `m` do tipo `map[K]V`. A função retorna um valor do
+        tipo `V`.
+    *   Especifica para o type parameter `K` a type constraint `comparable`.
+        Destinada especificamente para casos como estes, a constraint `comparable`
+        é pré-declarada em Go. Ela permite qualquer tipo cujos valores podem ser usados como
+        operando dos operadores de comparação `==` e `!=`. Go requer que chaves de map
+        sejam comparáveis. Então declarar `K` como `comparable` é necessário para que você
+        possa usar `K` como a chave na variável map. Também garante que o código
+        chamador use um tipo permitido para chaves de map.
+    *   Especifica para o type parameter `V` uma constraint que é uma união de dois
+        tipos: `int64` e `float64`. Usar `|` especifica uma união dos dois
+        tipos, significando que esta constraint permite qualquer um dos tipos. Qualquer tipo
+        será permitido pelo compilador como um argumento no código chamador.
+    *   Especifica que o argumento `m` é do tipo `map[K]V`, onde `K` e `V`
+        são os tipos já especificados para os type parameters. Note que sabemos
+        que `map[K]V` é um tipo de map válido porque `K` é um tipo comparável. Se
+        não tivéssemos declarado `K` comparable, o compilador rejeitaria a
+        referência a `map[K]V`.
 
-2. In main.go, beneath the code you already have, paste the following code.
+2. Em main.go, abaixo do código que você já tem, cole o seguinte código.
 
     ```
     fmt.Printf("Generic Sums: %v and %v\n",
@@ -263,21 +266,21 @@ integer or float types.
     	SumIntsOrFloats[string, float64](floats))
     ```
 
-    In this code, you:
+    Neste código, você:
 
-    *   Call the generic function you just declared, passing each of the maps
-        you created.
-    *   Specify type arguments – the type names in square brackets – to be
-        clear about the types that should replace type parameters in the
-        function you're calling.
+    *   Chama a função genérica que você acabou de declarar, passando cada um dos maps
+        que você criou.
+    *   Especifica type arguments – os nomes de tipo em colchetes – para ficar
+        claro sobre os tipos que devem substituir os type parameters na
+        função que você está chamando.
 
-        As you'll see in the next section, you can often omit the type
-        arguments in the function call. Go can often infer them from your code.
-    *   Print the sums returned by the function.
+        Como você verá na próxima seção, muitas vezes você pode omitir os type
+        arguments na chamada de função. Go pode frequentemente inferi-los do seu código.
+    *   Imprime as somas retornadas pela função.
 
-#### Run the code
+#### Executar o código
 
-From the command line in the directory containing main.go, run the code.
+Da linha de comando no diretório contendo main.go, execute o código.
 
 ```
 $ go run .
@@ -285,31 +288,31 @@ Non-Generic Sums: 46 and 62.97
 Generic Sums: 46 and 62.97
 ```
 
-To run your code, in each call the compiler replaced the type parameters with
-the concrete types specified in that call.
+Para executar seu código, em cada chamada o compilador substituiu os type parameters com
+os tipos concretos especificados naquela chamada.
 
-In calling the generic function you wrote, you specified type arguments that
-told the compiler what types to use in place of the function's type parameters.
-As you'll see in the next section, in many cases you can omit these type
-arguments because the compiler can infer them.
+Ao chamar a função genérica que você escreveu, você especificou type arguments que
+disseram ao compilador quais tipos usar no lugar dos type parameters da função.
+Como você verá na próxima seção, em muitos casos você pode omitir esses type
+arguments porque o compilador pode inferi-los.
 
-## Remove type arguments when calling the generic function {#remove_type_arguments}
+## Remover type arguments ao chamar a função genérica {#remove_type_arguments}
 
-In this section, you'll add a modified version of the generic function call,
-making a small change to simplify the calling code. You'll remove the type
-arguments, which aren't needed in this case.
+Nesta seção, você adicionará uma versão modificada da chamada da função genérica,
+fazendo uma pequena mudança para simplificar o código chamador. Você removerá os type
+arguments, que não são necessários neste caso.
 
-You can omit type arguments in calling code when the Go compiler can infer the
-types you want to use. The compiler infers type arguments from the types of
-function arguments.
+Você pode omitir type arguments no código chamador quando o compilador Go pode inferir os
+tipos que você quer usar. O compilador infere type arguments dos tipos dos
+argumentos da função.
 
-Note that this isn't always possible. For example, if you needed to call a
-generic function that had no arguments, you would need to include the type
-arguments in the function call.
+Note que isso nem sempre é possível. Por exemplo, se você precisasse chamar uma
+função genérica que não tivesse argumentos, você precisaria incluir os type
+arguments na chamada da função.
 
-#### Write the code
+#### Escrever o código
 
-*   In main.go, beneath the code you already have, paste the following code.
+*   Em main.go, abaixo do código que você já tem, cole o seguinte código.
 
     ```
     fmt.Printf("Generic Sums, type parameters inferred: %v and %v\n",
@@ -317,13 +320,13 @@ arguments in the function call.
     	SumIntsOrFloats(floats))
     ```
 
-    In this code, you:
+    Neste código, você:
 
-    *   Call the generic function, omitting the type arguments.
+    *   Chama a função genérica, omitindo os type arguments.
 
-#### Run the code
+#### Executar o código
 
-From the command line in the directory containing main.go, run the code.
+Da linha de comando no diretório contendo main.go, execute o código.
 
 ```
 $ go run .
@@ -332,29 +335,29 @@ Generic Sums: 46 and 62.97
 Generic Sums, type parameters inferred: 46 and 62.97
 ```
 
-Next, you'll further simplify the function by capturing the union of integers
-and floats into a type constraint you can reuse, such as from other code.
+A seguir, você simplificará ainda mais a função capturando a união de integers
+e floats em uma type constraint que você pode reutilizar, como de outro código.
 
-## Declare a type constraint {#declare_type_constraint}
+## Declarar uma type constraint {#declare_type_constraint}
 
-In this last section, you'll move the constraint you defined earlier into its
-own interface so that you can reuse it in multiple places. Declaring
-constraints in this way helps streamline code, such as when a constraint is
-more complex.
+Nesta última seção, você moverá a constraint que definiu anteriormente para sua
+própria interface para que possa reutilizá-la em múltiplos lugares. Declarar
+constraints desta forma ajuda a simplificar o código, como quando uma constraint é
+mais complexa.
 
-You declare a _type constraint_ as an interface. The constraint allows any
-type implementing the interface. For example, if you declare a type constraint
-interface with three methods, then use it with a type parameter in a generic
-function, type arguments used to call the function must have all of those
-methods.
+Você declara uma _type constraint_ como uma interface. A constraint permite qualquer
+tipo implementando a interface. Por exemplo, se você declarar uma interface de type constraint
+com três métodos, então usá-la com um type parameter em uma função
+genérica, type arguments usados para chamar a função devem ter todos esses
+métodos.
 
-Constraint interfaces can also refer to specific types, as you'll see in this
-section.
+Interfaces de constraint também podem se referir a tipos específicos, como você verá nesta
+seção.
 
-#### Write the code
+#### Escrever o código
 
-1. Just above `main`, immediately after the import statements, paste the
-    following code to declare a type constraint.
+1. Logo acima de `main`, imediatamente após as instruções import, cole o
+    seguinte código para declarar uma type constraint.
 
     ```
     type Number interface {
@@ -362,18 +365,18 @@ section.
     }
     ```
 
-    In this code, you:
+    Neste código, você:
 
-    *   Declare the `Number` interface type to use as a type constraint.
-    *   Declare a union of `int64` and `float64` inside the interface.
+    *   Declara o tipo de interface `Number` para usar como uma type constraint.
+    *   Declara uma união de `int64` e `float64` dentro da interface.
 
-        Essentially, you're moving the union from the function declaration
-        into a new type constraint. That way, when you want to constrain a type
-        parameter to either `int64` or `float64`, you can use this `Number`
-        type constraint instead of writing out `int64 | float64`.
+        Essencialmente, você está movendo a união da declaração da função
+        para uma nova type constraint. Dessa forma, quando você quer restringir um type
+        parameter a `int64` ou `float64`, você pode usar esta type constraint `Number`
+        em vez de escrever `int64 | float64`.
 
-2. Beneath the functions you already have, paste the following generic
-    `SumNumbers` function.
+2. Abaixo das funções que você já tem, cole a seguinte função genérica
+    `SumNumbers`.
 
     ```
     // SumNumbers sums the values of map m. It supports both integers
@@ -387,14 +390,14 @@ section.
     }
     ```
 
-    In this code, you:
+    Neste código, você:
 
-    *   Declare a generic function with the same logic as the generic function
-        you declared previously, but with the new interface type instead of the
-        union as the type constraint. As before, you use the type parameters
-        for the argument and return types.
+    *   Declara uma função genérica com a mesma lógica que a função genérica
+        que você declarou anteriormente, mas com o novo tipo de interface em vez da
+        união como a type constraint. Como antes, você usa os type parameters
+        para os tipos de argumento e retorno.
 
-3. In main.go, beneath the code you already have, paste the following code.
+3. Em main.go, abaixo do código que você já tem, cole o seguinte código.
 
     ```
     fmt.Printf("Generic Sums with Constraint: %v and %v\n",
@@ -402,18 +405,18 @@ section.
     	SumNumbers(floats))
     ```
 
-    In this code, you:
+    Neste código, você:
 
-    *   Call `SumNumbers` with each map, printing the sum from the values of
-        each.
+    *   Chama `SumNumbers` com cada map, imprimindo a soma dos valores de
+        cada um.
 
-        As in the preceding section, you omit the type arguments (the type
-        names in square brackets) in calls to the generic function. The Go
-        compiler can infer the type argument from other arguments.
+        Como na seção anterior, você omite os type arguments (os nomes de tipo
+        em colchetes) em chamadas à função genérica. O compilador Go
+        pode inferir o type argument de outros argumentos.
 
-#### Run the code
+#### Executar o código
 
-From the command line in the directory containing main.go, run the code.
+Da linha de comando no diretório contendo main.go, execute o código.
 
 ```
 $ go run .
@@ -423,24 +426,24 @@ Generic Sums, type parameters inferred: 46 and 62.97
 Generic Sums with Constraint: 46 and 62.97
 ```
 
-## Conclusion {#conclusion}
+## Conclusão {#conclusion}
 
-Nicely done! You've just introduced yourself to generics in Go.
+Muito bem feito! Você acabou de se apresentar a generics em Go.
 
-Suggested next topics:
+Próximos tópicos sugeridos:
 
-*   The [Go Tour](/tour/) is a great step-by-step
-    introduction to Go fundamentals.
-*   You'll find useful Go best practices described in
-    [Effective Go](/doc/effective_go) and
-    [How to write Go code](/doc/code).
+*   O [Go Tour](/tour/) é uma ótima introdução passo a passo
+    aos fundamentos do Go.
+*   Você encontrará práticas recomendadas úteis do Go descritas em
+    [Effective Go](/doc/effective_go) e
+    [Como escrever código Go](/doc/code).
 
-## Completed code {#completed_code}
+## Código completo {#completed_code}
 
 <!--TODO: Update text and link after release.-->
-You can run this program in the
-[Go playground](/play/p/apNmfVwogK0?v=gotip). On the
-playground simply click the **Run** button.
+Você pode executar este programa no
+[Go playground](/play/p/apNmfVwogK0?v=gotip). No
+playground simplesmente clique no botão **Run**.
 
 ```
 package main
@@ -518,3 +521,4 @@ func SumNumbers[K comparable, V Number](m map[K]V) V {
 	}
 	return s
 }
+```
