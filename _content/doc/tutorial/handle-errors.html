@@ -1,27 +1,28 @@
 <!--{
-    "Title": "Return and handle an error",
-    "Breadcrumb": true
+    "Title": "Retornar e tratar um erro",
+    "Breadcrumb": true,
+    "ia-translated": true
 }-->
 
 <p>
-  Handling errors is an essential feature of solid code. In this section, you'll
-  add a bit of code to return an error from the greetings module, then handle it
-  in the caller.
+  Tratar erros é uma característica essencial de código sólido. Nesta seção, você
+  adicionará um pouco de código para retornar um erro do módulo greetings, então tratará
+  no chamador.
 </p>
 
 <aside class="Note">
-  <strong>Note:</strong> This topic is part of a multi-part tutorial that begins
-  with <a href="/doc/tutorial/create-module.html">Create a Go module</a>.
+  <strong>Nota:</strong> Este tópico é parte de um tutorial em várias partes que começa
+  com <a href="/doc/tutorial/create-module.html">Criar um módulo Go</a>.
 </aside>
 
 <ol>
   <li>
-    In greetings/greetings.go, add the code highlighted below.
+    Em greetings/greetings.go, adicione o código destacado abaixo.
 
     <p>
-      There's no sense sending a greeting back if you don't know who to greet.
-      Return an error to the caller if the name is empty. Copy the following
-      code into greetings.go and save the file.
+      Não faz sentido enviar uma saudação de volta se você não sabe para quem cumprimentar.
+      Retorne um erro para o chamador se o nome estiver vazio. Copie o seguinte
+      código em greetings.go e salve o arquivo.
     </p>
 
     <pre>
@@ -47,44 +48,44 @@ func Hello(name string) <ins>(</ins>string<ins>, error)</ins> {
 </pre>
 
     <p>
-      In this code, you:
+      Neste código, você:
     </p>
 
     <ul>
       <li>
-        Change the function so that it returns two values: a
-        <code>string</code> and an <code>error</code>. Your caller will check
-        the second value to see if an error occurred. (Any Go function can
-        return multiple values. For more, see 
+        Altera a função para que ela retorne dois valores: uma
+        <code>string</code> e um <code>error</code>. Seu chamador verificará
+        o segundo valor para ver se ocorreu um erro. (Qualquer função Go pode
+        retornar múltiplos valores. Para mais informações, veja
         <a href="/doc/effective_go.html#multiple-returns">Effective Go</a>.)
       </li>
       <li>
-        Import the Go standard library <code>errors</code> package so you can
-        use its
+        Importa o pacote <code>errors</code> da biblioteca padrão Go para que você possa
+        usar sua função
         <a href="https://pkg.go.dev/errors/#example-New"
-          ><code>errors.New</code> function</a
+          ><code>errors.New</code></a
         >.
       </li>
       <li>
-        Add an <code>if</code> statement to check for an invalid request (an
-        empty string where the name should be) and return an error if the
-        request is invalid. The <code>errors.New</code> function returns an
-        <code>error</code> with your message inside.
+        Adiciona uma instrução <code>if</code> para verificar uma requisição inválida (uma
+        string vazia onde o nome deveria estar) e retorna um erro se a
+        requisição for inválida. A função <code>errors.New</code> retorna um
+        <code>error</code> com sua mensagem dentro.
       </li>
       <li>
-        Add <code>nil</code> (meaning no error) as a second value in the
-        successful return. That way, the caller can see that the function
-        succeeded.
+        Adiciona <code>nil</code> (significando nenhum erro) como um segundo valor no
+        retorno bem-sucedido. Dessa forma, o chamador pode ver que a função
+        foi bem-sucedida.
       </li>
     </ul>
   </li>
 
   <li>
-    In your hello/hello.go file, handle the error now returned by the
-    <code>Hello</code> function, along with the non-error value.
+    No seu arquivo hello/hello.go, trate o erro agora retornado pela
+    função <code>Hello</code>, junto com o valor não-erro.
 
     <p>
-      Paste the following code into hello.go.
+      Cole o seguinte código em hello.go.
     </p>
 
     <pre>
@@ -119,46 +120,46 @@ func main() {
 </pre>
 
     <p>
-      In this code, you:
+      Neste código, você:
     </p>
 
     <ul>
       <li>
-        Configure the
-        <a href="https://pkg.go.dev/log/"><code>log</code> package</a> to
-        print the command name ("greetings: ") at the start of its log messages,
-        without a time stamp or source file information.
+        Configura o
+        <a href="https://pkg.go.dev/log/"><code>log</code> package</a> para
+        imprimir o nome do comando ("greetings: ") no início de suas mensagens de log,
+        sem um timestamp ou informação de arquivo fonte.
       </li>
       <li>
-        Assign both of the <code>Hello</code> return values, including the
-        <code>error</code>, to variables.
+        Atribui ambos os valores de retorno de <code>Hello</code>, incluindo o
+        <code>error</code>, a variáveis.
       </li>
       <li>
-        Change the <code>Hello</code> argument from Gladys’s name to an empty
-        string, so you can try out your error-handling code.
+        Altera o argumento de <code>Hello</code> do nome de Gladys para uma string
+        vazia, para que você possa testar seu código de tratamento de erro.
       </li>
       <li>
-        Look for a non-nil <code>error</code> value. There's no sense continuing
-        in this case.
+        Procura por um valor <code>error</code> não-nil. Não faz sentido continuar
+        neste caso.
       </li>
       <li>
-        Use the functions in the standard library's <code>log package</code> to
-        output error information. If you get an error, you use the
-        <code>log</code> package's
+        Usa as funções no <code>log package</code> da biblioteca padrão para
+        exibir informações de erro. Se você obtiver um erro, você usa a função
         <a href="https://pkg.go.dev/log?tab=doc#Fatal"
-          ><code>Fatal</code> function</a
+          ><code>Fatal</code></a
         >
-        to print the error and stop the program.
+        do pacote <code>log</code>
+        para imprimir o erro e parar o programa.
       </li>
     </ul>
   </li>
 
   <li>
-    At the command line in the <code>hello</code> directory, run hello.go to
-    confirm that the code works.
+    Na linha de comando no diretório <code>hello</code>, execute hello.go para
+    confirmar que o código funciona.
 
     <p>
-      Now that you're passing in an empty name, you'll get an error.
+      Agora que você está passando um nome vazio, você receberá um erro.
     </p>
 
     <pre>
@@ -171,19 +172,19 @@ exit status 1
 </ol>
 
 <p>
-  That's common error handling in Go: Return an error as a value so the caller
-  can check for it.
+  Esse é o tratamento de erro comum em Go: Retorne um erro como um valor para que o chamador
+  possa verificá-lo.
 </p>
 
 <p>
-  Next, you'll use a Go slice to return a randomly-selected greeting.
+  A seguir, você usará um slice Go para retornar uma saudação selecionada aleatoriamente.
 </p>
 
 <p class="Navigation">
   <a class="Navigation-prev" href="/doc/tutorial/call-module-code.html"
-    >&lt; Call your code from another module</a
+    >&lt; Chame seu código de outro módulo</a
   >
   <a class="Navigation-next" href="/doc/tutorial/random-greeting.html"
-    >Return a random greeting &gt;</a
+    >Retorne uma saudação aleatória &gt;</a
   >
 </p>

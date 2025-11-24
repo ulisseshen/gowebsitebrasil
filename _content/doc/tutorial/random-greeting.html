@@ -1,34 +1,34 @@
 <!--{
-    "Title": "Return a random greeting",
-    "Breadcrumb": true
+    "Title": "Retornar uma saudação aleatória",
+    "Breadcrumb": true,
+    "ia-translated": true
 }-->
 
 <p>
-  In this section, you'll change your code so that instead of returning a single
-  greeting every time, it returns one of several predefined greeting messages.
+  Nesta seção, você mudará seu código para que, em vez de retornar uma única
+  saudação toda vez, ele retorne uma das várias mensagens de saudação predefinidas.
 </p>
 
 <aside class="Note">
-  <strong>Note:</strong> This topic is part of a multi-part tutorial that begins
-  with <a href="/doc/tutorial/create-module.html">Create a Go module</a>.
+  <strong>Nota:</strong> Este tópico é parte de um tutorial em várias partes que começa
+  com <a href="/doc/tutorial/create-module.html">Criar um módulo Go</a>.
 </aside>
 
 <p>
-  To do this, you'll use a Go slice. A slice is like an array, except that its
-  size changes dynamically as you add and remove items. The slice is one of Go's
-  most useful types.
+  Para fazer isso, você usará um slice Go. Um slice é como um array, exceto que seu
+  tamanho muda dinamicamente conforme você adiciona e remove itens. O slice é um dos tipos
+  mais úteis do Go.
 </p>
 
 <p>
-  You'll add a small slice to contain three greeting messages, then have your
-  code return one of the messages randomly. For more on slices,
-  see <a href="/blog/slices-intro">Go slices</a> in the Go
-  blog.
+  Você adicionará um pequeno slice para conter três mensagens de saudação, então terá seu
+  código retornando uma das mensagens aleatoriamente. Para mais sobre slices,
+  veja <a href="/blog/slices-intro">Go slices</a> no blog do Go.
 </p>
 
 <ol>
   <li>
-    In greetings/greetings.go, change your code so it looks like the following.
+    Em greetings/greetings.go, mude seu código para que fique assim.
 
     <pre>
 package greetings
@@ -67,45 +67,45 @@ func randomFormat() string {
 </pre>
 
     <p>
-      In this code, you:
+      Neste código, você:
     </p>
 
     <ul>
       <li>
-        Add a <code>randomFormat</code> function that returns a randomly
-        selected format for a greeting message. Note that
-        <code>randomFormat</code> starts with a lowercase letter, making it
-        accessible only to code in its own package (in other words, it's not
-        exported).
+        Adiciona uma função <code>randomFormat</code> que retorna um formato
+        selecionado aleatoriamente para uma mensagem de saudação. Note que
+        <code>randomFormat</code> começa com uma letra minúscula, tornando-a
+        acessível apenas ao código em seu próprio pacote (em outras palavras, ela não é
+        exportada).
       </li>
       <li>
-        In <code>randomFormat</code>, declare a <code>formats</code> slice with
-        three message formats. When declaring a slice, you omit its size in the
-        brackets, like this: <code>[]string</code>. This tells Go that the size
-        of the array underlying the slice can be dynamically changed.
+        Em <code>randomFormat</code>, declara um slice <code>formats</code> com
+        três formatos de mensagem. Ao declarar um slice, você omite seu tamanho nos
+        colchetes, assim: <code>[]string</code>. Isso diz ao Go que o tamanho
+        do array subjacente ao slice pode ser mudado dinamicamente.
       </li>
       <li>
-        Use the
+        Usa o
         <a href="https://pkg.go.dev/math/rand/"
           ><code>math/rand</code> package</a
         >
-        to generate a random number for selecting an item from the slice.
+        para gerar um número aleatório para selecionar um item do slice.
       </li>
       <li>
-        In <code>Hello</code>, call the <code>randomFormat</code> function to
-        get a format for the message you'll return, then use the format and
-        <code>name</code> value together to create the message.
+        Em <code>Hello</code>, chama a função <code>randomFormat</code> para
+        obter um formato para a mensagem que você retornará, então usa o formato e
+        o valor <code>name</code> juntos para criar a mensagem.
       </li>
-      <li>Return the message (or an error) as you did before.</li>
+      <li>Retorna a mensagem (ou um erro) como você fez antes.</li>
     </ul>
 
   </li>
 
   <li>
-    In hello/hello.go, change your code so it looks like the following.
+    Em hello/hello.go, mude seu código para que fique assim.
 
-    <p>You're just adding Gladys's name (or a different name, if you like)
-      as an argument to the <code>Hello</code> function call in hello.go.</p>
+    <p>Você está apenas adicionando o nome de Gladys (ou um nome diferente, se preferir)
+      como um argumento para a chamada da função <code>Hello</code> em hello.go.</p>
 
     <pre>package main
 
@@ -138,8 +138,8 @@ func main() {
   </li>
 
   <li>
-    At the command line, in the hello directory, run hello.go to confirm that
-    the code works. Run it multiple times, noticing that the greeting changes.
+    Na linha de comando, no diretório hello, execute hello.go para confirmar que
+    o código funciona. Execute várias vezes, notando que a saudação muda.
 
     <pre>
 $ go run .
@@ -155,14 +155,14 @@ Hail, Gladys! Well met!
 </ol>
 
 <p>
-  Next, you'll use a slice to greet multiple people.
+  A seguir, você usará um slice para cumprimentar várias pessoas.
 </p>
 
 <p class="Navigation">
   <a class="Navigation-prev" href="/doc/tutorial/handle-errors.html"
-    >&lt; Return and handle an error</a
+    >&lt; Retornar e tratar um erro</a
   >
   <a class="Navigation-next" href="/doc/tutorial/greetings-multiple-people.html"
-    >Return greetings for multiple people &gt;</a
+    >Retorne saudações para várias pessoas &gt;</a
   >
 </p>
