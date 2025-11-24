@@ -1,64 +1,65 @@
 ---
-title: When To Use Generics
+ia-translated: true
+title: Quando Usar Generics
 date: 2022-04-12
 by:
 - Ian Lance Taylor
 tags:
 - go2
 - generics
-summary: When to use generics when writing Go code, and when not to use them.
+summary: Quando usar generics ao escrever código Go, e quando não usá-los.
 ---
 
-## Introduction
+## Introdução
 
-This is the blog post version of my talks at Google Open Source Live:
+Esta é a versão em post de blog das minhas palestras no Google Open Source Live:
 
 {{video "https://www.youtube.com/embed/nr8EpUO9jhw"}}
 
-and GopherCon 2021:
+e GopherCon 2021:
 
 {{video "https://www.youtube.com/embed/Pa_e9EeCdy8?start=1244"}}
 
-The Go 1.18 release adds a major new language feature: support for
-generic programming.
-In this article I'm not going to describe what generics are nor how to
-use them.
-This article is about when to use generics in Go code, and when not to
-use them.
+O lançamento do Go 1.18 adiciona um novo recurso importante à linguagem: suporte para
+programação generic.
+Neste artigo não vou descrever o que são generics nem como
+usá-los.
+Este artigo é sobre quando usar generics em código Go, e quando não
+usá-los.
 
-To be clear, I'll provide general guidelines, not hard and fast
-rules.
-Use your own judgement.
-But if you aren't sure, I recommend using the guidelines discussed
-here.
+Para deixar claro, vou fornecer diretrizes gerais, não regras
+rígidas.
+Use seu próprio julgamento.
+Mas se você não tiver certeza, recomendo usar as diretrizes discutidas
+aqui.
 
-## Write code
+## Escreva código
 
-Let's start with a general guideline for programming Go: write Go
-programs by writing code, not by defining types.
-When it comes to generics, if you start writing your program by
-defining type parameter constraints, you are probably on the wrong
-path.
-Start by writing functions.
-It's easy to add type parameters later when it's clear that they will
-be useful.
+Vamos começar com uma diretriz geral para programar em Go: escreva programas Go
+escrevendo código, não definindo tipos.
+Quando se trata de generics, se você começa a escrever seu programa
+definindo type parameter constraints, você provavelmente está no caminho
+errado.
+Comece escrevendo funções.
+É fácil adicionar type parameters depois quando estiver claro que eles serão
+úteis.
 
-## When are type parameters useful?
+## Quando type parameters são úteis?
 
-That said, let's look at cases for which type parameters can be
-useful.
+Dito isso, vamos olhar para casos nos quais type parameters podem ser
+úteis.
 
-### When using language-defined container types
+### Ao usar tipos de contêiner definidos pela linguagem
 
-One case is when writing functions that operate on the special
-container types that are defined by the language: slices, maps, and
+Um caso é ao escrever funções que operam nos tipos de
+contêiner especiais que são definidos pela linguagem: slices, maps e
 channels.
-If a function has parameters with those types, and the function code
-doesn't make any particular assumptions about the element types, then
-it may be useful to use a type parameter.
+Se uma função tem parâmetros com esses tipos, e o código da função
+não faz nenhuma suposição particular sobre os tipos de elemento, então
+pode ser útil usar um type parameter.
 
-For example, here is a function that returns a slice of all the keys
-in a map of any type:
+Por exemplo, aqui está uma função que retorna um slice de todas as chaves
+em um map de qualquer tipo:
 
 {{raw `
 	// MapKeys returns a slice of all the keys in m.
@@ -72,37 +73,37 @@ in a map of any type:
 	}
 `}}
 
-This code doesn't assume anything about the map key type, and it
-doesn't use the map value type at all.
-It works for any map type.
-That makes it a good candidate for using type parameters.
+Este código não assume nada sobre o tipo da chave do map, e não
+usa o tipo do valor do map de forma alguma.
+Funciona para qualquer tipo de map.
+Isso o torna um bom candidato para usar type parameters.
 
-The alternative to type parameters for this kind of function is
-typically to use reflection, but that is a more awkward programming
-model, is not statically typechecked at build time, and is often slower
-at run time.
+A alternativa a type parameters para este tipo de função é
+tipicamente usar reflection, mas esse é um modelo de programação
+mais estranho, não é verificado estaticamente em tempo de compilação, e é frequentemente mais lento
+em tempo de execução.
 
-### General purpose data structures
+### Estruturas de dados de propósito geral
 
-Another case where type parameters can be useful is for general
-purpose data structures.
-A general purpose data structure is something like a slice or map, but
-one that is not built into the language, such as a linked list, or a
-binary tree.
+Outro caso onde type parameters podem ser úteis é para estruturas
+de dados de propósito geral.
+Uma estrutura de dados de propósito geral é algo como um slice ou map, mas
+que não é embutido na linguagem, como uma lista encadeada, ou uma
+árvore binária.
 
-Today, programs that need such data structures typically do one of two
-things: write them with a specific element type, or use an interface
-type.
-Replacing a specific element type with a type parameter can produce a
-more general data structure that can be used in other parts of the
-program, or by other programs.
-Replacing an interface type with a type parameter can permit data to
-be stored more efficiently, saving memory resources; it can also
-permit the code to avoid type assertions, and to be fully type checked
-at build time.
+Hoje, programas que precisam de tais estruturas de dados tipicamente fazem uma de duas
+coisas: escrevê-las com um tipo de elemento específico, ou usar um tipo de
+interface.
+Substituir um tipo de elemento específico por um type parameter pode produzir uma
+estrutura de dados mais geral que pode ser usada em outras partes do
+programa, ou por outros programas.
+Substituir um tipo de interface por um type parameter pode permitir que os dados
+sejam armazenados de forma mais eficiente, economizando recursos de memória; também pode
+permitir que o código evite asserções de tipo, e seja totalmente verificado
+em tempo de compilação.
 
-For example, here is part of what a binary tree data structure might
-look like using type parameters:
+Por exemplo, aqui está parte de como uma estrutura de dados de árvore binária poderia
+parecer usando type parameters:
 
 {{raw `
 	// Tree is a binary tree.
@@ -147,63 +148,63 @@ look like using type parameters:
 	}
 `}}
 
-Each node in the tree contains a value of the type parameter `T`.
-When the tree is instantiated with a particular type argument, values
-of that type will be stored directly in the nodes.
-They will not be stored as interface types.
+Cada nó na árvore contém um valor do type parameter `T`.
+Quando a árvore é instanciada com um argumento de tipo particular, valores
+desse tipo serão armazenados diretamente nos nós.
+Eles não serão armazenados como tipos de interface.
 
-This is a reasonable use of type parameters because the `Tree` data
-structure, including the code in the methods, is largely independent
-of the element type `T`.
+Este é um uso razoável de type parameters porque a estrutura de dados `Tree`,
+incluindo o código nos métodos, é em grande parte independente
+do tipo de elemento `T`.
 
-The `Tree` data structure does need to know how to compare values of
-the element type `T`; it uses a passed-in comparison function for
-that.
-You can see this on the fourth line of the `find` method, in the call
-to `bt.cmp`.
-Other than that, the type parameter doesn't matter at all.
+A estrutura de dados `Tree` precisa saber como comparar valores do
+tipo de elemento `T`; ela usa uma função de comparação passada para
+isso.
+Você pode ver isso na quarta linha do método `find`, na chamada
+para `bt.cmp`.
+Fora isso, o type parameter não importa de forma alguma.
 
-### For type parameters, prefer functions to methods
+### Para type parameters, prefira funções a métodos
 
-The `Tree` example illustrates another general guideline: when you
-need something like a comparison function, prefer a function to a
-method.
+O exemplo `Tree` ilustra outra diretriz geral: quando você
+precisa de algo como uma função de comparação, prefira uma função a um
+método.
 
-We could have defined the `Tree` type such that the element type is
-required to have a `Compare` or `Less` method.
-This would be done by writing a constraint that requires the method,
-meaning that any type argument used to instantiate the `Tree` type
-would need to have that method.
+Poderíamos ter definido o tipo `Tree` de tal forma que o tipo de elemento é
+obrigado a ter um método `Compare` ou `Less`.
+Isso seria feito escrevendo uma constraint que requer o método,
+significando que qualquer argumento de tipo usado para instanciar o tipo `Tree`
+precisaria ter esse método.
 
-A consequence would be that anybody who wants to use `Tree` with a
-simple data type like `int` would have to define their own integer
-type and write their own comparison method.
-If we define `Tree` to take a comparison function, as in the code
-shown above, then it is easy to pass in the desired function.
-It's just as easy to write that comparison function as it is to write
-a method.
+Uma consequência seria que qualquer um que queira usar `Tree` com um
+tipo de dados simples como `int` teria que definir seu próprio tipo
+inteiro e escrever seu próprio método de comparação.
+Se definirmos `Tree` para receber uma função de comparação, como no código
+mostrado acima, então é fácil passar a função desejada.
+É tão fácil escrever essa função de comparação quanto escrever
+um método.
 
-If the `Tree` element type happens to already have a `Compare` method,
-then we can simply use a method expression like `ElementType.Compare`
-as the comparison function.
+Se o tipo de elemento `Tree` já tem um método `Compare`,
+então podemos simplesmente usar uma expressão de método como `ElementType.Compare`
+como a função de comparação.
 
-To put it another way, it is much simpler to turn a method into a
-function than it is to add a method to a type.
-So for general purpose data types, prefer a function rather than
-writing a constraint that requires a method.
+Em outras palavras, é muito mais simples transformar um método em uma
+função do que adicionar um método a um tipo.
+Então para tipos de dados de propósito geral, prefira uma função em vez de
+escrever uma constraint que requer um método.
 
-### Implementing a common method
+### Implementando um método comum
 
-Another case where type parameters can be useful is when different
-types need to implement some common method, and the implementations
-for the different types all look the same.
+Outro caso onde type parameters podem ser úteis é quando diferentes
+tipos precisam implementar algum método comum, e as implementações
+para os diferentes tipos todas parecem iguais.
 
-For example, consider the standard library's `sort.Interface`.
-It requires that a type implement three methods: `Len`, `Swap`, and
+Por exemplo, considere o `sort.Interface` da biblioteca padrão.
+Ele requer que um tipo implemente três métodos: `Len`, `Swap` e
 `Less`.
 
-Here is an example of a generic type `SliceFn` that implements
-`sort.Interface` for any slice type:
+Aqui está um exemplo de um tipo generic `SliceFn` que implementa
+`sort.Interface` para qualquer tipo de slice:
 
 {{raw `
 	// SliceFn implements sort.Interface for a slice of T.
@@ -223,14 +224,14 @@ Here is an example of a generic type `SliceFn` that implements
 	}
 `}}
 
-For any slice type, the `Len` and `Swap` methods are exactly the same.
-The `Less` method requires a comparison, which is the `Fn` part of the
-name `SliceFn`.
-As with the earlier `Tree` example, we will pass in a function when we
-create a `SliceFn`.
+Para qualquer tipo de slice, os métodos `Len` e `Swap` são exatamente os mesmos.
+O método `Less` requer uma comparação, que é a parte `Fn` do
+nome `SliceFn`.
+Como no exemplo anterior `Tree`, vamos passar uma função quando
+criarmos um `SliceFn`.
 
-Here is how to use `SliceFn` to sort any slice using a comparison
-function:
+Aqui está como usar `SliceFn` para ordenar qualquer slice usando uma função
+de comparação:
 
 {{raw `
 	// SortFn sorts s in place using a comparison function.
@@ -239,45 +240,45 @@ function:
 	}
 `}}
 
-This is similar to the standard library function `sort.Slice`, but the
-comparison function is written using values rather than slice
-indexes.
+Isso é similar à função `sort.Slice` da biblioteca padrão, mas a
+função de comparação é escrita usando valores em vez de índices de
+slice.
 
-Using type parameters for this kind of code is appropriate because the
-methods look exactly the same for all slice types.
+Usar type parameters para este tipo de código é apropriado porque os
+métodos parecem exatamente iguais para todos os tipos de slice.
 
-(I should mention that Go 1.19--not 1.18--will most likely include a
-generic function to sort a slice using a comparison function, and that
-generic function will most likely not use `sort.Interface`.
-See [proposal #47619](/issue/47619).
-But the general point is still true even if this specific example will
-most likely not be useful: it's reasonable to use type parameters when
-you need to implement methods that look the same for all the relevant
-types.)
+(Devo mencionar que Go 1.19--não 1.18--muito provavelmente incluirá uma
+função generic para ordenar um slice usando uma função de comparação, e essa
+função generic muito provavelmente não usará `sort.Interface`.
+Veja [proposta #47619](/issue/47619).
+Mas o ponto geral ainda é verdadeiro mesmo que este exemplo específico
+provavelmente não seja útil: é razoável usar type parameters quando
+você precisa implementar métodos que parecem iguais para todos os tipos
+relevantes.)
 
-## When are type parameters not useful?
+## Quando type parameters não são úteis?
 
-Now let's talk about the other side of the question: when not to use
+Agora vamos falar sobre o outro lado da questão: quando não usar
 type parameters.
 
-### Don't replace interface types with type parameters
+### Não substitua tipos de interface por type parameters
 
-As we all know, Go has interface types.
-Interface types permit a kind of generic programming.
+Como todos sabemos, Go tem tipos de interface.
+Tipos de interface permitem um tipo de programação generic.
 
-For example, the widely used `io.Reader` interface provides a generic
-mechanism for reading data from any value that contains information
-(for example, a file) or that produces information (for example, a
-random number generator).
-If all you need to do with a value of some type is call a method on
-that value, use an interface type, not a type parameter.
-`io.Reader` is easy to read, efficient, and effective.
-There is no need to use a type parameter to read data from a value by
-calling the `Read` method.
+Por exemplo, a interface `io.Reader` amplamente usada fornece um mecanismo
+generic para ler dados de qualquer valor que contenha informação
+(por exemplo, um arquivo) ou que produza informação (por exemplo, um
+gerador de números aleatórios).
+Se tudo o que você precisa fazer com um valor de algum tipo é chamar um método nesse
+valor, use um tipo de interface, não um type parameter.
+`io.Reader` é fácil de ler, eficiente e eficaz.
+Não há necessidade de usar um type parameter para ler dados de um valor
+chamando o método `Read`.
 
-For example, it might be tempting to change the first function
-signature here, which uses just an interface type, into the second
-version, which uses a type parameter.
+Por exemplo, pode ser tentador mudar a primeira assinatura de função
+aqui, que usa apenas um tipo de interface, para a segunda
+versão, que usa um type parameter.
 
 {{raw `
 	func ReadSome(r io.Reader) ([]byte, error)
@@ -285,67 +286,67 @@ version, which uses a type parameter.
 	func ReadSome[T io.Reader](r T) ([]byte, error)
 `}}
 
-Don't make that kind of change.
-Omitting the type parameter makes the function easier to write, easier
-to read, and the execution time will likely be the same.
+Não faça esse tipo de mudança.
+Omitir o type parameter torna a função mais fácil de escrever, mais fácil
+de ler, e o tempo de execução provavelmente será o mesmo.
 
-It's worth emphasizing the last point.
-While it's possible to implement generics in several different ways,
-and implementations will change and improve over time, the
-implementation used in Go 1.18 will in many cases treat values whose
-type is a type parameter much like values whose type is an interface
-type.
-What this means is that using a type parameter will generally not be
-faster than using an interface type.
-So don't change from interface types to type parameters just for
-speed, because it probably won't run any faster.
+Vale a pena enfatizar o último ponto.
+Embora seja possível implementar generics de várias maneiras diferentes,
+e as implementações mudarão e melhorarão com o tempo, a
+implementação usada no Go 1.18 em muitos casos tratará valores cujo
+tipo é um type parameter de forma muito parecida com valores cujo tipo é um tipo de
+interface.
+O que isso significa é que usar um type parameter geralmente não será
+mais rápido do que usar um tipo de interface.
+Então não mude de tipos de interface para type parameters apenas por
+velocidade, porque provavelmente não executará mais rápido.
 
-### Don't use type parameters if method implementations differ
+### Não use type parameters se as implementações de métodos diferem
 
-When deciding whether to use a type parameter or an interface type,
-consider the implementation of the methods.
-Earlier we said that if the implementation of a method is the same for
-all types, use a type parameter.
-Inversely, if the implementation is different for each type, then use
-an interface type and write different method implementations, don't
-use a type parameter.
+Ao decidir se usar um type parameter ou um tipo de interface,
+considere a implementação dos métodos.
+Anteriormente dissemos que se a implementação de um método é a mesma para
+todos os tipos, use um type parameter.
+Inversamente, se a implementação é diferente para cada tipo, então use
+um tipo de interface e escreva diferentes implementações de métodos, não
+use um type parameter.
 
-For example, the implementation of `Read` from a file is nothing like
-the implementation of `Read` from a random number generator.
-That means that we should write two different `Read` methods, and
-use an interface type like `io.Reader`.
+Por exemplo, a implementação de `Read` de um arquivo não é nada como
+a implementação de `Read` de um gerador de números aleatórios.
+Isso significa que devemos escrever dois métodos `Read` diferentes, e
+usar um tipo de interface como `io.Reader`.
 
-### Use reflection where appropriate
+### Use reflection onde apropriado
 
-Go has [run time reflection](https://pkg.go.dev/reflect).
-Reflection permits a kind of generic programming, in that it permits
-you to write code that works with any type.
+Go tem [reflection em tempo de execução](https://pkg.go.dev/reflect).
+Reflection permite um tipo de programação generic, no sentido de que permite
+escrever código que funciona com qualquer tipo.
 
-If some operation has to support even types that don't have methods
-(so that interface types don't help), and if the operation is
-different for each type (so that type parameters aren't appropriate),
+Se alguma operação tem que suportar até tipos que não têm métodos
+(de modo que tipos de interface não ajudam), e se a operação é
+diferente para cada tipo (de modo que type parameters não são apropriados),
 use reflection.
 
-An example of this is the
-[encoding/json](https://pkg.go.dev/encoding/json) package.
-We don't want to require that every type that we encode have a
-`MarshalJSON` method, so we can't use interface types.
-But encoding an interface type is nothing like encoding a struct type,
-so we shouldn't use type parameters.
-Instead, the package uses reflection.
-The code is not simple, but it works.
-For details, see [the source
-code](/src/encoding/json/encode.go).
+Um exemplo disso é o
+pacote [encoding/json](https://pkg.go.dev/encoding/json).
+Não queremos exigir que todo tipo que codificamos tenha um
+método `MarshalJSON`, então não podemos usar tipos de interface.
+Mas codificar um tipo de interface não é nada como codificar um tipo struct,
+então não devemos usar type parameters.
+Em vez disso, o pacote usa reflection.
+O código não é simples, mas funciona.
+Para detalhes, veja [o código
+fonte](/src/encoding/json/encode.go).
 
-## One simple guideline
+## Uma diretriz simples
 
-In closing, this discussion of when to use generics can be reduced to
-one simple guideline.
+Para concluir, esta discussão de quando usar generics pode ser reduzida a
+uma diretriz simples.
 
-If you find yourself writing the exact same code multiple times, where
-the only difference between the copies is that the code uses different
-types, consider whether you can use a type parameter.
+Se você se pegar escrevendo exatamente o mesmo código várias vezes, onde
+a única diferença entre as cópias é que o código usa diferentes
+tipos, considere se você pode usar um type parameter.
 
-Another way to say this is that you should avoid type parameters until
-you notice that you are about to write the exact same code multiple
-times.
+Outra forma de dizer isso é que você deve evitar type parameters até
+perceber que está prestes a escrever exatamente o mesmo código várias
+vezes.
