@@ -21,7 +21,7 @@ Após traduzir cada arquivo, marque o checkpoint com `[x]`.
 - [ ] `_content/blog/when-generics.md` - When Generics
 - [ ] `_content/blog/generics-proposal.md` - Generics Proposal
 - [ ] `_content/blog/generics-next-step.md` - Generics Next Step
-- [ ] `_content/blog/intro-generics.md` - Introdução a Generics
+- [x] `_content/blog/intro-generics.md` - Introdução a Generics
 - [ ] `_content/blog/generic-interfaces.md` - Generic Interfaces
 - [ ] `_content/blog/generic-slice-functions.md` - Generic Slice Functions
 - [ ] `_content/blog/deconstructing-type-parameters.md` - Deconstructing Type Parameters
