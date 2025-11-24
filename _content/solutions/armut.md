@@ -1,6 +1,7 @@
 ---
-linkTitle: "How Armut Labs use Go "
-description: "Learn about how Armut Labs reduced resource consumption and API response time after moving from C# and .net core to Go."
+ia-translated: true
+linkTitle: "Como a Armut Labs usa Go"
+description: "Saiba como a Armut Labs reduziu o consumo de recursos e o tempo de resposta da API após migrar de C# e .net core para Go."
 company: Armut
 logoSrc: armut_light.png
 logoSrcDark: armut_dark.png

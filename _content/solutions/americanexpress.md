@@ -1,5 +1,6 @@
 ---
-title: "American Express Uses Go for Payments & Rewards"
+ia-translated: true
+title: "American Express usa Go para Pagamentos & Recompensas"
 company: American Express
 logoSrc: american-express.svg
 logoSrcDark: american-express.svg
@@ -7,77 +8,77 @@ heroImgSrc: go_amex_case_study_logo.png
 carouselImgSrc: go_amex_case_study.png
 date: 2019-12-19
 series: Case Studies
-quote: Go provides American Express with the speed and scalability it needs for both its payment and rewards networks.
+quote: Go fornece à American Express a velocidade e escalabilidade que ela precisa tanto para suas redes de pagamento quanto de recompensas.
 ---
 
 {{pullquote `
   author: Glen Balliet
-  title: Engineering Director of loyalty platforms
+  title: Diretor de Engenharia de plataformas de fidelidade
   company: American Express
   quote: |
-    What makes Go different from other programming languages is cognitive load. You can do more with less code, which makes it easier to reason about and understand the code that you do end up writing.
+    O que torna Go diferente de outras linguagens de programação é a carga cognitiva. Você pode fazer mais com menos código, o que torna mais fácil raciocinar e entender o código que você acaba escrevendo.
 
-    The majority of Go code ends up looking quite similar, so, even if you’re working with a completely new codebase, you can get up and running pretty quickly.
+    A maioria do código Go acaba parecendo bastante similar, então, mesmo se você estiver trabalhando com uma base de código completamente nova, você pode começar a trabalhar rapidamente.
 `}}
 
-## Go Improves Microservices and Speeds Productivity
+## Go melhora microsserviços e acelera a produtividade
 
-Founded in 1850, American Express is a globally integrated payments company offering charge and credit card products, merchant acquisition and processing services, network services, and travel-related services.
+Fundada em 1850, a American Express é uma empresa de pagamentos globalmente integrada que oferece produtos de cartões de crédito e cobrança, aquisição e processamento de comerciantes, serviços de rede e serviços relacionados a viagens.
 
-American Express’ payment processing systems have been developed over its long history and have been updated across multiple architectural evolutions. Foremost in any update, payment processing needs to be fast, especially at very large transaction volumes, with resilience built across systems that must all be compliant with security and regulatory standards. With Go, American Express gains the speed and scalability it needs for both its payment and rewards networks.
+Os sistemas de processamento de pagamentos da American Express foram desenvolvidos ao longo de sua longa história e foram atualizados através de múltiplas evoluções arquiteturais. Acima de tudo em qualquer atualização, o processamento de pagamentos precisa ser rápido, especialmente em volumes de transação muito grandes, com resiliência construída em sistemas que devem estar todos em conformidade com padrões de segurança e regulamentares. Com Go, a American Express ganha a velocidade e escalabilidade que precisa tanto para suas redes de pagamento quanto de recompensas.
 
-### Modernizing American Express systems
+### Modernizando os sistemas da American Express
 
-American Express understands that the programming language landscape is changing drastically. The company's existing systems were purpose-built for high concurrency and low latency, but knowing that those systems would be re-platformed in the near future. The payments platform team decided to take the time to identify what languages were ideal for American Express's evolving needs.
+A American Express entende que o cenário de linguagens de programação está mudando drasticamente. Os sistemas existentes da empresa foram construídos especificamente para alta concorrência e baixa latência, mas sabendo que esses sistemas seriam re-plataformados em um futuro próximo. A equipe da plataforma de pagamentos decidiu tirar um tempo para identificar quais linguagens eram ideais para as necessidades em evolução da American Express.
 
-The payments and rewards platform teams at American Express were among the first to start evaluating Go. These teams were focused on microservices, transaction routing, and load-balancing use cases, and they needed to modernize their architecture. Many American Express developers were familiar with the language’s capabilities and wanted to pilot Go for their high concurrency and low latency applications (such as custom transactional load balancers). With this goal in mind, the teams began lobbying senior leadership to deploy Go on the American Express payment platform.
+As equipes de plataformas de pagamentos e recompensas da American Express estavam entre as primeiras a começar a avaliar Go. Essas equipes estavam focadas em microsserviços, roteamento de transações e casos de uso de balanceamento de carga, e elas precisavam modernizar sua arquitetura. Muitos desenvolvedores da American Express estavam familiarizados com as capacidades da linguagem e queriam pilotar Go para suas aplicações de alta concorrência e baixa latência (como balanceadores de carga transacionais customizados). Com esse objetivo em mente, as equipes começaram a fazer lobby com a liderança sênior para implantar Go na plataforma de pagamentos da American Express.
 
-"We wanted to find the optimal language for writing fast and efficient applications for payment processing," says Benjamin Cane, vice president and principal engineer at American Express. "To do so, we started an internal programming language showdown with the goal of seeing which language best fit our design and performance needs."
+"Queríamos encontrar a linguagem ideal para escrever aplicações rápidas e eficientes para processamento de pagamentos", diz Benjamin Cane, vice-presidente e engenheiro principal da American Express. "Para isso, iniciamos uma competição interna de linguagens de programação com o objetivo de ver qual linguagem melhor se adequava às nossas necessidades de design e desempenho."
 
-### Comparing languages
+### Comparando linguagens
 
-For their assessment, Cane's team chose to build a microservice in four different programming languages. They then compared the four languages for speed/performance, tooling, testing, and ease of development.
+Para sua avaliação, a equipe de Cane escolheu construir um microsserviço em quatro linguagens de programação diferentes. Eles então compararam as quatro linguagens em velocidade/desempenho, ferramentas, testes e facilidade de desenvolvimento.
 
-For the service, they decided on an ISO8583 to JSON converter. ISO8583 is an international standard for financial transactions, and it’s commonly used within American Express's payment network. For the programming languages, they chose to compare C++, Go, Java and Node.js. With the exception of Go, all of these languages were already in use within American Express.
+Para o serviço, eles decidiram por um conversor ISO8583 para JSON. ISO8583 é um padrão internacional para transações financeiras, e é comumente usado dentro da rede de pagamentos da American Express. Para as linguagens de programação, eles escolheram comparar C++, Go, Java e Node.js. Com exceção de Go, todas essas linguagens já estavam em uso dentro da American Express.
 
-From a speed perspective, Go achieved the second-best performance at 140,000 requests per second. Go showed that it excels when used for backend microservices.
+De uma perspectiva de velocidade, Go alcançou o segundo melhor desempenho com 140.000 requisições por segundo. Go mostrou que se destaca quando usado para microsserviços de backend.
 
-While Go may not have been the fastest language tested, its powerful tooling helped bolster its overall results. Go's built-in testing framework, profiling capabilities, and benchmarking tools impressed the team. "It is easy to write effective tests in Go," says Cane. "The benchmarking and profiling features make it simple to tune our application. Coupled with its fast build times, Go makes it easy to write well-tested and optimized code."
+Embora Go possa não ter sido a linguagem mais rápida testada, seu poderoso ferramental ajudou a reforçar seus resultados gerais. O framework de testes integrado de Go, capacidades de profiling e ferramentas de benchmarking impressionaram a equipe. "É fácil escrever testes eficazes em Go", diz Cane. "As funcionalidades de benchmarking e profiling tornam simples ajustar nossa aplicação. Aliado aos seus tempos rápidos de compilação, Go torna fácil escrever código bem testado e otimizado."
 
-Ultimately, Go was selected by the team as the preferred language for building high-performance microservices. The tooling, testing frameworks, performance, and language simplicity were all key contributors.
+Finalmente, Go foi selecionado pela equipe como a linguagem preferida para construir microsserviços de alto desempenho. O ferramental, frameworks de testes, desempenho e simplicidade da linguagem foram todos contribuidores chave.
 
-### Go for infrastructure
+### Go para infraestrutura
 
-"Many of our services are running in Docker containers within our Kubernetes-based internal cloud platform" says Cane. Kubernetes is an open-source container-orchestration system written in Go. It provides clusters of hosts to run container based workloads, most notably Docker containers. Docker is a software product, also written in Go, that uses operating system level virtualization to provide portable software runtimes called containers.
+"Muitos de nossos serviços estão rodando em containers Docker dentro de nossa plataforma de nuvem interna baseada em Kubernetes", diz Cane. Kubernetes é um sistema de orquestração de containers open-source escrito em Go. Ele fornece clusters de hosts para executar cargas de trabalho baseadas em containers, mais notavelmente containers Docker. Docker é um produto de software, também escrito em Go, que usa virtualização em nível de sistema operacional para fornecer runtimes de software portáteis chamados containers.
 
-American Express also collects application metrics via Prometheus, an open-source monitoring and alerting toolkit written in Go. Prometheus collects and aggregates real-time events and metrics for monitoring and alerts.
+A American Express também coleta métricas de aplicação via Prometheus, um toolkit de monitoramento e alertas open-source escrito em Go. Prometheus coleta e agrega eventos e métricas em tempo real para monitoramento e alertas.
 
-This triumvirate of Go solutions—Kubernetes, Docker, and Prometheus—has helped modernize American Express infrastructure.
+Esse triunvirato de soluções Go—Kubernetes, Docker e Prometheus—tem ajudado a modernizar a infraestrutura da American Express.
 
-### Improving performance with Go
+### Melhorando o desempenho com Go
 
-Today, scores of developers are programming with Go at American Express, with most working on platforms designed for high availability and performance.
+Hoje, dezenas de desenvolvedores estão programando com Go na American Express, com a maioria trabalhando em plataformas projetadas para alta disponibilidade e desempenho.
 
-"Tooling has always been a critical area of need for our legacy code base," says Cane. "We have found that Go has excellent tooling, plus built-in testing, benchmarking, and profiling frameworks. It is easy to write efficient and resilient applications."
+"Ferramental sempre foi uma área crítica de necessidade para nossa base de código legado", diz Cane. "Descobrimos que Go tem excelente ferramental, além de frameworks integrados de testes, benchmarking e profiling. É fácil escrever aplicações eficientes e resilientes."
 
 {{backgroundquote `
   author: Benjamin Cane
-  title: Vice President and Principal Engineer
+  title: Vice-Presidente e Engenheiro Principal
   company: American Express
   quote: |
-    After working on Go, most of our developers don't want to go back to other languages.
+    Depois de trabalhar com Go, a maioria de nossos desenvolvedores não quer voltar para outras linguagens.
 `}}
 
-American Express is just beginning to see the benefits of Go. For example, Go was designed from the ground up with concurrency in mind – using lightweight “goroutines” rather than heavier-weight operating system threads – making it practical to create hundreds of thousands of goroutines in the same address space. Using goroutines, American Express has seen improved performance numbers in its real-time transaction processing.
+A American Express está apenas começando a ver os benefícios de Go. Por exemplo, Go foi projetado desde o início com concorrência em mente – usando "goroutines" leves em vez de threads de sistema operacional mais pesadas – tornando prático criar centenas de milhares de goroutines no mesmo espaço de endereço. Usando goroutines, a American Express viu números de desempenho melhorados em seu processamento de transações em tempo real.
 
-Go’s garbage collection is also a major improvement over other languages, both in terms of performance and ease of development. “We saw far better results of garbage collection in Go than we did in other languages, and garbage collection for real time transaction processing is a big deal.” says Cane. “Tuning garbage collection in other languages can be very complicated. With Go you don’t tune anything.”
+A coleta de lixo (garbage collection) de Go também é uma grande melhoria em relação a outras linguagens, tanto em termos de desempenho quanto facilidade de desenvolvimento. "Vimos resultados muito melhores de coleta de lixo em Go do que em outras linguagens, e coleta de lixo para processamento de transações em tempo real é muito importante", diz Cane. "Ajustar a coleta de lixo em outras linguagens pode ser muito complicado. Com Go você não ajusta nada."
 
-To learn more, read ["Choosing Go at American Express"](https://americanexpress.io/choosing-go/) which goes into more depth about American Express's Go adoption.
+Para saber mais, leia ["Choosing Go at American Express"](https://americanexpress.io/choosing-go/) que vai mais a fundo sobre a adoção de Go pela American Express.
 
-### Getting your enterprise started with Go
+### Começando sua empresa com Go
 
-Just as American Express is using Go to modernize its payment and rewards networks, dozens of other large enterprises are adopting Go as well.
+Assim como a American Express está usando Go para modernizar suas redes de pagamento e recompensas, dezenas de outras grandes empresas também estão adotando Go.
 
-There are over one million developers using Go worldwide—spanning banking and commerce, gaming and media, technology, and other industries, at enterprises as diverse as [PayPal](/solutions/paypal), [Mercado Libre](/solutions/mercadolibre), Capital One, Dropbox, IBM, Mercado Libre, Monzo, New York Times, Salesforce, Square, Target, Twitch, Uber, and of course Google.
+Existem mais de um milhão de desenvolvedores usando Go em todo o mundo—abrangendo bancos e comércio, jogos e mídia, tecnologia e outras indústrias, em empresas tão diversas quanto [PayPal](/solutions/paypal), [Mercado Libre](/solutions/mercadolibre), Capital One, Dropbox, IBM, Mercado Libre, Monzo, New York Times, Salesforce, Square, Target, Twitch, Uber e, é claro, Google.
 
-To learn more about how Go can help your enterprise build reliable, scalable software as it does at American Express, visit [go.dev](/) today.
+Para saber mais sobre como Go pode ajudar sua empresa a construir software confiável e escalável como faz na American Express, visite [go.dev](/) hoje.
