@@ -48,7 +48,7 @@ Após traduzir cada arquivo, marque o checkpoint com `[x]`.
 
 ### 2.1 Getting Started (HTML)
 - [ ] `_content/doc/tutorial/index.html` - Índice de tutoriais
-- [ ] `_content/doc/tutorial/getting-started.html` - Começando com Go
+- [x] `_content/doc/tutorial/getting-started.html` - Começando com Go
 - [ ] `_content/doc/tutorial/create-module.html` - Criar um módulo
 - [ ] `_content/doc/tutorial/call-module-code.html` - Chamar código de módulo
 - [ ] `_content/doc/tutorial/handle-errors.html` - Tratar erros
