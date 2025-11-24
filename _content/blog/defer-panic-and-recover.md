@@ -1,5 +1,6 @@
 ---
-title: Defer, Panic, and Recover
+ia-translated: true
+title: Defer, Panic e Recover
 date: 2010-08-04
 by:
 - Andrew Gerrand
@@ -9,21 +10,21 @@ tags:
 - recover
 - technical
 - function
-summary: An introduction to the Go's defer, panic, and recover control flow mechanisms.
+summary: Uma introdução aos mecanismos de controle de fluxo defer, panic e recover do Go.
 ---
 
 
-Go has the usual mechanisms for control flow:
+Go possui os mecanismos usuais para controle de fluxo:
 if, for, switch, goto.
-It also has the go statement to run code in a separate goroutine.
-Here I'd like to discuss some of the less common ones:
-defer, panic, and recover.
+Ele também tem a declaração go para executar código em uma goroutine separada.
+Aqui eu gostaria de discutir alguns dos mecanismos menos comuns:
+defer, panic e recover.
 
-A **defer statement** pushes a function call onto a list.
-The list of saved calls is executed after the surrounding function returns.
-Defer is commonly used to simplify functions that perform various clean-up actions.
+Uma **declaração defer** coloca uma chamada de função em uma lista.
+A lista de chamadas salvas é executada após o retorno da função circundante.
+Defer é comumente usado para simplificar funções que realizam várias ações de limpeza.
 
-For example, let's look at a function that opens two files and copies the contents of one file to the other:
+Por exemplo, vamos olhar uma função que abre dois arquivos e copia o conteúdo de um arquivo para o outro:
 
 	func CopyFile(dstName, srcName string) (written int64, err error) {
 	    src, err := os.Open(srcName)
@@ -42,12 +43,12 @@ For example, let's look at a function that opens two files and copies the conten
 	    return
 	}
 
-This works, but there is a bug. If the call to os.Create fails,
-the function will return without closing the source file.
-This can be easily remedied by putting a call to src.Close before the second return statement,
-but if the function were more complex the problem might not be so easily
-noticed and resolved.
-By introducing defer statements we can ensure that the files are always closed:
+Isso funciona, mas há um bug. Se a chamada para os.Create falhar,
+a função retornará sem fechar o arquivo de origem.
+Isso pode ser facilmente corrigido colocando uma chamada para src.Close antes da segunda declaração return,
+mas se a função fosse mais complexa o problema poderia não ser tão facilmente
+percebido e resolvido.
+Ao introduzir declarações defer, podemos garantir que os arquivos sejam sempre fechados:
 
 	func CopyFile(dstName, srcName string) (written int64, err error) {
 	    src, err := os.Open(srcName)
@@ -65,16 +66,16 @@ By introducing defer statements we can ensure that the files are always closed:
 	    return io.Copy(dst, src)
 	}
 
-Defer statements allow us to think about closing each file right after opening it,
-guaranteeing that, regardless of the number of return statements in the function,
-the files _will_ be closed.
+Declarações defer nos permitem pensar sobre fechar cada arquivo logo após abri-lo,
+garantindo que, independentemente do número de declarações return na função,
+os arquivos _serão_ fechados.
 
-The behavior of defer statements is straightforward and predictable. There are three simple rules:
+O comportamento de declarações defer é direto e previsível. Existem três regras simples:
 
-1. _A deferred function's arguments are evaluated when the defer statement is evaluated._
+1. _Os argumentos de uma função diferida são avaliados quando a declaração defer é avaliada._
 
-In this example, the expression "i" is evaluated when the Println call is deferred.
-The deferred call will print "0" after the function returns.
+Neste exemplo, a expressão "i" é avaliada quando a chamada Println é diferida.
+A chamada diferida imprimirá "0" após o retorno da função.
 
 	func a() {
 	    i := 0
@@ -83,9 +84,9 @@ The deferred call will print "0" after the function returns.
 	    return
 	}
 
-2. _Deferred function calls are executed in Last In First Out order after the surrounding function returns._
+2. _Chamadas de função diferidas são executadas em ordem Last In First Out após o retorno da função circundante._
 
-This function prints "3210":
+Esta função imprime "3210":
 
 {{raw `
 	func b() {
@@ -95,37 +96,37 @@ This function prints "3210":
 	}
 `}}
 
-3. _Deferred functions may read and assign to the returning function's named return values._
+3. _Funções diferidas podem ler e atribuir aos valores de retorno nomeados da função que está retornando._
 
-In this example, a deferred function increments the return value i _after_
-the surrounding function returns.
-Thus, this function returns 2:
+Neste exemplo, uma função diferida incrementa o valor de retorno i _após_
+o retorno da função circundante.
+Assim, esta função retorna 2:
 
 	func c() (i int) {
 	    defer func() { i++ }()
 	    return 1
 	}
 
-This is convenient for modifying the error return value of a function; we will see an example of this shortly.
+Isso é conveniente para modificar o valor de retorno de erro de uma função; veremos um exemplo disso em breve.
 
-**Panic** is a built-in function that stops the ordinary flow of control and begins _panicking_.
-When the function F calls panic, execution of F stops,
-any deferred functions in F are executed normally,
-and then F returns to its caller.
-To the caller, F then behaves like a call to panic.
-The process continues up the stack until all functions in the current goroutine have returned,
-at which point the program crashes.
-Panics can be initiated by invoking panic directly.
-They can also be caused by runtime errors,
-such as out-of-bounds array accesses.
+**Panic** é uma função embutida que para o fluxo ordinário de controle e começa a _entrar em pânico_.
+Quando a função F chama panic, a execução de F para,
+quaisquer funções diferidas em F são executadas normalmente,
+e então F retorna ao seu chamador.
+Para o chamador, F então se comporta como uma chamada para panic.
+O processo continua subindo a pilha até que todas as funções na goroutine atual tenham retornado,
+momento em que o programa trava.
+Panics podem ser iniciados invocando panic diretamente.
+Eles também podem ser causados por erros de tempo de execução,
+como acessos a arrays fora dos limites.
 
-**Recover** is a built-in function that regains control of a panicking goroutine.
-Recover is only useful inside deferred functions.
-During normal execution, a call to recover will return nil and have no other effect.
-If the current goroutine is panicking, a call to recover will capture the
-value given to panic and resume normal execution.
+**Recover** é uma função embutida que recupera o controle de uma goroutine em pânico.
+Recover só é útil dentro de funções diferidas.
+Durante a execução normal, uma chamada para recover retornará nil e não terá nenhum outro efeito.
+Se a goroutine atual estiver em pânico, uma chamada para recover capturará o
+valor fornecido para panic e retomará a execução normal.
 
-Here's an example program that demonstrates the mechanics of panic and defer:
+Aqui está um programa de exemplo que demonstra os mecanismos de panic e defer:
 
 	package main
 
@@ -157,13 +158,13 @@ Here's an example program that demonstrates the mechanics of panic and defer:
 	    g(i + 1)
 	}
 
-The function g takes the int i, and panics if i is greater than 3,
-or else it calls itself with the argument i+1.
-The function f defers a function that calls recover and prints the recovered
-value (if it is non-nil).
-Try to picture what the output of this program might be before reading on.
+A função g recebe o int i, e entra em panic se i for maior que 3,
+ou então ela chama a si mesma com o argumento i+1.
+A função f difere uma função que chama recover e imprime o valor
+recuperado (se ele não for nil).
+Tente imaginar qual seria a saída deste programa antes de continuar lendo.
 
-The program will output:
+O programa produzirá:
 
 	Calling g.
 	Printing in g 0
@@ -178,10 +179,10 @@ The program will output:
 	Recovered in f 4
 	Returned normally from f.
 
-If we remove the deferred function from f the panic is not recovered and
-reaches the top of the goroutine's call stack,
-terminating the program.
-This modified program will output:
+Se removermos a função diferida de f, o panic não é recuperado e
+atinge o topo da pilha de chamadas da goroutine,
+terminando o programa.
+Este programa modificado produzirá:
 
 	Calling g.
 	Printing in g 0
@@ -198,31 +199,31 @@ This modified program will output:
 	panic PC=0x2a9cd8
 	[stack trace omitted]
 
-For a real-world example of **panic** and **recover**,
-see the [json package](/pkg/encoding/json/) from the
-Go standard library.
-It encodes an interface with a set of recursive functions.
-If an error occurs when traversing the value,
-panic is called to unwind the stack to the top-level function call,
-which recovers from the panic and returns an appropriate error value (see
-the 'error' and 'marshal' methods of the encodeState type in [encode.go](/src/pkg/encoding/json/encode.go)).
+Para um exemplo do mundo real de **panic** e **recover**,
+veja o [pacote json](/pkg/encoding/json/) da
+biblioteca padrão do Go.
+Ele codifica uma interface com um conjunto de funções recursivas.
+Se um erro ocorrer ao percorrer o valor,
+panic é chamado para desenrolar a pilha até a chamada de função de nível superior,
+que recupera do panic e retorna um valor de erro apropriado (veja
+os métodos 'error' e 'marshal' do tipo encodeState em [encode.go](/src/pkg/encoding/json/encode.go)).
 
-The convention in the Go libraries is that even when a package uses panic internally,
-its external API still presents explicit error return values.
+A convenção nas bibliotecas Go é que mesmo quando um pacote usa panic internamente,
+sua API externa ainda apresenta valores de retorno de erro explícitos.
 
-Other uses of **defer** (beyond the file.Close example given earlier) include releasing a mutex:
+Outros usos de **defer** (além do exemplo file.Close dado anteriormente) incluem liberar um mutex:
 
 	mu.Lock()
 	defer mu.Unlock()
 
-printing a footer:
+imprimir um rodapé:
 
 	printHeader()
 	defer printFooter()
 
-and more.
+e mais.
 
-In summary, the defer statement (with or without panic and recover) provides
-an unusual and powerful mechanism for control flow.
-It can be used to model a number of features implemented by special-purpose
-structures in other programming languages. Try it out.
+Em resumo, a declaração defer (com ou sem panic e recover) fornece
+um mecanismo incomum e poderoso para controle de fluxo.
+Ela pode ser usada para modelar uma série de recursos implementados por estruturas
+de propósito especial em outras linguagens de programação. Experimente.
