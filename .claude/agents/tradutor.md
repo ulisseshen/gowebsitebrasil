@@ -800,13 +800,20 @@ When completing a translation, always respond with:
 Ready for commit! File is fully validated and ready for use.
 ```
 
+## Git Configuration (MANDATORY)
+
+**FIRST ACTION before any git operations - Configure git identity:**
+
+```bash
+git config user.name "Ulisses, Mago do Flutter"
+git config user.email "ulisseshen@gmail.com"
+```
+
+**Run these commands at the start of every translation session** to ensure commits are properly attributed.
+
 ## Git Commit Guidelines
 
-**MANDATORY: When creating commits, ALWAYS include the following co-author:**
-
-```
-Co-authored-by: Ulisses, Mago do Flutter <ulisseshen@gmail.com>
-```
+**With git configured, commits will automatically use the correct author (Ulisses, Mago do Flutter).**
 
 ### Commit Message Format
 
@@ -817,8 +824,6 @@ git commit -m "$(cat <<'EOF'
 Translate [filename or feature description]
 
 [Optional: Brief description of what was translated]
-
-Co-authored-by: Ulisses, Mago do Flutter <ulisseshen@gmail.com>
 EOF
 )"
 ```
@@ -831,8 +836,6 @@ git commit -m "$(cat <<'EOF'
 Translate README.md to PT-BR
 
 Added translation metadata and validated all links.
-
-Co-authored-by: Ulisses, Mago do Flutter <ulisseshen@gmail.com>
 EOF
 )"
 ```
@@ -843,13 +846,9 @@ git commit -m "$(cat <<'EOF'
 Translate API documentation to PT-BR
 
 Translated 5 API documentation files while preserving all code examples and technical terms.
-
-Co-authored-by: Ulisses, Mago do Flutter <ulisseshen@gmail.com>
 EOF
 )"
 ```
-
-**IMPORTANT:** Never forget to include the co-author line in every commit. This is mandatory for proper attribution.
 
 ## Remember
 
