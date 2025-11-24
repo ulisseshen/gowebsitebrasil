@@ -42,11 +42,11 @@ Após traduzir cada arquivo, marque o checkpoint com `[x]`.
 
 ## Seção 3: Funções e Estruturas
 
-- [ ] `_content/blog/functions-codewalk.md` - Funções codewalk
-- [ ] `_content/blog/first-class-functions-in-go-and-new-go.md` - Funções first-class
-- [ ] `_content/blog/defer-panic-and-recover.md` - Defer, Panic e Recover
-- [ ] `_content/blog/gob.md` - Gob
-- [ ] `_content/blog/gobs-of-data.md` - Gobs of Data
+- [x] `_content/blog/functions-codewalk.md` - Funções codewalk
+- [x] `_content/blog/first-class-functions-in-go-and-new-go.md` - Funções first-class
+- [x] `_content/blog/defer-panic-and-recover.md` - Defer, Panic e Recover
+- [x] `_content/blog/gob.md` - Gob
+- [x] `_content/blog/gobs-of-data.md` - Gobs of Data
 
 ---
 
@@ -158,7 +158,7 @@ Após traduzir cada arquivo, marque o checkpoint com `[x]`.
 |-------|-------|------------|-----------|
 | Introdução | 6 | 6 | 100% |
 | Sintaxe | 9 | 9 | 100% |
-| Funções | 5 | 0 | 0% |
+| Funções | 5 | 5 | 100% |
 | Erros | 4 | 3 | 75% |
 | Interfaces | 7 | 0 | 0% |
 | Concorrência | 7 | 0 | 0% |
@@ -170,7 +170,7 @@ Após traduzir cada arquivo, marque o checkpoint com `[x]`.
 | Profiling | 2 | 0 | 0% |
 | Debugging | 6 | 0 | 0% |
 | Text | 2 | 0 | 0% |
-| **TOTAL** | **67** | **18** | **27%** |
+| **TOTAL** | **67** | **23** | **34%** |
 
 ---
 

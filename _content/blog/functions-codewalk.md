@@ -1,5 +1,6 @@
 ---
-title: First Class Functions in Go
+ia-translated: true
+title: Funções de Primeira Classe em Go
 date: 2011-06-30
 by:
 - Andrew Gerrand
@@ -7,16 +8,16 @@ tags:
 - codewalk
 - function
 - technical
-summary: Announcing a new Go codewalk, exploring first class functions.
+summary: Anunciando um novo codewalk de Go, explorando funções de primeira classe.
 ---
 
 
-Programmers new to Go are often surprised by its support for function types,
-functions as values, and closures.
-The [First Class Functions in Go](/doc/codewalk/functions/)
-code walk demonstrates these features with a simulation of the dice game
+Programadores novos em Go frequentemente se surpreendem com o suporte da linguagem para tipos de função (function types),
+funções como valores (functions as values) e closures.
+O code walk [First Class Functions in Go](/doc/codewalk/functions/)
+demonstra essas características com uma simulação do jogo de dados
 [Pig](http://en.wikipedia.org/wiki/Pig_(dice)).
-It is a pretty program that uses the language to great effect,
-and a fun read for Go beginners and veterans alike.
+É um programa elegante que usa a linguagem com grande efeito,
+e uma leitura divertida tanto para iniciantes quanto para veteranos de Go.
 
-More resources are available at [golang.org](/doc/docs.html).
+Mais recursos estão disponíveis em [golang.org](/doc/docs.html).
