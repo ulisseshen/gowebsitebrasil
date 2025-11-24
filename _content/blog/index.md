@@ -1,5 +1,6 @@
 ---
-title: The Go Blog
+ia-translated: true
+title: O Blog Go
 ---
 
 <div id="blogindex">
@@ -18,9 +19,9 @@ title: The Go Blog
 {{end}}
 
 <p class="blogtitle">
-<a href="/blog/all" aria-label="More articles" aria-describedby="blog-description">More articles...</a>
+<a href="/blog/all" aria-label="Mais artigos" aria-describedby="blog-description">Mais artigos...</a>
 </p>
 
 <div class="screen-reader-only" id="blog-description" hidden>
-    Opens in new window.
+    Abre em nova janela.
 </div>

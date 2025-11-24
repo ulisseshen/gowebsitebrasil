@@ -17,12 +17,12 @@ Após traduzir cada arquivo, marque o checkpoint com `[x]`.
 
 ## Seção 1: Hello World e Introdução
 
-- [ ] `_content/blog/index.md` - Índice do blog
-- [ ] `_content/blog/hello-world.md` - Hello World
-- [ ] `_content/blog/hello-china.md` - Hello China
-- [ ] `_content/blog/first-go-program.md` - Primeiro programa Go
-- [ ] `_content/blog/learn-go-from-your-browser.md` - Aprenda Go no navegador
-- [ ] `_content/blog/tour.md` - Tour of Go
+- [x] `_content/blog/index.md` - Índice do blog
+- [x] `_content/blog/hello-world.md` - Hello World
+- [x] `_content/blog/hello-china.md` - Hello China
+- [x] `_content/blog/first-go-program.md` - Primeiro programa Go
+- [x] `_content/blog/learn-go-from-your-browser.md` - Aprenda Go no navegador
+- [x] `_content/blog/tour.md` - Tour of Go
 
 ---
 
@@ -156,7 +156,7 @@ Após traduzir cada arquivo, marque o checkpoint com `[x]`.
 
 | Seção | Total | Traduzidos | Progresso |
 |-------|-------|------------|-----------|
-| Introdução | 6 | 0 | 0% |
+| Introdução | 6 | 6 | 100% |
 | Sintaxe | 9 | 0 | 0% |
 | Funções | 5 | 0 | 0% |
 | Erros | 4 | 3 | 75% |
@@ -170,7 +170,7 @@ Após traduzir cada arquivo, marque o checkpoint com `[x]`.
 | Profiling | 2 | 0 | 0% |
 | Debugging | 6 | 0 | 0% |
 | Text | 2 | 0 | 0% |
-| **TOTAL** | **67** | **3** | **4%** |
+| **TOTAL** | **67** | **9** | **13%** |
 
 ---
 

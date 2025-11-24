@@ -1,4 +1,5 @@
 ---
+ia-translated: true
 title: Hello, 中国!
 date: 2018-01-22
 by:
@@ -6,32 +7,32 @@ by:
 tags:
 - community
 - china
-summary: "The Go home page and binary downloads is now available in China, at https://golang.google.cn."
+summary: "A página inicial do Go e os downloads de binários agora estão disponíveis na China, em https://golang.google.cn."
 ---
 
 
-We are thrilled to announce that the content on
-[golang.org](/) is now available in mainland China through
-the name [https://golang.google.cn](https://golang.google.cn).
-The growing Go developer community in China can now directly access official
-documentation, technical articles, and binaries.
+Estamos entusiasmados em anunciar que o conteúdo em
+[golang.org](/) agora está disponível na China continental através
+do nome [https://golang.google.cn](https://golang.google.cn).
+A crescente comunidade de desenvolvedores Go na China agora pode acessar diretamente
+documentação oficial, artigos técnicos e binários.
 
-The Go community in China is bigger than ever.
-In 2015, Robert Griesemer [visited Shanghai](gopherchina) to attend
-GopherChina, the first Go conference in the country.
-In the years since, it has become one of the largest Go conferences in the world
-with over 1200 attendees at their 2017 event.
-Over the same period, one of the most popular
-[community-built Go forums](https://gocn.io) saw their traffic increase
-threefold and the number of participants in Go-specific groups on social
-platforms like WeChat and QQ has grown to over 11,000 people.
+A comunidade Go na China está maior do que nunca.
+Em 2015, Robert Griesemer [visitou Shanghai](gopherchina) para participar da
+GopherChina, a primeira conferência Go no país.
+Nos anos seguintes, ela se tornou uma das maiores conferências Go do mundo
+com mais de 1200 participantes em seu evento de 2017.
+Durante o mesmo período, um dos mais populares
+[fóruns Go construídos pela comunidade](https://gocn.io) viu seu tráfego aumentar
+três vezes e o número de participantes em grupos específicos de Go em plataformas
+sociais como WeChat e QQ cresceu para mais de 11.000 pessoas.
 
-Go adoption within China-based companies has also increased, with
+A adoção de Go dentro de empresas sediadas na China também aumentou, com
 [Qiniu](https://www.qiniu.com/), [Huawei](http://www.huawei.com/),
-[Alibaba](http://www.alibabagroup.com/), and countless others using Go heavily
-in their production stacks.
+[Alibaba](http://www.alibabagroup.com/), e inúmeras outras usando Go extensivamente
+em suas stacks de produção.
 
-We’re excited to provide even more resources for Go developers in China to
-supplement the excellent material already available to them, but this is just
-the beginning. We’ll be focusing on making Go more accessible to non-English
-speakers in 2018, so keep watching this space.
+Estamos empolgados em fornecer ainda mais recursos para desenvolvedores Go na China para
+complementar o excelente material já disponível para eles, mas isso é apenas
+o começo. Estaremos focando em tornar Go mais acessível para falantes não nativos de inglês
+em 2018, então fique de olho neste espaço.

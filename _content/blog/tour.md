@@ -1,26 +1,27 @@
 ---
-title: Learn Go from your browser
+ia-translated: true
+title: Aprenda Go do seu navegador
 date: 2011-10-04
 by:
 - Andrew Gerrand
 tags:
 - playground
 - tour
-summary: "Announcing the Go tour, https://tour.golang.org/."
+summary: "Anunciando o tour de Go, https://tour.golang.org/."
 ---
 
 
-We are excited to announce [A Tour of Go](/tour/),
-a guided tour of the Go programming language you can run from your browser.
+Estamos empolgados em anunciar [A Tour of Go](/tour/),
+um tour guiado da linguagem de programação Go que você pode executar do seu navegador.
 
-The tour is hands-on, demonstrating the language through code samples that you can modify,
-compile, and run from the tour itself.
-(The technology behind the [Go Playground](/doc/play/) does the work.)
+O tour é prático, demonstrando a linguagem através de exemplos de código que você pode modificar,
+compilar e executar do próprio tour.
+(A tecnologia por trás do [Go Playground](/doc/play/) faz o trabalho.)
 
-The tour has four sections. The first section covers basic syntax and data structures;
-the second discusses methods and interfaces;
-the third is about Generics;
-and the fourth introduces Go's concurrency primitives.
-Each section concludes with a few exercises so you can practice what you've learned.
+O tour tem quatro seções. A primeira seção cobre sintaxe básica e estruturas de dados;
+a segunda discute methods e interfaces;
+a terceira é sobre Generics;
+e a quarta introduz as primitivas de concorrência de Go.
+Cada seção conclui com alguns exercícios para que você possa praticar o que aprendeu.
 
-So, what are you waiting for? [Get started now!](/tour/)
+Então, o que você está esperando? [Comece agora!](/tour/)

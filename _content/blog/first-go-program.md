@@ -1,33 +1,34 @@
 ---
-title: The first Go program
+ia-translated: true
+title: O primeiro programa Go
 date: 2013-07-18
 by:
 - Andrew Gerrand
 tags:
 - history
-summary: Rob Pike dug up the first Go program ever written.
+summary: Rob Pike descobriu o primeiro programa Go já escrito.
 ---
 
 
-Brad Fitzpatrick and I (Andrew Gerrand) recently started restructuring
-[godoc](/cmd/godoc/), and it occurred to me that it is one
-of the oldest Go programs.
-Robert Griesemer started writing it back in early 2009,
-and we're still using it today.
+Brad Fitzpatrick e eu (Andrew Gerrand) recentemente começamos a reestruturar
+o [godoc](/cmd/godoc/), e me ocorreu que ele é um
+dos programas Go mais antigos.
+Robert Griesemer começou a escrevê-lo no início de 2009,
+e ainda o estamos usando hoje.
 
-When I [tweeted](https://twitter.com/enneff/status/357403054632484865) about
-this, Dave Cheney replied with an [interesting question](https://twitter.com/davecheney/status/357406479415914497):
-what is the oldest Go program? Rob Pike dug into his mail and found it
-in an old message to Robert and Ken Thompson.
+Quando eu [tweetei](https://twitter.com/enneff/status/357403054632484865) sobre
+isso, Dave Cheney respondeu com uma [pergunta interessante](https://twitter.com/davecheney/status/357406479415914497):
+qual é o programa Go mais antigo? Rob Pike procurou em seu email e o encontrou
+em uma antiga mensagem para Robert e Ken Thompson.
 
-What follows is the first Go program. It was written by Rob in February 2008,
-when the team was just Rob, Robert, and Ken. They had a solid feature list
-(mentioned in [this blog post](https://commandcenter.blogspot.com.au/2012/06/less-is-exponentially-more.html))
-and a rough language specification. Ken had just finished the first working version of
-a Go compiler (it didn't produce native code, but rather transliterated Go code
-to C for fast prototyping) and it was time to try writing a program with it.
+O que segue é o primeiro programa Go. Foi escrito por Rob em fevereiro de 2008,
+quando a equipe era apenas Rob, Robert e Ken. Eles tinham uma lista sólida de funcionalidades
+(mencionada [neste post de blog](https://commandcenter.blogspot.com.au/2012/06/less-is-exponentially-more.html))
+e uma especificação de linguagem preliminar. Ken tinha acabado de finalizar a primeira versão funcional de
+um compilador Go (ele não produzia código nativo, mas sim transliterava código Go
+para C para prototipagem rápida) e era hora de tentar escrever um programa com ele.
 
-Rob sent mail to the "Go team":
+Rob enviou um email para o "time Go":
 
 	From: Rob 'Commander' Pike
 	Date: Wed, Feb 6, 2008 at 3:42 PM
@@ -44,40 +45,40 @@ Rob sent mail to the "Go team":
 	here's the code.
 	some ugly hackery to get around the lack of strings.
 
-(The `icounter` line in the program output is the number of executed
-statements, printed for debugging.)
+(A linha `icounter` na saída do programa é o número de instruções
+executadas, impressas para depuração.)
 
 {{code "first-go-program/slist.go"}}
 
-The program parses and prints an
+O programa analisa e imprime uma
 [S-expression](https://en.wikipedia.org/wiki/S-expression).
-It takes no user input and has no imports, relying only on the built-in
-`print` facility for output.
-It was written literally the first day there was a
-[working but rudimentary compiler](/change/8b8615138da3).
-Much of the language wasn't implemented and some of it wasn't even specified.
+Ele não recebe entrada do usuário e não tem imports, dependendo apenas da
+funcionalidade `print` embutida para saída.
+Foi escrito literalmente no primeiro dia em que havia um
+[compilador funcional mas rudimentar](/change/8b8615138da3).
+Muito da linguagem não estava implementado e parte dela nem estava especificada.
 
-Still, the basic flavor of the language today is recognizable in this program.
-Type and variable declarations, control flow, and package statements haven't
-changed much.
+Ainda assim, o sabor básico da linguagem hoje é reconhecível neste programa.
+Declarações de tipo e variável, fluxo de controle e declarações de package não
+mudaram muito.
 
-But there are many differences and absences.
-Most significant are the lack of concurrency and interfaces—both
-considered essential since day 1 but not yet designed.
+Mas há muitas diferenças e ausências.
+As mais significativas são a falta de concorrência e interfaces—ambas
+consideradas essenciais desde o dia 1, mas ainda não projetadas.
 
-A `func` was a `function`, and its signature specified return values
-_before_ arguments, separating them with {{raw "`<-`"}}, which we now use as the channel
-send/receive operator. For example, the `WhiteSpace` function takes the integer
-`c` and returns a boolean.
+Uma `func` era uma `function`, e sua assinatura especificava valores de retorno
+_antes_ dos argumentos, separando-os com {{raw "`<-`"}}, que agora usamos como operador
+de envio/recebimento de channel. Por exemplo, a função `WhiteSpace` recebe o inteiro
+`c` e retorna um booleano.
 
 {{raw `
 	function WhiteSpace(bool <- c int)
 `}}
 
-This arrow was a stop-gap measure until a better syntax arose for declaring
-multiple return values.
+Esta seta foi uma medida provisória até que uma sintaxe melhor surgisse para declarar
+múltiplos valores de retorno.
 
-Methods were distinct from functions and had their own keyword.
+Methods eram distintos de functions e tinham sua própria keyword.
 
 {{raw `
 	method (this *Slist) Car(*Slist <-) {
@@ -85,7 +86,7 @@ Methods were distinct from functions and had their own keyword.
 	}
 `}}
 
-And methods were pre-declared in the struct definition, although that changed soon.
+E methods eram pré-declarados na definição da struct, embora isso tenha mudado logo em seguida.
 
 {{raw `
 	type Slist struct {
@@ -94,10 +95,10 @@ And methods were pre-declared in the struct definition, although that changed so
 	}
 `}}
 
-There were no strings, although they were in the spec.
-To work around this, Rob had to build the input string as an `uint8` array with
-a clumsy construction. (Arrays were rudimentary and slices hadn't been designed
-yet, let alone implemented, although there was the unimplemented concept of an
+Não havia strings, embora estivessem na especificação.
+Para contornar isso, Rob teve que construir a string de entrada como um array `uint8` com
+uma construção desajeitada. (Arrays eram rudimentares e slices ainda não tinham sido projetados,
+muito menos implementados, embora existisse o conceito não implementado de um
 "open array".)
 
 	input[i] = '('; i = i + 1;
@@ -108,23 +109,23 @@ yet, let alone implemented, although there was the unimplemented concept of an
 	input[i] = ' '; i = i + 1;
 	...
 
-Both `panic` and `print` were built-in keywords, not pre-declared functions.
+Tanto `panic` quanto `print` eram keywords embutidas, não funções pré-declaradas.
 
 	print "parse error: expected ", c, "\n";
 	panic "parse";
 
-And there are many other little differences; see if you can identify some others.
+E há muitas outras pequenas diferenças; veja se você consegue identificar algumas outras.
 
-Less than two years after this program was written, Go was released as an
-open source project. Looking back, it is striking how much the language has
-grown and matured. (The last thing to change between this proto-Go and the Go
-we know today was the elimination of semicolons.)
+Menos de dois anos depois que este programa foi escrito, Go foi lançado como um
+projeto de código aberto. Olhando para trás, é impressionante quanto a linguagem
+cresceu e amadureceu. (A última coisa a mudar entre este proto-Go e o Go
+que conhecemos hoje foi a eliminação dos ponto e vírgulas.)
 
-But even more striking is how much we have learned about _writing_ Go code.
-For instance, Rob called his method receivers `this`, but now we use shorter
-context-specific names. There are hundreds of more significant examples
-and to this day we're still discovering better ways to write Go code.
-(Check out the [glog package](https://github.com/golang/glog)'s clever trick for
-[handling verbosity levels](https://github.com/golang/glog/blob/c6f9652c7179652e2fd8ed7002330db089f4c9db/glog.go#L893).)
+Mas ainda mais impressionante é quanto aprendemos sobre _escrever_ código Go.
+Por exemplo, Rob chamou seus receivers de method de `this`, mas agora usamos nomes
+contextuais mais curtos. Há centenas de exemplos mais significativos
+e até hoje ainda estamos descobrindo maneiras melhores de escrever código Go.
+(Confira o truque inteligente do [glog package](https://github.com/golang/glog) para
+[lidar com níveis de verbosidade](https://github.com/golang/glog/blob/c6f9652c7179652e2fd8ed7002330db089f4c9db/glog.go#L893).)
 
-I wonder what we'll learn tomorrow.
+Eu me pergunto o que aprenderemos amanhã.
