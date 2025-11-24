@@ -53,10 +53,10 @@ Após traduzir cada arquivo, marque o checkpoint com `[x]`.
 - [x] `_content/doc/tutorial/call-module-code.html` - Chamar código de módulo
 - [x] `_content/doc/tutorial/handle-errors.html` - Tratar erros
 - [x] `_content/doc/tutorial/random-greeting.html` - Saudação aleatória
-- [ ] `_content/doc/tutorial/greetings-multiple-people.html` - Múltiplas saudações
-- [ ] `_content/doc/tutorial/add-a-test.html` - Adicionar um teste
-- [ ] `_content/doc/tutorial/compile-install.html` - Compilar e instalar
-- [ ] `_content/doc/tutorial/module-conclusion.html` - Conclusão do módulo
+- [x] `_content/doc/tutorial/greetings-multiple-people.html` - Múltiplas saudações
+- [x] `_content/doc/tutorial/add-a-test.html` - Adicionar um teste
+- [x] `_content/doc/tutorial/compile-install.html` - Compilar e instalar
+- [x] `_content/doc/tutorial/module-conclusion.html` - Conclusão do módulo
 
 ### 2.2 Tutoriais Avançados (Markdown)
 - [ ] `_content/doc/tutorial/database-access.md` - Acesso a banco de dados

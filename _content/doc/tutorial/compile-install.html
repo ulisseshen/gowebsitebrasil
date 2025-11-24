@@ -1,55 +1,56 @@
 <!--{
-    "Title": "Compile and install the application",
-    "Breadcrumb": true
+    "Title": "Compilar e instalar o aplicativo",
+    "Breadcrumb": true,
+    "ia-translated": true
 }-->
 
 <p>
-  In this last topic, you'll learn a couple new <code>go</code> commands. While
-  the <code>go run</code> command is a useful shortcut for compiling and running
-  a program when you're making frequent changes, it doesn't generate a binary
-  executable.</p>
+  Neste último tópico, você aprenderá alguns novos comandos <code>go</code>. Embora
+  o comando <code>go run</code> seja um atalho útil para compilar e executar
+  um programa quando você está fazendo mudanças frequentes, ele não gera um executável
+  binário.</p>
 
 <p>
-  This topic introduces two additional commands for building code:
+  Este tópico introduz dois comandos adicionais para construir código:
 </p>
 
 <ul>
   <li>
-    The <a href="/cmd/go/#hdr-Compile_packages_and_dependencies"><code>go
-    build</code> command</a> compiles the packages, along with their dependencies,
-    but it doesn't install the results.
+    O <a href="/cmd/go/#hdr-Compile_packages_and_dependencies">comando <code>go
+    build</code></a> compila os pacotes, junto com suas dependências,
+    mas não instala os resultados.
   </li>
   <li>
-    The <a href="/ref/mod#go-install"><code>go
-    install</code> command</a> compiles and installs the packages.
+    O <a href="/ref/mod#go-install">comando <code>go
+    install</code></a> compila e instala os pacotes.
   </li>
 </ul>
 
 <aside class="Note">
-  <strong>Note:</strong> This topic is part of a multi-part tutorial that begins
-  with <a href="create-module.html">Create a Go module</a>.
+  <strong>Nota:</strong> Este tópico é parte de um tutorial em várias partes que começa
+  com <a href="create-module.html">Criar um módulo Go</a>.
 </aside>
 
 <ol>
   <li>
-    From the command line in the hello directory, run the <code>go build</code>
-    command to compile the code into an executable.
+    Na linha de comando no diretório hello, execute o comando <code>go build</code>
+    para compilar o código em um executável.
 
     <pre>$ go build</pre>
   </li>
 
   <li>
-    From the command line in the hello directory, run the new <code>hello</code>
-    executable to confirm that the code works.
+    Na linha de comando no diretório hello, execute o novo executável <code>hello</code>
+    para confirmar que o código funciona.
 
     <p>
-      Note that your result might differ depending on whether you changed
-      your greetings.go code after testing it.
+      Note que seu resultado pode diferir dependendo se você mudou
+      seu código greetings.go depois de testá-lo.
     </p>
 
     <ul>
       <li>
-        On Linux or Mac:
+        No Linux ou Mac:
 
         <pre>
 $ ./hello
@@ -58,7 +59,7 @@ map[Darrin:Great to see you, Darrin! Gladys:Hail, Gladys! Well met! Samantha:Hai
       </li>
 
       <li>
-        On Windows:
+        No Windows:
 
         <pre>
 $ hello.exe
@@ -67,24 +68,24 @@ map[Darrin:Great to see you, Darrin! Gladys:Hail, Gladys! Well met! Samantha:Hai
       </li>
     </ul>
     <p>
-      You've compiled the application into an executable so you can run it.
-      But to run it currently, your prompt needs either to be in the executable's
-      directory, or to specify the executable's path.
+      Você compilou o aplicativo em um executável para poder executá-lo.
+      Mas para executá-lo atualmente, seu prompt precisa estar no diretório do executável,
+      ou especificar o caminho do executável.
     </p>
     <p>
-      Next, you'll install the executable so you can run it without specifying
-      its path.
+      A seguir, você instalará o executável para poder executá-lo sem especificar
+      seu caminho.
     </p>
   </li>
 
   <li>
-    Discover the Go install path, where the <code>go</code> command will install
-    the current package.
+    Descubra o caminho de instalação do Go, onde o comando <code>go</code> instalará
+    o pacote atual.
 
     <p>
-      You can discover the install path by running the
+      Você pode descobrir o caminho de instalação executando o
       <a href="/cmd/go/#hdr-List_packages_or_modules">
-        <code>go list</code> command</a>, as in the following example:
+        comando <code>go list</code></a>, como no seguinte exemplo:
     </p>
 
     <pre>
@@ -92,23 +93,23 @@ $ go list -f '{{.Target}}'
 </pre>
 
     <p>
-      For example, the command's output might say <code>/home/gopher/bin/hello</code>,
-      meaning that binaries are installed to /home/gopher/bin. You'll need this
-      install directory in the next step.
+      Por exemplo, a saída do comando pode dizer <code>/home/gopher/bin/hello</code>,
+      significando que binários são instalados em /home/gopher/bin. Você precisará deste
+      diretório de instalação no próximo passo.
     </p>
   </li>
 
   <li>
-    Add the Go install directory to your system's shell path.
+    Adicione o diretório de instalação do Go ao caminho shell do seu sistema.
 
     <p>
-      That way, you'll be able to run your program's executable without
-      specifying where the executable is.
+      Dessa forma, você será capaz de executar o executável do seu programa sem
+      especificar onde o executável está.
     </p>
 
     <ul>
       <li>
-        On Linux or Mac, run the following command:
+        No Linux ou Mac, execute o seguinte comando:
 
         <pre>
 $ export PATH=$PATH:/path/to/your/install/directory
@@ -117,7 +118,7 @@ $ export PATH=$PATH:/path/to/your/install/directory
       </li>
 
       <li>
-        On Windows, run the following command:
+        No Windows, execute o seguinte comando:
 
         <pre>
 $ set PATH=%PATH%;C:\path\to\your\install\directory
@@ -127,12 +128,12 @@ $ set PATH=%PATH%;C:\path\to\your\install\directory
     </ul>
 
     <p>
-      As an alternative, if you already have a directory like
-      <code>$HOME/bin</code> in your shell path and you'd like to install your
-      Go programs there, you can change the install target by setting the
-      <code>GOBIN</code> variable using the
+      Como alternativa, se você já tem um diretório como
+      <code>$HOME/bin</code> no seu caminho shell e gostaria de instalar seus
+      programas Go lá, você pode mudar o destino de instalação definindo a
+      variável <code>GOBIN</code> usando o
       <a href="/cmd/go/#hdr-Print_Go_environment_information">
-        <code>go env</code> command</a>:
+        comando <code>go env</code></a>:
     </p>
 
     <pre>
@@ -140,7 +141,7 @@ $ go env -w GOBIN=/path/to/your/bin
 </pre>
 
     <p>
-      or
+      ou
     </p>
 
     <pre>
@@ -150,16 +151,16 @@ $ go env -w GOBIN=C:\path\to\your\bin
   </li>
 
   <li>
-    Once you've updated the shell path, run the <code>go install</code> command
-    to compile and install the package.
+    Uma vez que você atualizou o caminho shell, execute o comando <code>go install</code>
+    para compilar e instalar o pacote.
 
     <pre>$ go install</pre>
   </li>
 
   <li>
-    Run your application by simply typing its name. To make this interesting,
-    open a new command prompt and run the <code>hello</code> executable name
-    in some other directory.
+    Execute seu aplicativo simplesmente digitando seu nome. Para tornar isso interessante,
+    abra um novo prompt de comando e execute o nome executável <code>hello</code>
+    em algum outro diretório.
 
     <pre>
 $ hello
@@ -170,11 +171,11 @@ map[Darrin:Hail, Darrin! Well met! Gladys:Great to see you, Gladys! Samantha:Hai
 </ol>
 
 <p>
-  That wraps up this Go tutorial!
+  Isso encerra este tutorial do Go!
 </p>
 
 <p class="Navigation">
-  <a class="Navigation-prev" href="add-a-test.html">&lt; Add a test</a>
-  <a class="Navigation-next" href="module-conclusion.html">Conclusion and links
-    to more information &gt;</a>
+  <a class="Navigation-prev" href="add-a-test.html">&lt; Adicionar um teste</a>
+  <a class="Navigation-next" href="module-conclusion.html">Conclusão e links
+    para mais informações &gt;</a>
 </p>

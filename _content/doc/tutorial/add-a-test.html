@@ -1,38 +1,39 @@
 <!--{
-    "Title": "Add a test",
-    "Breadcrumb": true
+    "Title": "Adicionar um teste",
+    "Breadcrumb": true,
+    "ia-translated": true
 }-->
 
 <p>
-  Now that you've gotten your code to a stable place (nicely done, by the way),
-  add a test. Testing your code during development can expose bugs that find
-  their way in as you make changes. In this topic, you add a test for the
-  <code>Hello</code> function.
+  Agora que você deixou seu código em um estado estável (muito bem feito, a propósito),
+  adicione um teste. Testar seu código durante o desenvolvimento pode expor bugs que surgem
+  conforme você faz alterações. Neste tópico, você adiciona um teste para a função
+  <code>Hello</code>.
 </p>
 
 <aside class="Note">
-  <strong>Note:</strong> This topic is part of a multi-part tutorial that begins
-  with <a href="/doc/tutorial/create-module.html">Create a Go module</a>.
+  <strong>Nota:</strong> Este tópico é parte de um tutorial em várias partes que começa
+  com <a href="/doc/tutorial/create-module.html">Criar um módulo Go</a>.
 </aside>
 
 <p>
-  Go's built-in support for unit testing makes it easier to test as you go.
-  Specifically, using naming conventions, Go's <code>testing</code> package, and
-  the <code>go test</code> command, you can quickly write and execute tests.
+  O suporte integrado do Go para testes unitários facilita testar conforme você avança.
+  Especificamente, usando convenções de nomenclatura, o pacote <code>testing</code> do Go e
+  o comando <code>go test</code>, você pode rapidamente escrever e executar testes.
 </p>
 
 <ol>
   <li>
-    In the greetings directory, create a file called greetings_test.go.
+    No diretório greetings, crie um arquivo chamado greetings_test.go.
 
     <p>
-      Ending a file's name with _test.go tells the <code>go test</code> command
-      that this file contains test functions.
+      Terminar o nome de um arquivo com _test.go diz ao comando <code>go test</code>
+      que este arquivo contém funções de teste.
     </p>
   </li>
 
   <li>
-    In greetings_test.go, paste the following code and save the file.
+    Em greetings_test.go, cole o seguinte código e salve o arquivo.
 
     <pre>
 package greetings
@@ -65,42 +66,42 @@ func TestHelloEmpty(t *testing.T) {
     >
 
     <p>
-      In this code, you:
+      Neste código, você:
     </p>
 
     <ul>
       <li>
-        Implement test functions in the same package as the code you're testing.
+        Implementa funções de teste no mesmo pacote que o código que você está testando.
       </li>
       <li>
-        Create two test functions to test the <code>greetings.Hello</code>
-        function. Test function names have the form <code>Test<em>Name</em></code>,
-        where <em>Name</em> says something about the specific test. Also, test
-        functions take a pointer to the <code>testing</code> package's
-        <a href="/pkg/testing/#T"><code>testing.T</code>
-        type</a> as a parameter. You use this parameter's methods for reporting
-        and logging from your test.
+        Cria duas funções de teste para testar a função <code>greetings.Hello</code>.
+        Nomes de função de teste têm a forma <code>Test<em>Name</em></code>,
+        onde <em>Name</em> diz algo sobre o teste específico. Além disso, funções de
+        teste recebem um ponteiro para o
+        <a href="/pkg/testing/#T">tipo <code>testing.T</code></a>
+        do pacote <code>testing</code> como um parâmetro. Você usa os métodos deste parâmetro para reportar
+        e registrar log do seu teste.
       </li>
       <li>
-        Implement two tests:
+        Implementa dois testes:
 
         <ul>
           <li>
-            <code>TestHelloName</code> calls the <code>Hello</code> function,
-            passing a <code>name</code> value with which the function should be
-            able to return a valid response message. If the call returns an
-            error or an unexpected response message (one that doesn't include
-            the name you passed in), you use the <code>t</code> parameter's
-            <a href="/pkg/testing/#T.Errorf">
-            <code>Errorf</code> method</a> to print a message to the console.
+            <code>TestHelloName</code> chama a função <code>Hello</code>,
+            passando um valor <code>name</code> com o qual a função deve ser
+            capaz de retornar uma mensagem de resposta válida. Se a chamada retornar um
+            erro ou uma mensagem de resposta inesperada (uma que não inclui
+            o nome que você passou), você usa o
+            <a href="/pkg/testing/#T.Errorf">método
+            <code>Errorf</code></a> do parâmetro <code>t</code> para imprimir uma mensagem no console.
           </li>
           <li>
-            <code>TestHelloEmpty</code> calls the <code>Hello</code> function
-            with an empty string. This test is designed to confirm that your
-            error handling works. If the call returns a non-empty string or no
-            error, you use the <code>t</code> parameter's
-            <a href="/pkg/testing/#T.Errorf"><code>Errorf
-            </code> method</a> to print a message to the console.
+            <code>TestHelloEmpty</code> chama a função <code>Hello</code>
+            com uma string vazia. Este teste é projetado para confirmar que seu
+            tratamento de erro funciona. Se a chamada retornar uma string não vazia ou nenhum
+            erro, você usa o
+            <a href="/pkg/testing/#T.Errorf">método <code>Errorf</code></a>
+            do parâmetro <code>t</code> para imprimir uma mensagem no console.
           </li>
         </ul>
       </li>
@@ -108,21 +109,21 @@ func TestHelloEmpty(t *testing.T) {
   </li>
 
   <li>
-    At the command line in the greetings directory, run the
+    Na linha de comando no diretório greetings, execute o
     <a href="/cmd/go/#hdr-Test_packages"
-      ><code>go test</code> command</a
+      >comando <code>go test</code></a
     >
-    to execute the test.
+    para executar o teste.
 
     <p>
-      The <code>go test</code> command executes test functions (whose names
-      begin with <code>Test</code>) in test files (whose names end with
-      _test.go). You can add the <code>-v</code> flag to get verbose output that
-      lists all of the tests and their results.
+      O comando <code>go test</code> executa funções de teste (cujos nomes
+      começam com <code>Test</code>) em arquivos de teste (cujos nomes terminam com
+      _test.go). Você pode adicionar a flag <code>-v</code> para obter saída verbosa que
+      lista todos os testes e seus resultados.
     </p>
 
     <p>
-      The tests should pass.
+      Os testes devem passar.
     </p>
 
     <pre>
@@ -142,20 +143,20 @@ ok      example.com/greetings   0.372s
   </li>
 
   <li>
-    Break the <code>greetings.Hello</code> function to view a failing test.
+    Quebre a função <code>greetings.Hello</code> para ver um teste falhando.
 
     <p>
-      The <code>TestHelloName</code> test function checks the return value for
-      the name you specified as a <code>Hello</code> function parameter. To view
-      a failing test result, change the <code>greetings.Hello</code> function so
-      that it no longer includes the name.
+      A função de teste <code>TestHelloName</code> verifica o valor de retorno para
+      o nome que você especificou como um parâmetro da função <code>Hello</code>. Para ver
+      um resultado de teste falhando, mude a função <code>greetings.Hello</code> para que
+      ela não inclua mais o nome.
     </p>
 
     <p>
-      In greetings/greetings.go, paste the following code in place of the
-      <code>Hello</code> function. Note that the highlighted lines change the
-      value that the function returns, as if the <code>name</code> argument had
-      been accidentally removed.
+      Em greetings/greetings.go, cole o seguinte código no lugar da
+      função <code>Hello</code>. Note que as linhas destacadas mudam o
+      valor que a função retorna, como se o argumento <code>name</code> tivesse
+      sido acidentalmente removido.
     </p>
 
     <pre>
@@ -174,14 +175,14 @@ func Hello(name string) (string, error) {
   </li>
 
   <li>
-    At the command line in the greetings directory, run <code>go test</code> to
-    execute the test.
+    Na linha de comando no diretório greetings, execute <code>go test</code> para
+    executar o teste.
 
     <p>
-      This time, run <code>go test</code> without the <code>-v</code> flag. The
-      output will include results for only the tests that failed, which can be
-      useful when you have a lot of tests. The <code>TestHelloName</code> test
-      should fail -- <code>TestHelloEmpty</code> still passes.
+      Desta vez, execute <code>go test</code> sem a flag <code>-v</code>. A
+      saída incluirá resultados apenas para os testes que falharam, o que pode ser
+      útil quando você tem muitos testes. O teste <code>TestHelloName</code>
+      deve falhar -- <code>TestHelloEmpty</code> ainda passa.
     </p>
 
     <pre>
@@ -197,15 +198,15 @@ FAIL    example.com/greetings   0.182s
 </ol>
 
 <p>
-  In the next (and last) topic, you'll see how to compile and install your code
-  to run it locally.
+  No próximo (e último) tópico, você verá como compilar e instalar seu código
+  para executá-lo localmente.
 </p>
 
 <p class="Navigation">
   <a class="Navigation-prev" href="/doc/tutorial/greetings-multiple-people.html"
-    >&lt; Return greetings for multiple people</a
+    >&lt; Retornar saudações para várias pessoas</a
   >
   <a class="Navigation-next" href="/doc/tutorial/compile-install.html"
-    >Compile and install the application &gt;</a
+    >Compilar e instalar o aplicativo &gt;</a
   >
 </p>
