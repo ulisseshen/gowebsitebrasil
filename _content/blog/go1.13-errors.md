@@ -1,22 +1,23 @@
 ---
-title: Working with Errors in Go 1.13
+ia-translated: true
+title: Trabalhando com Errors no Go 1.13
 date: 2019-10-17
 by:
 - Damien Neil and Jonathan Amsterdam
 tags:
 - errors
 - technical
-summary: How to use the new Go 1.13 error interfaces and functions.
+summary: Como usar as novas interfaces e funções de error do Go 1.13.
 ---
 
-## Introduction
+## Introdução
 
-Go’s treatment of [errors as values](/blog/errors-are-values)
-has served us well over the last decade. Although the standard library’s support
-for errors has been minimal—just the `errors.New` and `fmt.Errorf` functions,
-which produce errors that contain only a message—the built-in `error` interface
-allows Go programmers to add whatever information they desire. All it requires
-is a type that implements an `Error` method:
+O tratamento de [erros como valores](/blog/errors-are-values) do Go
+tem nos servido bem ao longo da última década. Embora o suporte da biblioteca padrão
+para errors tenha sido mínimo—apenas as funções `errors.New` e `fmt.Errorf`,
+que produzem errors que contêm apenas uma mensagem—a interface `error` embutida
+permite que programadores Go adicionem qualquer informação que desejarem. Tudo o que ela requer
+é um tipo que implemente um método `Error`:
 
 	type QueryError struct {
 		Query string
@@ -25,32 +26,32 @@ is a type that implements an `Error` method:
 
 	func (e *QueryError) Error() string { return e.Query + ": " + e.Err.Error() }
 
-Error types like this one are ubiquitous, and the information they store varies
-widely, from timestamps to filenames to server addresses. Often, that
-information includes another, lower-level error to provide additional context.
+Tipos de error como este são onipresentes, e a informação que eles armazenam varia
+amplamente, de timestamps a nomes de arquivos a endereços de servidor. Frequentemente, essa
+informação inclui outro error de nível mais baixo para fornecer contexto adicional.
 
-The pattern of one error containing another is so pervasive in Go code that,
-after [extensive discussion](/issue/29934), Go 1.13 added
-explicit support for it. This post describes the additions to the standard
-library that provide that support: three new functions in the `errors` package,
-and a new formatting verb for `fmt.Errorf`.
+O padrão de um error contendo outro é tão difundido no código Go que,
+após [extensa discussão](/issue/29934), o Go 1.13 adicionou
+suporte explícito para ele. Este post descreve as adições à biblioteca
+padrão que fornecem esse suporte: três novas funções no pacote `errors`,
+e um novo verbo de formatação para `fmt.Errorf`.
 
-Before describing the changes in detail, let's review how errors are examined
-and constructed in previous versions of the language.
+Antes de descrever as mudanças em detalhes, vamos revisar como errors são examinados
+e construídos em versões anteriores da linguagem.
 
-## Errors before Go 1.13
+## Errors antes do Go 1.13
 
-### Examining errors
+### Examinando errors
 
-Go errors are values. Programs make decisions based on those values in a few
-ways. The most common is to compare an error to `nil` to see if an operation
-failed.
+Errors do Go são valores. Programas tomam decisões baseadas nesses valores de algumas
+maneiras. A mais comum é comparar um error a `nil` para ver se uma operação
+falhou.
 
 	if err != nil {
 		// something went wrong
 	}
 
-Sometimes we compare an error to a known _sentinel_ value, to see if a specific error has occurred.
+Às vezes comparamos um error a um valor _sentinel_ conhecido, para ver se um error específico ocorreu.
 
 	var ErrNotFound = errors.New("not found")
 
@@ -58,9 +59,9 @@ Sometimes we compare an error to a known _sentinel_ value, to see if a specific 
 		// something wasn't found
 	}
 
-An error value may be of any type which satisfies the language-defined `error`
-interface. A program can use a type assertion or type switch to view an error
-value as a more specific type.
+Um valor de error pode ser de qualquer tipo que satisfaça a interface `error`
+definida pela linguagem. Um programa pode usar uma type assertion ou type switch para visualizar um valor de
+error como um tipo mais específico.
 
 	type NotFoundError struct {
 		Name string
@@ -72,61 +73,61 @@ value as a more specific type.
 		// e.Name wasn't found
 	}
 
-### Adding information
+### Adicionando informação
 
-Frequently a function passes an error up the call stack while adding information
-to it, like a brief description of what was happening when the error occurred. A
-simple way to do this is to construct a new error that includes the text of the
-previous one:
+Frequentemente uma função passa um error para cima na pilha de chamadas enquanto adiciona informação
+a ele, como uma breve descrição do que estava acontecendo quando o error ocorreu. Uma
+maneira simples de fazer isso é construir um novo error que inclua o texto do
+anterior:
 
 	if err != nil {
 		return fmt.Errorf("decompress %v: %v", name, err)
 	}
 
-Creating a new error with `fmt.Errorf` discards everything from the original
-error except the text. As we saw above with `QueryError`, we may sometimes want
-to define a new error type that contains the underlying error, preserving it for
-inspection by code. Here is `QueryError` again:
+Criar um novo error com `fmt.Errorf` descarta tudo do error original
+exceto o texto. Como vimos acima com `QueryError`, podemos às vezes querer
+definir um novo tipo de error que contenha o error subjacente, preservando-o para
+inspeção pelo código. Aqui está `QueryError` novamente:
 
 	type QueryError struct {
 		Query string
 		Err   error
 	}
 
-Programs can look inside a `*QueryError` value to make decisions based on the
-underlying error. You'll sometimes see this referred to as "unwrapping" the
+Programas podem olhar dentro de um valor `*QueryError` para tomar decisões baseadas no
+error subjacente. Você às vezes verá isso sendo referido como fazer "unwrap" do
 error.
 
 	if e, ok := err.(*QueryError); ok && e.Err == ErrPermission {
 		// query failed because of a permission problem
 	}
 
-The `os.PathError` type in the standard library is another example of one error which contains another.
+O tipo `os.PathError` na biblioteca padrão é outro exemplo de um error que contém outro.
 
-## Errors in Go 1.13
+## Errors no Go 1.13
 
-### The Unwrap method
+### O método Unwrap
 
-Go 1.13 introduces new features to the `errors` and `fmt` standard library
-packages to simplify working with errors that contain other errors. The most
-significant of these is a convention rather than a change: an error which
-contains another may implement an `Unwrap` method returning the underlying
-error. If `e1.Unwrap()` returns `e2`, then we say that `e1` _wraps_ `e2`, and
-that you can _unwrap_ `e1` to get `e2`.
+O Go 1.13 introduz novos recursos aos pacotes da biblioteca padrão `errors` e `fmt`
+para simplificar o trabalho com errors que contêm outros errors. O mais
+significativo deles é uma convenção ao invés de uma mudança: um error que
+contém outro pode implementar um método `Unwrap` retornando o error
+subjacente. Se `e1.Unwrap()` retorna `e2`, então dizemos que `e1` _envolve_ `e2`, e
+que você pode fazer _unwrap_ de `e1` para obter `e2`.
 
-Following this convention, we can give the `QueryError` type above an `Unwrap`
-method that returns its contained error:
+Seguindo essa convenção, podemos dar ao tipo `QueryError` acima um método `Unwrap`
+que retorna seu error contido:
 
 	func (e *QueryError) Unwrap() error { return e.Err }
 
-The result of unwrapping an error may itself have an `Unwrap` method; we call
-the sequence of errors produced by repeated unwrapping the _error chain_.
+O resultado de fazer unwrap de um error pode ele mesmo ter um método `Unwrap`; chamamos
+a sequência de errors produzida por unwrap repetido de _error chain_.
 
-### Examining errors with Is and As
+### Examinando errors com Is e As
 
-The Go 1.13 `errors` package includes two new functions for examining errors: `Is` and `As`.
+O pacote `errors` do Go 1.13 inclui duas novas funções para examinar errors: `Is` e `As`.
 
-The `errors.Is` function compares an error to a value.
+A função `errors.Is` compara um error a um valor.
 
 	// Similar to:
 	//   if err == ErrNotFound { … }
@@ -134,7 +135,7 @@ The `errors.Is` function compares an error to a value.
 		// something wasn't found
 	}
 
-The `As` function tests whether an error is a specific type.
+A função `As` testa se um error é de um tipo específico.
 
 	// Similar to:
 	//   if e, ok := err.(*QueryError); ok { … }
@@ -144,108 +145,108 @@ The `As` function tests whether an error is a specific type.
 		// err is a *QueryError, and e is set to the error's value
 	}
 
-In the simplest case, the `errors.Is` function behaves like a comparison to a
-sentinel error, and the `errors.As` function behaves like a type assertion. When
-operating on wrapped errors, however, these functions consider all the errors in
-a chain. Let's look again at the example from above of unwrapping a `QueryError`
-to examine the underlying error:
+No caso mais simples, a função `errors.Is` se comporta como uma comparação a um
+sentinel error, e a função `errors.As` se comporta como uma type assertion. Quando
+operando em wrapped errors, entretanto, essas funções consideram todos os errors em
+uma chain. Vamos olhar novamente o exemplo de cima de fazer unwrap de um `QueryError`
+para examinar o error subjacente:
 
 	if e, ok := err.(*QueryError); ok && e.Err == ErrPermission {
 		// query failed because of a permission problem
 	}
 
-Using the `errors.Is` function, we can write this as:
+Usando a função `errors.Is`, podemos escrever isso como:
 
 	if errors.Is(err, ErrPermission) {
 		// err, or some error that it wraps, is a permission problem
 	}
 
-The `errors` package also includes a new `Unwrap` function which returns the
-result of calling an error's `Unwrap` method, or `nil` when the error has no
-`Unwrap` method. It is usually better to use `errors.Is` or `errors.As`,
-however, since these functions will examine the entire chain in a single call.
+O pacote `errors` também inclui uma nova função `Unwrap` que retorna o
+resultado de chamar o método `Unwrap` de um error, ou `nil` quando o error não tem
+método `Unwrap`. Geralmente é melhor usar `errors.Is` ou `errors.As`,
+entretanto, já que essas funções examinarão a chain inteira em uma única chamada.
 
-Note: although it may feel odd to take a pointer to a pointer, in this case it
-is correct. Think of it instead as taking a pointer to a value of the error
-type; it so happens in this case that the returned error is a pointer type.
+Nota: embora possa parecer estranho pegar um ponteiro para um ponteiro, neste caso está
+correto. Pense nisso como pegar um ponteiro para um valor do tipo
+error; acontece que, neste caso, o error retornado é um tipo ponteiro.
 
-### Wrapping errors with %w
+### Envolvendo errors com %w
 
-As mentioned earlier, it is common to use the `fmt.Errorf` function to add additional information to an error.
+Como mencionado anteriormente, é comum usar a função `fmt.Errorf` para adicionar informação adicional a um error.
 
 	if err != nil {
 		return fmt.Errorf("decompress %v: %v", name, err)
 	}
 
-In Go 1.13, the `fmt.Errorf` function supports a new `%w` verb. When this verb
-is present, the error returned by `fmt.Errorf` will have an `Unwrap` method
-returning the argument of `%w`, which must be an error. In all other ways, `%w`
-is identical to `%v`.
+No Go 1.13, a função `fmt.Errorf` suporta um novo verbo `%w`. Quando este verbo
+está presente, o error retornado por `fmt.Errorf` terá um método `Unwrap`
+retornando o argumento de `%w`, que deve ser um error. Em todos os outros aspectos, `%w`
+é idêntico a `%v`.
 
 	if err != nil {
 		// Return an error which unwraps to err.
 		return fmt.Errorf("decompress %v: %w", name, err)
 	}
 
-Wrapping an error with `%w` makes it available to `errors.Is` and `errors.As`:
+Envolver um error com `%w` o torna disponível para `errors.Is` e `errors.As`:
 
 	err := fmt.Errorf("access denied: %w", ErrPermission)
 	...
 	if errors.Is(err, ErrPermission) ...
 
-### Whether to Wrap
+### Quando Envolver
 
-When adding additional context to an error, either with `fmt.Errorf` or by
-implementing a custom type, you need to decide whether the new error should wrap
-the original. There is no single answer to this question; it depends on the
-context in which the new error is created. Wrap an error to expose it to
-callers. Do not wrap an error when doing so would expose implementation details.
+Ao adicionar contexto adicional a um error, seja com `fmt.Errorf` ou
+implementando um tipo customizado, você precisa decidir se o novo error deve envolver
+o original. Não há uma única resposta para esta questão; depende do
+contexto no qual o novo error é criado. Envolva um error para expô-lo aos
+chamadores. Não envolva um error quando fazer isso exporia detalhes de implementação.
 
-As one example, imagine a `Parse` function which reads a complex data structure
-from an `io.Reader`. If an error occurs, we wish to report the line and column
-number at which it occurred. If the error occurs while reading from the
-`io.Reader`, we will want to wrap that error to allow inspection of the
-underlying problem. Since the caller provided the `io.Reader` to the function,
-it makes sense to expose the error produced by it.
+Como um exemplo, imagine uma função `Parse` que lê uma estrutura de dados complexa
+de um `io.Reader`. Se um error ocorre, desejamos reportar a linha e coluna
+onde ocorreu. Se o error ocorre enquanto lendo do
+`io.Reader`, vamos querer envolver esse error para permitir inspeção do
+problema subjacente. Como o chamador forneceu o `io.Reader` para a função,
+faz sentido expor o error produzido por ele.
 
-In contrast, a function which makes several calls to a database probably should
-not return an error which unwraps to the result of one of those calls. If the
-database used by the function is an implementation detail, then exposing these
-errors is a violation of abstraction. For example, if the `LookupUser` function
-of your package `pkg` uses Go's `database/sql` package, then it may encounter a
-`sql.ErrNoRows` error. If you return that error with
+Em contraste, uma função que faz várias chamadas a um banco de dados provavelmente
+não deveria retornar um error que faz unwrap para o resultado de uma dessas chamadas. Se o
+banco de dados usado pela função é um detalhe de implementação, então expor esses
+errors é uma violação de abstração. Por exemplo, se a função `LookupUser`
+do seu pacote `pkg` usa o pacote `database/sql` do Go, então ela pode encontrar um
+error `sql.ErrNoRows`. Se você retorna esse error com
 `fmt.Errorf("accessing DB: %v", err)`
-then a caller cannot look inside to find the `sql.ErrNoRows`. But if
-the function instead returns `fmt.Errorf("accessing DB: %w", err)`, then a
-caller could reasonably write
+então um chamador não pode olhar dentro para encontrar o `sql.ErrNoRows`. Mas se
+a função em vez disso retorna `fmt.Errorf("accessing DB: %w", err)`, então um
+chamador poderia razoavelmente escrever
 
 	err := pkg.LookupUser(...)
 	if errors.Is(err, sql.ErrNoRows) …
 
-At that point, the function must always return `sql.ErrNoRows` if you don't want
-to break your clients, even if you switch to a different database package. In
-other words, wrapping an error makes that error part of your API. If you don't
-want to commit to supporting that error as part of your API in the future, you
-shouldn't wrap the error.
+Neste ponto, a função deve sempre retornar `sql.ErrNoRows` se você não quiser
+quebrar seus clientes, mesmo se você mudar para um pacote de banco de dados diferente. Em
+outras palavras, envolver um error torna esse error parte da sua API. Se você não
+quer se comprometer a suportar esse error como parte da sua API no futuro, você
+não deveria envolver o error.
 
-It’s important to remember that whether you wrap or not, the error text will be
-the same. A _person_ trying to understand the error will have the same information
-either way; the choice to wrap is about whether to give _programs_ additional
-information so they can make more informed decisions, or to withhold that
-information to preserve an abstraction layer.
+É importante lembrar que, envolvendo ou não, o texto do error será o
+mesmo. Uma _pessoa_ tentando entender o error terá a mesma informação
+de qualquer forma; a escolha de envolver é sobre dar a _programas_ informação adicional
+para que possam tomar decisões mais informadas, ou reter essa
+informação para preservar uma camada de abstração.
 
-## Customizing error tests with Is and As methods
+## Customizando testes de error com métodos Is e As
 
-The `errors.Is` function examines each error in a chain for a match with a
-target value. By default, an error matches the target if the two are
-[equal](/ref/spec#Comparison_operators). In addition, an
-error in the chain may declare that it matches a target by implementing an `Is`
-_method_.
+A função `errors.Is` examina cada error em uma chain para uma correspondência com um
+valor alvo. Por padrão, um error corresponde ao alvo se os dois são
+[iguais](/ref/spec#Comparison_operators). Além disso, um
+error na chain pode declarar que corresponde a um alvo implementando um
+_método_ `Is`.
 
-As an example, consider this error inspired by the
-[Upspin error package](https://commandcenter.blogspot.com/2017/12/error-handling-in-upspin.html)
-which compares an error against a template, considering only fields which are
-non-zero in the template:
+Como exemplo, considere este error inspirado no
+[pacote de error do Upspin](https://commandcenter.blogspot.com/2017/12/error-handling-in-upspin.html)
+que compara um error contra um template, considerando apenas campos que são
+não-zero no template:
 
 	type Error struct {
 		Path string
@@ -265,20 +266,20 @@ non-zero in the template:
 		// err's User field is "someuser".
 	}
 
-The `errors.As` function similarly consults an `As` method when present.
+A função `errors.As` similarmente consulta um método `As` quando presente.
 
-## Errors and package APIs
+## Errors e APIs de pacotes
 
-A package which returns errors (and most do) should describe what properties of
-those errors programmers may rely on. A well-designed package will also avoid
-returning errors with properties that should not be relied upon.
+Um pacote que retorna errors (e a maioria retorna) deve descrever quais propriedades desses
+errors programadores podem confiar. Um pacote bem projetado também evitará
+retornar errors com propriedades que não deveriam ser confiadas.
 
-The simplest specification is to say that operations either succeed or fail,
-returning a nil or non-nil error value respectively. In many cases, no further
-information is needed.
+A especificação mais simples é dizer que operações ou têm sucesso ou falham,
+retornando um valor de error nil ou não-nil, respectivamente. Em muitos casos, nenhuma
+informação adicional é necessária.
 
-If we wish a function to return an identifiable error condition, such as "item
-not found," we might return an error wrapping a sentinel.
+Se desejamos que uma função retorne uma condição de error identificável, como "item
+não encontrado", podemos retornar um error envolvendo um sentinel.
 
 	var ErrNotFound = errors.New("not found")
 
@@ -293,15 +294,15 @@ not found," we might return an error wrapping a sentinel.
 		// ...
 	}
 
-There are other existing patterns for providing errors which can be semantically
-examined by the caller, such as directly returning a sentinel value, a specific
-type, or a value which can be examined with a predicate function.
+Existem outros padrões existentes para fornecer errors que podem ser semanticamente
+examinados pelo chamador, como retornar diretamente um valor sentinel, um tipo
+específico, ou um valor que pode ser examinado com uma função predicado.
 
-In all cases, care should be taken not to expose internal details to the user.
-As we touched on in "Whether to Wrap" above, when you return
-an error from another package you should convert the error to a form that does
-not expose the underlying error, unless you are willing to commit to returning
-that specific error in the future.
+Em todos os casos, deve-se ter cuidado para não expor detalhes internos ao usuário.
+Como abordamos em "Quando Envolver" acima, quando você retorna
+um error de outro pacote, você deve converter o error para uma forma que
+não exponha o error subjacente, a menos que você esteja disposto a se comprometer a retornar
+esse error específico no futuro.
 
 	f, err := os.Open(filename)
 	if err != nil {
@@ -312,8 +313,8 @@ that specific error in the future.
 		return fmt.Errorf("%v", err)
 	}
 
-If a function is defined as returning an error wrapping some sentinel or type,
-do not return the underlying error directly.
+Se uma função é definida como retornando um error envolvendo algum sentinel ou tipo,
+não retorne o error subjacente diretamente.
 
 	var ErrPermission = errors.New("permission denied")
 
@@ -337,14 +338,14 @@ do not return the underlying error directly.
 		// ...
 	}
 
-## Conclusion
+## Conclusão
 
-Although the changes we’ve discussed amount to just three functions and a
-formatting verb, we hope they will go a long way toward improving how errors are
-handled in Go programs. We expect that wrapping to provide additional context
-will become commonplace, helping programs to make better decisions and helping
-programmers to find bugs more quickly.
+Embora as mudanças que discutimos se resumam a apenas três funções e um
+verbo de formatação, esperamos que elas contribuam muito para melhorar como errors são
+tratados em programas Go. Esperamos que envolver para fornecer contexto adicional
+se torne comum, ajudando programas a tomar melhores decisões e ajudando
+programadores a encontrar bugs mais rapidamente.
 
-As Russ Cox said in his [GopherCon 2019 keynote](/blog/experiment),
-on the path to Go 2 we experiment, simplify and ship. Now that we’ve
-shipped these changes, we look forward to the experiments that will follow.
+Como Russ Cox disse em seu [keynote da GopherCon 2019](/blog/experiment),
+no caminho para o Go 2 nós experimentamos, simplificamos e lançamos. Agora que lançamos
+essas mudanças, aguardamos ansiosamente os experimentos que se seguirão.
