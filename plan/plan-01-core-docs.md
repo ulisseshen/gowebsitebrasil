@@ -50,7 +50,7 @@ Após traduzir cada arquivo, marque o checkpoint com `[x]`.
 - [ ] `_content/doc/tutorial/index.html` - Índice de tutoriais
 - [x] `_content/doc/tutorial/getting-started.html` - Começando com Go
 - [x] `_content/doc/tutorial/create-module.html` - Criar um módulo
-- [ ] `_content/doc/tutorial/call-module-code.html` - Chamar código de módulo
+- [x] `_content/doc/tutorial/call-module-code.html` - Chamar código de módulo
 - [ ] `_content/doc/tutorial/handle-errors.html` - Tratar erros
 - [ ] `_content/doc/tutorial/random-greeting.html` - Saudação aleatória
 - [ ] `_content/doc/tutorial/greetings-multiple-people.html` - Múltiplas saudações

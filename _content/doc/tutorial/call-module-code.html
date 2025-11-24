@@ -1,37 +1,38 @@
 <!--{
-    "Title": "Call your code from another module",
-    "Breadcrumb": true
+    "Title": "Chame seu código de outro module",
+    "Breadcrumb": true,
+    "ia-translated": true
 }-->
 
 <p>
-  In the <a href="/doc/tutorial/create-module.html">previous section</a>, you created a
-  <code>greetings</code> module. In this section, you'll write code to make
-  calls to the <code>Hello</code> function in the module you just wrote. You'll
-  write code you can execute as an application, and which calls code in the
-  <code>greetings</code> module.
+  Na <a href="/doc/tutorial/create-module.html">seção anterior</a>, você criou um
+  module <code>greetings</code>. Nesta seção, você escreverá código para fazer
+  chamadas à função <code>Hello</code> no module que você acabou de escrever. Você
+  escreverá código que pode executar como uma aplicação, e que chama código no
+  module <code>greetings</code>.
 </p>
 
 <aside class="Note">
-  <strong>Note:</strong> This topic is part of a multi-part tutorial that begins
-  with <a href="/doc/tutorial/create-module.html">Create a Go module</a>.
+  <strong>Nota:</strong> Este tópico faz parte de um tutorial em múltiplas partes que começa
+  com <a href="/doc/tutorial/create-module.html">Create a Go module</a>.
 </aside>
 
 <ol>
   <li>
-    Create a <code>hello</code> directory for your Go module source code. This
-    is where you'll write your caller.
+    Crie um diretório <code>hello</code> para o código fonte do seu module Go. Este
+    é onde você escreverá seu caller.
 
     <p>
-      After you create this directory, you should have both a hello and a
-      greetings directory at the same level in the hierarchy, like so:
+      Depois de criar este diretório, você deve ter tanto um diretório hello quanto um
+      greetings no mesmo nível na hierarquia, assim:
     </p>
       <pre>&lt;home&gt;/
  |-- greetings/
  |-- hello/</pre>
 
     <p>
-      For example, if your command prompt is in the greetings directory, you
-      could use the following commands:
+      Por exemplo, se seu prompt de comando está no diretório greetings, você
+      poderia usar os seguintes comandos:
     </p>
 
     <pre>
@@ -43,18 +44,18 @@ cd hello
   </li>
 
   <li>
-    Enable dependency tracking for the code you're about to write.
+    Habilite o rastreamento de dependências para o código que você está prestes a escrever.
 
     <p>
-      To enable dependency tracking for your code, run the
+      Para habilitar o rastreamento de dependências para seu código, execute o
       <a
         href="/ref/mod#go-mod-init"
-        ><code>go mod init</code> command</a>, giving it the name of the module
-        your code will be in.</p>
+        >comando <code>go mod init</code></a>, informando o nome do module
+        em que seu código estará.</p>
 
     <p>
-        For the purposes of this tutorial, use <code>example.com/hello</code>
-        for the module path.
+        Para os propósitos deste tutorial, use <code>example.com/hello</code>
+        para o module path.
     </p>
 
     <pre>
@@ -64,16 +65,16 @@ go: creating new go.mod: module example.com/hello
   </li>
 
   <li>
-    In your text editor, in the hello directory, create a file in which to
-    write your code and call it hello.go.
+    No seu editor de texto, no diretório hello, crie um arquivo no qual
+    escrever seu código e chame-o de hello.go.
   </li>
 
   <li>
-    Write code to call the <code>Hello</code> function, then print the
-    function's return value.
+    Escreva código para chamar a função <code>Hello</code>, depois imprima o
+    valor de retorno da função.
 
     <p>
-      To do that, paste the following code into hello.go.
+      Para fazer isso, cole o seguinte código no hello.go.
     </p>
 
     <pre>
@@ -93,66 +94,66 @@ func main() {
 </pre>
 
     <p>
-      In this code, you:
+      Neste código, você:
     </p>
 
     <ul>
       <li>
-        Declare a <code>main</code> package. In Go, code executed as an
-        application must be in a <code>main</code> package.
+        Declara um package <code>main</code>. Em Go, código executado como uma
+        aplicação deve estar em um package <code>main</code>.
       </li>
       <li>
-        Import two packages: <code>example.com/greetings</code> and
-        the <a href="https://pkg.go.dev/fmt/"><code>fmt</code> package</a>. This
-        gives your code access to functions in those packages. Importing
-        <code>example.com/greetings</code> (the package contained in the module
-        you created earlier) gives you access to the <code>Hello</code>
-        function. You also import <code>fmt</code>, with functions for handling
-        input and output text (such as printing text to the console).
+        Importa dois packages: <code>example.com/greetings</code> e
+        o <a href="https://pkg.go.dev/fmt/">package <code>fmt</code></a>. Isso
+        dá ao seu código acesso a funções nesses packages. Importar
+        <code>example.com/greetings</code> (o package contido no module
+        que você criou anteriormente) dá a você acesso à função <code>Hello</code>.
+        Você também importa <code>fmt</code>, com funções para manipular
+        texto de entrada e saída (como imprimir texto no console).
       </li>
       <li>
-        Get a greeting by calling the <code>greetings</code> package’s
-        <code>Hello</code> function.
+        Obtém uma saudação chamando a função <code>Hello</code> do package
+        <code>greetings</code>.
       </li>
     </ul>
   </li>
 
   <li>
-    Edit the <code>example.com/hello</code> module to use your local
-    <code>example.com/greetings</code> module.
+    Edite o module <code>example.com/hello</code> para usar seu
+    module <code>example.com/greetings</code> local.
 
     <p>
-      For production use, you’d publish the <code>example.com/greetings</code>
-      module from its repository (with a module path that reflected its published
-      location), where Go tools could find it to download it.
-      For now, because you haven't published the module yet, you need to adapt
-      the <code>example.com/hello</code> module so it can find the
-      <code>example.com/greetings</code> code on your local file system.
+      Para uso em produção, você publicaria o module <code>example.com/greetings</code>
+      do seu repositório (com um module path que refletisse sua localização publicada),
+      onde as ferramentas Go poderiam encontrá-lo para baixá-lo.
+      Por enquanto, porque você ainda não publicou o module, você precisa adaptar
+      o module <code>example.com/hello</code> para que ele possa encontrar o
+      código <code>example.com/greetings</code> no seu sistema de arquivos local.
     </p>
 
     <p>
-      To do that, use the
-      <a href="/ref/mod#go-mod-edit"><code>go
-      mod edit</code> command</a> to edit the <code>example.com/hello</code>
-      module to redirect Go tools from its module path (where the module isn't)
-      to the local directory (where it is).
+      Para fazer isso, use o
+      <a href="/ref/mod#go-mod-edit">comando <code>go
+      mod edit</code></a> para editar o module <code>example.com/hello</code>
+      e redirecionar as ferramentas Go do seu module path (onde o module não está)
+      para o diretório local (onde ele está).
     </p>
 
     <ol>
       <li>
-        From the command prompt in the hello directory, run the following
-        command:
+        No prompt de comando no diretório hello, execute o seguinte
+        comando:
 
     <pre>
 $ go mod edit -replace example.com/greetings=../greetings
 </pre>
 
     <p>
-      The command specifies that <code>example.com/greetings</code> should be
-      replaced with <code>../greetings</code> for the purpose of locating the
-      dependency. After you run the command, the go.mod file in the hello
-      directory should include a <a href="/doc/modules/gomod-ref#replace">
-        <code>replace</code> directive</a>:
+      O comando especifica que <code>example.com/greetings</code> deve ser
+      substituído por <code>../greetings</code> para o propósito de localizar a
+      dependência. Depois de executar o comando, o arquivo go.mod no diretório hello
+      deve incluir uma <a href="/doc/modules/gomod-ref#replace">diretiva
+        <code>replace</code></a>:
     </p>
 
         <pre>
@@ -165,18 +166,18 @@ go 1.16
       </li>
 
       <li>
-        From the command prompt in the hello directory, run the
-        <a href="/ref/mod#go-mod-tidy">
-        <code>go mod tidy</code> command</a> to synchronize the
-        <code>example.com/hello</code> module's dependencies, adding those
-        required by the code, but not yet tracked in the module.
+        No prompt de comando no diretório hello, execute o
+        <a href="/ref/mod#go-mod-tidy">comando
+        <code>go mod tidy</code></a> para sincronizar as
+        dependências do module <code>example.com/hello</code>, adicionando aquelas
+        requeridas pelo código, mas ainda não rastreadas no module.
 
         <pre>$ go mod tidy
 go: found example.com/greetings in example.com/greetings v0.0.0-00010101000000-000000000000
 </pre>
         <p>
-         After the command completes, the <code>example.com/hello</code>
-         module's go.mod file should look like this:
+         Depois que o comando for concluído, o arquivo go.mod do module
+         <code>example.com/hello</code> deve ficar assim:
         </p>
 
         <pre>module example.com/hello
@@ -188,33 +189,32 @@ replace example.com/greetings => ../greetings
 <ins>require example.com/greetings v0.0.0-00010101000000-000000000000</ins></pre>
 
         <p>
-          The command found the local code in the greetings directory, then
-          added a <a href="/doc/modules/gomod-ref#require"><code>require</code>
-          directive</a> to specify that <code>example.com/hello</code>
-          requires <code>example.com/greetings</code>. You created this
-          dependency when you imported the <code>greetings</code> package in
+          O comando encontrou o código local no diretório greetings, depois
+          adicionou uma <a href="/doc/modules/gomod-ref#require">diretiva <code>require</code></a> para especificar que <code>example.com/hello</code>
+          requer <code>example.com/greetings</code>. Você criou esta
+          dependência quando importou o package <code>greetings</code> no
           hello.go.
         </p>
         <p>
-          The number following the module path is a <em>pseudo-version number</em>
-          -- a generated number used in place of a semantic version number (which
-          the module doesn't have yet).
+          O número que segue o module path é um <em>número de pseudo-versão</em>
+          -- um número gerado usado no lugar de um número de versão semântico (que
+          o module ainda não tem).
         </p>
         <p>
-          To reference a <em>published</em> module, a go.mod file would
-          typically omit the <code>replace</code> directive and use a
-          <code>require</code> directive with a tagged version number at the end.
+          Para referenciar um module <em>publicado</em>, um arquivo go.mod
+          normalmente omitiria a diretiva <code>replace</code> e usaria uma
+          diretiva <code>require</code> com um número de versão com tag no final.
         </p>
 
         <pre>require example.com/greetings v1.1.0</pre>
 
-        <p>For more on version numbers, see
+        <p>Para mais sobre números de versão, veja
           <a href="/doc/modules/version-numbers">Module version numbering</a>.</p>
       </li>
     </ol>
   <li>
-    At the command prompt in the <code>hello</code> directory, run your code to
-    confirm that it works.
+    No prompt de comando no diretório <code>hello</code>, execute seu código para
+    confirmar que funciona.
 
     <pre>
 $ go run .
@@ -224,11 +224,11 @@ Hi, Gladys. Welcome!
 </ol>
 
 <p>
-  Congrats! You've written two functioning modules.
+  Parabéns! Você escreveu dois modules funcionais.
 </p>
 
 <p>
-  In the next topic, you'll add some error handling.
+  No próximo tópico, você adicionará algum tratamento de erro.
 </p>
 
 <p class="Navigation">
