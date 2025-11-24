@@ -102,18 +102,18 @@ Após traduzir cada arquivo, marque o checkpoint com `[x]`.
 - [x] `_content/solutions/sitereliability.md` - Site Reliability
 - [x] `_content/solutions/sixt.md` - Sixt
 - [x] `_content/solutions/stream.md` - Stream
-- [ ] `_content/solutions/trivago.md` - Trivago
-- [ ] `_content/solutions/twitch.md` - Twitch
+- [x] `_content/solutions/trivago.md` - Trivago
+- [x] `_content/solutions/twitch.md` - Twitch
 - [x] `_content/solutions/uber.md` - Uber
-- [ ] `_content/solutions/wildlifestudios.md` - Wildlife Studios
-- [ ] `_content/solutions/x.md` - X (Twitter)
+- [x] `_content/solutions/wildlifestudios.md` - Wildlife Studios
+- [x] `_content/solutions/x.md` - X (Twitter)
 
 ### 3.6 Google Solutions
-- [ ] `_content/solutions/google/index.md` - Google Index
-- [ ] `_content/solutions/google/chrome.md` - Google Chrome
-- [ ] `_content/solutions/google/coredata.md` - Google Core Data
-- [ ] `_content/solutions/google/firebase.md` - Google Firebase
-- [ ] `_content/solutions/google/sitereliability.md` - Google SRE
+- [x] `_content/solutions/google/index.md` - Google Index
+- [x] `_content/solutions/google/chrome.md` - Google Chrome
+- [x] `_content/solutions/google/coredata.md` - Google Core Data
+- [x] `_content/solutions/google/firebase.md` - Google Firebase
+- [x] `_content/solutions/google/sitereliability.md` - Google SRE
 
 ---
 
@@ -158,13 +158,13 @@ Após traduzir cada arquivo, marque o checkpoint com `[x]`.
 | Solutions Principal | 7 | 7 | 100% |
 | Solutions A-C | 11 | 11 | 100% |
 | Solutions D-M | 7 | 7 | 100% |
-| Solutions N-Z | 12 | 9 | 75% |
-| Google Solutions | 5 | 0 | 0% |
+| Solutions N-Z | 12 | 12 | 100% |
+| Google Solutions | 5 | 5 | 100% |
 | Root Pages | 7 | 0 | 0% |
 | gopls | 2 | 0 | 0% |
 | ref | 1 | 0 | 0% |
 | Wiki | 1 | 0 | 0% |
-| **TOTAL** | **73** | **48** | **66%** |
+| **TOTAL** | **73** | **57** | **78%** |
 
 ---
 

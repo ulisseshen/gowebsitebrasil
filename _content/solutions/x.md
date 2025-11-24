@@ -1,6 +1,7 @@
 ---
-title: "X - 5 billion sessions a day in realtime"
-description: "We now see about five billion sessions per day, and growing. Hundreds of millions of devices send millions of events every second to the Answers endpoint. During the time that it took you to read to here, the Answers back-end will have received and processed about 10,000,000 analytics events."
+ia-translated: true
+title: "X - 5 Bilhões de Sessões por Dia em Tempo Real"
+description: "Agora vemos cerca de cinco bilhões de sessões por dia, e crescendo. Centenas de milhões de dispositivos enviam milhões de eventos por segundo para o endpoint Answers. Durante o tempo que levou para você ler até aqui, o backend do Answers terá recebido e processado cerca de 10.000.000 de eventos de analytics."
 company: X
 logoSrc: x.png
 logoSrcDark: x.png

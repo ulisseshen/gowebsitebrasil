@@ -1,6 +1,7 @@
 ---
-linkTitle: "Twitch - Go’s march to low latency GC"
-description: "We use Go at Twitch for many of our busiest systems. Its simplicity, safety, performance, and readability make it a good tool for the problems we encounter with serving live video and chat to our  millions of users."
+ia-translated: true
+linkTitle: "Twitch - A Marcha do Go para GC de Baixa Latência"
+description: "Usamos Go na Twitch para muitos de nossos sistemas mais movimentados. Sua simplicidade, segurança, desempenho e legibilidade fazem dele uma boa ferramenta para os problemas que encontramos ao fornecer vídeo ao vivo e chat para nossos milhões de usuários."
 company: Twitch
 logoSrc: twitch.svg
 logoSrcDark: twitch.svg

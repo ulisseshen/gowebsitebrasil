@@ -1,77 +1,78 @@
 ---
-title: "How the Firebase Hosting Team Scaled With Go"
+ia-translated: true
+title: "Como a Equipe Firebase Hosting Escalou Com Go"
 company: Firebase
 logoSrc: firebase.svg
 logoSrcDark: firebase.svg
 heroImgSrc: go_firebase_case_study.png
 series: Case Studies
 quote: |
-  Firebase is Google’s mobile platform that helps you quickly develop high-quality
-  apps and grow your business.
+  Firebase é a plataforma móvel do Google que ajuda você a desenvolver rapidamente aplicativos
+  de alta qualidade e expandir seus negócios.
 
-  The Firebase Hosting team shared their journey with Go, including their
-  backend migration from Node.js, the ease of onboarding new Go developers, and
-  how Go has helped them scale.
+  A equipe Firebase Hosting compartilhou sua jornada com Go, incluindo sua
+  migração de backend do Node.js, a facilidade de integrar novos desenvolvedores Go, e
+  como Go os ajudou a escalar.
 ---
 
-The Firebase Hosting team provides static web hosting services for Google Cloud
-customers. They provide a static web host that sits behind a global content
-delivery network, and offer users tools that are easy to use. The team also
-develops features that range from uploading site files to registering domains to
-tracking usage.
+A equipe Firebase Hosting fornece serviços de hospedagem web estática para clientes do Google Cloud.
+Eles fornecem um host web estático que fica atrás de uma rede de entrega de conteúdo
+global, e oferecem aos usuários ferramentas fáceis de usar. A equipe também
+desenvolve recursos que vão desde o upload de arquivos do site até o registro de domínios e
+rastreamento de uso.
 
-Before joining Google, Firebase Hosting’s tech stack was written in Node.js. The
-team started to use Go when they needed to interoperate with several other
-Google services. They decided to use Go to help them scale easily and
-efficiently, knowing that “concurrency would continue to be a big need.” They
-“were confident Go would be more performant,” and “liked that Go is more terse”
-than other languages they were considering, said Michael Bleigh, a software
-engineer on the team.
+Antes de ingressar no Google, a stack tecnológica do Firebase Hosting foi escrita em Node.js. A
+equipe começou a usar Go quando precisou interoperar com vários outros
+serviços do Google. Eles decidiram usar Go para ajudá-los a escalar com facilidade e
+eficiência, sabendo que "a concorrência continuaria a ser uma grande necessidade." Eles
+"estavam confiantes de que Go seria mais performático", e "gostaram que Go é mais conciso"
+do que outras linguagens que estavam considerando, disse Michael Bleigh, um engenheiro de software
+da equipe.
 
-Starting with one small service written in Go, the team migrated their entire
-backend in a series of moves. The team progressively identified large features
-they wanted to implement and, in the process, rewrote them in Go and moved to
-Google Cloud and Google’s internal cluster management system. **Now the Firebase
-Hosting team has replaced 100% of backend Node.js code with Go.**
+Começando com um pequeno serviço escrito em Go, a equipe migrou todo o seu
+backend em uma série de movimentos. A equipe progressivamente identificou grandes recursos
+que queriam implementar e, no processo, os reescreveram em Go e migraram para
+o Google Cloud e o sistema interno de gerenciamento de clusters do Google. **Agora a equipe Firebase
+Hosting substituiu 100% do código backend Node.js por Go.**
 
-The team’s experience writing in Go began with one engineer. “Through
-peer-to-peer learning and Go being generally easy to get started with, everyone
-on the team now has Go dev experience,” said Bleigh. They’ve found that while a
-majority of people who are new to the team haven’t had any experience with Go,
-“most of them are productive within a couple weeks.”
+A experiência da equipe em escrever em Go começou com um engenheiro. "Através de
+aprendizado peer-to-peer e Go sendo geralmente fácil de começar, todos
+na equipe agora têm experiência de desenvolvimento em Go", disse Bleigh. Eles descobriram que embora a
+maioria das pessoas que são novas na equipe não tivesse nenhuma experiência com Go,
+"a maioria delas é produtiva em algumas semanas."
 
-"Using Go, it's easy to see how the code is organized and what the code does,"
-said Bleigh, speaking for the team. “Go is generally very readable and
-understandable. The language’s error handling, receivers, and interfaces are all
-easy to understand due to the idioms in the language.”
+"Usando Go, é fácil ver como o código está organizado e o que o código faz",
+disse Bleigh, falando pela equipe. "Go é geralmente muito legível e
+compreensível. O tratamento de erros, receivers e interfaces da linguagem são todos
+fáceis de entender devido aos idiomas da linguagem."
 
-Concurrency continues to be a focus for the team as they scale. Robert Rossney,
-a software engineer, shared that “Go makes it very easy to put all of the hard
-concurrency stuff in one place, and everywhere else it's abstracted.” Rossney
-also spoke to the benefits of using a language built with concurrency in mind,
-saying that “there are also a lot of ways to do concurrency in Go. We’ve had to
-learn when each route is best, how to determine when a problem is a concurrency
-problem, how to debug–but that comes out of the fact that you actually can write
-these patterns in Go code.”
+A concorrência continua sendo um foco para a equipe à medida que escalam. Robert Rossney,
+um engenheiro de software, compartilhou que "Go torna muito fácil colocar todas as coisas
+difíceis de concorrência em um lugar, e em todos os outros lugares está abstraído." Rossney
+também falou sobre os benefícios de usar uma linguagem construída com concorrência em mente,
+dizendo que "também existem muitas maneiras de fazer concorrência em Go. Tivemos que
+aprender quando cada rota é melhor, como determinar quando um problema é um problema de concorrência,
+como depurar - mas isso vem do fato de que você realmente pode escrever
+esses padrões em código Go."
 
 {{backgroundquote `
   author: Robert Rossney
   title: Software Engineer
   quote: |
-    Generally speaking, there’s not a time on the team where we’re feeling
-    frustrated with Go, it just kind of gets out of the way and lets you do work.
+    De modo geral, não há um momento na equipe em que estejamos sentindo
+    frustração com Go, ele simplesmente sai do caminho e deixa você trabalhar.
 `}}
 
-Hundreds of thousands of customers host their websites with Firebase Hosting,
-which means Go code is used to serve billions of requests per day. “Our customer
-base and traffic have doubled multiple times since migrating to Go without ever
-requiring fine-tuned optimizations” shared Bleigh.  With Go, the team has seen
-performance improvements both in the software and on the team, with excellent
-productivity gains. “Generally speaking,” Rossney mentioned, “...there’s not a
-time on the team where we’re feeling frustrated with Go, it just kind of gets
-out of the way and lets you do work.”
+Centenas de milhares de clientes hospedam seus sites com Firebase Hosting,
+o que significa que o código Go é usado para servir bilhões de requisições por dia. "Nossa base de clientes
+e tráfego dobraram várias vezes desde a migração para Go sem nunca
+exigir otimizações ajustadas", compartilhou Bleigh. Com Go, a equipe viu
+melhorias de desempenho tanto no software quanto na equipe, com excelentes
+ganhos de produtividade. "De modo geral", Rossney mencionou, "...não há um
+momento na equipe em que estejamos sentindo frustração com Go, ele simplesmente sai
+do caminho e deixa você trabalhar."
 
-In addition to the Firebase Hosting team, engineering teams across Google have
-adopted Go in their development process. Read about how the [Core Data
-Solutions](/solutions/google/coredata/) and [Chrome](/solutions/google/chrome/)
-teams use Go to build fast, reliable, and efficient software at scale.
+Além da equipe Firebase Hosting, equipes de engenharia de todo o Google
+adotaram Go em seu processo de desenvolvimento. Leia sobre como as equipes [Core Data
+Solutions](/solutions/google/coredata/) e [Chrome](/solutions/google/chrome/)
+usam Go para construir software rápido, confiável e eficiente em escala.

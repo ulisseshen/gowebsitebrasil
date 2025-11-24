@@ -1,112 +1,113 @@
 ---
-title: "Actuating Google Production: How Google’s Site Reliability Engineering Team Uses Go"
+ia-translated: true
+title: "Atuando na Produção do Google: Como a Equipe de Site Reliability Engineering do Google Usa Go"
 company: Google Site Reliability Engineering (SRE)
 logoSrc: sitereliability.svg
 logoSrcDark: sitereliability.svg
 heroImgSrc: go_sitereliability_case_study.png
 series: Case Studies
 quote: |
-  Google’s Site Reliability Engineering team has a mission to protect, provide for, and progress the software and systems behind all of Google’s public services — Google Search, Ads, Gmail, Android, YouTube, and App Engine, to name just a few — with an ever-watchful eye on their availability, latency, performance, and capacity.
+  A equipe de Site Reliability Engineering do Google tem a missão de proteger, prover e progredir o software e os sistemas por trás de todos os serviços públicos do Google — Google Search, Ads, Gmail, Android, YouTube e App Engine, para citar apenas alguns — com um olhar sempre vigilante sobre sua disponibilidade, latência, desempenho e capacidade.
 
-  They shared their experience building core production management systems with Go, coming from experience with Python and C++.
+  Eles compartilharam sua experiência construindo sistemas centrais de gerenciamento de produção com Go, vindo de experiência com Python e C++.
 authors:
   - Pierre Palatin, Site Reliability Engineer
 ---
 
-Google runs a small number of very large services. Those services are powered
-by a global infrastructure covering everything a developer needs: storage
-systems, load balancers, network, logging, monitoring, and much more.
-Nevertheless, it is not a static system—it cannot be. Architecture evolves,
-new products and ideas are created, new versions must be rolled out, configs
-pushed, database schema updated, and more. We end up deploying changes to our
-systems dozens of times per second.
+O Google executa um pequeno número de serviços muito grandes. Esses serviços são alimentados
+por uma infraestrutura global cobrindo tudo o que um desenvolvedor precisa: sistemas de
+armazenamento, balanceadores de carga, rede, logging, monitoramento e muito mais.
+No entanto, não é um sistema estático - não pode ser. A arquitetura evolui,
+novos produtos e ideias são criados, novas versões devem ser implantadas, configurações
+enviadas, schemas de banco de dados atualizados e mais. Acabamos implantando mudanças em nossos
+sistemas dezenas de vezes por segundo.
 
-Because of this scale and critical need for reliability, Google pioneered Site
-Reliability Engineering (SRE), a role that many other companies have since adopted.
-“SRE is what you get when you treat operations as if it’s a software problem.
-Our mission is to protect, provide for, and progress the software and systems
-behind all of Google’s public services with an ever-watchful eye on their
-availability, latency, performance, and capacity.”
+Devido a essa escala e necessidade crítica de confiabilidade, o Google foi pioneiro em Site
+Reliability Engineering (SRE), uma função que muitas outras empresas adotaram desde então.
+"SRE é o que você obtém quando trata operações como se fosse um problema de software.
+Nossa missão é proteger, prover e progredir o software e os sistemas
+por trás de todos os serviços públicos do Google com um olhar sempre vigilante sobre sua
+disponibilidade, latência, desempenho e capacidade."
 — [Site Reliability Engineering (SRE)](https://sre.google/).
 
 {{backgroundquote `
   quote: |
-    Go promised a sweet spot between performance and readability that neither of
-    the other languages [Python and C++] were able to offer.
+    Go prometia um ponto ideal entre desempenho e legibilidade que nenhuma das
+    outras linguagens [Python e C++] era capaz de oferecer.
 `}}
 
-In 2013-2014, Google’s SRE team realized that our approach to production
-management was not cutting it anymore in many ways. We had advanced far beyond
-shell scripts, but our scale had so many moving pieces and complexities that a
-new approach was needed. We determined that we needed to move toward a
-declarative model of our production, called "Prodspec", driving a dedicated
-control plane, called "Annealing".
+Em 2013-2014, a equipe SRE do Google percebeu que nossa abordagem para gerenciamento de produção
+não estava mais sendo suficiente de muitas maneiras. Tínhamos avançado muito além de
+scripts shell, mas nossa escala tinha tantas partes móveis e complexidades que uma
+nova abordagem era necessária. Determinamos que precisávamos nos mover em direção a um
+modelo declarativo de nossa produção, chamado "Prodspec", conduzindo um plano de
+controle dedicado, chamado "Annealing".
 
-When we started those projects, Go was just becoming a viable option for
-critical services at Google. Most engineers were more familiar with Python
-and C++, either of which would have been valid choices. Nevertheless, Go
-captured our interest. The appeal of novelty was certainly a factor of
-course. But, more importantly, Go promised a sweet spot between performance
-and readability that neither of the other languages were able to offer. We
-started a small experiment with Go for some initial parts of Annealing and
-Prodspec. As the projects progressed, those initial parts written in Go found
-themselves at the core. We were happy with Go—its simplicity grew on us, the
-performance was there, and concurrency primitives would have been hard to
-replace.
+Quando começamos esses projetos, Go estava apenas se tornando uma opção viável para
+serviços críticos no Google. A maioria dos engenheiros estava mais familiarizada com Python
+e C++, qualquer um dos quais teria sido uma escolha válida. No entanto, Go
+capturou nosso interesse. O apelo da novidade foi certamente um fator, é
+claro. Mas, mais importante, Go prometia um ponto ideal entre desempenho
+e legibilidade que nenhuma das outras linguagens era capaz de oferecer. Começamos
+um pequeno experimento com Go para algumas partes iniciais do Annealing e
+Prodspec. À medida que os projetos progrediram, essas partes iniciais escritas em Go se encontraram
+no núcleo. Estávamos felizes com Go - sua simplicidade cresceu em nós, o
+desempenho estava lá, e primitivas de concorrência teriam sido difíceis de
+substituir.
 
 {{backgroundquote `
   quote: |
-    Now the majority of Google production is managed and maintained by our systems
-    written in Go.
+    Agora a maior parte da produção do Google é gerenciada e mantida por nossos sistemas
+    escritos em Go.
 `}}
 
-At no point was there ever a mandate or requirement to use Go, but we had no
-desire to return to Python or C++. Go grew organically in Annealing and
-Prodspec. It was the right choice, and thus is now our language of choice.
-Now the majority of Google production is managed and maintained by our systems
-written in Go.
+Em nenhum momento houve um mandato ou requisito para usar Go, mas não tínhamos
+desejo de retornar ao Python ou C++. Go cresceu organicamente no Annealing e
+Prodspec. Foi a escolha certa, e assim agora é nossa linguagem de escolha.
+Agora a maior parte da produção do Google é gerenciada e mantida por nossos sistemas
+escritos em Go.
 
-The power of having a simple language in those projects is hard to overstate.
-There have been cases where some feature was indeed missing, such as the
-ability to enforce in the code that some complex structure should not be
-mutated. But for each one of those cases, there have undoubtedly been tens or
-hundred of cases where the simplicity helped.
+O poder de ter uma linguagem simples nesses projetos é difícil de exagerar.
+Houve casos em que algum recurso estava de fato faltando, como a
+capacidade de impor no código que alguma estrutura complexa não deveria ser
+mutada. Mas para cada um desses casos, sem dúvida houve dezenas ou
+centenas de casos em que a simplicidade ajudou.
 
 {{backgroundquote `
   quote: |
-    Go’s simplicity means that the code is easy to follow, whether it is to spot
-    bugs during review or when trying to determine exactly what happened during a
-    service disruption.
+    A simplicidade do Go significa que o código é fácil de seguir, seja para detectar
+    bugs durante a revisão ou ao tentar determinar exatamente o que aconteceu durante uma
+    interrupção de serviço.
 `}}
 
-For example, Annealing impacts a wide variety of teams and services meaning
-that we relied heavily on contributions across the company. The simplicity of
-Go made it possible for people outside our team to see why some part or another
-was not working for them, and often provide fixes or features themselves. This
-allowed us to quickly grow.
+Por exemplo, Annealing impacta uma ampla variedade de equipes e serviços, o que significa
+que dependemos fortemente de contribuições de toda a empresa. A simplicidade do
+Go tornou possível que pessoas fora de nossa equipe vissem por que alguma parte ou outra
+não estava funcionando para elas, e frequentemente fornecessem correções ou recursos elas mesmas. Isso
+nos permitiu crescer rapidamente.
 
-Prodspec and Annealing are in charge of some quite critical components. Go’s
-simplicity means that the code is easy to follow, whether it is to spot bugs
-during review or when trying to determine exactly what happened during a
-service disruption.
+Prodspec e Annealing estão encarregados de alguns componentes bastante críticos. A
+simplicidade do Go significa que o código é fácil de seguir, seja para detectar bugs
+durante a revisão ou ao tentar determinar exatamente o que aconteceu durante uma
+interrupção de serviço.
 
-Go performance and concurrency support have also been key for our work. As our
-model of production is declarative, we tend to manipulate a lot of structured
-data, which describes what production is and what it should be. We have large
-services so the data can grow large, often making purely sequential processing
-not efficient enough.
+O desempenho e o suporte à concorrência do Go também foram fundamentais para nosso trabalho. Como nosso
+modelo de produção é declarativo, tendemos a manipular muitos dados
+estruturados, que descrevem o que a produção é e o que deveria ser. Temos grandes
+serviços, então os dados podem crescer muito, frequentemente tornando o processamento puramente sequencial
+não eficiente o suficiente.
 
-We are manipulating this data in many ways and many places. It is not a matter
-of having a smart person come up with a parallel version of our algorithm. It
-is a matter of casual parallelism, finding the next bottleneck and
-parallelising that code section. And Go enables exactly that.
+Estamos manipulando esses dados de muitas maneiras e em muitos lugares. Não é uma questão
+de ter uma pessoa inteligente que inventa uma versão paralela de nosso algoritmo. É
+uma questão de paralelismo casual, encontrando o próximo gargalo e
+paralelizando aquela seção de código. E Go permite exatamente isso.
 
-As a result of our success with Go, we now use Go for every new development for
-Prodspec and Annealing.
+Como resultado de nosso sucesso com Go, agora usamos Go para cada novo desenvolvimento para
+Prodspec e Annealing.
 
-In addition to the Site Reliability Engineering team, engineering teams across
-Google have adopted Go in their development process. Read about how the
+Além da equipe Site Reliability Engineering, equipes de engenharia de todo o
+Google adotaram Go em seu processo de desenvolvimento. Leia sobre como as equipes
 [Core Data Solutions](/solutions/google/coredata/),
-[Firebase Hosting](/solutions/google/firebase/), and
-[Chrome](/solutions/google/chrome/) teams use Go to build fast, reliable,
-and efficient software at scale.
+[Firebase Hosting](/solutions/google/firebase/), e
+[Chrome](/solutions/google/chrome/) usam Go para construir software rápido, confiável
+e eficiente em escala.

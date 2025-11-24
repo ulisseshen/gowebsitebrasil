@@ -1,62 +1,62 @@
 ---
-title: "Chrome Content Optimization Service Runs on Go"
+ia-translated: true
+title: "Serviço de Otimização de Conteúdo do Chrome Roda em Go"
 company: Chrome
 logoSrc: chrome.svg
 logoSrcDark: chrome.svg
 heroImgSrc: go_chrome_case_study.png
 series: Case Studies
 quote: |
-  Google Chrome is a more simple, secure, and faster web browser than ever,
-  with Google's smarts built-in.
+  Google Chrome é um navegador web mais simples, seguro e rápido do que nunca,
+  com as funcionalidades inteligentes do Google integradas.
 
-  In this case study, the Chrome Optimization Guide
-  team shared how they experimented with Go, ramped up quickly, and their plans to
-  use Go going forward.
+  Neste estudo de caso, a equipe Chrome Optimization Guide
+  compartilhou como eles experimentaram com Go, aumentaram a velocidade rapidamente, e seus planos para
+  usar Go no futuro.
 ---
 
-When the product Chrome comes to mind, you probably think solely of the
-user-installed browser. But behind the scenes, Chrome has an extensive fleet of
-backends. Among these is the Chrome Optimization Guide service. This service
-forms an important basis for Chrome's user experience strategy, operating in the
-critical path for users, and is implemented in Go.
+Quando você pensa no produto Chrome, provavelmente pensa apenas no
+navegador instalado pelo usuário. Mas nos bastidores, o Chrome tem uma extensa frota de
+backends. Entre eles está o serviço Chrome Optimization Guide. Este serviço
+forma uma base importante para a estratégia de experiência do usuário do Chrome, operando no
+caminho crítico para os usuários, e é implementado em Go.
 
-The Chrome Optimization Guide service is designed to bring the power of Google
-to Chrome by providing hints to the installed browser about what optimizations
-may be performed on a page load, as well as when they can be applied most
-effectively. It comprises a conjunction of real-time servers and batch logs
-analysis.
+O serviço Chrome Optimization Guide foi projetado para trazer o poder do Google
+para o Chrome fornecendo dicas ao navegador instalado sobre quais otimizações
+podem ser realizadas no carregamento de uma página, bem como quando elas podem ser aplicadas de forma mais
+eficaz. Ele compreende uma combinação de servidores em tempo real e análise de logs em
+batch.
 
-All Lite mode users of Chrome receive data via the service through the following
-mechanisms: a data blob push that provides hints for well-known sites in their
-geography, a check-in to Google servers to retrieve hints for hosts that the
-specific user visits often, and on demand for page loads for which a hint is not
-already on the device. Were the Chrome Optimization Guide service to suddenly
-disappear, users might notice a dramatic change in the speed of their page loads
-and the amount of data consumed while browsing the web.
+Todos os usuários do modo Lite do Chrome recebem dados através do serviço pelos seguintes
+mecanismos: um push de blob de dados que fornece dicas para sites conhecidos em sua
+geografia, um check-in nos servidores do Google para recuperar dicas para hosts que o
+usuário específico visita frequentemente, e sob demanda para carregamentos de páginas para os quais uma dica não está
+já no dispositivo. Se o serviço Chrome Optimization Guide desaparecesse de repente, os usuários poderiam notar uma mudança dramática na velocidade de seus carregamentos de página
+e na quantidade de dados consumidos ao navegar na web.
 
 {{backgroundquote `
   author: Sophie Chang
   title: Software Engineer
   quote: |
-    Given that Go was a success for us, we plan to continue to use
-    it where appropriate
+    Dado que Go foi um sucesso para nós, planejamos continuar a usá-lo
+    onde apropriado
 `}}
 
-When the Chrome engineering team started building the service, only a few
-members had comfort with Go. Most of the team was more familiar with C++, but
-they found the complex boilerplate required to stand up a C++ server to be too
-much. The team shared that “[they] were pretty motivated to learn Go due to its
-simplicity, fast ramp-up, and ecosystem.” and that “[their] sense of adventure
-was rewarded.” Millions of users rely on this service to make their Chrome
-experience better, and choosing Go was no small decision. After their experience
-so far, the team also shared that “given that Go was a success for us, we plan
-to continue to use it where appropriate.”
+Quando a equipe de engenharia do Chrome começou a construir o serviço, apenas alguns
+membros tinham conforto com Go. A maior parte da equipe estava mais familiarizada com C++, mas
+eles acharam o boilerplate complexo necessário para criar um servidor C++ demais.
+A equipe compartilhou que "[eles] estavam bastante motivados para aprender Go devido à sua
+simplicidade, rápida curva de aprendizado e ecossistema." e que "[seu] senso de aventura
+foi recompensado." Milhões de usuários confiam neste serviço para tornar sua experiência com o Chrome
+melhor, e escolher Go não foi uma pequena decisão. Após sua experiência
+até agora, a equipe também compartilhou que "dado que Go foi um sucesso para nós, planejamos
+continuar a usá-lo onde apropriado."
 
-In addition to the Chrome Optimization Guide team, engineering teams across
-Google have adopted Go in their development process. Read about how the [Core
-Data Solutions](/solutions/google/coredata/) and [Firebase
-Hosting](/solutions/google/firebase/) teams use Go to build fast, reliable,
-and efficient software at scale.
+Além da equipe Chrome Optimization Guide, equipes de engenharia de todo o
+Google adotaram Go em seu processo de desenvolvimento. Leia sobre como as equipes [Core
+Data Solutions](/solutions/google/coredata/) e [Firebase
+Hosting](/solutions/google/firebase/) usam Go para construir software rápido, confiável
+e eficiente em escala.
 
-*Editorial note: The Go team would like to thank Sophie Chang for her
-contributions to this story.*
+*Nota editorial: A equipe Go gostaria de agradecer a Sophie Chang por suas
+contribuições para esta história.*
