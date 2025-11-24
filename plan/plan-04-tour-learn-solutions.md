@@ -20,9 +20,9 @@ Após traduzir cada arquivo, marque o checkpoint com `[x]`.
 > **NOTA:** Os arquivos `.article` contêm o texto do tour. Os arquivos `.go` são exemplos de código que NÃO devem ser traduzidos.
 
 ### 1.1 Artigos do Tour
-- [ ] `_content/tour/welcome.article` - Boas-vindas
-- [ ] `_content/tour/basics.article` - Básicos
-- [ ] `_content/tour/flowcontrol.article` - Controle de fluxo
+- [x] `_content/tour/welcome.article` - Boas-vindas
+- [x] `_content/tour/basics.article` - Básicos
+- [x] `_content/tour/flowcontrol.article` - Controle de fluxo
 - [ ] `_content/tour/moretypes.article` - Mais tipos
 - [ ] `_content/tour/methods.article` - Métodos
 - [ ] `_content/tour/concurrency.article` - Concorrência
@@ -152,7 +152,7 @@ Após traduzir cada arquivo, marque o checkpoint com `[x]`.
 
 | Seção | Total | Traduzidos | Progresso |
 |-------|-------|------------|-----------|
-| Tour Articles | 7 | 0 | 0% |
+| Tour Articles | 7 | 3 | 43% |
 | Tour Templates | 5 | 0 | 0% |
 | Learn | 8 | 0 | 0% |
 | Solutions Principal | 7 | 0 | 0% |
@@ -164,7 +164,7 @@ Após traduzir cada arquivo, marque o checkpoint com `[x]`.
 | gopls | 2 | 0 | 0% |
 | ref | 1 | 0 | 0% |
 | Wiki | 1 | 0 | 0% |
-| **TOTAL** | **73** | **0** | **0%** |
+| **TOTAL** | **73** | **3** | **4%** |
 
 ---
 

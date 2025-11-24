@@ -1,51 +1,53 @@
-Welcome!
-Learn how to use this tour: including how to navigate the different lessons and how to run code.
+Bem-vindo!
+Aprenda a usar este tour: incluindo como navegar pelas diferentes lições e como executar código.
 
 The Go Authors
 https://golang.org
 
-* Hello, 世界
+# ia-translated: true
 
-Welcome to a tour of the [[/][Go programming language]].
+* Olá, 世界
 
-The tour is divided into a list of modules that you can
-access by clicking on
-[[javascript:highlight(".logo")][A Tour of Go]] on the top left of the page.
+Bem-vindo a um tour da [[/][linguagem de programação Go]].
 
-You can also view the table of contents at any time by clicking on the [[javascript:highlightAndClick(".nav")][menu]] on the top right of the page.
+O tour está dividido em uma lista de módulos que você pode
+acessar clicando em
+[[javascript:highlight(".logo")][A Tour of Go]] no canto superior esquerdo da página.
 
-Throughout the tour you will find a series of slides and exercises for you
-to complete.
+Você também pode visualizar o índice a qualquer momento clicando no [[javascript:highlightAndClick(".nav")][menu]] no canto superior direito da página.
 
-You can navigate through them using
+Ao longo do tour você encontrará uma série de slides e exercícios para
+completar.
 
-- [[javascript:highlight(".prev-page")]["previous"]] or `PageUp` to go to the previous page,
+Você pode navegar por eles usando
 
-- [[javascript:highlight(".next-page")]["next"]] or `PageDown` to go to the next page.
+- [[javascript:highlight(".prev-page")]["previous"]] ou `PageUp` para ir para a página anterior,
 
-The tour is interactive. Click the
-[[javascript:highlightAndClick("#run")][Run]] button now
-(or press `Shift` + `Enter`) to compile and run the program on
-#appengine: a remote server.
-your computer.
-The result is displayed below the code.
+- [[javascript:highlight(".next-page")]["next"]] ou `PageDown` para ir para a próxima página.
 
-These example programs demonstrate different aspects of Go. The programs in the tour are meant to be starting points for your own experimentation.
+O tour é interativo. Clique no botão
+[[javascript:highlightAndClick("#run")][Run]] agora
+(ou pressione `Shift` + `Enter`) para compilar e executar o programa em
+#appengine: um servidor remoto.
+seu computador.
+O resultado é exibido abaixo do código.
 
-Edit the program and run it again.
+Estes programas de exemplo demonstram diferentes aspectos do Go. Os programas no tour são destinados a ser pontos de partida para suas próprias experimentações.
 
-When you click on [[javascript:highlightAndClick("#format")][Format]]
-(shortcut: `Ctrl` + `Enter`), the text in the editor is formatted using the
-[[/cmd/gofmt/][gofmt]] tool. You can switch syntax highlighting on and off
-by clicking on the [[javascript:highlightAndClick(".syntax-checkbox")][syntax]] button.
+Edite o programa e execute-o novamente.
 
-When you're ready to move on, click the [[javascript:highlightAndClick(".next-page")][right arrow]] below or type the `PageDown` key.
+Quando você clicar em [[javascript:highlightAndClick("#format")][Format]]
+(atalho: `Ctrl` + `Enter`), o texto no editor é formatado usando a
+ferramenta [[/cmd/gofmt/][gofmt]]. Você pode ativar e desativar o realce de sintaxe
+clicando no botão [[javascript:highlightAndClick(".syntax-checkbox")][syntax]].
+
+Quando estiver pronto para continuar, clique na [[javascript:highlightAndClick(".next-page")][seta para a direita]] abaixo ou pressione a tecla `PageDown`.
 
 .play welcome/hello.go
 
 * Go local
 
-The tour is available in other languages:
+O tour está disponível em outros idiomas:
 
 - [[https://go-tour-br.appspot.com/][Brazilian Portuguese — Português do Brasil]]
 - [[https://go-tour-ca.appspot.com/][Catalan — Català]]
@@ -58,49 +60,49 @@ The tour is available in other languages:
 - [[https://go-tour-th.appspot.com/][Thai — ภาษาไทย]]
 - [[https://go-tour-ua-translation.lm.r.appspot.com/][Ukrainian — Українською]]
 
-Click the [[javascript:highlightAndClick(".next-page")]["next"]] button or type `PageDown` to continue.
+Clique no botão [[javascript:highlightAndClick(".next-page")]["next"]] ou pressione `PageDown` para continuar.
 
-#appengine: * Go offline (optional)
+#appengine: * Go offline (opcional)
 #appengine:
-#appengine: This tour is also available as a stand-alone program that you can use
-#appengine: without access to the internet. It builds and runs the code samples on
-#appengine: your own machine.
+#appengine: Este tour também está disponível como um programa standalone que você pode usar
+#appengine: sem acesso à internet. Ele compila e executa os exemplos de código na
+#appengine: sua própria máquina.
 #appengine:
-#appengine: To run the tour locally, you'll need to first
-#appengine: [[/doc/install][install Go]] and then run:
+#appengine: Para executar o tour localmente, você precisará primeiro
+#appengine: [[/doc/install][instalar o Go]] e então executar:
 #appengine:
 #appengine:   go install golang.org/x/website/tour@latest
 #appengine:
-#appengine: This will place a `tour` binary in your
-#appengine: [[/cmd/go/#hdr-GOPATH_and_Modules][GOPATH]]'s `bin` directory.
-#appengine: When you run the tour program, it will open a web browser displaying
-#appengine: your local version of the tour.
+#appengine: Isso colocará um binário `tour` no diretório `bin` do seu
+#appengine: [[/cmd/go/#hdr-GOPATH_and_Modules][GOPATH]].
+#appengine: Quando você executar o programa tour, ele abrirá um navegador web exibindo
+#appengine: sua versão local do tour.
 #appengine:
-#appengine: Of course, you can continue to take the tour through this web site.
+#appengine: É claro, você pode continuar a fazer o tour através deste site.
 
 #appengine: * The Go Playground
 #appengine:
-#appengine: This tour is built atop the [[https://play.golang.org/][Go Playground]], a
-#appengine: web service that runs on [[/][golang.org]]'s servers.
+#appengine: Este tour é construído sobre o [[https://play.golang.org/][Go Playground]], um
+#appengine: serviço web que roda nos servidores do [[/][golang.org]].
 #appengine:
-#appengine: The service receives a Go program, compiles, links, and runs the program inside
-#appengine: a sandbox, then returns the output.
+#appengine: O serviço recebe um programa Go, compila, vincula e executa o programa dentro
+#appengine: de um sandbox, e então retorna a saída.
 #appengine:
-#appengine: There are limitations to the programs that can be run in the playground:
+#appengine: Existem limitações para os programas que podem ser executados no playground:
 #appengine:
-#appengine: - In the playground the time begins at 2009-11-10 23:00:00 UTC (determining the significance of this date is an exercise for the reader). This makes it easier to cache programs by giving them deterministic output.
+#appengine: - No playground, o tempo começa em 2009-11-10 23:00:00 UTC (determinar o significado desta data é um exercício para o leitor). Isso facilita o cache de programas, dando a eles uma saída determinística.
 #appengine:
-#appengine: - There are also limits on execution time and on CPU and memory usage, and the program cannot access external network hosts.
+#appengine: - Há também limites no tempo de execução e no uso de CPU e memória, e o programa não pode acessar hosts de rede externos.
 #appengine:
-#appengine: The playground uses the latest stable release of Go.
+#appengine: O playground usa a versão estável mais recente do Go.
 #appengine:
-#appengine: Read "[[/blog/playground][Inside the Go Playground]]" to learn more.
+#appengine: Leia "[[/blog/playground][Inside the Go Playground]]" para saber mais.
 #appengine:
 #appengine: .play welcome/sandbox.go
 
-* Congratulations
+* Parabéns
 
-You've finished the first module of the tour!
+Você terminou o primeiro módulo do tour!
 
-Now click on [[javascript:highlightAndClick(".logo")][A Tour of Go]] to find out what else
-you can learn about Go, or go directly to the [[javascript:click('.next-page')][next lesson]].
+Agora clique em [[javascript:highlightAndClick(".logo")][A Tour of Go]] para descobrir o que mais
+você pode aprender sobre Go, ou vá diretamente para a [[javascript:click('.next-page')][próxima lição]].

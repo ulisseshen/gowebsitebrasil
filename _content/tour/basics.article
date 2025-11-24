@@ -1,124 +1,125 @@
-Packages, variables, and functions.
-Learn the basic components of any Go program.
+# ia-translated: true
+Pacotes, variáveis e funções.
+Aprenda os componentes básicos de qualquer programa Go.
 
 The Go Authors
 https://golang.org
 
-* Packages
+* Pacotes
 
-Every Go program is made up of packages.
+Todo programa Go é composto por pacotes.
 
-Programs start running in package `main`.
+Os programas começam a executar no pacote `main`.
 
-This program is using the packages with import paths `"fmt"` and `"math/rand"`.
+Este programa está usando os pacotes com caminhos de importação `"fmt"` e `"math/rand"`.
 
-By convention, the package name is the same as the last element of the import path. For instance, the `"math/rand"` package comprises files that begin with the statement `package`rand`.
+Por convenção, o nome do pacote é o mesmo que o último elemento do caminho de importação. Por exemplo, o pacote `"math/rand"` compreende arquivos que começam com a declaração `package`rand`.
 
 .play basics/packages.go
 
 * Imports
 
-This code groups the imports into a parenthesized, "factored" import statement.
+Este código agrupa as importações em uma declaração de import "fatorada" entre parênteses.
 
-You can also write multiple import statements, like:
+Você também pode escrever múltiplas declarações import, como:
 
 	import "fmt"
 	import "math"
 
-But it is good style to use the factored import statement.
+Mas é um bom estilo usar a declaração import fatorada.
 
 .play basics/imports.go
 
-* Exported names
+* Nomes exportados
 
-In Go, a name is exported if it begins with a capital letter.
-For example, `Pizza` is an exported name, as is `Pi`, which is exported from
-the `math` package.
+Em Go, um nome é exportado se ele começa com uma letra maiúscula.
+Por exemplo, `Pizza` é um nome exportado, assim como `Pi`, que é exportado do
+pacote `math`.
 
-`pizza` and `pi` do not start with a capital letter, so they are not exported.
+`pizza` e `pi` não começam com uma letra maiúscula, então eles não são exportados.
 
-When importing a package, you can refer only to its exported names.
-Any "unexported" names are not accessible from outside the package.
+Ao importar um pacote, você pode se referir apenas aos seus nomes exportados.
+Quaisquer nomes "não exportados" não são acessíveis de fora do pacote.
 
-Run the code. Notice the error message.
+Execute o código. Note a mensagem de erro.
 
-To fix the error, rename `math.pi` to `math.Pi` and try it again.
+Para corrigir o erro, renomeie `math.pi` para `math.Pi` e tente novamente.
 
 .play basics/exported-names.go
 
-* Functions
+* Funções
 
-A function can take zero or more arguments.
+Uma função pode receber zero ou mais argumentos.
 
-In this example, `add` takes two parameters of type `int`.
+Neste exemplo, `add` recebe dois parâmetros do tipo `int`.
 
-Notice that the type comes _after_ the variable name.
+Note que o tipo vem _depois_ do nome da variável.
 
-(For more about why types look the way they do, see the [[/blog/gos-declaration-syntax][article on Go's declaration syntax]].)
+(Para mais sobre por que os tipos parecem do jeito que são, veja o [[/blog/gos-declaration-syntax][artigo sobre sintaxe de declaração do Go]].)
 
 .play basics/functions.go
 
-* Functions continued
+* Funções continuação
 
-When two or more consecutive named function parameters share a type, you can omit the type from all but the last.
+Quando dois ou mais parâmetros nomeados consecutivos de uma função compartilham um tipo, você pode omitir o tipo de todos exceto o último.
 
-In this example, we shortened
+Neste exemplo, encurtamos
 
 	x int, y int
 
-to
+para
 
 	x, y int
 
 .play basics/functions-continued.go
 
-* Multiple results
+* Múltiplos resultados
 
-A function can return any number of results.
+Uma função pode retornar qualquer número de resultados.
 
-The `swap` function returns two strings.
+A função `swap` retorna duas strings.
 
 .play basics/multiple-results.go
 
-* Named return values
+* Valores de retorno nomeados
 
-Go's return values may be named. If so, they are treated as variables defined at the top of the function.
+Os valores de retorno do Go podem ser nomeados. Se assim for, eles são tratados como variáveis definidas no topo da função.
 
-These names should be used to document the meaning of the return values.
+Esses nomes devem ser usados para documentar o significado dos valores de retorno.
 
-A `return` statement without arguments returns the named return values. This is known as a "naked" return.
+Uma declaração `return` sem argumentos retorna os valores de retorno nomeados. Isso é conhecido como um return "nu" (naked).
 
-Naked return statements should be used only in short functions, as with the example shown here. They can harm readability in longer functions.
+Declarações return nuas devem ser usadas apenas em funções curtas, como no exemplo mostrado aqui. Elas podem prejudicar a legibilidade em funções mais longas.
 
 .play basics/named-results.go
 
-* Variables
+* Variáveis
 
-The `var` statement declares a list of variables; as in function argument lists, the type is last.
+A declaração `var` declara uma lista de variáveis; como em listas de argumentos de função, o tipo é o último.
 
-A `var` statement can be at package or function level. We see both in this example.
+Uma declaração `var` pode estar no nível do pacote ou da função. Vemos ambos neste exemplo.
 
 .play basics/variables.go
 
-* Variables with initializers
+* Variáveis com inicializadores
 
-A var declaration can include initializers, one per variable.
+Uma declaração var pode incluir inicializadores, um por variável.
 
-If an initializer is present, the type can be omitted; the variable will take the type of the initializer.
+Se um inicializador estiver presente, o tipo pode ser omitido; a variável assumirá o tipo do inicializador.
 
 .play basics/variables-with-initializers.go
 
-* Short variable declarations
+* Declarações de variáveis curtas
 
-Inside a function, the `:=` short assignment statement can be used in place of a `var` declaration with implicit type.
+Dentro de uma função, a declaração de atribuição curta `:=` pode ser usada no lugar de uma declaração `var` com tipo implícito.
 
-Outside a function, every statement begins with a keyword (`var`, `func`, and so on) and so the `:=` construct is not available.
+Fora de uma função, toda declaração começa com uma palavra-chave (`var`, `func`, e assim por diante) e então a construção `:=` não está disponível.
 
 .play basics/short-variable-declarations.go
 
-* Basic types
+* Tipos básicos
 
-Go's basic types are
+Os tipos básicos do Go são
 
 	bool
 
@@ -127,102 +128,102 @@ Go's basic types are
 	int  int8  int16  int32  int64
 	uint uint8 uint16 uint32 uint64 uintptr
 
-	byte // alias for uint8
+	byte // alias para uint8
 
-	rune // alias for int32
-	     // represents a Unicode code point
+	rune // alias para int32
+	     // representa um code point Unicode
 
 	float32 float64
 
 	complex64 complex128
 
-The example shows variables of several types,
-and also that variable declarations may be "factored" into blocks,
-as with import statements.
+O exemplo mostra variáveis de vários tipos,
+e também que declarações de variáveis podem ser "fatoradas" em blocos,
+assim como declarações import.
 
-The `int`, `uint`, and `uintptr` types are usually 32 bits wide on 32-bit systems and 64 bits wide on 64-bit systems.
-When you need an integer value you should use `int` unless you have a specific reason to use a sized or unsigned integer type.
+Os tipos `int`, `uint`, e `uintptr` geralmente têm 32 bits de largura em sistemas de 32 bits e 64 bits de largura em sistemas de 64 bits.
+Quando você precisa de um valor inteiro, você deve usar `int` a menos que tenha uma razão específica para usar um tipo inteiro dimensionado ou sem sinal.
 
 .play basics/basic-types.go
 
-* Zero values
+* Valores zero
 
-Variables declared without an explicit initial value are given their
-_zero_value_.
+Variáveis declaradas sem um valor inicial explícito recebem seu
+_valor_zero_.
 
-The zero value is:
+O valor zero é:
 
-- `0` for numeric types,
-- `false` for the boolean type, and
-- `""` (the empty string) for strings.
+- `0` para tipos numéricos,
+- `false` para o tipo boolean, e
+- `""` (a string vazia) para strings.
 
 .play basics/zero.go
 
-* Type conversions
+* Conversões de tipo
 
-The expression `T(v)` converts the value `v` to the type `T`.
+A expressão `T(v)` converte o valor `v` para o tipo `T`.
 
-Some numeric conversions:
+Algumas conversões numéricas:
 
 	var i int = 42
 	var f float64 = float64(i)
 	var u uint = uint(f)
 
-Or, put more simply:
+Ou, colocando de forma mais simples:
 
 	i := 42
 	f := float64(i)
 	u := uint(f)
 
-Unlike in C, in Go assignment between items of different type requires an
-explicit conversion.
-Try removing the `float64` or `uint` conversions in the example and see what happens.
+Diferente de C, em Go a atribuição entre itens de tipos diferentes requer uma
+conversão explícita.
+Tente remover as conversões `float64` ou `uint` no exemplo e veja o que acontece.
 
 .play basics/type-conversions.go
 
-* Type inference
+* Inferência de tipo
 
-When declaring a variable without specifying an explicit type (either by using the `:=` syntax or `var`=` expression syntax), the variable's type is inferred from the value on the right hand side.
+Ao declarar uma variável sem especificar um tipo explícito (seja usando a sintaxe `:=` ou a sintaxe de expressão `var`=`), o tipo da variável é inferido do valor no lado direito.
 
-When the right hand side of the declaration is typed, the new variable is of that same type:
+Quando o lado direito da declaração é tipado, a nova variável é do mesmo tipo:
 
 	var i int
-	j := i // j is an int
+	j := i // j é um int
 
-But when the right hand side contains an untyped numeric constant, the new variable may be an `int`, `float64`, or `complex128` depending on the precision of the constant:
+Mas quando o lado direito contém uma constante numérica sem tipo, a nova variável pode ser um `int`, `float64`, ou `complex128` dependendo da precisão da constante:
 
 	i := 42           // int
 	f := 3.142        // float64
 	g := 0.867 + 0.5i // complex128
 
-Try changing the initial value of `v` in the example code and observe how its type is affected.
+Tente mudar o valor inicial de `v` no código de exemplo e observe como seu tipo é afetado.
 
 .play basics/type-inference.go
 
-* Constants
+* Constantes
 
-Constants are declared like variables, but with the `const` keyword.
+Constantes são declaradas como variáveis, mas com a palavra-chave `const`.
 
-Constants can be character, string, boolean, or numeric values.
+Constantes podem ser caractere, string, boolean, ou valores numéricos.
 
-Constants cannot be declared using the `:=` syntax.
+Constantes não podem ser declaradas usando a sintaxe `:=`.
 
 .play basics/constants.go
 
-* Numeric Constants
+* Constantes Numéricas
 
-Numeric constants are high-precision _values_.
+Constantes numéricas são _valores_ de alta precisão.
 
-An untyped constant takes the type needed by its context.
+Uma constante sem tipo assume o tipo necessário pelo seu contexto.
 
-Try printing `needInt(Big)` too.
+Tente imprimir `needInt(Big)` também.
 
-(An `int` can store at maximum a 64-bit integer, and sometimes less.)
+(Um `int` pode armazenar no máximo um inteiro de 64 bits, e às vezes menos.)
 
 .play basics/numeric-constants.go
 
-* Congratulations!
+* Parabéns!
 
-You finished this lesson!
+Você terminou esta lição!
 
-You can go back to the list of [[/tour/list][modules]] to find what to learn next, or continue with the [[javascript:click('.next-page')][next lesson]].
+Você pode voltar para a lista de [[/tour/list][módulos]] para encontrar o que aprender em seguida, ou continuar com a [[javascript:click('.next-page')][próxima lição]].
