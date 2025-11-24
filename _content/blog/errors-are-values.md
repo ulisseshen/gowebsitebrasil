@@ -1,57 +1,58 @@
 ---
-title: Errors are values
+ia-translated: true
+title: Errors são valores
 date: 2015-01-12
 by:
 - Rob Pike
-summary: Idioms and patterns for handling errors in Go.
+summary: Idiomas e padrões para tratamento de errors em Go.
 ---
 
 
-A common point of discussion among Go programmers,
-especially those new to the language, is how to handle errors.
-The conversation often turns into a lament at the number of times the sequence
+Um ponto comum de discussão entre programadores Go,
+especialmente aqueles novos na linguagem, é como tratar errors.
+A conversa frequentemente se transforma em uma lamentação sobre o número de vezes que a sequência
 
 	if err != nil {
 		return err
 	}
 
-shows up.
-We recently scanned all the open source projects we could find and
-discovered that this snippet occurs only once per page or two,
-less often than some would have you believe.
-Still, if the perception persists that one must type
+aparece.
+Recentemente escaneamos todos os projetos open source que pudemos encontrar e
+descobrimos que este trecho ocorre apenas uma vez a cada página ou duas,
+com menos frequência do que alguns gostariam que você acreditasse.
+Ainda assim, se a percepção persiste de que é preciso digitar
 
 	if err != nil
 
-all the time, something must be wrong, and the obvious target is Go itself.
+o tempo todo, algo deve estar errado, e o alvo óbvio é o próprio Go.
 
-This is unfortunate, misleading, and easily corrected.
-Perhaps what is happening is that programmers new to Go ask,
-"How does one handle errors?", learn this pattern, and stop there.
-In other languages, one might use a try-catch block or other such mechanism to handle errors.
-Therefore, the programmer thinks, when I would have used a try-catch
-in my old language, I will just type `if` `err` `!=` `nil` in Go.
-Over time the Go code collects many such snippets, and the result feels clumsy.
+Isso é infeliz, enganoso e facilmente corrigido.
+Talvez o que esteja acontecendo é que programadores novos em Go perguntam,
+"Como se tratam errors?", aprendem este padrão e param por aí.
+Em outras linguagens, pode-se usar um bloco try-catch ou outro mecanismo similar para tratar errors.
+Portanto, o programador pensa, quando eu teria usado um try-catch
+na minha antiga linguagem, vou apenas digitar `if` `err` `!=` `nil` em Go.
+Com o tempo o código Go acumula muitos desses trechos, e o resultado parece desajeitado.
 
-Regardless of whether this explanation fits,
-it is clear that these Go programmers miss a fundamental point about errors:
-_Errors are values._
+Independentemente de esta explicação se encaixar,
+está claro que esses programadores Go perdem um ponto fundamental sobre errors:
+_Errors são valores._
 
-Values can be programmed, and since errors are values, errors can be programmed.
+Valores podem ser programados, e como errors são valores, errors podem ser programados.
 
-Of course a common statement involving an error value is to test whether it is nil,
-but there are countless other things one can do with an error value,
-and application of some of those other things can make your program better,
-eliminating much of the boilerplate that arises if every error is checked with a rote if statement.
+É claro que uma instrução comum envolvendo um valor de error é testar se ele é nil,
+mas há inúmeras outras coisas que se pode fazer com um valor de error,
+e a aplicação de algumas dessas outras coisas pode tornar seu programa melhor,
+eliminando muito do código repetitivo que surge se cada error é verificado com uma instrução if mecânica.
 
-Here's a simple example from the `bufio` package's
-[`Scanner`](/pkg/bufio/#Scanner) type.
-Its [`Scan`](/pkg/bufio/#Scanner.Scan) method performs the underlying I/O,
-which can of course lead to an error.
-Yet the `Scan` method does not expose an error at all.
-Instead, it returns a boolean, and a separate method, to be run at the end of the scan,
-reports whether an error occurred.
-Client code looks like this:
+Aqui está um exemplo simples do tipo
+[`Scanner`](/pkg/bufio/#Scanner) do pacote `bufio`.
+Seu método [`Scan`](/pkg/bufio/#Scanner.Scan) realiza a E/S subjacente,
+que pode, é claro, levar a um error.
+No entanto, o método `Scan` não expõe um error de forma alguma.
+Em vez disso, ele retorna um booleano, e um método separado, para ser executado no final da varredura,
+informa se ocorreu um error.
+O código cliente se parece com isto:
 
 	scanner := bufio.NewScanner(input)
 	for scanner.Scan() {
@@ -62,12 +63,12 @@ Client code looks like this:
 		// process the error
 	}
 
-Sure, there is a nil check for an error, but it appears and executes only once.
-The `Scan` method could instead have been defined as
+Claro, há uma verificação nil para um error, mas ela aparece e executa apenas uma vez.
+O método `Scan` poderia em vez disso ter sido definido como
 
 	func (s *Scanner) Scan() (token []byte, error)
 
-and then the example user code might be (depending on how the token is retrieved),
+e então o código de usuário exemplo poderia ser (dependendo de como o token é recuperado),
 
 	scanner := bufio.NewScanner(input)
 	for {
@@ -78,35 +79,35 @@ and then the example user code might be (depending on how the token is retrieved
 		// process token
 	}
 
-This isn't very different, but there is one important distinction.
-In this code, the client must check for an error on every iteration,
-but in the real `Scanner` API, the error handling is abstracted away from the key API element,
-which is iterating over tokens.
-With the real API, the client's code therefore feels more natural:
-loop until done, then worry about errors.
-Error handling does not obscure the flow of control.
+Isso não é muito diferente, mas há uma distinção importante.
+Neste código, o cliente deve verificar por um error em cada iteração,
+mas na API `Scanner` real, o tratamento de error é abstraído do elemento chave da API,
+que é iterar sobre tokens.
+Com a API real, o código do cliente portanto parece mais natural:
+loop até terminar, então se preocupe com errors.
+O tratamento de error não obscurece o fluxo de controle.
 
-Under the covers what's happening, of course,
-is that as soon as `Scan` encounters an I/O error, it records it and returns `false`.
-A separate method, [`Err`](/pkg/bufio/#Scanner.Err),
-reports the error value when the client asks.
-Trivial though this is, it's not the same as putting
+Por baixo dos panos o que está acontecendo, é claro,
+é que assim que `Scan` encontra um error de E/S, ele o registra e retorna `false`.
+Um método separado, [`Err`](/pkg/bufio/#Scanner.Err),
+relata o valor do error quando o cliente pede.
+Por mais trivial que isso seja, não é o mesmo que colocar
 
 	if err != nil
 
-everywhere or asking the client to check for an error after every token.
-It's programming with error values.
-Simple programming, yes, but programming nonetheless.
+em todos os lugares ou pedir ao cliente para verificar por um error após cada token.
+É programar com valores de error.
+Programação simples, sim, mas programação mesmo assim.
 
-It's worth stressing that whatever the design,
-it's critical that the program check the errors however they are exposed.
-The discussion here is not about how to avoid checking errors,
-it's about using the language to handle errors with grace.
+Vale a pena enfatizar que qualquer que seja o design,
+é crítico que o programa verifique os errors independentemente de como eles são expostos.
+A discussão aqui não é sobre como evitar verificar errors,
+é sobre usar a linguagem para tratar errors com elegância.
 
-The topic of repetitive error-checking code arose when I attended the autumn 2014 GoCon in Tokyo.
-An enthusiastic gopher, who goes by [`@jxck_`](https://twitter.com/jxck_) on Twitter,
-echoed the familiar lament about error checking.
-He had some code that looked schematically like this:
+O tópico de código repetitivo de verificação de error surgiu quando participei da GoCon de outono de 2014 em Tóquio.
+Um gopher entusiasmado, que se identifica como [`@jxck_`](https://twitter.com/jxck_) no Twitter,
+ecoou a familiar lamentação sobre verificação de error.
+Ele tinha um código que parecia esquematicamente com isto:
 
 	_, err = fd.Write(p0[a:b])
 	if err != nil {
@@ -122,10 +123,10 @@ He had some code that looked schematically like this:
 	}
 	// and so on
 
-It is very repetitive.
-In the real code, which was longer,
-there is more going on so it's not easy to just refactor this using a helper function,
-but in this idealized form, a function literal closing over the error variable would help:
+É muito repetitivo.
+No código real, que era mais longo,
+há mais coisas acontecendo então não é fácil simplesmente refatorar isso usando uma função auxiliar,
+mas nesta forma idealizada, um literal de função fechando sobre a variável error ajudaria:
 
 	var err error
 	write := func(buf []byte) {
@@ -142,28 +143,28 @@ but in this idealized form, a function literal closing over the error variable w
 		return err
 	}
 
-This pattern works well, but requires a closure in each function doing the writes;
-a separate helper function is clumsier to use because the `err` variable
-needs to be maintained across calls (try it).
+Este padrão funciona bem, mas requer um closure em cada função fazendo as escritas;
+uma função auxiliar separada é mais desajeitada de usar porque a variável `err`
+precisa ser mantida através das chamadas (tente).
 
-We can make this cleaner, more general, and reusable by borrowing the idea from the
-`Scan` method above.
-I mentioned this technique in our discussion but `@jxck_` didn't see how to apply it.
-After a long exchange, hampered somewhat by a language barrier,
-I asked if I could just borrow his laptop and show him by typing some code.
+Podemos tornar isso mais limpo, mais geral e reutilizável emprestando a ideia do
+método `Scan` acima.
+Mencionei esta técnica em nossa discussão mas `@jxck_` não viu como aplicá-la.
+Após uma longa troca, dificultada um pouco por uma barreira de idioma,
+perguntei se eu poderia apenas pegar emprestado seu laptop e mostrar a ele digitando algum código.
 
-I defined an object called an `errWriter`, something like this:
+Defini um objeto chamado `errWriter`, algo como isto:
 
 	type errWriter struct {
 		w   io.Writer
 		err error
 	}
 
-and gave it one method, `write.`
-It doesn't need to have the standard `Write` signature,
-and it's lower-cased in part to highlight the distinction.
-The `write` method calls the `Write` method of the underlying `Writer`
-and records the first error for future reference:
+e dei a ele um método, `write.`
+Ele não precisa ter a assinatura `Write` padrão,
+e é minúsculo em parte para destacar a distinção.
+O método `write` chama o método `Write` do `Writer` subjacente
+e registra o primeiro error para referência futura:
 
 	func (ew *errWriter) write(buf []byte) {
 		if ew.err != nil {
@@ -172,11 +173,11 @@ and records the first error for future reference:
 		_, ew.err = ew.w.Write(buf)
 	}
 
-As soon as an error occurs, the `write` method becomes a no-op but the error value is saved.
+Assim que um error ocorre, o método `write` torna-se uma operação vazia mas o valor do error é salvo.
 
-Given the `errWriter` type and its `write` method, the code above can be refactored:
+Dado o tipo `errWriter` e seu método `write`, o código acima pode ser refatorado:
 
-	ew := &errWriter{w: fd}
+	ew := &errWriter{w: fd}
 	ew.write(p0[a:b])
 	ew.write(p1[c:d])
 	ew.write(p2[e:f])
@@ -185,29 +186,29 @@ Given the `errWriter` type and its `write` method, the code above can be refacto
 		return ew.err
 	}
 
-This is cleaner, even compared to the use of a closure,
-and also makes the actual sequence of writes being done easier to see on the page.
-There is no clutter anymore.
-Programming with error values (and interfaces) has made the code nicer.
+Isso é mais limpo, mesmo comparado ao uso de um closure,
+e também torna a sequência real de escritas sendo feitas mais fácil de ver na página.
+Não há mais desordem.
+Programar com valores de error (e interfaces) tornou o código mais agradável.
 
-It's likely that some other piece of code in the same package can build on this idea,
-or even use `errWriter` directly.
+É provável que alguma outra parte do código no mesmo pacote possa construir sobre esta ideia,
+ou até mesmo usar `errWriter` diretamente.
 
-Also, once `errWriter` exists, there's more it could do to help,
-especially in less artificial examples.
-It could accumulate the byte count.
-It could coalesce writes into a single buffer that can then be transmitted atomically.
-And much more.
+Além disso, uma vez que `errWriter` existe, há mais que ele poderia fazer para ajudar,
+especialmente em exemplos menos artificiais.
+Ele poderia acumular a contagem de bytes.
+Ele poderia unir escritas em um único buffer que pode então ser transmitido atomicamente.
+E muito mais.
 
-In fact, this pattern appears often in the standard library.
-The [`archive/zip`](/pkg/archive/zip/) and
-[`net/http`](/pkg/net/http/) packages use it.
-More salient to this discussion, the [`bufio` package's `Writer`](/pkg/bufio/)
-is actually an implementation of the `errWriter` idea.
-Although `bufio.Writer.Write` returns an error,
-that is mostly about honoring the [`io.Writer`](/pkg/io/#Writer) interface.
-The `Write` method of `bufio.Writer` behaves just like our `errWriter.write`
-method above, with `Flush` reporting the error, so our example could be written like this:
+De fato, este padrão aparece frequentemente na biblioteca padrão.
+Os pacotes [`archive/zip`](/pkg/archive/zip/) e
+[`net/http`](/pkg/net/http/) o usam.
+Mais saliente para esta discussão, o [`Writer` do pacote `bufio`](/pkg/bufio/)
+é na verdade uma implementação da ideia `errWriter`.
+Embora `bufio.Writer.Write` retorne um error,
+isso é principalmente sobre honrar a interface [`io.Writer`](/pkg/io/#Writer).
+O método `Write` de `bufio.Writer` comporta-se exatamente como nosso método `errWriter.write`
+acima, com `Flush` reportando o error, então nosso exemplo poderia ser escrito assim:
 
 	b := bufio.NewWriter(fd)
 	b.Write(p0[a:b])
@@ -218,20 +219,20 @@ method above, with `Flush` reporting the error, so our example could be written 
 		return b.Flush()
 	}
 
-There is one significant drawback to this approach, at least for some applications:
-there is no way to know how much of the processing completed before the error occurred.
-If that information is important, a more fine-grained approach is necessary.
-Often, though, an all-or-nothing check at the end is sufficient.
+Há uma desvantagem significativa para esta abordagem, pelo menos para algumas aplicações:
+não há maneira de saber quanto do processamento foi completado antes que o error ocorresse.
+Se essa informação é importante, uma abordagem mais refinada é necessária.
+Frequentemente, no entanto, uma verificação tudo-ou-nada no final é suficiente.
 
-We've looked at just one technique for avoiding repetitive error handling code.
-Keep in mind that the use of `errWriter` or `bufio.Writer` isn't the only way to simplify error handling,
-and this approach is not suitable for all situations.
-The key lesson, however, is that errors are values and the full power of
-the Go programming language is available for processing them.
+Examinamos apenas uma técnica para evitar código repetitivo de tratamento de error.
+Tenha em mente que o uso de `errWriter` ou `bufio.Writer` não é a única maneira de simplificar o tratamento de error,
+e esta abordagem não é adequada para todas as situações.
+A lição chave, no entanto, é que errors são valores e todo o poder da
+linguagem de programação Go está disponível para processá-los.
 
-Use the language to simplify your error handling.
+Use a linguagem para simplificar seu tratamento de error.
 
-But remember: Whatever you do, always check your errors!
+Mas lembre-se: Faça o que fizer, sempre verifique seus errors!
 
-Finally, for the full story of my interaction with @jxck\_, including a little video he recorded,
-visit [his blog](http://jxck.hatenablog.com/entry/golang-error-handling-lesson-by-rob-pike).
+Finalmente, para a história completa da minha interação com @jxck\_, incluindo um pequeno vídeo que ele gravou,
+visite [seu blog](http://jxck.hatenablog.com/entry/golang-error-handling-lesson-by-rob-pike).

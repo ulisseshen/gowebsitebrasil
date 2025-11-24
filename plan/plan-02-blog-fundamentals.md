@@ -54,7 +54,7 @@ Após traduzir cada arquivo, marque o checkpoint com `[x]`.
 
 - [x] `_content/blog/error-handling-and-go.md` - Error handling em Go
 - [ ] `_content/blog/error-syntax.md` - Sintaxe de erros
-- [ ] `_content/blog/errors-are-values.md` - Errors are values
+- [x] `_content/blog/errors-are-values.md` - Errors are values
 - [ ] `_content/blog/go1.13-errors.md` - Erros no Go 1.13
 
 ---
@@ -159,7 +159,7 @@ Após traduzir cada arquivo, marque o checkpoint com `[x]`.
 | Introdução | 6 | 0 | 0% |
 | Sintaxe | 9 | 0 | 0% |
 | Funções | 5 | 0 | 0% |
-| Erros | 4 | 1 | 25% |
+| Erros | 4 | 2 | 50% |
 | Interfaces | 7 | 0 | 0% |
 | Concorrência | 7 | 0 | 0% |
 | Pacotes | 5 | 0 | 0% |
@@ -170,7 +170,7 @@ Após traduzir cada arquivo, marque o checkpoint com `[x]`.
 | Profiling | 2 | 0 | 0% |
 | Debugging | 6 | 0 | 0% |
 | Text | 2 | 0 | 0% |
-| **TOTAL** | **67** | **1** | **1%** |
+| **TOTAL** | **67** | **2** | **3%** |
 
 ---
 
