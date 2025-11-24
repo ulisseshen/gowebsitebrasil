@@ -60,7 +60,7 @@ Após traduzir cada arquivo, marque o checkpoint com `[x]`.
 
 ### 2.2 Tutoriais Avançados (Markdown)
 - [x] `_content/doc/tutorial/database-access.md` - Acesso a banco de dados
-- [ ] `_content/doc/tutorial/web-service-gin.md` - Web service com Gin
+- [x] `_content/doc/tutorial/web-service-gin.md` - Web service com Gin
 - [x] `_content/doc/tutorial/generics.md` - Generics
 - [ ] `_content/doc/tutorial/fuzz.md` - Fuzzing
 - [x] `_content/doc/tutorial/workspaces.md` - Workspaces
