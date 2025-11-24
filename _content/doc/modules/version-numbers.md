@@ -1,36 +1,37 @@
 <!--{
-  "Title": "Module version numbering"
+  "Title": "Module version numbering",
+  "ia-translated": true
 }-->
 
-A module's developer uses each part of a module's version number to signal the
-version’s  stability and backward compatibility. For each new release, a
-module's release version number specifically reflects the nature of the module's
-changes since the preceding release.
+O desenvolvedor de um módulo usa cada parte do número de versão de um módulo para sinalizar a
+estabilidade e compatibilidade retroativa da versão. Para cada novo release, o
+número de versão do release de um módulo reflete especificamente a natureza das mudanças do módulo
+desde o release anterior.
 
-When you're developing code that uses external modules, you can use the version
-numbers to understand an external module's stability when you're considering an
-upgrade. When you're developing your own modules, your version numbers will
-signal your modules' stability and backward compatibility to other developers.
+Quando você está desenvolvendo código que usa módulos externos, você pode usar os números de
+versão para entender a estabilidade de um módulo externo ao considerar uma
+atualização. Quando você está desenvolvendo seus próprios módulos, seus números de versão
+sinalizarão a estabilidade e compatibilidade retroativa dos seus módulos para outros desenvolvedores.
 
-This topic describes what module version numbers mean.
+Este tópico descreve o que os números de versão de módulo significam.
 
-**See also**
+**Veja também**
 
-* When you're using external packages in your code, you can manage those
-  dependencies with Go tools. For more, see [Managing dependencies](managing-dependencies).
-* If you're developing modules for others to use, you apply a version number
-  when you publish the module, tagging the module in its repository. For more,
-  see [Publishing a module](publishing).
+* Quando você está usando packages externos no seu código, você pode gerenciar essas
+  dependências com as ferramentas Go. Para mais, consulte [Managing dependencies](managing-dependencies).
+* Se você está desenvolvendo módulos para outros usarem, você aplica um número de versão
+  quando publica o módulo, tagueando o módulo em seu repositório. Para mais,
+  consulte [Publishing a module](publishing).
 
-A released module is published with a version number in the semantic versioning
-model, as in the following illustration:
+Um módulo lançado é publicado com um número de versão no modelo de versionamento semântico,
+como na seguinte ilustração:
 
 <img src="images/version-number.png"
-     alt="Diagram illustrating a semantic version number showing major version 1, minor version 4, patch version 0, and pre-release version beta 2"
+     alt="Diagrama ilustrando um número de versão semântica mostrando versão major 1, versão minor 4, versão patch 0, e versão pre-release beta 2"
      style="width: 300px;" />
 
-The following table describes how the parts of a version number signify a
-module's stability and backward compatibility.
+A tabela a seguir descreve como as partes de um número de versão significam a
+estabilidade e compatibilidade retroativa de um módulo.
 
 <table class="DocTable">
   <thead>
@@ -43,39 +44,39 @@ module's stability and backward compatibility.
   <tbody>
     <tr class="DocTable-row">
       <td class="DocTable-cell"><a href="#in-development">In development</a></td>
-      <td class="DocTable-cell">Automatic pseudo-version number
+      <td class="DocTable-cell">Número de pseudo-versão automático
       <p>v<strong>0</strong>.x.x</td>
-      <td class="DocTable-cell">Signals that the module is still <strong>in
-        development and unstable</strong>. This release carries no backward
-        compatibility or stability guarantees.</td>
+      <td class="DocTable-cell">Sinaliza que o módulo ainda está <strong>em
+        desenvolvimento e instável</strong>. Este release não carrega garantias de compatibilidade retroativa
+        ou estabilidade.</td>
     </tr>
     <tr class="DocTable-row">
       <td class="DocTable-cell"><a href="#major">Major version</a></td>
       <td class="DocTable-cell">v<strong>1</strong>.x.x</td>
-      <td class="DocTable-cell">Signals <strong>backward-incompatible public API
-        changes</strong>. This release carries no guarantee that it will be
-        backward compatible with preceding major versions.</td>
+      <td class="DocTable-cell">Sinaliza <strong>mudanças incompatíveis na API pública
+        </strong>. Este release não carrega garantia de que será
+        compatível retroativamente com versões major anteriores.</td>
     </tr>
     <tr class="DocTable-row">
       <td class="DocTable-cell"><a href="#minor">Minor version</a></td>
       <td class="DocTable-cell">vx.<strong>4</strong>.x</td>
-      <td class="DocTable-cell">Signals <strong>backward-compatible public API
-        changes</strong>. This release guarantees backward compatibility and
-        stability.</td>
+      <td class="DocTable-cell">Sinaliza <strong>mudanças compatíveis retroativamente na API pública
+        </strong>. Este release garante compatibilidade retroativa e
+        estabilidade.</td>
     </tr>
     <tr class="DocTable-row">
       <td class="DocTable-cell"><a href="#patch">Patch version</a></td>
       <td class="DocTable-cell">vx.x.<strong>1</strong></td>
-      <td class="DocTable-cell">Signals <strong>changes that don't affect the
-        module's public API</strong> or its dependencies. This release
-        guarantees backward compatibility and stability.</td>
+      <td class="DocTable-cell">Sinaliza <strong>mudanças que não afetam a
+        API pública do módulo</strong> ou suas dependências. Este release
+        garante compatibilidade retroativa e estabilidade.</td>
     </tr>
     <tr class="DocTable-row">
       <td class="DocTable-cell"><a href="#pre-release">Pre-release version</a></td>
       <td class="DocTable-cell">vx.x.x-<strong>beta.2</strong></td>
-      <td class="DocTable-cell">Signals that this is a <strong>pre-release
-        milestone, such as an alpha or beta</strong>. This release carries no
-        stability guarantees.</td>
+      <td class="DocTable-cell">Sinaliza que este é um <strong>milestone de pre-release,
+        como um alpha ou beta</strong>. Este release não carrega
+        garantias de estabilidade.</td>
     </tr>
   </tbody>
 </table>
@@ -83,152 +84,152 @@ module's stability and backward compatibility.
 <a id="in-development" ></a>
 ## In development
 
-Signals that the module is still in development and **unstable**. This release
-carries no backward compatibility or stability guarantees.
+Sinaliza que o módulo ainda está em desenvolvimento e **instável**. Este release
+não carrega garantias de compatibilidade retroativa ou estabilidade.
 
-The version number can take one of the following forms:
+O número de versão pode assumir uma das seguintes formas:
 
-**Pseudo-version number**
+**Número de pseudo-versão**
 
 > v0.0.0-20170915032832-14c0d48ead0c
 
-**v0 number**
+**Número v0**
 
 > v0.x.x
 
 <a id="pseudo" ></a>
-### Pseudo-version number
+### Número de pseudo-versão
 
-When a module has not been tagged in its repository, Go tools will generate a
-pseudo-version number for use in the go.mod file of code that calls functions in
-the module.
+Quando um módulo não foi tagueado em seu repositório, as ferramentas Go gerarão um
+número de pseudo-versão para uso no arquivo go.mod do código que chama funções no
+módulo.
 
-**Note:** As a best practice, always allow Go tools to generate the
-pseudo-version number rather than creating your own.
+**Nota:** Como melhor prática, sempre permita que as ferramentas Go gerem o
+número de pseudo-versão em vez de criar o seu próprio.
 
-Pseudo-versions are useful when a developer of code consuming the module's
-functions needs to develop against a commit that hasn't been tagged with a
-semantic version tag yet.
+Pseudo-versões são úteis quando um desenvolvedor de código consumindo as
+funções do módulo precisa desenvolver contra um commit que ainda não foi tagueado com uma
+tag de versão semântica.
 
-A pseudo-version number has three parts separated by dashes, as shown in the
-following form:
+Um número de pseudo-versão tem três partes separadas por hífens, como mostrado na
+seguinte forma:
 
-#### Syntax
+#### Sintaxe
 
 _baseVersionPrefix_-_timestamp_-_revisionIdentifier_
 
-#### Parts
+#### Partes
 
-* **baseVersionPrefix** (vX.0.0 or vX.Y.Z-0) is a value derived either from a
-  semantic version tag that precedes the revision or from vX.0.0 if there is no
-  such tag.
+* **baseVersionPrefix** (vX.0.0 ou vX.Y.Z-0) é um valor derivado ou de uma
+  tag de versão semântica que precede a revisão ou de vX.0.0 se não houver
+  tal tag.
 
-* **timestamp** (yymmddhhmmss) is the UTC time the revision was created. In Git,
-  this is the commit time, not the author time.
+* **timestamp** (yymmddhhmmss) é o horário UTC em que a revisão foi criada. No Git,
+  este é o commit time, não o author time.
 
-* **revisionIdentifier** (abcdefabcdef) is a 12-character prefix of the commit
-  hash, or in Subversion, a zero-padded revision number.
+* **revisionIdentifier** (abcdefabcdef) é um prefixo de 12 caracteres do hash do commit,
+  ou no Subversion, um número de revisão com padding zero.
 
 <a id="v0" ></a>
-### v0 number
+### Número v0
 
-A module published with a v0 number will have a formal semantic version number
-with a major, minor, and patch part, as well as an optional pre-release
-identifier.
+Um módulo publicado com um número v0 terá um número de versão semântica formal
+com uma parte major, minor e patch, bem como um identificador de pre-release
+opcional.
 
-Though a v0 version can be used in production, it makes no stability or backward
-compatibility guarantees. In addition, versions v1 and later are allowed to
-break backward compatibility for code using the v0 versions. For this reason, a
-developer with code consuming functions in a v0 module is responsible for
-adapting to incompatible changes until v1 is released.
+Embora uma versão v0 possa ser usada em produção, ela não faz garantias de estabilidade ou compatibilidade
+retroativa. Além disso, versões v1 e posteriores têm permissão para
+quebrar compatibilidade retroativa para código usando as versões v0. Por esta razão, um
+desenvolvedor com código consumindo funções em um módulo v0 é responsável por
+se adaptar a mudanças incompatíveis até que v1 seja lançado.
 
 <a id="pre-release" ></a>
 ## Pre-release version
 
-Signals that this is a pre-release milestone, such as an alpha or beta. This
-release carries no stability guarantees.
+Sinaliza que este é um milestone de pre-release, como um alpha ou beta. Este
+release não carrega garantias de estabilidade.
 
-#### Example
+#### Exemplo
 
 ```
 vx.x.x-beta.2
 ```
 
-A module's developer can use a pre-release identifier with any major.minor.patch
-combination by appending a hyphen and the pre-release identifier.
+O desenvolvedor de um módulo pode usar um identificador de pre-release com qualquer combinação major.minor.patch
+anexando um hífen e o identificador de pre-release.
 
 <a id="minor" ></a>
 ## Minor version
 
-Signals backward-compatible changes to the module’s public API. This release
-guarantees backward compatibility and stability.
+Sinaliza mudanças compatíveis retroativamente na API pública do módulo. Este release
+garante compatibilidade retroativa e estabilidade.
 
-#### Example
+#### Exemplo
 
 ```
 vx.4.x
 ```
 
-This version changes the module's public API, but not in a way that breaks
-calling code. This might include changes to a module’s own dependencies or the
-addition of new functions, methods, struct fields, or types.
+Esta versão altera a API pública do módulo, mas não de uma maneira que quebre
+código que a chama. Isso pode incluir mudanças nas próprias dependências de um módulo ou a
+adição de novas funções, métodos, campos de struct ou tipos.
 
-In other words, this version might include enhancements through new functions
-that another developer might want to use. However, a developer using previous
-minor versions needn’t change their code otherwise.
+Em outras palavras, esta versão pode incluir melhorias através de novas funções
+que outro desenvolvedor pode querer usar. No entanto, um desenvolvedor usando
+versões minor anteriores não precisa alterar seu código de outra forma.
 
 <a id="patch" ></a>
 ## Patch version
 
-Signals changes that don't affect the module's public API or its dependencies.
-This release guarantees backward compatibility and stability.
+Sinaliza mudanças que não afetam a API pública do módulo ou suas dependências.
+Este release garante compatibilidade retroativa e estabilidade.
 
-#### Example
+#### Exemplo
 
 ```
 vx.x.1
 ```
 
-An update that increments this number is only for minor changes such as bug
-fixes. Developers of consuming code can upgrade to this version safely without
-needing to change their code.
+Uma atualização que incrementa este número é apenas para pequenas mudanças como correções de
+bugs. Desenvolvedores de código consumidor podem atualizar para esta versão com segurança sem
+precisar alterar seu código.
 
 <a id="major" ></a>
 ## Major version
 
-Signals backward-incompatible changes in a module’s public API. This release
-carries no guarantee that it will be backward compatible with preceding major
-versions.
+Sinaliza mudanças incompatíveis retroativamente na API pública de um módulo. Este release
+não carrega garantia de que será compatível retroativamente com versões major
+anteriores.
 
-#### Example
+#### Exemplo
 
 v1.x.x
 
-A v1 or above version number signals that the module is stable for use (with
-exceptions for its pre-release versions).
+Um número de versão v1 ou superior sinaliza que o módulo é estável para uso (com
+exceções para suas versões de pre-release).
 
-Note that because a version 0 makes no stability or backward compatibility
-guarantees, a developer upgrading a module from v0 to v1 is responsible for
-adapting to changes that break backward compatibility.
+Observe que como uma versão 0 não faz garantias de estabilidade ou compatibilidade retroativa,
+um desenvolvedor atualizando um módulo de v0 para v1 é responsável por
+se adaptar a mudanças que quebram compatibilidade retroativa.
 
-A module developer should increment this number past v1 only when necessary
-because the version upgrade represents significant disruption for developers
-whose code uses function in the upgraded module. This disruption includes
-backward-incompatible changes to the public API, as well as the need for
-developers using the module to update the package path wherever they import
-packages from the module.
+Um desenvolvedor de módulo deve incrementar este número além de v1 apenas quando necessário
+porque a atualização de versão representa uma interrupção significativa para desenvolvedores
+cujo código usa funções no módulo atualizado. Esta interrupção inclui
+mudanças incompatíveis retroativamente na API pública, bem como a necessidade de
+desenvolvedores usando o módulo atualizarem o caminho do package onde quer que importem
+packages do módulo.
 
-A major version update to a number higher than v1 will also have a new module
-path. That's because the module path will have the major version number
-appended, as in the following example:
+Uma atualização de versão major para um número maior que v1 também terá um novo caminho de
+módulo. Isso porque o caminho do módulo terá o número de versão major
+anexado, como no exemplo a seguir:
 
 ```
 module example.com/mymodule/v2 v2.0.0
 ```
 
-A major version update makes this a new module with a separate history from the
-module's previous version. If you're developing modules to publish for others,
-see "Publishing breaking API changes" in [Module release and versioning
+Uma atualização de versão major torna este um novo módulo com um histórico separado do
+módulo da versão anterior. Se você está desenvolvendo módulos para publicar para outros,
+consulte "Publishing breaking API changes" em [Module release and versioning
 workflow](release-workflow).
 
-For more on the module directive, see [go.mod reference](gomod-ref).
+Para mais sobre a diretiva module, consulte [go.mod reference](gomod-ref).

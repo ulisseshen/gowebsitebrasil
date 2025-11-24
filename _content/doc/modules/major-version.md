@@ -1,64 +1,65 @@
 <!--{
-  "Title": "Developing a major version update"
+  "Title": "Developing a major version update",
+  "ia-translated": true
 }-->
 
-You must update to a major version when changes you're making in a potential new
-version can't guarantee backward compatibility for the module's users. For
-example, you'll make this change if you change your module's public API such
-that it breaks client code using previous versions of the module.
+Você deve atualizar para uma versão major quando mudanças que você está fazendo em uma potencial nova
+versão não podem garantir compatibilidade retroativa para os usuários do módulo. Por
+exemplo, você fará esta mudança se alterar a API pública do seu módulo de tal forma
+que quebre código cliente usando versões anteriores do módulo.
 
-> **Note:** Each release type -- major, minor, patch, or pre-release -- has a
-different meaning for a module's users. Those users rely on these differences to
-understand the level of risk a release represents to their own code. In other
-words, when preparing a release, be sure that its version number accurately
-reflects the nature of the changes since the preceding release. For more on
-version numbers, see [Module version numbering](/doc/modules/version-numbers).
+> **Nota:** Cada tipo de release -- major, minor, patch, ou pre-release -- tem um
+significado diferente para os usuários de um módulo. Esses usuários confiam nessas diferenças para
+entender o nível de risco que um release representa para seu próprio código. Em outras
+palavras, ao preparar um release, certifique-se de que seu número de versão reflete com precisão
+a natureza das mudanças desde o release anterior. Para mais sobre
+números de versão, consulte [Module version numbering](/doc/modules/version-numbers).
 
-**See also**
+**Veja também**
 
-* For an overview of module development, see [Developing and publishing
+* Para uma visão geral do desenvolvimento de módulos, consulte [Developing and publishing
   modules](developing).
-* For an end-to-end view, see [Module release and versioning
+* Para uma visão end-to-end, consulte [Module release and versioning
   workflow](release-workflow).
 
-## Considerations for a major version update {#considerations}
+## Considerações para uma atualização de versão major {#considerations}
 
-You should only update to a new major version when it's absolutely necessary.
-A major version update represents significant churn for both you and your
-module's users. When you're considering a major version update, think about
-the following:
+Você deve apenas atualizar para uma nova versão major quando for absolutamente necessário.
+Uma atualização de versão major representa uma agitação significativa tanto para você quanto para os
+usuários do seu módulo. Ao considerar uma atualização de versão major, pense sobre
+o seguinte:
 
-* Be clear with your users about what releasing the new major version means
-  for your support of previous major versions.
+* Seja claro com seus usuários sobre o que lançar a nova versão major significa
+  para seu suporte de versões major anteriores.
 
-  Are previous versions deprecated? Supported as they were before? Will you be
-  maintaining previous versions, including with bug fixes?
+  As versões anteriores são depreciadas? Suportadas como eram antes? Você estará
+  mantendo versões anteriores, incluindo com correções de bugs?
 
-* Be ready to take on the maintenance of two versions: the old and the new.
-  For example, if you fix bugs in one, you'll often be porting those fixes into
-  the other.
+* Esteja pronto para assumir a manutenção de duas versões: a antiga e a nova.
+  Por exemplo, se você corrigir bugs em uma, você frequentemente estará portando essas correções para
+  a outra.
 
-* Remember that a new major version is a new module from a dependency management
-  perspective. Your users will need to update to use a new module after you
-  release, rather than simply upgrading.
+* Lembre-se de que uma nova versão major é um novo módulo de uma perspectiva de gerenciamento de
+  dependências. Seus usuários precisarão atualizar para usar um novo módulo após você
+  lançar, em vez de simplesmente fazer upgrade.
 
-  That's because a new major version has a different module path from the
-  preceding major version. For example, for a module whose module path is
-  example.com/mymodule, a v2 version would have the module path
+  Isso porque uma nova versão major tem um caminho de módulo diferente da
+  versão major anterior. Por exemplo, para um módulo cujo caminho de módulo é
+  example.com/mymodule, uma versão v2 teria o caminho de módulo
   example.com/mymodule/v2.
 
-* When you're developing a new major version, you must also update import paths
-  wherever code imports packages from the new module. Your module's users must
-  also update their import paths if they want to upgrade to the new major version.
+* Quando você está desenvolvendo uma nova versão major, você também deve atualizar caminhos de import
+  onde quer que o código importe packages do novo módulo. Os usuários do seu módulo também devem
+  atualizar seus caminhos de import se quiserem fazer upgrade para a nova versão major.
 
-## Branching for a major release {#branching}
+## Ramificando para um release major {#branching}
 
-The most straightforward approach to handling source when preparing to develop a
-new major version is to branch the repository at the latest version of the
-previous major version.
+A abordagem mais direta para lidar com código fonte ao preparar para desenvolver uma
+nova versão major é ramificar o repositório na versão mais recente da
+versão major anterior.
 
-For example, in a command prompt you might change to your module's root
-directory, then create a new v2 branch there.
+Por exemplo, em um prompt de comando você pode mudar para o diretório raiz do seu módulo,
+depois criar um novo branch v2 lá.
 
 ```
 $ cd mymodule
@@ -67,21 +68,21 @@ Switched to a new branch "v2"
 ```
 
 <img src="images/v2-branch-module.png"
-     alt="Diagram illustrating a repository branched from master to v2"
+     alt="Diagrama ilustrando um repositório ramificado de master para v2"
      style="width: 600px;" />
 
 
-Once you have the source branched, you'll need to make the following changes to
-the source for your new version:
+Uma vez que você tem o código fonte ramificado, você precisará fazer as seguintes mudanças no
+código fonte para sua nova versão:
 
-* In the new version's go.mod file, append new major version number to the
-  module path, as in the following example:
-  * Existing version: `example.com/mymodule`
-  * New version: `example.com/mymodule/v2`
+* No arquivo go.mod da nova versão, anexe o novo número de versão major ao
+  caminho do módulo, como no exemplo a seguir:
+  * Versão existente: `example.com/mymodule`
+  * Nova versão: `example.com/mymodule/v2`
 
-* In your Go code, update every imported package path where you import a package
-  from the module, appending the major version number to the module path portion.
-  * Old import statement: `import "example.com/mymodule/package1"`
-  * New import statement: `import "example.com/mymodule/v2/package1"`
+* No seu código Go, atualize cada caminho de package importado onde você importa um package
+  do módulo, anexando o número de versão major à porção do caminho do módulo.
+  * Antiga declaração import: `import "example.com/mymodule/package1"`
+  * Nova declaração import: `import "example.com/mymodule/v2/package1"`
 
-For publishing steps, see [Publishing a module](/doc/modules/publishing).
+Para passos de publicação, consulte [Publishing a module](/doc/modules/publishing).

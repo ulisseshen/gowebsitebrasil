@@ -1,52 +1,53 @@
 <!--{
-  "Title": "Publishing a module"
+  "Title": "Publishing a module",
+  "ia-translated": true
 }-->
 
-When you want to make a module available for other developers, you publish it so
-that it's visible to Go tools. Once you've published the module, developers
-importing its packages will be able to resolve a dependency on the module by
-running commands such as `go get`.
+Quando você quer tornar um módulo disponível para outros desenvolvedores, você o publica para
+que fique visível para as ferramentas Go. Uma vez que você publicou o módulo, desenvolvedores
+importando seus packages poderão resolver uma dependência no módulo executando
+comandos como `go get`.
 
-> **Note:** Don't change a tagged version of a module after publishing it. For
-developers using the module, Go tools authenticate a downloaded module against
-the first downloaded copy. If the two differ, Go tools will return a security
-error. Instead of changing the code for a previously published version, publish
-a new version.
+> **Nota:** Não altere uma versão tagueada de um módulo após publicá-lo. Para
+desenvolvedores usando o módulo, as ferramentas Go autenticam um módulo baixado contra
+a primeira cópia baixada. Se as duas diferirem, as ferramentas Go retornarão um erro de
+segurança. Em vez de alterar o código de uma versão previamente publicada, publique
+uma nova versão.
 
-**See also**
+**Veja também**
 
-* For an overview of module development, see [Developing and publishing
+* Para uma visão geral do desenvolvimento de módulos, consulte [Developing and publishing
   modules](developing)
-* For a high-level module development workflow -- which includes publishing --
-  see [Module release and versioning workflow](release-workflow).
+* Para um workflow de desenvolvimento de módulo de alto nível -- que inclui publicação --
+  consulte [Module release and versioning workflow](release-workflow).
 
-## Publishing steps
+## Passos de publicação
 
-Use the following steps to publish a module.
+Use os seguintes passos para publicar um módulo.
 
-1. Open a command prompt and change to your module's root directory in the local
-  repository.
+1. Abra um prompt de comando e mude para o diretório raiz do seu módulo no repositório
+  local.
 
-1.  Run `go mod tidy`, which removes any dependencies the module might have
-  accumulated that are no longer necessary.
+1.  Execute `go mod tidy`, que remove quaisquer dependências que o módulo possa ter
+  acumulado que não são mais necessárias.
 
     ```
     $ go mod tidy
     ```
 
-1.  Run `go test ./...` a final time to make sure everything is working.
+1.  Execute `go test ./...` uma última vez para garantir que tudo está funcionando.
 
-    This runs the unit tests you've written to use the Go testing framework.
+    Isso executa os testes unitários que você escreveu para usar o framework de teste Go.
 
     ```
     $ go test ./...
     ok      example.com/mymodule       0.015s
     ```
 
-1.  Tag the project with a new version number using the `git tag` command.
+1.  Tagueie o projeto com um novo número de versão usando o comando `git tag`.
 
-    For the version number, use a number that signals to users the nature of
-    changes in this release. For more, see [Module version
+    Para o número de versão, use um número que sinalize aos usuários a natureza das
+    mudanças neste release. Para mais, consulte [Module version
     numbering](version-numbers).
 
     ```
@@ -54,29 +55,28 @@ Use the following steps to publish a module.
     $ git tag v0.1.0
     ```
 
-1.  Push the new tag to the origin repository.
+1.  Faça push da nova tag para o repositório de origem.
 
     ```
     $ git push origin v0.1.0
     ```
 
-1.  Make the module available by running the [`go list`
-  command](/cmd/go/#hdr-List_packages_or_modules) to prompt
-  Go to update its index of modules with information about the module you're
-  publishing.
+1.  Torne o módulo disponível executando o comando [`go list`](/cmd/go/#hdr-List_packages_or_modules) para solicitar
+  que o Go atualize seu índice de módulos com informações sobre o módulo que você está
+  publicando.
 
-    Precede the command with a statement to set the `GOPROXY` environment
-    variable to a Go proxy. This will ensure that your request reaches the
+    Preceda o comando com uma declaração para definir a variável de ambiente `GOPROXY`
+    para um proxy Go. Isso garantirá que sua requisição chegue ao
     proxy.
 
     ```
     $ GOPROXY=proxy.golang.org go list -m example.com/mymodule@v0.1.0
     ```
 
-Developers interested in your module import a package from it and run the [`go
-get` command]() just as they would with any other module. They can run the [`go
-get` command]() for latest versions or they can specify a particular version, as
-in the following example:
+Desenvolvedores interessados no seu módulo importam um package dele e executam o comando [`go
+get`]() assim como fariam com qualquer outro módulo. Eles podem executar o comando [`go
+get`]() para versões mais recentes ou podem especificar uma versão particular, como
+no exemplo a seguir:
 
 ```
 $ go get example.com/mymodule@v0.1.0
