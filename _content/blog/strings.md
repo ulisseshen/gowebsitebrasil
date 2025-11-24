@@ -1,5 +1,6 @@
 ---
-title: Strings, bytes, runes and characters in Go
+ia-translated: true
+title: Strings, bytes, runes e caracteres em Go
 date: 2013-10-23
 by:
 - Rob Pike
@@ -8,330 +9,329 @@ tags:
 - bytes
 - runes
 - characters
-summary: How strings work in Go, and how to use them.
+summary: Como strings funcionam em Go e como usá-las.
 ---
 
-## Introduction
+## Introdução
 
-The [previous blog post](/blog/slices) explained how slices
-work in Go, using a number of examples to illustrate the mechanism behind
-their implementation.
-Building on that background, this post discusses strings in Go.
-At first, strings might seem too simple a topic for a blog post, but to use
-them well requires understanding not only how they work,
-but also the difference between a byte, a character, and a rune,
-the difference between Unicode and UTF-8,
-the difference between a string and a string literal,
-and other even more subtle distinctions.
+O [post anterior do blog](/blog/slices) explicou como slices
+funcionam em Go, usando vários exemplos para ilustrar o mecanismo por trás
+de sua implementação.
+Com base nesse contexto, este post discute strings em Go.
+À primeira vista, strings podem parecer um tópico muito simples para um post de blog, mas para usá-las
+bem é necessário entender não apenas como elas funcionam,
+mas também a diferença entre um byte, um caractere e uma rune,
+a diferença entre Unicode e UTF-8,
+a diferença entre uma string e um string literal,
+e outras distinções ainda mais sutis.
 
-One way to approach this topic is to think of it as an answer to the frequently
-asked question, "When I index a Go string at position _n_, why don't I get the
-_nth_ character?"
-As you'll see, this question leads us to many details about how text works
-in the modern world.
+Uma forma de abordar este tópico é pensar nele como uma resposta à pergunta
+frequente: "Quando eu acesso uma string Go na posição _n_, por que não obtenho o
+_n-ésimo_ caractere?"
+Como você verá, esta pergunta nos leva a muitos detalhes sobre como o texto funciona
+no mundo moderno.
 
-An excellent introduction to some of these issues, independent of Go,
-is Joel Spolsky's famous blog post,
+Uma excelente introdução a alguns desses assuntos, independente de Go,
+é o famoso post de blog de Joel Spolsky,
 [The Absolute Minimum Every Software Developer Absolutely, Positively Must Know About Unicode and Character Sets (No Excuses!)](http://www.joelonsoftware.com/articles/Unicode.html).
-Many of the points he raises will be echoed here.
+Muitos dos pontos que ele levanta serão ecoados aqui.
 
-## What is a string?
+## O que é uma string?
 
-Let's start with some basics.
+Vamos começar com alguns conceitos básicos.
 
-In Go, a string is in effect a read-only slice of bytes.
-If you're at all uncertain about what a slice of bytes is or how it works,
-please read the [previous blog post](/blog/slices);
-we'll assume here that you have.
+Em Go, uma string é, na prática, um slice de bytes somente leitura.
+Se você tem alguma dúvida sobre o que é um slice de bytes ou como funciona,
+por favor leia o [post anterior do blog](/blog/slices);
+vamos assumir aqui que você já leu.
 
-It's important to state right up front that a string holds _arbitrary_ bytes.
-It is not required to hold Unicode text, UTF-8 text, or any other predefined format.
-As far as the content of a string is concerned, it is exactly equivalent to a
-slice of bytes.
+É importante afirmar desde o início que uma string contém bytes _arbitrários_.
+Não é necessário conter texto Unicode, texto UTF-8 ou qualquer outro formato predefinido.
+No que diz respeito ao conteúdo de uma string, ela é exatamente equivalente a um
+slice de bytes.
 
-Here is a string literal (more about those soon) that uses the
-`\xNN` notation to define a string constant holding some peculiar byte values.
-(Of course, bytes range from hexadecimal values 00 through FF, inclusive.)
+Aqui está um string literal (falaremos mais sobre isso em breve) que usa a
+notação `\xNN` para definir uma constante string contendo alguns valores de byte peculiares.
+(É claro, bytes variam de valores hexadecimais 00 até FF, inclusive.)
 
 {{code "strings/basic.go" `/const sample/`}}
 
-## Printing strings
+## Imprimindo strings
 
-Because some of the bytes in our sample string are not valid ASCII, not even
-valid UTF-8, printing the string directly will produce ugly output.
-The simple print statement
+Como alguns dos bytes em nossa string de amostra não são ASCII válido, nem mesmo
+UTF-8 válido, imprimir a string diretamente produzirá uma saída feia.
+O simples comando print
 
 {{code "strings/basic.go" `/println/` `/println/`}}
 
-produces this mess (whose exact appearance varies with the environment):
+produz esta bagunça (cuja aparência exata varia com o ambiente):
 
 	��=� ⌘
 
-To find out what that string really holds, we need to take it apart and examine the pieces.
-There are several ways to do this.
-The most obvious is to loop over its contents and pull out the bytes
-individually, as in this `for` loop:
+Para descobrir o que essa string realmente contém, precisamos desmontá-la e examinar as peças.
+Existem várias formas de fazer isso.
+A mais óbvia é percorrer seu conteúdo e extrair os bytes
+individualmente, como neste loop `for`:
 
 {{code "strings/basic.go" `/byte loop/` `/byte loop/`}}
 
-As implied up front, indexing a string accesses individual bytes, not
-characters. We'll return to that topic in detail below. For now, let's
-stick with just the bytes.
-This is the output from the byte-by-byte loop:
+Como mencionado anteriormente, indexar uma string acessa bytes individuais, não
+caracteres. Retornaremos a esse tópico em detalhes abaixo. Por enquanto, vamos
+focar apenas nos bytes.
+Esta é a saída do loop byte por byte:
 
 	bd b2 3d bc 20 e2 8c 98
 
-Notice how the individual bytes match the
-hexadecimal escapes that defined the string.
+Observe como os bytes individuais correspondem aos
+escapes hexadecimais que definiram a string.
 
-A shorter way to generate presentable output for a messy string
-is to use the `%x` (hexadecimal) format verb of `fmt.Printf`.
-It just dumps out the sequential bytes of the string as hexadecimal
-digits, two per byte.
+Uma forma mais curta de gerar uma saída apresentável para uma string confusa
+é usar o verbo de formato `%x` (hexadecimal) do `fmt.Printf`.
+Ele simplesmente despeja os bytes sequenciais da string como dígitos
+hexadecimais, dois por byte.
 
 {{code "strings/basic.go" `/percent x/` `/percent x/`}}
 
-Compare its output to that above:
+Compare sua saída com a acima:
 
 	bdb23dbc20e28c98
 
-A nice trick is to use the "space" flag in that format, putting a
-space between the `%` and the `x`. Compare the format string
-used here to the one above,
+Um truque legal é usar a flag "space" nesse formato, colocando um
+espaço entre o `%` e o `x`. Compare a string de formato
+usada aqui com a acima,
 
 {{code "strings/basic.go" `/percent space x/` `/percent space x/`}}
 
-and notice how the bytes come
-out with spaces between, making the result a little less imposing:
+e observe como os bytes saem
+com espaços entre eles, tornando o resultado um pouco menos intimidador:
 
 	bd b2 3d bc 20 e2 8c 98
 
-There's more. The `%q` (quoted) verb will escape any non-printable
-byte sequences in a string so the output is unambiguous.
+Há mais. O verbo `%q` (quoted) escapará quaisquer sequências de
+bytes não imprimíveis em uma string para que a saída seja inequívoca.
 
 {{code "strings/basic.go" `/percent q/` `/percent q/`}}
 
-This technique is handy when much of the string is
-intelligible as text but there are peculiarities to root out; it produces:
+Esta técnica é útil quando grande parte da string é
+inteligível como texto, mas há peculiaridades a serem descobertas; ela produz:
 
 	"\xbd\xb2=\xbc ⌘"
 
-If we squint at that, we can see that buried in the noise is one ASCII equals sign,
-along with a regular space, and at the end appears the well-known Swedish "Place of Interest"
-symbol.
-That symbol has Unicode value U+2318, encoded as UTF-8 by the bytes
-after the space (hex value `20`): `e2` `8c` `98`.
+Se observarmos atentamente, podemos ver que enterrado no ruído há um sinal de igual ASCII,
+junto com um espaço regular, e no final aparece o bem conhecido símbolo sueco "Place of Interest"
+(Ponto de Interesse).
+Esse símbolo tem o valor Unicode U+2318, codificado como UTF-8 pelos bytes
+após o espaço (valor hex `20`): `e2` `8c` `98`.
 
-If we are unfamiliar or confused by strange values in the string,
-we can use the "plus" flag to the `%q` verb. This flag causes the output to escape
-not only non-printable sequences, but also any non-ASCII bytes, all
-while interpreting UTF-8.
-The result is that it exposes the Unicode values of properly formatted UTF-8
-that represents non-ASCII data in the string:
+Se não estivermos familiarizados ou confusos com valores estranhos na string,
+podemos usar a flag "plus" com o verbo `%q`. Esta flag faz com que a saída escape
+não apenas sequências não imprimíveis, mas também quaisquer bytes não-ASCII, tudo
+enquanto interpreta UTF-8.
+O resultado é que ela expõe os valores Unicode de UTF-8 formatado corretamente
+que representa dados não-ASCII na string:
 
 {{code "strings/basic.go" `/percent plus q/` `/percent plus q/`}}
 
-With that format, the Unicode value of the Swedish symbol shows up as a
-`\u` escape:
+Com esse formato, o valor Unicode do símbolo sueco aparece como um
+escape `\u`:
 
 	"\xbd\xb2=\xbc \u2318"
 
-These printing techniques are good to know when debugging
-the contents of strings, and will be handy in the discussion that follows.
-It's worth pointing out as well that all these methods behave exactly the
-same for byte slices as they do for strings.
+Essas técnicas de impressão são boas para conhecer ao fazer debug
+do conteúdo de strings e serão úteis na discussão a seguir.
+Vale a pena destacar também que todos esses métodos se comportam exatamente da
+mesma forma para slices de bytes como fazem para strings.
 
-Here's the full set of printing options we've listed, presented as
-a complete program you can run (and edit) right in the browser:
+Aqui está o conjunto completo de opções de impressão que listamos, apresentado como
+um programa completo que você pode executar (e editar) direto no navegador:
 
 {{play "strings/basic.go" `/package/` `/^}/`}}
 
-[Exercise: Modify the examples above to use a slice of bytes
-instead of a string. Hint: Use a conversion to create the slice.]
+[Exercício: Modifique os exemplos acima para usar um slice de bytes
+em vez de uma string. Dica: Use uma conversão para criar o slice.]
 
-[Exercise: Loop over the string using the `%q` format on each byte.
-What does the output tell you?]
+[Exercício: Percorra a string usando o formato `%q` em cada byte.
+O que a saída te diz?]
 
-## UTF-8 and string literals
+## UTF-8 e string literals
 
-As we saw, indexing a string yields its bytes, not its characters: a string is just a
-bunch of bytes.
-That means that when we store a character value in a string,
-we store its byte-at-a-time representation.
-Let's look at a more controlled example to see how that happens.
+Como vimos, indexar uma string produz seus bytes, não seus caracteres: uma string é apenas um
+monte de bytes.
+Isso significa que quando armazenamos um valor de caractere em uma string,
+armazenamos sua representação byte por byte.
+Vamos ver um exemplo mais controlado para entender como isso acontece.
 
-Here's a simple program that prints a string constant with a single character
-three different ways, once as a plain string, once as an ASCII-only quoted
-string, and once as individual bytes in hexadecimal.
-To avoid any confusion, we create a "raw string", enclosed by back quotes,
-so it can contain only literal text. (Regular strings, enclosed by double
-quotes, can contain escape sequences as we showed above.)
+Aqui está um programa simples que imprime uma constante string com um único caractere
+de três formas diferentes: uma vez como uma string simples, uma vez como uma string
+quoted somente ASCII, e uma vez como bytes individuais em hexadecimal.
+Para evitar qualquer confusão, criamos uma "raw string", delimitada por crases,
+para que possa conter apenas texto literal. (Strings regulares, delimitadas por aspas
+duplas, podem conter sequências de escape como mostramos acima.)
 
 {{play "strings/utf8.go" `/^func/` `/^}/`}}
 
-The output is:
+A saída é:
 
 	plain string: ⌘
 	quoted string: "\u2318"
 	hex bytes: e2 8c 98
 
-which reminds us that the Unicode character value U+2318, the "Place
-of Interest" symbol ⌘, is represented by the bytes `e2` `8c` `98`, and
-that those bytes are the UTF-8 encoding of the hexadecimal
-value 2318.
+o que nos lembra que o valor de caractere Unicode U+2318, o símbolo "Place
+of Interest" ⌘, é representado pelos bytes `e2` `8c` `98`, e
+que esses bytes são a codificação UTF-8 do valor
+hexadecimal 2318.
 
-It may be obvious or it may be subtle, depending on your familiarity with
-UTF-8, but it's worth taking a moment to explain how the UTF-8 representation
-of the string was created.
-The simple fact is: it was created when the source code was written.
+Pode ser óbvio ou pode ser sutil, dependendo da sua familiaridade com
+UTF-8, mas vale a pena dedicar um momento para explicar como a representação UTF-8
+da string foi criada.
+O fato simples é: ela foi criada quando o código-fonte foi escrito.
 
-Source code in Go is _defined_ to be UTF-8 text; no other representation is
-allowed. That implies that when, in the source code, we write the text
+O código-fonte em Go é _definido_ como texto UTF-8; nenhuma outra representação é
+permitida. Isso implica que quando, no código-fonte, escrevemos o texto
 
 	`⌘`
 
-the text editor used to create the program places the UTF-8 encoding
-of the symbol ⌘ into the source text.
-When we print out the hexadecimal bytes, we're just dumping the
-data the editor placed in the file.
+o editor de texto usado para criar o programa coloca a codificação UTF-8
+do símbolo ⌘ no texto fonte.
+Quando imprimimos os bytes hexadecimais, estamos apenas despejando os
+dados que o editor colocou no arquivo.
 
-In short, Go source code is UTF-8, so
-_the source code for the string literal is UTF-8 text_.
-If that string literal contains no escape sequences, which a raw
-string cannot, the constructed string will hold exactly the
-source text  between the quotes.
-Thus by definition and
-by construction the raw string will always contain a valid UTF-8
-representation of its contents.
-Similarly, unless it contains UTF-8-breaking escapes like those
-from the previous section, a regular string literal will also always
-contain valid UTF-8.
+Em resumo, o código-fonte Go é UTF-8, então
+_o código-fonte para o string literal é texto UTF-8_.
+Se esse string literal não contém sequências de escape, o que uma raw
+string não pode conter, a string construída conterá exatamente o
+texto fonte entre as aspas.
+Assim, por definição e
+por construção, a raw string sempre conterá uma representação UTF-8
+válida de seu conteúdo.
+Da mesma forma, a menos que contenha escapes que quebrem UTF-8 como os
+da seção anterior, um string literal regular também sempre
+conterá UTF-8 válido.
 
-Some people think Go strings are always UTF-8, but they
-are not: only string literals are UTF-8.
-As we showed in the previous section, string _values_ can contain arbitrary
-bytes;
-as we showed in this one, string _literals_ always contain UTF-8 text
-as long as they have no byte-level escapes.
+Algumas pessoas pensam que strings Go são sempre UTF-8, mas elas
+não são: apenas string literals são UTF-8.
+Como mostramos na seção anterior, _valores_ de string podem conter bytes arbitrários;
+como mostramos nesta, string _literals_ sempre contêm texto UTF-8
+desde que não tenham escapes de nível de byte.
 
-To summarize, strings can contain arbitrary bytes, but when constructed
-from string literals, those bytes are (almost always) UTF-8.
+Para resumir, strings podem conter bytes arbitrários, mas quando construídas
+a partir de string literals, esses bytes são (quase sempre) UTF-8.
 
-## Code points, characters, and runes
+## Code points, caracteres e runes
 
-We've been very careful so far in how we use the words "byte" and "character".
-That's partly because strings hold bytes, and partly because the idea of "character"
-is a little hard to define.
-The Unicode standard uses the term "code point" to refer to the item represented
-by a single value.
-The code point U+2318, with hexadecimal value 2318, represents the symbol ⌘.
-(For lots more information about that code point, see
-[its Unicode page](http://unicode.org/cldr/utility/character.jsp?a=2318).)
+Temos sido muito cuidadosos até agora em como usamos as palavras "byte" e "caractere".
+Isso é em parte porque strings contêm bytes, e em parte porque a ideia de "caractere"
+é um pouco difícil de definir.
+O padrão Unicode usa o termo "code point" para se referir ao item representado
+por um único valor.
+O code point U+2318, com valor hexadecimal 2318, representa o símbolo ⌘.
+(Para muito mais informações sobre esse code point, veja
+[sua página Unicode](http://unicode.org/cldr/utility/character.jsp?a=2318).)
 
-To pick a more prosaic example, the Unicode code point U+0061 is the lower
-case Latin letter 'A': a.
+Para escolher um exemplo mais prosaico, o code point Unicode U+0061 é a letra
+latina minúscula 'A': a.
 
-But what about the lower case grave-accented letter 'A', à?
-That's a character, and it's also a code point (U+00E0), but it has other
-representations.
-For example we can use the "combining" grave accent code point, U+0300,
-and attach it to the lower case letter a, U+0061, to create the same character à.
-In general, a character may be represented by a number of different
-sequences of code points, and therefore different sequences of UTF-8 bytes.
+Mas e quanto à letra minúscula 'A' com acento grave, à?
+Isso é um caractere, e também é um code point (U+00E0), mas tem outras
+representações.
+Por exemplo, podemos usar o code point de acento grave "combining" (combinável), U+0300,
+e anexá-lo à letra minúscula a, U+0061, para criar o mesmo caractere à.
+Em geral, um caractere pode ser representado por várias
+sequências diferentes de code points, e portanto diferentes sequências de bytes UTF-8.
 
-The concept of character in computing is therefore ambiguous, or at least
-confusing, so we use it with care.
-To make things dependable, there are _normalization_ techniques that guarantee that
-a given character is always represented by the same code points, but that
-subject takes us too far off the topic for now.
-A later blog post will explain how the Go libraries address normalization.
+O conceito de caractere em computação é, portanto, ambíguo, ou pelo menos
+confuso, então o usamos com cuidado.
+Para tornar as coisas confiáveis, existem técnicas de _normalização_ que garantem que
+um determinado caractere sempre seja representado pelos mesmos code points, mas esse
+assunto nos leva muito longe do tópico por enquanto.
+Um post de blog posterior explicará como as bibliotecas Go abordam a normalização.
 
-"Code point" is a bit of a mouthful, so Go introduces a shorter term for the
-concept: _rune_.
-The term appears in the libraries and source code, and means exactly
-the same as "code point", with one interesting addition.
+"Code point" é um bocado, então Go introduz um termo mais curto para o
+conceito: _rune_.
+O termo aparece nas bibliotecas e código-fonte, e significa exatamente
+o mesmo que "code point", com uma adição interessante.
 
-The Go language defines the word `rune` as an alias for the type `int32`, so
-programs can be clear when an integer value represents a code point.
-Moreover, what you might think of as a character constant is called a
-_rune constant_ in Go.
-The type and value of the expression
+A linguagem Go define a palavra `rune` como um alias para o tipo `int32`, então
+programas podem ser claros quando um valor inteiro representa um code point.
+Além disso, o que você pode pensar como uma constante de caractere é chamado de
+_constante rune_ em Go.
+O tipo e valor da expressão
 
 	'⌘'
 
-is `rune` with integer value `0x2318`.
+é `rune` com valor inteiro `0x2318`.
 
-To summarize, here are the salient points:
+Para resumir, aqui estão os pontos salientes:
 
-  - Go source code is always UTF-8.
-  - A string holds arbitrary bytes.
-  - A string literal, absent byte-level escapes, always holds valid UTF-8 sequences.
-  - Those sequences represent Unicode code points, called runes.
-  - No guarantee is made in Go that characters in strings are normalized.
+  - O código-fonte Go é sempre UTF-8.
+  - Uma string contém bytes arbitrários.
+  - Um string literal, na ausência de escapes de nível de byte, sempre contém sequências UTF-8 válidas.
+  - Essas sequências representam code points Unicode, chamados runes.
+  - Não há garantia em Go de que caracteres em strings sejam normalizados.
 
-## Range loops
+## Loops Range
 
-Besides the axiomatic detail that Go source code is UTF-8,
-there's really only one way that Go treats UTF-8 specially, and that is when using
-a `for` `range` loop on a string.
+Além do detalhe axiomático de que o código-fonte Go é UTF-8,
+há realmente apenas uma forma em que Go trata UTF-8 de maneira especial, e isso é ao usar
+um loop `for` `range` em uma string.
 
-We've seen what happens with a regular `for` loop.
-A `for` `range` loop, by contrast, decodes one UTF-8-encoded rune on each
-iteration.
-Each time around the loop, the index of the loop is the starting position of the
-current rune, measured in bytes, and the code point is its value.
-Here's an example using yet another handy `Printf` format, `%#U`, which shows
-the code point's Unicode value and its printed representation:
+Vimos o que acontece com um loop `for` regular.
+Um loop `for` `range`, em contraste, decodifica uma rune codificada em UTF-8 em cada
+iteração.
+A cada volta do loop, o índice do loop é a posição inicial da
+rune atual, medida em bytes, e o code point é seu valor.
+Aqui está um exemplo usando outro formato útil do `Printf`, `%#U`, que mostra
+o valor Unicode do code point e sua representação impressa:
 
 {{play "strings/range.go" `/const/` `/}/`}}
 
-The output shows how each code point occupies multiple bytes:
+A saída mostra como cada code point ocupa múltiplos bytes:
 
 	U+65E5 '日' starts at byte position 0
 	U+672C '本' starts at byte position 3
 	U+8A9E '語' starts at byte position 6
 
-[Exercise: Put an invalid UTF-8 byte sequence into the string. (How?)
-What happens to the iterations of the loop?]
+[Exercício: Coloque uma sequência de bytes UTF-8 inválida na string. (Como?)
+O que acontece com as iterações do loop?]
 
-## Libraries
+## Bibliotecas
 
-Go's standard library provides strong support for interpreting UTF-8 text.
-If a `for` `range` loop isn't sufficient for your purposes,
-chances are the facility you need is provided by a package in the library.
+A biblioteca padrão do Go fornece suporte robusto para interpretar texto UTF-8.
+Se um loop `for` `range` não for suficiente para seus propósitos,
+é provável que a funcionalidade que você precisa seja fornecida por um pacote na biblioteca.
 
-The most important such package is
+O pacote mais importante é
 [`unicode/utf8`](/pkg/unicode/utf8/),
-which contains
-helper routines to validate, disassemble, and reassemble UTF-8 strings.
-Here is a program equivalent to the `for` `range` example above,
-but using the `DecodeRuneInString` function from that package to
-do the work.
-The return values from the function are the rune and its width in
-UTF-8-encoded bytes.
+que contém
+rotinas auxiliares para validar, desmontar e remontar strings UTF-8.
+Aqui está um programa equivalente ao exemplo `for` `range` acima,
+mas usando a função `DecodeRuneInString` desse pacote para
+fazer o trabalho.
+Os valores de retorno da função são a rune e sua largura em
+bytes codificados em UTF-8.
 
 {{play "strings/encoding.go" `/const/` `/}/`}}
 
-Run it to see that it performs the same.
-The `for` `range` loop and `DecodeRuneInString` are defined to produce
-exactly the same iteration sequence.
+Execute-o para ver que ele executa da mesma forma.
+O loop `for` `range` e `DecodeRuneInString` são definidos para produzir
+exatamente a mesma sequência de iteração.
 
-Look at the
-[documentation](/pkg/unicode/utf8/)
-for the `unicode/utf8` package to see what
-other facilities it provides.
+Veja a
+[documentação](/pkg/unicode/utf8/)
+do pacote `unicode/utf8` para conhecer quais
+outras funcionalidades ele oferece.
 
-## Conclusion
+## Conclusão
 
-To answer the question posed at the beginning: Strings are built from bytes
-so indexing them yields bytes, not characters.
-A string might not even hold characters.
-In fact, the definition of "character" is ambiguous and it would
-be a mistake to try to resolve the ambiguity by defining that strings are made
-of characters.
+Para responder à pergunta colocada no início: Strings são construídas a partir de bytes,
+então indexá-las produz bytes, não caracteres.
+Uma string pode nem mesmo conter caracteres.
+Na verdade, a definição de "caractere" é ambígua e seria
+um erro tentar resolver a ambiguidade definindo que strings são feitas
+de caracteres.
 
-There's much more to say about Unicode, UTF-8, and the world of multilingual
-text processing, but it can wait for another post.
-For now, we hope you have a better understanding of how Go strings behave
-and that, although they may contain arbitrary bytes, UTF-8 is a central part
-of their design.
+Há muito mais a dizer sobre Unicode, UTF-8 e o mundo do processamento de
+texto multilíngue, mas isso pode esperar por outro post.
+Por enquanto, esperamos que você tenha uma melhor compreensão de como strings Go se comportam
+e que, embora possam conter bytes arbitrários, UTF-8 é uma parte central
+de seu design.
