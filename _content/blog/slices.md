@@ -1,5 +1,6 @@
 ---
-title: "Arrays, slices (and strings): The mechanics of 'append'"
+ia-translated: true
+title: "Arrays, slices (e strings): A mecânica de 'append'"
 date: 2013-09-26
 by:
 - Rob Pike
@@ -9,106 +10,106 @@ tags:
 - string
 - copy
 - append
-summary: How Go arrays and slices work, and how to use copy and append.
+summary: Como arrays e slices do Go funcionam, e como usar copy e append.
 ---
 
-## Introduction
+## Introdução
 
-One of the most common features of procedural programming languages is
-the concept of an array.
-Arrays seem like simple things but there are many questions that must be
-answered when adding them to a language, such as:
+Um dos recursos mais comuns das linguagens de programação procedurais é
+o conceito de array.
+Arrays parecem coisas simples, mas há muitas perguntas que devem ser
+respondidas ao adicioná-los a uma linguagem, tais como:
 
-  - fixed-size or variable-size?
-  - is the size part of the type?
-  - what do multidimensional arrays look like?
-  - does the empty array have meaning?
+  - tamanho fixo ou variável?
+  - o tamanho faz parte do tipo?
+  - como são os arrays multidimensionais?
+  - o array vazio tem significado?
 
-The answers to these questions affect whether arrays are just
-a feature of the language or a core part of its design.
+As respostas a essas perguntas afetam se os arrays são apenas
+um recurso da linguagem ou uma parte central de seu design.
 
-In the early development of Go, it took about a year to decide the answers
-to these questions before the design felt right.
-The key step was the introduction of _slices_, which built on fixed-size
-_arrays_ to give a flexible, extensible data structure.
-To this day, however, programmers new to Go often stumble over the way slices
-work, perhaps because experience from other languages has colored their thinking.
+No desenvolvimento inicial de Go, levou cerca de um ano para decidir as respostas
+a essas perguntas antes que o design parecesse certo.
+O passo chave foi a introdução de _slices_, que se construíram sobre _arrays_
+de tamanho fixo para fornecer uma estrutura de dados flexível e extensível.
+Até hoje, no entanto, programadores novos em Go frequentemente tropeçam na maneira como slices
+funcionam, talvez porque a experiência de outras linguagens tenha colorido seu pensamento.
 
-In this post we'll attempt to clear up the confusion.
-We'll do so by building up the pieces to explain how the `append` built-in function
-works, and why it works the way it does.
+Neste post tentaremos esclarecer a confusão.
+Faremos isso construindo as peças para explicar como a função built-in `append`
+funciona, e por que funciona da maneira que funciona.
 
 ## Arrays
 
-Arrays are an important building block in Go, but like the foundation of a building
-they are often hidden below more visible components.
-We must talk about them briefly before we move on to the more interesting,
-powerful, and prominent idea of slices.
+Arrays são um bloco de construção importante em Go, mas como a fundação de um edifício
+eles frequentemente ficam ocultos abaixo de componentes mais visíveis.
+Devemos falar sobre eles brevemente antes de passarmos para a ideia mais interessante,
+poderosa e proeminente dos slices.
 
-Arrays are not often seen in Go programs because
-the size of an array is part of its type, which limits its expressive power.
+Arrays não são frequentemente vistos em programas Go porque
+o tamanho de um array faz parte de seu tipo, o que limita seu poder expressivo.
 
-The declaration
+A declaração
 
 {{code "slices/prog010.go" `/var buffer/`}}
 
-declares the variable `buffer`, which holds 256 bytes.
-The type of `buffer` includes its size, `[256]byte`.
-An array with 512 bytes would be of the distinct type `[512]byte`.
+declara a variável `buffer`, que contém 256 bytes.
+O tipo de `buffer` inclui seu tamanho, `[256]byte`.
+Um array com 512 bytes seria do tipo distinto `[512]byte`.
 
-The data associated with an array is just that: an array of elements.
-Schematically, our buffer looks like this in memory,
+Os dados associados a um array são apenas isso: um array de elementos.
+Esquematicamente, nosso buffer se parece com isso na memória,
 
-	buffer: byte byte byte ... 256 times ... byte byte byte
+	buffer: byte byte byte ... 256 vezes ... byte byte byte
 
-That is, the variable holds 256 bytes of data and nothing else. We can
-access its elements with the familiar indexing syntax, `buffer[0]`, `buffer[1]`,
-and so on through `buffer[255]`. (The index range 0 through 255 covers
-256 elements.) Attempting to index `buffer` with a value outside this
-range will crash the program.
+Ou seja, a variável contém 256 bytes de dados e nada mais. Podemos
+acessar seus elementos com a sintaxe de indexação familiar, `buffer[0]`, `buffer[1]`,
+e assim por diante até `buffer[255]`. (A faixa de índice 0 a 255 cobre
+256 elementos.) Tentar indexar `buffer` com um valor fora dessa
+faixa fará o programa travar.
 
-There is a built-in function called `len` that returns the number of elements
-of an array or slice and also of a few other data types.
-For arrays, it's obvious what `len` returns.
-In our example, `len(buffer)` returns the fixed value 256.
+Há uma função built-in chamada `len` que retorna o número de elementos
+de um array ou slice e também de alguns outros tipos de dados.
+Para arrays, é óbvio o que `len` retorna.
+Em nosso exemplo, `len(buffer)` retorna o valor fixo 256.
 
-Arrays have their place—they are a good representation of a transformation
-matrix for instance—but their most common purpose in Go is to hold storage
-for a slice.
+Arrays têm seu lugar—eles são uma boa representação de uma matriz de transformação,
+por exemplo—mas seu propósito mais comum em Go é conter armazenamento
+para um slice.
 
-## Slices: The slice header
+## Slices: O header de slice
 
-Slices are where the action is, but to use them well one must understand
-exactly what they are and what they do.
+Slices são onde a ação está, mas para usá-los bem é preciso entender
+exatamente o que eles são e o que fazem.
 
-A slice is a data structure describing a contiguous section of an array
-stored separately from the slice variable itself.
-_A slice is not an array_.
-A slice _describes_ a piece of an array.
+Um slice é uma estrutura de dados que descreve uma seção contígua de um array
+armazenado separadamente da variável slice em si.
+_Um slice não é um array_.
+Um slice _descreve_ um pedaço de um array.
 
-Given our `buffer` array variable from the previous section, we could create
-a slice that describes elements 100 through 150 (to be precise, 100 through 149,
-inclusive) by _slicing_ the array:
+Dada nossa variável array `buffer` da seção anterior, poderíamos criar
+um slice que descreve os elementos 100 a 150 (para ser preciso, 100 a 149,
+inclusivo) fazendo _slicing_ do array:
 
 {{code "slices/prog010.go" `/var slice/`}}
 
-In that snippet we used the full variable declaration to be explicit.
-The variable `slice` has type `[]byte`, pronounced "slice of bytes",
-and is initialized from the array, called
-`buffer`, by slicing elements 100 (inclusive) through 150 (exclusive).
-The more idiomatic syntax would drop the type, which is set by the initializing expression:
+Nesse trecho usamos a declaração de variável completa para ser explícito.
+A variável `slice` tem tipo `[]byte`, pronunciado "slice de bytes",
+e é inicializada a partir do array, chamado
+`buffer`, fazendo slicing dos elementos 100 (inclusivo) a 150 (exclusivo).
+A sintaxe mais idiomática omitiria o tipo, que é definido pela expressão de inicialização:
 
 	var slice = buffer[100:150]
 
-Inside a function we could use the short declaration form,
+Dentro de uma função poderíamos usar a forma de declaração curta,
 
 	slice := buffer[100:150]
 
-What exactly is this slice variable?
-It's not quite the full story, but for now think of a
-slice as a little data structure with two elements: a length and a pointer to an element
-of an array.
-You can think of it as being built like this behind the scenes:
+O que exatamente é essa variável slice?
+Não é bem a história completa, mas por enquanto pense em um
+slice como uma pequena estrutura de dados com dois elementos: um comprimento e um ponteiro para um elemento
+de um array.
+Você pode pensar nisso como sendo construído assim nos bastidores:
 
 	type sliceHeader struct {
 		Length        int
@@ -120,156 +121,155 @@ You can think of it as being built like this behind the scenes:
 		ZerothElement: &buffer[100],
 	}
 
-Of course, this is just an illustration.
-Despite what this snippet says that `sliceHeader` struct is not visible
-to the programmer, and the type
-of the element pointer depends on the type of the elements,
-but this gives the general idea of the mechanics.
+Claro, isso é apenas uma ilustração.
+Apesar do que este trecho diz, a struct `sliceHeader` não é visível
+para o programador, e o tipo
+do ponteiro de elemento depende do tipo dos elementos,
+mas isso dá a ideia geral da mecânica.
 
-So far we've used a slice operation on an array, but we can also slice a slice, like this:
+Até agora usamos uma operação de slice em um array, mas também podemos fazer slice de um slice, assim:
 
 	slice2 := slice[5:10]
 
-Just as before, this operation creates a new slice, in this case with elements
-5 through 9 (inclusive) of the original slice, which means elements
-105 through 109 of the original array.
-The underlying `sliceHeader` struct for the `slice2` variable looks like
-this:
+Assim como antes, essa operação cria um novo slice, neste caso com elementos
+5 a 9 (inclusivo) do slice original, o que significa elementos
+105 a 109 do array original.
+A struct `sliceHeader` subjacente para a variável `slice2` se parece com
+isso:
 
 	slice2 := sliceHeader{
 		Length:        5,
 		ZerothElement: &buffer[105],
 	}
 
-Notice that this header still points to the same underlying array, stored in
-the `buffer` variable.
+Note que esse header ainda aponta para o mesmo array subjacente, armazenado na
+variável `buffer`.
 
-We can also _reslice_, which is to say slice a slice and store the result back in
-the original slice structure. After
+Também podemos fazer _reslice_, ou seja, fazer slice de um slice e armazenar o resultado de volta na
+estrutura slice original. Depois de
 
 	slice = slice[5:10]
 
-the `sliceHeader` structure for the `slice` variable looks just like it did for the `slice2`
-variable.
-You'll see reslicing used often, for example to truncate a slice. This statement drops
-the first and last elements of our slice:
+a estrutura `sliceHeader` para a variável `slice` se parece exatamente como ficou para a variável `slice2`.
+Você verá reslicing usado frequentemente, por exemplo para truncar um slice. Esta declaração remove
+o primeiro e último elementos do nosso slice:
 
 	slice = slice[1:len(slice)-1]
 
-[Exercise: Write out what the `sliceHeader` struct looks like after this assignment.]
+[Exercício: Escreva como a struct `sliceHeader` fica após esta atribuição.]
 
-You'll often hear experienced Go programmers talk about the "slice header"
-because that really is what's stored in a slice variable.
-For instance, when you call a function that takes a slice as an argument, such as
-[bytes.IndexRune](/pkg/bytes/#IndexRune), that header is
-what gets passed to the function.
-In this call,
+Você frequentemente ouvirá programadores Go experientes falar sobre o "header de slice"
+porque isso realmente é o que é armazenado em uma variável slice.
+Por exemplo, quando você chama uma função que recebe um slice como argumento, como
+[bytes.IndexRune](/pkg/bytes/#IndexRune), esse header é
+o que é passado para a função.
+Nesta chamada,
 
 	slashPos := bytes.IndexRune(slice, '/')
 
-the `slice` argument that is passed to the `IndexRune` function is, in fact,
-a "slice header".
+o argumento `slice` que é passado para a função `IndexRune` é, de fato,
+um "header de slice".
 
-There's one more data item in the slice header, which we talk about below,
-but first let's see what the existence of the slice header means when you
-program with slices.
+Há mais um item de dados no header de slice, sobre o qual falaremos abaixo,
+mas primeiro vamos ver o que a existência do header de slice significa quando você
+programa com slices.
 
-## Passing slices to functions
+## Passando slices para funções
 
-It's important to understand that even though a slice contains a pointer,
-it is itself a value.
-Under the covers, it is a struct value holding a pointer and a length.
-It is _not_ a pointer to a struct.
+É importante entender que mesmo que um slice contenha um ponteiro,
+ele próprio é um valor.
+Por baixo dos panos, é um valor de struct contendo um ponteiro e um comprimento.
+Ele _não_ é um ponteiro para uma struct.
 
-This matters.
+Isso importa.
 
-When we called `IndexRune` in the previous example,
-it was passed a _copy_ of the slice header.
-That behavior has important ramifications.
+Quando chamamos `IndexRune` no exemplo anterior,
+foi passada uma _cópia_ do header de slice.
+Esse comportamento tem ramificações importantes.
 
-Consider this simple function:
+Considere esta função simples:
 
 {{code "slices/prog010.go" `/^func/` `/^}/`}}
 
-It does just what its name implies, iterating over the indices of a slice
-(using a `for` `range` loop), incrementing its elements.
+Ela faz exatamente o que seu nome implica, iterando sobre os índices de um slice
+(usando um loop `for` `range`), incrementando seus elementos.
 
-Try it:
+Experimente:
 
 {{play "slices/prog010.go" `/^func main/` `/^}/`}}
 
-(You can edit and re-execute these runnable snippets if you want to explore.)
+(Você pode editar e re-executar esses trechos executáveis se quiser explorar.)
 
-Even though the slice _header_ is passed by value, the header includes
-a pointer to elements of an array, so both the original slice header
-and the copy of the header passed to the function describe the same
+Mesmo que o _header_ de slice seja passado por valor, o header inclui
+um ponteiro para elementos de um array, então tanto o header de slice original
+quanto a cópia do header passada para a função descrevem o mesmo
 array.
-Therefore, when the function returns, the modified elements can
-be seen through the original slice variable.
+Portanto, quando a função retorna, os elementos modificados podem
+ser vistos através da variável slice original.
 
-The argument to the function really is a copy, as this example shows:
+O argumento para a função realmente é uma cópia, como este exemplo mostra:
 
 {{play "slices/prog020.go" `/^func/` `$`}}
 
-Here we see that the _contents_ of a slice argument can be modified by a function,
-but its _header_ cannot.
-The length stored in the `slice` variable is not modified by the call to the function,
-since the function is passed a copy of the slice header, not the original.
-Thus if we want to write a function that modifies the header, we must return it as a result
-parameter, just as we have done here.
-The `slice` variable is unchanged but the returned value has the new length,
-which is then stored in `newSlice`.
+Aqui vemos que o _conteúdo_ de um argumento slice pode ser modificado por uma função,
+mas seu _header_ não pode.
+O comprimento armazenado na variável `slice` não é modificado pela chamada à função,
+já que a função recebe uma cópia do header de slice, não o original.
+Assim, se quisermos escrever uma função que modifica o header, devemos retorná-lo como um
+parâmetro de resultado, exatamente como fizemos aqui.
+A variável `slice` permanece inalterada, mas o valor retornado tem o novo comprimento,
+que é então armazenado em `newSlice`.
 
-## Pointers to slices: Method receivers
+## Ponteiros para slices: Receivers de método
 
-Another way to have a function modify the slice header is to pass a pointer to it.
-Here's a variant of our previous example that does this:
+Outra maneira de ter uma função que modifica o header de slice é passar um ponteiro para ele.
+Aqui está uma variante do nosso exemplo anterior que faz isso:
 
 {{play "slices/prog030.go" `/^func/` `$`}}
 
-It seems clumsy in that example, especially dealing with the extra level of indirection
-(a temporary variable helps),
-but there is one common case where you see pointers to slices.
-It is idiomatic to use a pointer receiver for a method that modifies a slice.
+Parece desajeitado nesse exemplo, especialmente lidando com o nível extra de indireção
+(uma variável temporária ajuda),
+mas há um caso comum onde você vê ponteiros para slices.
+É idiomático usar um receiver de ponteiro para um método que modifica um slice.
 
-Let's say we wanted to have a method on a slice that truncates it at the final slash.
-We could write it like this:
+Digamos que quiséssemos ter um método em um slice que o trunca na última barra.
+Poderíamos escrevê-lo assim:
 
 {{play "slices/prog040.go" `/^type/` `$`}}
 
-If you run this example you'll see that it works properly, updating the slice in the caller.
+Se você executar este exemplo verá que funciona corretamente, atualizando o slice no caller.
 
-[Exercise: Change the type of the receiver to be a value rather
-than a pointer and run it again. Explain what happens.]
+[Exercício: Mude o tipo do receiver para ser um valor em vez
+de um ponteiro e execute novamente. Explique o que acontece.]
 
-On the other hand, if we wanted to write a method for `path` that upper-cases
-the ASCII letters in the path (parochially ignoring non-English names), the method could
-be a value because the value receiver will still point to the same underlying array.
+Por outro lado, se quiséssemos escrever um método para `path` que coloca em maiúsculas
+as letras ASCII no path (paroquialmente ignorando nomes não-ingleses), o método poderia
+ser um valor porque o receiver de valor ainda apontará para o mesmo array subjacente.
 
 {{play "slices/prog050.go" `/^type/` `$`}}
 
-Here the `ToUpper` method uses two variables in the `for` `range` construct
-to capture the index and slice element.
-This form of loop avoids writing `p[i]` multiple times in the body.
+Aqui o método `ToUpper` usa duas variáveis na construção `for` `range`
+para capturar o índice e elemento do slice.
+Esta forma de loop evita escrever `p[i]` várias vezes no corpo.
 
-[Exercise: Convert the `ToUpper` method to use a pointer receiver and see if its behavior changes.]
+[Exercício: Converta o método `ToUpper` para usar um receiver de ponteiro e veja se seu comportamento muda.]
 
-[Advanced exercise: Convert the `ToUpper` method to handle Unicode letters, not just ASCII.]
+[Exercício avançado: Converta o método `ToUpper` para lidar com letras Unicode, não apenas ASCII.]
 
 ## Capacity
 
-Look at the following function that extends its argument slice of `ints` by one element:
+Veja a seguinte função que estende seu argumento slice de `ints` em um elemento:
 
 {{code "slices/prog060.go" `/^func Extend/` `/^}/`}}
 
-(Why does it need to return the modified slice?) Now run it:
+(Por que ela precisa retornar o slice modificado?) Agora execute-a:
 
 {{play "slices/prog060.go" `/^func main/` `/^}/`}}
 
-See how the slice grows until... it doesn't.
+Veja como o slice cresce até... não crescer mais.
 
-It's time to talk about the third component of the slice header: its _capacity_.
-Besides the array pointer and length, the slice header also stores its capacity:
+É hora de falar sobre o terceiro componente do header de slice: sua _capacity_.
+Além do ponteiro de array e comprimento, o header de slice também armazena sua capacity:
 
 	type sliceHeader struct {
 		Length        int
@@ -277,15 +277,15 @@ Besides the array pointer and length, the slice header also stores its capacity:
 		ZerothElement *byte
 	}
 
-The `Capacity` field records how much space the underlying array actually has; it is the maximum
-value the `Length` can reach.
-Trying to grow the slice beyond its capacity will step beyond the limits of the array and will trigger a panic.
+O campo `Capacity` registra quanto espaço o array subjacente realmente tem; é o valor máximo
+que `Length` pode alcançar.
+Tentar aumentar o slice além de sua capacity ultrapassará os limites do array e acionará um panic.
 
-After our example slice is created by
+Depois que nosso slice de exemplo é criado por
 
 	slice := iBuffer[0:0]
 
-its header looks like this:
+seu header se parece com isso:
 
 	slice := sliceHeader{
 		Length:        0,
@@ -293,9 +293,9 @@ its header looks like this:
 		ZerothElement: &iBuffer[0],
 	}
 
-The `Capacity` field is equal to the length of the underlying array,
-minus the index in the array of the first element of the slice (zero in this case).
-If you want to inquire what the capacity is for a slice, use the built-in function `cap`:
+O campo `Capacity` é igual ao comprimento do array subjacente,
+menos o índice no array do primeiro elemento do slice (zero neste caso).
+Se você quiser consultar qual é a capacity de um slice, use a função built-in `cap`:
 
 	if cap(slice) == len(slice) {
 		fmt.Println("slice is full!")
@@ -303,186 +303,186 @@ If you want to inquire what the capacity is for a slice, use the built-in functi
 
 ## Make
 
-What if we want to grow the slice beyond its capacity?
-You can't!
-By definition, the capacity is the limit to growth.
-But you can achieve an equivalent result by allocating a new array, copying the data over, and modifying
-the slice to describe the new array.
+E se quisermos aumentar o slice além de sua capacity?
+Você não pode!
+Por definição, a capacity é o limite para crescimento.
+Mas você pode alcançar um resultado equivalente alocando um novo array, copiando os dados, e modificando
+o slice para descrever o novo array.
 
-Let's start with allocation.
-We could use the `new` built-in function to allocate a bigger array
-and then slice the result,
-but it is simpler to use the `make` built-in function instead.
-It allocates a new array and
-creates a slice header to describe it, all at once.
-The `make` function takes three arguments: the type of the slice, its initial length, and its capacity, which is the
-length of the array that `make` allocates to hold the slice data.
-This call creates a slice of length 10 with room for 5 more (15-10), as you can see by running it:
+Vamos começar com alocação.
+Poderíamos usar a função built-in `new` para alocar um array maior
+e então fazer slice do resultado,
+mas é mais simples usar a função built-in `make` em vez disso.
+Ela aloca um novo array e
+cria um header de slice para descrevê-lo, tudo de uma vez.
+A função `make` recebe três argumentos: o tipo do slice, seu comprimento inicial, e sua capacity, que é o
+comprimento do array que `make` aloca para conter os dados do slice.
+Esta chamada cria um slice de comprimento 10 com espaço para mais 5 (15-10), como você pode ver executando:
 
 {{play "slices/prog070.go" `/slice/` `/fmt/`}}
 
-This snippet doubles the capacity of our `int` slice but keeps its length the same:
+Este trecho dobra a capacity do nosso slice de `int` mas mantém seu comprimento o mesmo:
 
 {{play "slices/prog080.go" `/slice/` `/OMIT/`}}
 
-After running this code the slice has much more room to grow before needing another reallocation.
+Após executar este código, o slice tem muito mais espaço para crescer antes de precisar de outra realocação.
 
-When creating slices, it's often true that the length and capacity will be same.
-The `make` built-in has a shorthand for this common case.
-The length argument defaults to the capacity, so you can leave it out
-to set them both to the same value.
-After
+Ao criar slices, frequentemente é verdade que o comprimento e capacity serão os mesmos.
+A função built-in `make` tem um atalho para este caso comum.
+O argumento de comprimento assume como padrão a capacity, então você pode deixá-lo de fora
+para definir ambos com o mesmo valor.
+Depois de
 
 	gophers := make([]Gopher, 10)
 
-the `gophers` slice has both its length and capacity set to 10.
+o slice `gophers` tem tanto seu comprimento quanto capacity definidos como 10.
 
 ## Copy
 
-When we doubled the capacity of our slice in the previous section,
-we wrote a loop to copy the old data to the new slice.
-Go has a built-in function, `copy`, to make this easier.
-Its arguments are two slices, and it copies the data from the right-hand argument to the left-hand argument.
-Here's our example rewritten to use `copy`:
+Quando dobramos a capacity do nosso slice na seção anterior,
+escrevemos um loop para copiar os dados antigos para o novo slice.
+Go tem uma função built-in, `copy`, para tornar isso mais fácil.
+Seus argumentos são dois slices, e ela copia os dados do argumento da direita para o argumento da esquerda.
+Aqui está nosso exemplo reescrito para usar `copy`:
 
 {{play "slices/prog090.go" `/newSlice/` `/newSlice/`}}
 
-The `copy` function is smart.
-It only copies what it can, paying attention to the lengths of both arguments.
-In other words, the number of elements it copies is the minimum of the lengths of the two slices.
-This can save a little bookkeeping.
-Also, `copy` returns an integer value, the number of elements it copied, although it's not always worth checking.
+A função `copy` é inteligente.
+Ela apenas copia o que pode, prestando atenção aos comprimentos de ambos os argumentos.
+Em outras palavras, o número de elementos que ela copia é o mínimo dos comprimentos dos dois slices.
+Isso pode economizar um pouco de contabilidade.
+Além disso, `copy` retorna um valor inteiro, o número de elementos que copiou, embora nem sempre valha a pena verificar.
 
-The `copy` function also gets things right when source and destination overlap, which means it can be used to shift
-items around in a single slice.
-Here's how to use `copy` to insert a value into the middle of a slice.
+A função `copy` também acerta quando origem e destino se sobrepõem, o que significa que pode ser usada para deslocar
+itens dentro de um único slice.
+Aqui está como usar `copy` para inserir um valor no meio de um slice.
 
 {{code "slices/prog100.go" `/Insert/` `/^}/`}}
 
-There are a couple of things to notice in this function.
-First, of course, it must return the updated slice because its length has changed.
-Second, it uses a convenient shorthand.
-The expression
+Há algumas coisas a notar nesta função.
+Primeiro, é claro, ela deve retornar o slice atualizado porque seu comprimento mudou.
+Segundo, ela usa um atalho conveniente.
+A expressão
 
 	slice[i:]
 
-means exactly the same as
+significa exatamente o mesmo que
 
 	slice[i:len(slice)]
 
-Also, although we haven't used the trick yet, we can leave out the first element of a slice expression too;
-it defaults to zero. Thus
+Além disso, embora ainda não tenhamos usado o truque, também podemos deixar de fora o primeiro elemento de uma expressão de slice;
+ele assume zero como padrão. Assim
 
 	slice[:]
 
-just means the slice itself, which is useful when slicing an array.
-This expression is the shortest way to say "a slice describing all the elements of the array":
+apenas significa o próprio slice, o que é útil ao fazer slice de um array.
+Esta expressão é a maneira mais curta de dizer "um slice descrevendo todos os elementos do array":
 
 	array[:]
 
-Now that's out of the way, let's run our `Insert` function.
+Agora que isso está resolvido, vamos executar nossa função `Insert`.
 
 {{play "slices/prog100.go" `/make/` `/OMIT/`}}
 
-## Append: An example
+## Append: Um exemplo
 
-A few sections back, we wrote an `Extend` function that extends a slice by one element.
-It was buggy, though, because if the slice's capacity was too small, the function would
-crash.
-(Our `Insert` example has the same problem.)
-Now we have the pieces in place to fix that, so let's write a robust implementation of
-`Extend` for integer slices.
+Algumas seções atrás, escrevemos uma função `Extend` que estende um slice em um elemento.
+Ela tinha bugs, no entanto, porque se a capacity do slice fosse muito pequena, a função
+travaria.
+(Nosso exemplo `Insert` tem o mesmo problema.)
+Agora temos as peças no lugar para corrigir isso, então vamos escrever uma implementação robusta de
+`Extend` para slices de inteiros.
 
 {{code "slices/prog110.go" `/func Extend/` `/^}/`}}
 
-In this case it's especially important to return the slice, since when it reallocates
-the resulting slice describes a completely different array.
-Here's a little snippet to demonstrate what happens as the slice fills up:
+Neste caso é especialmente importante retornar o slice, já que quando ele realoca
+o slice resultante descreve um array completamente diferente.
+Aqui está um pequeno trecho para demonstrar o que acontece conforme o slice vai enchendo:
 
 {{play "slices/prog110.go" `/START/` `/END/`}}
 
-Notice the reallocation when the initial array of size 5 is filled up.
-Both the capacity and the address of the zeroth element change when the new array is allocated.
+Note a realocação quando o array inicial de tamanho 5 é preenchido.
+Tanto a capacity quanto o endereço do elemento zero mudam quando o novo array é alocado.
 
-With the robust `Extend` function as a guide we can write an even nicer function that lets
-us extend the slice by multiple elements.
-To do this, we use Go's ability to turn a list of function arguments into a slice when the
-function is called.
-That is, we use Go's variadic function facility.
+Com a função `Extend` robusta como guia, podemos escrever uma função ainda mais legal que nos permite
+estender o slice por múltiplos elementos.
+Para fazer isso, usamos a habilidade do Go de transformar uma lista de argumentos de função em um slice quando a
+função é chamada.
+Ou seja, usamos o recurso de função variádica do Go.
 
-Let's call the function `Append`.
-For the first version, we can just call `Extend` repeatedly so the mechanism of the variadic function is clear.
-The signature of `Append` is this:
+Vamos chamar a função de `Append`.
+Para a primeira versão, podemos apenas chamar `Extend` repetidamente para que o mecanismo da função variádica fique claro.
+A assinatura de `Append` é esta:
 
 	func Append(slice []int, items ...int) []int
 
-What that says is that `Append` takes one argument, a slice, followed by zero or more
-`int` arguments.
-Those arguments are exactly a slice of `int` as far as the implementation
-of `Append` is concerned, as you can see:
+O que isso diz é que `Append` recebe um argumento, um slice, seguido por zero ou mais
+argumentos `int`.
+Esses argumentos são exatamente um slice de `int` no que diz respeito à implementação
+de `Append`, como você pode ver:
 
 {{code "slices/prog120.go" `/Append/` `/^}/`}}
 
-Notice the `for` `range` loop iterating over the elements of the `items` argument, which has implied type `[]int`.
-Also notice the use of the blank identifier `_` to discard the index in the loop, which we don't need in this case.
+Note o loop `for` `range` iterando sobre os elementos do argumento `items`, que tem tipo implícito `[]int`.
+Note também o uso do identificador em branco `_` para descartar o índice no loop, que não precisamos neste caso.
 
-Try it:
+Experimente:
 
 {{play "slices/prog120.go" `/START/` `/END/`}}
 
-Another new technique in this example is that we initialize the slice by writing a composite literal,
-which consists of the type of the slice followed by its elements in braces:
+Outra técnica nova neste exemplo é que inicializamos o slice escrevendo um literal composto,
+que consiste no tipo do slice seguido por seus elementos entre chaves:
 
 {{code "slices/prog120.go" `/slice := /`}}
 
-The `Append` function is interesting for another reason.
-Not only can we append elements, we can append a whole second slice
-by "exploding" the slice into arguments using the `...` notation at the call site:
+A função `Append` é interessante por outro motivo.
+Não apenas podemos adicionar elementos, podemos adicionar um segundo slice inteiro
+"explodindo" o slice em argumentos usando a notação `...` no local da chamada:
 
 {{play "slices/prog130.go" `/START/` `/END/`}}
 
-Of course, we can make `Append` more efficient by allocating no more than once,
-building on the innards of `Extend`:
+Claro, podemos tornar `Append` mais eficiente alocando não mais de uma vez,
+construindo sobre as entranhas de `Extend`:
 
 {{code "slices/prog140.go" `/Append/` `/^}/`}}
 
-Here, notice how we use `copy` twice, once to move the slice data to the newly
-allocated memory, and then to copy the appending items to the end of the old data.
+Aqui, note como usamos `copy` duas vezes, uma vez para mover os dados do slice para a memória
+recém-alocada, e então para copiar os itens a serem adicionados ao final dos dados antigos.
 
-Try it; the behavior is the same as before:
+Experimente; o comportamento é o mesmo de antes:
 
 {{play "slices/prog140.go" `/START/` `/END/`}}
 
-## Append: The built-in function
+## Append: A função built-in
 
-And so we arrive at the motivation for the design of the `append` built-in function.
-It does exactly what our `Append` example does, with equivalent efficiency, but it
-works for any slice type.
+E assim chegamos à motivação para o design da função built-in `append`.
+Ela faz exatamente o que nosso exemplo `Append` faz, com eficiência equivalente, mas
+funciona para qualquer tipo de slice.
 
-A weakness of Go is that any generic-type operations must be provided by the
-run-time. Some day that may change, but for now, to make working with slices
-easier, Go provides a built-in generic `append` function.
-It works the same as our `int` slice version, but for _any_ slice type.
+Uma fraqueza do Go é que quaisquer operações de tipo genérico devem ser fornecidas pelo
+runtime. Algum dia isso pode mudar, mas por enquanto, para tornar o trabalho com slices
+mais fácil, Go fornece uma função genérica built-in `append`.
+Ela funciona da mesma forma que nossa versão de slice de `int`, mas para _qualquer_ tipo de slice.
 
-Remember, since the slice header is always updated by a call to `append`, you need
-to save the returned slice after the call.
-In fact, the compiler won't let you call append without saving the result.
+Lembre-se, já que o header de slice é sempre atualizado por uma chamada a `append`, você precisa
+salvar o slice retornado após a chamada.
+Na verdade, o compilador não permitirá que você chame append sem salvar o resultado.
 
-Here are some one-liners intermingled with print statements. Try them, edit them and explore:
+Aqui estão alguns one-liners intercalados com declarações print. Experimente-os, edite-os e explore:
 
 {{play "slices/prog150.go" `/START/` `/END/`}}
 
-It's worth taking a moment to think about the final one-liner of that example in detail to understand
-how the design of slices makes it possible for this simple call to work correctly.
+Vale a pena dedicar um momento para pensar sobre o one-liner final desse exemplo em detalhe para entender
+como o design de slices torna possível que esta simples chamada funcione corretamente.
 
-There are lots more examples of `append`, `copy`, and other ways to use slices
-on the community-built
-["Slice Tricks" Wiki page](/wiki/SliceTricks).
+Há muito mais exemplos de `append`, `copy`, e outras maneiras de usar slices
+na página Wiki construída pela comunidade
+["Slice Tricks"](/wiki/SliceTricks).
 
 ## Nil
 
-As an aside, with our newfound knowledge we can see what the representation of a `nil` slice is.
-Naturally, it is the zero value of the slice header:
+Como um aparte, com nosso conhecimento recém-adquirido podemos ver qual é a representação de um slice `nil`.
+Naturalmente, é o valor zero do header de slice:
 
 	sliceHeader{
 		Length:        0,
@@ -490,96 +490,95 @@ Naturally, it is the zero value of the slice header:
 		ZerothElement: nil,
 	}
 
-or just
+ou apenas
 
 	sliceHeader{}
 
-The key detail is that the element pointer is `nil` too. The slice created by
+O detalhe chave é que o ponteiro de elemento também é `nil`. O slice criado por
 
 	array[0:0]
 
-has length zero (and maybe even capacity zero) but its pointer is not `nil`, so
-it is not a nil slice.
+tem comprimento zero (e talvez até capacity zero) mas seu ponteiro não é `nil`, então
+ele não é um slice nil.
 
-As should be clear, an empty slice can grow (assuming it has non-zero capacity), but a `nil`
-slice has no array to put values in and can never grow to hold even one element.
+Como deve estar claro, um slice vazio pode crescer (assumindo que tem capacity diferente de zero), mas um slice `nil`
+não tem array para colocar valores e nunca pode crescer para conter nem mesmo um elemento.
 
-That said, a `nil` slice is functionally equivalent to a zero-length slice, even though it points
-to nothing.
-It has length zero and can be appended to, with allocation.
-As an example, look at the one-liner above that copies a slice by appending
-to a `nil` slice.
+Dito isso, um slice `nil` é funcionalmente equivalente a um slice de comprimento zero, mesmo que aponte
+para nada.
+Ele tem comprimento zero e pode receber append, com alocação.
+Como exemplo, olhe o one-liner acima que copia um slice fazendo append
+a um slice `nil`.
 
 ## Strings
 
-Now a brief section about strings in Go in the context of slices.
+Agora uma breve seção sobre strings em Go no contexto de slices.
 
-Strings are actually very simple: they are just read-only slices of bytes with a bit
-of extra syntactic support from the language.
+Strings são na verdade muito simples: são apenas slices de bytes somente leitura com um pouco
+de suporte sintático extra da linguagem.
 
-Because they are read-only, there is no need for a capacity (you can't grow them),
-but otherwise for most purposes you can treat them just like read-only slices
-of bytes.
+Como são somente leitura, não há necessidade de capacity (você não pode aumentá-las),
+mas caso contrário, para a maioria dos propósitos você pode tratá-las exatamente como slices
+de bytes somente leitura.
 
-For starters, we can index them to access individual bytes:
+Para começar, podemos indexá-las para acessar bytes individuais:
 
-	slash := "/usr/ken"[0] // yields the byte value '/'.
+	slash := "/usr/ken"[0] // retorna o valor byte '/'.
 
-We can slice a string to grab a substring:
+Podemos fazer slice de uma string para pegar uma substring:
 
-	usr := "/usr/ken"[0:4] // yields the string "/usr"
+	usr := "/usr/ken"[0:4] // retorna a string "/usr"
 
-It should be obvious now what's going on behind the scenes when we slice a string.
+Deve estar óbvio agora o que está acontecendo nos bastidores quando fazemos slice de uma string.
 
-We can also take a normal slice of bytes and create a string from it with the simple conversion:
+Também podemos pegar um slice normal de bytes e criar uma string a partir dele com a conversão simples:
 
 	str := string(slice)
 
-and go in the reverse direction as well:
+e ir na direção inversa também:
 
 	slice := []byte(usr)
 
-The array underlying a string is hidden from view; there is no way to access its contents
-except through the string. That means that when we do either of these conversions, a
-copy of the array must be made.
-Go takes care of this, of course, so you don't have to.
-After either of these conversions, modifications to
-the array underlying the byte slice don't affect the corresponding string.
+O array subjacente a uma string está oculto da vista; não há maneira de acessar seu conteúdo
+exceto através da string. Isso significa que quando fazemos qualquer uma dessas conversões, uma
+cópia do array deve ser feita.
+Go cuida disso, é claro, então você não precisa.
+Após qualquer uma dessas conversões, modificações no
+array subjacente ao slice de bytes não afetam a string correspondente.
 
-An important consequence of this slice-like design for strings is that
-creating a substring is very efficient.
-All that needs to happen
-is the creation of a two-word string header. Since the string is read-only, the original
-string and the string resulting from the slice operation can share the same array safely.
+Uma consequência importante deste design semelhante a slice para strings é que
+criar uma substring é muito eficiente.
+Tudo que precisa acontecer
+é a criação de um header de string de duas palavras. Já que a string é somente leitura, a string original
+e a string resultante da operação de slice podem compartilhar o mesmo array com segurança.
 
-A historical note: The earliest implementation of strings always allocated, but when slices
-were added to the language, they provided a model for efficient string handling. Some of
-the benchmarks saw huge speedups as a result.
+Uma nota histórica: A implementação mais antiga de strings sempre alocava, mas quando slices
+foram adicionados à linguagem, eles forneceram um modelo para manipulação eficiente de strings. Alguns dos
+benchmarks viram enormes acelerações como resultado.
 
-There's much more to strings, of course, and a
-[separate blog post](/blog/strings) covers them in greater depth.
+Há muito mais sobre strings, é claro, e um
+[post de blog separado](/blog/strings) as cobre em maior profundidade.
 
-## Conclusion
+## Conclusão
 
-To understand how slices work, it helps to understand how they are implemented.
-There is a little data structure, the slice header, that is the item associated with the slice
-variable, and that header describes a section of a separately allocated array.
-When we pass slice values around, the header gets copied but the array it points
-to is always shared.
+Para entender como slices funcionam, ajuda entender como eles são implementados.
+Há uma pequena estrutura de dados, o header de slice, que é o item associado à variável
+slice, e esse header descreve uma seção de um array alocado separadamente.
+Quando passamos valores de slice por aí, o header é copiado mas o array para o qual ele aponta
+é sempre compartilhado.
 
-Once you appreciate how they work, slices become not only easy to use, but
-powerful and expressive, especially with the help of the `copy` and `append`
-built-in functions.
+Uma vez que você aprecia como eles funcionam, slices se tornam não apenas fáceis de usar, mas
+poderosos e expressivos, especialmente com a ajuda das funções built-in `copy` e `append`.
 
-## More reading
+## Mais leitura
 
-There's lots to find around the intertubes about slices in Go.
-As mentioned earlier,
-the ["Slice Tricks" Wiki page](/wiki/SliceTricks)
-has many examples.
-The [Go Slices](/blog/go-slices-usage-and-internals) blog post
-describes the memory layout details with clear diagrams.
-Russ Cox's [Go Data Structures](https://research.swtch.com/godata) article includes
-a discussion of slices along with some of Go's other internal data structures.
+Há muito para encontrar pela internet sobre slices em Go.
+Como mencionado anteriormente,
+a página Wiki ["Slice Tricks"](/wiki/SliceTricks)
+tem muitos exemplos.
+O post de blog [Go Slices](/blog/go-slices-usage-and-internals)
+descreve os detalhes de layout de memória com diagramas claros.
+O artigo [Go Data Structures](https://research.swtch.com/godata) de Russ Cox inclui
+uma discussão de slices juntamente com algumas das outras estruturas de dados internas do Go.
 
-There is much more material available, but the best way to learn about slices is to use them.
+Há muito mais material disponível, mas a melhor maneira de aprender sobre slices é usá-los.
