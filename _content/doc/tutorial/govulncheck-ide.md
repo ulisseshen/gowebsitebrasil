@@ -1,35 +1,38 @@
+---
+ia-translated: true
+---
 <!--{
-  "Title": "Tutorial: Find and fix vulnerable dependencies with VS Code Go",
+  "Title": "Tutorial: Encontre e corrija dependências vulneráveis com VS Code Go",
   "Breadcrumb": true
 }-->
 
-[Back to Go Security](/security)
+[Voltar para Go Security](/security)
 
-You can scan your code for vulnerabilities directly out of your editor with the Go extension for Visual Studio Code.
+Você pode escanear seu código em busca de vulnerabilidades diretamente do seu editor com a extensão Go para Visual Studio Code.
 
-Note: for an explanation of the vulnerability fix included in the images below, see the [govulncheck tutorial](/doc/tutorial/govulncheck).
+Nota: para uma explicação da correção de vulnerabilidade incluída nas imagens abaixo, veja o [tutorial govulncheck](/doc/tutorial/govulncheck).
 
-## Prerequisites:
+## Pré-requisitos:
 
-- **Go.** We recommend using the latest version of Go to follow this tutorial. For installation instructions, see [Installing Go](/doc/install).
-- **VS Code**, updated to the latest version. [Download here](https://code.visualstudio.com/). You can also use Vim (see [here](/security/vuln/editor#editor-specific-instructions) for details), but this tutorial focuses on VS Code Go.
-- **VS Code Go extension**, which can be [downloaded here](https://marketplace.visualstudio.com/items?itemName=golang.go).
-- **Editor-specific settings changes.** You will need to modify your IDE settings according to [these specifications](/security/vuln/editor#editor-specific-instructions) before being able to replicate the results below.
+- **Go.** Recomendamos usar a versão mais recente do Go para seguir este tutorial. Para instruções de instalação, veja [Instalando Go](/doc/install).
+- **VS Code**, atualizado para a versão mais recente. [Download aqui](https://code.visualstudio.com/). Você também pode usar Vim (veja [aqui](/security/vuln/editor#editor-specific-instructions) para detalhes), mas este tutorial foca no VS Code Go.
+- **Extensão VS Code Go**, que pode ser [baixada aqui](https://marketplace.visualstudio.com/items?itemName=golang.go).
+- **Mudanças de configurações específicas do editor.** Você precisará modificar as configurações do seu IDE de acordo com [estas especificações](/security/vuln/editor#editor-specific-instructions) antes de conseguir replicar os resultados abaixo.
 
 
-## How to scan for vulnerabilities using VS Code Go
+## Como escanear em busca de vulnerabilidades usando VS Code Go
 
-**Step 1.** Run "Go: Toggle Vulncheck"
+**Passo 1.** Execute "Go: Toggle Vulncheck"
 
-The [Toggle Vulncheck](https://github.com/golang/vscode-go/wiki/Commands#go-toggle-vulncheck) command displays vulnerability analysis for all the dependencies listed in your modules. To use this command, open the [command palette](https://code.visualstudio.com/docs/getstarted/userinterface#_command-palette) in your IDE (Ctrl+Shift+P on Linux/Windows or Cmd+Shift+P on Mac OS) and run “Go: Toggle Vulncheck.” In your go.mod file, you will see the diagnostics for vulnerable dependencies that are used both directly and indirectly in your code.
+O comando [Toggle Vulncheck](https://github.com/golang/vscode-go/wiki/Commands#go-toggle-vulncheck) exibe análise de vulnerabilidade para todas as dependências listadas em seus módulos. Para usar este comando, abra a [paleta de comandos](https://code.visualstudio.com/docs/getstarted/userinterface#_command-palette) no seu IDE (Ctrl+Shift+P no Linux/Windows ou Cmd+Shift+P no Mac OS) e execute "Go: Toggle Vulncheck." No seu arquivo go.mod, você verá os diagnósticos para dependências vulneráveis que são usadas tanto direta quanto indiretamente no seu código.
 
 <div class="image">
   <center>
-    <img style="width: 100%" width="2110" height="952" src="editor_tutorial_1.png" alt="Run Toggle Vulncheck"></img>
+    <img style="width: 100%" width="2110" height="952" src="editor_tutorial_1.png" alt="Run Toggle Vulncheck"></img>
   </center>
 </div>
 
-Note: To reproduce this tutorial on your own editor, copy the code below into your main.go file.
+Nota: Para reproduzir este tutorial no seu próprio editor, copie o código abaixo no seu arquivo main.go.
 
 ```
 // This program takes language tags as command-line
@@ -58,7 +61,7 @@ func main() {
 }
 ```
 
-Then, make sure the corresponding go.mod file for the program looks like this:
+Então, certifique-se de que o arquivo go.mod correspondente para o programa fique assim:
 
 
 ```
@@ -69,47 +72,47 @@ go 1.18
 require golang.org/x/text v0.3.5
 ```
 
-Now, run `go mod tidy` to ensure that your go.sum file is updated.
+Agora, execute `go mod tidy` para garantir que seu arquivo go.sum esteja atualizado.
 
-**Step 2.** Run govulncheck via a code action.
+**Passo 2.** Execute govulncheck via uma code action.
 
-Running govulncheck using a code action allows you to focus on the dependencies that are actually called in your code. Code actions in VS Code are marked by lightbulb icons; hover over the relevant dependency to see information about the vulnerability, then select “Quick Fix” to be shown a menu of options. Of these, choose “run govulncheck to verify.” This will return the relevant govulncheck output in your terminal.
+Executar govulncheck usando uma code action permite que você foque nas dependências que são realmente chamadas no seu código. Code actions no VS Code são marcadas por ícones de lâmpada; passe o mouse sobre a dependência relevante para ver informações sobre a vulnerabilidade, então selecione "Quick Fix" para ver um menu de opções. Destas, escolha "run govulncheck to verify." Isso retornará a saída relevante do govulncheck no seu terminal.
 
 <div class="image">
   <center>
-    <img style="width: 100%" width="2110" height="952" src="editor_tutorial_2.png" alt="govulncheck code action"></img>
+    <img style="width: 100%" width="2110" height="952" src="editor_tutorial_2.png" alt="govulncheck code action"></img>
   </center>
 </div>
 
 <div class="image">
   <center>
-    <img style="width: 100%" width="2110" height="952" src="editor_tutorial_3.png" alt="VS Code Go govulncheck output"></img>
+    <img style="width: 100%" width="2110" height="952" src="editor_tutorial_3.png" alt="VS Code Go govulncheck output"></img>
   </center>
 </div>
 
-**Step 3**. Hover over a dependency listed in your go.mod file.
+**Passo 3**. Passe o mouse sobre uma dependência listada no seu arquivo go.mod.
 
-The relevant govulncheck output about a specific dependency can also be found by hovering over the dependency in the go.mod file. For a quick look at dependency information, this option is even more efficient than using a code action.
+A saída relevante do govulncheck sobre uma dependência específica também pode ser encontrada passando o mouse sobre a dependência no arquivo go.mod. Para uma olhada rápida nas informações de dependência, esta opção é ainda mais eficiente do que usar uma code action.
 
 <div class="image">
   <center>
-    <img style="width: 100%" width="2110" height="952" src="editor_tutorial_4.png" alt="Hover over dependency for vulnerability information"></img>
+    <img style="width: 100%" width="2110" height="952" src="editor_tutorial_4.png" alt="Hover over dependency for vulnerability information"></img>
   </center>
 </div>
 
-**Step 4.** Upgrade to a "fixed in" version of your dependency.
+**Passo 4.** Atualize para uma versão "fixed in" da sua dependência.
 
-Code actions can also be used to quickly upgrade to a version of your dependency where the vulnerability is fixed. Do this by selecting the “Upgrade” option in the code action drop-down menu.
+Code actions também podem ser usadas para atualizar rapidamente para uma versão da sua dependência onde a vulnerabilidade foi corrigida. Faça isso selecionando a opção "Upgrade" no menu suspenso de code action.
 
 <div class="image">
   <center>
-    <img style="width: 100%" width="2110" height="952" src="editor_tutorial_5.png" alt="Upgrade to Latest via code action menu"></img>
+    <img style="width: 100%" width="2110" height="952" src="editor_tutorial_5.png" alt="Upgrade to Latest via code action menu"></img>
   </center>
 </div>
 
 
-## Additional resources
+## Recursos adicionais
 
-- See [this page](/security/vuln/editor) for more information about vulnerability scanning in your IDE. The [Notes and Caveats section](/security/vuln/editor#notes-and-caveats), in particular, discusses special cases for which vulnerability scanning may be more complex than in the example above.
-- The [Go Vulnerability Database](https://pkg.go.dev/vuln/) contains information from many existing sources in addition to direct reports by Go package maintainers to the Go security team.
-- See [Go Vulnerability Management](/security/vuln/) page provides a high-level view of Go's architecture for detecting, reporting and managing vulnerabilities.
+- Veja [esta página](/security/vuln/editor) para mais informações sobre escaneamento de vulnerabilidades no seu IDE. A [seção Notes and Caveats](/security/vuln/editor#notes-and-caveats), em particular, discute casos especiais para os quais o escaneamento de vulnerabilidades pode ser mais complexo do que no exemplo acima.
+- O [Go Vulnerability Database](https://pkg.go.dev/vuln/) contém informações de muitas fontes existentes além de relatórios diretos por mantenedores de pacotes Go para a equipe de segurança do Go.
+- Veja a página [Go Vulnerability Management](/security/vuln/) que fornece uma visão de alto nível da arquitetura do Go para detectar, relatar e gerenciar vulnerabilidades.

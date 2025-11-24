@@ -63,9 +63,9 @@ Após traduzir cada arquivo, marque o checkpoint com `[x]`.
 - [ ] `_content/doc/tutorial/web-service-gin.md` - Web service com Gin
 - [ ] `_content/doc/tutorial/generics.md` - Generics
 - [ ] `_content/doc/tutorial/fuzz.md` - Fuzzing
-- [ ] `_content/doc/tutorial/workspaces.md` - Workspaces
-- [ ] `_content/doc/tutorial/govulncheck.md` - Govulncheck
-- [ ] `_content/doc/tutorial/govulncheck-ide.md` - Govulncheck no IDE
+- [x] `_content/doc/tutorial/workspaces.md` - Workspaces
+- [x] `_content/doc/tutorial/govulncheck.md` - Govulncheck
+- [x] `_content/doc/tutorial/govulncheck-ide.md` - Govulncheck no IDE
 
 ---
 

@@ -1,64 +1,67 @@
+---
+ia-translated: true
+---
 <!--{
-  "Title": "Tutorial: Getting started with multi-module workspaces",
+  "Title": "Tutorial: Começando com workspaces multi-módulos",
   "Breadcrumb": true
 }-->
 
-This tutorial introduces the basics of multi-module workspaces in Go.
-With multi-module workspaces, you can tell the Go command that you're
-writing code in multiple modules at the same time and easily build and
-run code in those modules.
+Este tutorial introduz os fundamentos de workspaces multi-módulos em Go.
+Com workspaces multi-módulos, você pode dizer ao comando Go que está
+escrevendo código em múltiplos módulos ao mesmo tempo e facilmente construir e
+executar código nesses módulos.
 
-In this tutorial, you'll create two modules in a shared multi-module
-workspace, make changes across those modules, and see the results
-of those changes in a build.
+Neste tutorial, você criará dois módulos em um workspace multi-módulo
+compartilhado, fará alterações nesses módulos, e verá os resultados
+dessas alterações em uma construção.
 
 <!-- TODO TOC -->
 
-**Note:** For other tutorials, see [Tutorials](/doc/tutorial/index.html).
+**Nota:** Para outros tutoriais, veja [Tutoriais](/doc/tutorial/index.html).
 
-## Prerequisites
+## Pré-requisitos
 
-*   **An installation of Go 1.18 or later.**
-*   **A tool to edit your code.** Any text editor you have will work fine.
-*   **A command terminal.** Go works well using any terminal on Linux and Mac,
-    and on PowerShell or cmd in Windows.
+*   **Uma instalação do Go 1.18 ou posterior.**
+*   **Uma ferramenta para editar seu código.** Qualquer editor de texto que você tenha funcionará bem.
+*   **Um terminal de comando.** Go funciona bem usando qualquer terminal no Linux e Mac,
+    e no PowerShell ou cmd no Windows.
 
-This tutorial requires go1.18 or later. Make sure you've installed Go at Go 1.18 or later using the
-links at [go.dev/dl](/dl).
+Este tutorial requer go1.18 ou posterior. Certifique-se de ter instalado Go no Go 1.18 ou posterior usando os
+links em [go.dev/dl](/dl).
 
-## Create a module for your code {#create_folder}
+## Criar um módulo para seu código {#create_folder}
 
-To begin, create a module for the code you’ll write.
+Para começar, crie um módulo para o código que você escreverá.
 
-1. Open a command prompt and change to your home directory.
+1. Abra um prompt de comando e mude para seu diretório home.
 
-   On Linux or Mac:
+   No Linux ou Mac:
 
     ```
     $ cd
     ```
 
-   On Windows:
+   No Windows:
 
     ```
     C:\> cd %HOMEPATH%
     ```
 
-   The rest of the tutorial will show a $ as the prompt. The commands you use
-   will work on Windows too.
+   O resto do tutorial mostrará um $ como o prompt. Os comandos que você usa
+   funcionarão no Windows também.
 
-2. From the command prompt, create a directory for your code called workspace.
+2. Do prompt de comando, crie um diretório para seu código chamado workspace.
 
     ```
     $ mkdir workspace
     $ cd workspace
     ```
 
-3. Initialize the module
+3. Inicialize o módulo
 
-   Our example will create a new module `hello` that will depend on the golang.org/x/example module.
+   Nosso exemplo criará um novo módulo `hello` que dependerá do módulo golang.org/x/example.
 
-   Create the hello module:
+   Crie o módulo hello:
 
    ```
    $ mkdir hello
@@ -67,13 +70,13 @@ To begin, create a module for the code you’ll write.
    go: creating new go.mod: module example.com/hello
    ```
 
-   Add a dependency on the golang.org/x/example/hello/reverse package by using `go get`.
+   Adicione uma dependência no pacote golang.org/x/example/hello/reverse usando `go get`.
 
    ```
    $ go get golang.org/x/example/hello/reverse
    ```
 
-   Create hello.go in the hello directory with the following contents:
+   Crie hello.go no diretório hello com os seguintes conteúdos:
 
    ```
    package main
@@ -89,30 +92,29 @@ To begin, create a module for the code you’ll write.
    }
    ```
 
-   Now, run the hello program:
+   Agora, execute o programa hello:
 
    ```
    $ go run .
    olleH
    ```
 
-## Create the workspace
+## Criar o workspace
 
-In this step, we'll create a `go.work` file to specify a workspace with the module.
+Neste passo, criaremos um arquivo `go.work` para especificar um workspace com o módulo.
 
-#### Initialize the workspace
+#### Inicializar o workspace
 
-In the `workspace` directory, run:
+No diretório `workspace`, execute:
 
    ```
    $ go work init ./hello
    ```
 
-The `go work init` command tells `go` to create a `go.work` file
-for a workspace containing the modules in the `./hello`
-directory.
+O comando `go work init` diz ao `go` para criar um arquivo `go.work`
+para um workspace contendo os módulos no diretório `./hello`.
 
-The `go` command produces a `go.work` file that looks like this:
+O comando `go` produz um arquivo `go.work` que se parece com isto:
 
    ```
    go 1.18
@@ -120,43 +122,42 @@ The `go` command produces a `go.work` file that looks like this:
    use ./hello
    ```
 
-The `go.work` file has similar syntax to `go.mod`.
+O arquivo `go.work` tem sintaxe similar a `go.mod`.
 
-The `go` directive tells Go which version of Go the file should be
-interpreted with. It's similar to the `go` directive in the `go.mod`
-file.
+A diretiva `go` diz ao Go qual versão do Go o arquivo deve ser
+interpretado com. É similar à diretiva `go` no arquivo `go.mod`.
 
-The `use` directive tells Go that the module in the `hello`
-directory should be main modules when doing a build.
+A diretiva `use` diz ao Go que o módulo no diretório `hello`
+deve ser módulos principais ao fazer uma construção.
 
-So in any subdirectory of `workspace` the module will be active.
+Então em qualquer subdiretório de `workspace` o módulo estará ativo.
 
-#### Run the program in the workspace directory
+#### Executar o programa no diretório workspace
 
-In the `workspace` directory, run:
+No diretório `workspace`, execute:
 
    ```
    $ go run ./hello
    olleH
    ```
 
-The Go command includes all the modules in the workspace as main modules. This allows us
-to refer to a package in the module, even outside the module. Running the `go run` command
-outside the module or the workspace would result in an error because the `go` command
-wouldn't know which modules to use.
+O comando Go inclui todos os módulos no workspace como módulos principais. Isso nos permite
+referir a um pacote no módulo, mesmo fora do módulo. Executar o comando `go run`
+fora do módulo ou do workspace resultaria em um erro porque o comando `go`
+não saberia quais módulos usar.
 
-Next, we'll add a local copy of the `golang.org/x/example/hello` module to the workspace.
-That module is stored in a subdirectory of the `go.googlesource.com/example` Git repository.
-We'll then add a new function to the `reverse` package that we can use instead of `String`.
+A seguir, adicionaremos uma cópia local do módulo `golang.org/x/example/hello` ao workspace.
+Esse módulo está armazenado em um subdiretório do repositório Git `go.googlesource.com/example`.
+Então adicionaremos uma nova função ao pacote `reverse` que podemos usar em vez de `String`.
 
-## Download and modify the `golang.org/x/example/hello` module
+## Baixar e modificar o módulo `golang.org/x/example/hello`
 
-   In this step, we'll download a copy of the Git repo containing the `golang.org/x/example/hello` module,
-   add it to the workspace, and then add a new function to it that we will use from the hello program.
+   Neste passo, baixaremos uma cópia do repositório Git contendo o módulo `golang.org/x/example/hello`,
+   adicionaremos ao workspace, e então adicionaremos uma nova função a ele que usaremos do programa hello.
 
-1. Clone the repository
+1. Clone o repositório
 
-   From the workspace directory, run the `git` command to clone the repository:
+   Do diretório workspace, execute o comando `git` para clonar o repositório:
 
    ```
    $ git clone https://go.googlesource.com/example
@@ -166,17 +167,17 @@ We'll then add a new function to the `reverse` package that we can use instead o
    Resolving deltas: 100% (27/27), done.
    ```
 
-2. Add the module to the workspace
+2. Adicione o módulo ao workspace
 
-   The Git repo was just checked out into `./example`.
-   The source code for the `golang.org/x/example/hello` module is in `./example/hello`.
-   Add it to the workspace:
+   O repositório Git foi acabado de ser baixado em `./example`.
+   O código fonte para o módulo `golang.org/x/example/hello` está em `./example/hello`.
+   Adicione-o ao workspace:
 
    ```
    $ go work use ./example/hello
    ```
 
-   The `go work use` command adds a new module to the go.work file. It will now look like this:
+   O comando `go work use` adiciona um novo módulo ao arquivo go.work. Ele agora ficará assim:
 
    ```
    go 1.18
@@ -187,18 +188,18 @@ We'll then add a new function to the `reverse` package that we can use instead o
    )
    ```
 
-   The workspace now includes both the `example.com/hello` module and the `golang.org/x/example/hello` module,
-   which provides the `golang.org/x/example/hello/reverse` package.
+   O workspace agora inclui tanto o módulo `example.com/hello` quanto o módulo `golang.org/x/example/hello`,
+   que fornece o pacote `golang.org/x/example/hello/reverse`.
 
-   This will allow us to use the new code we will write in our copy of the `reverse` package
-   instead of the version of the package in the module cache
-   that we downloaded with the `go get` command.
+   Isso nos permitirá usar o novo código que escreveremos na nossa cópia do pacote `reverse`
+   em vez da versão do pacote no cache de módulos
+   que baixamos com o comando `go get`.
 
-3. Add the new function.
+3. Adicione a nova função.
 
-   We'll add a new function to reverse a number to the `golang.org/x/example/hello/reverse` package.
+   Adicionaremos uma nova função para reverter um número ao pacote `golang.org/x/example/hello/reverse`.
 
-   Create a new file named `int.go` in the `workspace/example/hello/reverse` directory containing the following contents:
+   Crie um novo arquivo chamado `int.go` no diretório `workspace/example/hello/reverse` contendo os seguintes conteúdos:
 
    ```
    package reverse
@@ -212,9 +213,9 @@ We'll then add a new function to the `reverse` package that we can use instead o
    }
    ```
 
-4. Modify the hello program to use the function.
+4. Modifique o programa hello para usar a função.
 
-   Modify the contents of `workspace/hello/hello.go` to contain the following contents:
+   Modifique os conteúdos de `workspace/hello/hello.go` para conter os seguintes conteúdos:
 
    ```
    package main
@@ -230,52 +231,52 @@ We'll then add a new function to the `reverse` package that we can use instead o
    }
    ```
 
-#### Run the code in the workspace
+#### Executar o código no diretório workspace
 
-   From the workspace directory, run
+   Do diretório workspace, execute
 
    ```
    $ go run ./hello
    olleH 10642
    ```
 
-   The Go command finds the `example.com/hello` module specified in the
-   command line in the `hello` directory specified by the `go.work`
-   file, and similarly resolves the `golang.org/x/example/hello/reverse` import using
-   the `go.work` file.
+   O comando Go encontra o módulo `example.com/hello` especificado na
+   linha de comando no diretório `hello` especificado pelo arquivo `go.work`,
+   e similarmente resolve o import `golang.org/x/example/hello/reverse` usando
+   o arquivo `go.work`.
 
-   `go.work` can be used instead of adding [`replace`](/ref/mod#go-mod-file-replace)
-   directives to work across multiple modules.
+   `go.work` pode ser usado em vez de adicionar diretivas [`replace`](/ref/mod#go-mod-file-replace)
+   para trabalhar em múltiplos módulos.
 
-   Since the two modules are in the same workspace it's easy
-   to make a change in one module and use it in another.
+   Como os dois módulos estão no mesmo workspace é fácil
+   fazer uma alteração em um módulo e usá-la em outro.
 
-#### Future step
+#### Próximo passo
 
-   Now, to properly release these modules we'd need to make a release of the `golang.org/x/example/hello`
-   module, for example at `v0.1.0`. This is usually done by tagging a commit on the module's version
-   control repository. See the
-   [module release workflow documentation](/doc/modules/release-workflow)
-   for more details. Once the release is done, we can increase the requirement on the
-   `golang.org/x/example/hello` module in `hello/go.mod`:
+   Agora, para lançar adequadamente esses módulos precisaríamos fazer um lançamento do módulo `golang.org/x/example/hello`,
+   por exemplo em `v0.1.0`. Isso geralmente é feito marcando um commit no repositório de controle de versão do módulo.
+   Veja a
+   [documentação de workflow de lançamento de módulos](/doc/modules/release-workflow)
+   para mais detalhes. Uma vez que o lançamento está feito, podemos aumentar o requisito no
+   módulo `golang.org/x/example/hello` em `hello/go.mod`:
 
    ```
    cd hello
    go get golang.org/x/example/hello@v0.1.0
    ```
 
-   That way, the `go` command can properly resolve the modules outside the workspace.
+   Dessa forma, o comando `go` pode resolver adequadamente os módulos fora do workspace.
 
-## Learn more about workspaces
+## Saiba mais sobre workspaces
 
-   The `go` command has a couple of subcommands for working with workspaces in addition to `go work init` which
-   we saw earlier in the tutorial:
+   O comando `go` tem alguns subcomandos para trabalhar com workspaces além de `go work init` que
+   vimos anteriormente no tutorial:
 
-   - `go work use [-r] [dir]` adds a `use` directive to the `go.work` file for `dir`,
-   if it exists, and removes the `use` directory if the argument directory doesn't exist. The `-r`
-   flag examines subdirectories of `dir` recursively.
-   - `go work edit` edits the `go.work` file similarly to `go mod edit`
-   - `go work sync` syncs dependencies from the workspace's build list into each of the workspace modules.
+   - `go work use [-r] [dir]` adiciona uma diretiva `use` ao arquivo `go.work` para `dir`,
+   se ele existir, e remove a diretiva `use` se o diretório argumento não existir. A flag `-r`
+   examina subdiretórios de `dir` recursivamente.
+   - `go work edit` edita o arquivo `go.work` similarmente a `go mod edit`
+   - `go work sync` sincroniza dependências da lista de construção do workspace em cada um dos módulos do workspace.
 
-   See [Workspaces](/ref/mod#workspaces) in the Go Modules Reference for more detail on
-   workspaces and `go.work` files.
+   Veja [Workspaces](/ref/mod#workspaces) na Referência de Módulos Go para mais detalhes sobre
+   workspaces e arquivos `go.work`.
