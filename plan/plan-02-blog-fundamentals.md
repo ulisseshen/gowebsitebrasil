@@ -28,15 +28,15 @@ Após traduzir cada arquivo, marque o checkpoint com `[x]`.
 
 ## Seção 2: Sintaxe e Declarações
 
-- [ ] `_content/blog/declaration-syntax.md` - Sintaxe de declaração
-- [ ] `_content/blog/gos-declaration-syntax.md` - Sintaxe de declaração Go
-- [ ] `_content/blog/constants.md` - Constantes
-- [ ] `_content/blog/strings.md` - Strings
-- [ ] `_content/blog/slices.md` - Slices
-- [ ] `_content/blog/slices-intro.md` - Introdução a Slices
-- [ ] `_content/blog/go-slices-usage-and-internals.md` - Slices: uso e internals
-- [ ] `_content/blog/maps.md` - Maps
-- [ ] `_content/blog/go-maps-in-action.md` - Maps em ação
+- [x] `_content/blog/declaration-syntax.md` - Sintaxe de declaração
+- [x] `_content/blog/gos-declaration-syntax.md` - Sintaxe de declaração Go
+- [x] `_content/blog/constants.md` - Constantes
+- [x] `_content/blog/strings.md` - Strings
+- [x] `_content/blog/slices.md` - Slices
+- [x] `_content/blog/slices-intro.md` - Introdução a Slices
+- [x] `_content/blog/go-slices-usage-and-internals.md` - Slices: uso e internals
+- [x] `_content/blog/maps.md` - Maps
+- [x] `_content/blog/go-maps-in-action.md` - Maps em ação
 
 ---
 
@@ -157,7 +157,7 @@ Após traduzir cada arquivo, marque o checkpoint com `[x]`.
 | Seção | Total | Traduzidos | Progresso |
 |-------|-------|------------|-----------|
 | Introdução | 6 | 6 | 100% |
-| Sintaxe | 9 | 0 | 0% |
+| Sintaxe | 9 | 9 | 100% |
 | Funções | 5 | 0 | 0% |
 | Erros | 4 | 3 | 75% |
 | Interfaces | 7 | 0 | 0% |
@@ -170,7 +170,7 @@ Após traduzir cada arquivo, marque o checkpoint com `[x]`.
 | Profiling | 2 | 0 | 0% |
 | Debugging | 6 | 0 | 0% |
 | Text | 2 | 0 | 0% |
-| **TOTAL** | **67** | **9** | **13%** |
+| **TOTAL** | **67** | **18** | **27%** |
 
 ---
 
