@@ -1,5 +1,6 @@
 ---
-title: Why Generics?
+ia-translated: true
+title: Por Que Generics?
 date: 2019-07-31
 by:
 - Ian Lance Taylor
@@ -7,46 +8,46 @@ tags:
 - go2
 - proposals
 - generics
-summary: Why should we add generics to Go, and what might they look like?
+summary: Por que deveríamos adicionar generics ao Go, e como eles poderiam ser?
 ---
 
-## Introduction
+## Introdução
 
-This is the blog post version of my talk last week at Gophercon 2019.
+Esta é a versão em post de blog da minha palestra na semana passada na Gophercon 2019.
 
 {{video "https://www.youtube.com/embed/WzgLqE-3IhY?rel=0"}}
 
-This article is about what it would mean to add generics to Go, and
-why I think we should do it.
-I'll also touch on an update to a possible design for
-adding generics to Go.
+Este artigo é sobre o que significaria adicionar generics ao Go, e
+por que acho que deveríamos fazer isso.
+Também vou tocar em uma atualização para um possível design para
+adicionar generics ao Go.
 
-Go was released on November 10, 2009.
-Less than 24 hours later we saw the
-[first comment about generics](https://groups.google.com/d/msg/golang-nuts/70-pdwUUrbI/onMsQspcljcJ).
-(That comment also mentions exceptions, which we added to the
-language, in the form of `panic` and `recover`, in early 2010.)
+Go foi lançado em 10 de novembro de 2009.
+Menos de 24 horas depois vimos o
+[primeiro comentário sobre generics](https://groups.google.com/d/msg/golang-nuts/70-pdwUUrbI/onMsQspcljcJ).
+(Esse comentário também menciona exceções, que adicionamos à
+linguagem, na forma de `panic` e `recover`, no início de 2010.)
 
-In three years of Go surveys, lack of generics has always been listed
-as one of the top three problems to fix in the language.
+Em três anos de pesquisas Go, a falta de generics sempre foi listada
+como um dos três principais problemas a corrigir na linguagem.
 
-## Why generics?
+## Por que generics?
 
-But what does it mean to add generics, and why would we want it?
+Mas o que significa adicionar generics, e por que queremos isso?
 
-To paraphrase
+Parafraseando
 [Jazayeri, et al](https://www.dagstuhl.de/en/program/calendar/semhp/?semnr=98171):
-generic programming enables the representation of functions and data
-structures in a generic form, with types factored out.
+programação generic permite a representação de funções e estruturas de dados
+em uma forma generic, com tipos fatorados.
 
-What does that mean?
+O que isso significa?
 
-For a simple example, let's assume we want to reverse the elements in
-a slice.
-It's not something that many programs need to do, but it's
-not all that unusual.
+Para um exemplo simples, vamos supor que queremos inverter os elementos em
+um slice.
+Não é algo que muitos programas precisam fazer, mas não é
+nada incomum.
 
-Let's say it's a slice of int.
+Vamos dizer que é um slice de int.
 
 {{raw `
 	func ReverseInts(s []int) {
@@ -60,10 +61,10 @@ Let's say it's a slice of int.
 	}
 `}}
 
-Pretty simple, but even for a simple function like that you'd want to
-write a few test cases.
-In fact, when I did, I found a bug.
-I'm sure many readers have spotted it already.
+Bem simples, mas mesmo para uma função simples como essa você gostaria de
+escrever alguns casos de teste.
+Na verdade, quando eu fiz, encontrei um bug.
+Tenho certeza de que muitos leitores já o perceberam.
 
 {{raw `
 	func ReverseInts(s []int) {
@@ -77,9 +78,9 @@ I'm sure many readers have spotted it already.
 	}
 `}}
 
-We need to subtract 1 when we set the variable last.
+Precisamos subtrair 1 quando definimos a variável last.
 
-Now let's reverse a slice of string.
+Agora vamos inverter um slice de string.
 
 {{raw `
 	func ReverseStrings(s []string) {
@@ -93,282 +94,281 @@ Now let's reverse a slice of string.
 	}
 `}}
 
-If you compare `ReverseInts` and `ReverseStrings`, you'll see that the
-two functions are exactly the same, except for the type of the parameter.
-I don't think any reader is surprised by that.
+Se você comparar `ReverseInts` e `ReverseStrings`, verá que as
+duas funções são exatamente iguais, exceto pelo tipo do parâmetro.
+Não acho que nenhum leitor se surpreenda com isso.
 
-What some people new to Go find surprising is that there is no way to
-write a simple `Reverse` function that works for a slice of any type.
+O que algumas pessoas novas em Go acham surpreendente é que não há maneira de
+escrever uma função `Reverse` simples que funcione para um slice de qualquer tipo.
 
-Most other languages do let you write that kind of function.
+A maioria das outras linguagens permite que você escreva esse tipo de função.
 
-In a dynamically typed language like Python or JavaScript you can
-simply write the function, without bothering to specify the element
-type.  This doesn't work in Go because Go is statically typed, and
-requires you to write down the exact type of the slice and the type of
-the slice elements.
+Em uma linguagem dinamicamente tipada como Python ou JavaScript você pode
+simplesmente escrever a função, sem se preocupar em especificar o tipo do elemento.
+Isso não funciona em Go porque Go é estaticamente tipado, e
+requer que você escreva o tipo exato do slice e o tipo dos
+elementos do slice.
 
-Most other statically typed languages, like C++ or Java or Rust or
-Swift, support generics to address exactly this kind of issue.
+A maioria das outras linguagens estaticamente tipadas, como C++ ou Java ou Rust ou
+Swift, suportam generics para lidar exatamente com esse tipo de questão.
 
-## Go generic programming today
+## Programação generic em Go hoje
 
-So how do people write this kind of code in Go?
+Então como as pessoas escrevem esse tipo de código em Go?
 
-In Go you can write a single function that works for different slice
-types by using an interface type, and defining a method on the slice
-types you want to pass in.
-That is how the standard library's `sort.Sort` function works.
+Em Go você pode escrever uma única função que funciona para diferentes tipos de slice
+usando um tipo de interface, e definindo um método nos tipos de slice
+que você quer passar.
+É assim que a função `sort.Sort` da biblioteca padrão funciona.
 
-In other words, interface types in Go are a form of generic
-programming.
-They let us capture the common aspects of different types and express
-them as methods.
-We can then write functions that use those interface types, and those
-functions will work for any type that implements those methods.
+Em outras palavras, tipos de interface em Go são uma forma de programação
+generic.
+Eles nos permitem capturar os aspectos comuns de diferentes tipos e expressá-los
+como métodos.
+Podemos então escrever funções que usam esses tipos de interface, e essas
+funções funcionarão para qualquer tipo que implemente esses métodos.
 
-But this approach falls short of what we want.
-With interfaces you have to write the methods yourself.
-It's awkward to have to define a named type with a couple of methods
-just to reverse a slice.
-And the methods you write are exactly the same for each slice type, so
-in a sense we've just moved and condensed the duplicate code, we
-haven't eliminated it.
-Although interfaces are a form of generics, they don’t give us
-everything we want from generics.
+Mas essa abordagem fica aquém do que queremos.
+Com interfaces você tem que escrever os métodos você mesmo.
+É estranho ter que definir um tipo nomeado com alguns métodos
+apenas para inverter um slice.
+E os métodos que você escreve são exatamente os mesmos para cada tipo de slice, então
+de certa forma apenas movemos e condensamos o código duplicado, não
+o eliminamos.
+Embora interfaces sejam uma forma de generics, elas não nos dão
+tudo o que queremos de generics.
 
-A different way of using interfaces for generics, which could get around
-the need to write the methods yourself, would be to have the language
-define methods for some kinds of types.
-That isn't something the language supports today, but, for example,
-the language could define that every slice type has an Index method
-that returns an element.
-But in order to use that method in practice it would have to return an
-empty interface type, and then we lose all the benefits of static
-typing.
-More subtly, there would be no way to define a generic function that
-takes two different slices with the same element type, or that takes a
-map of one element type and returns a slice of the same element type.
-Go is a statically typed language because that makes it easier to
-write large programs; we don’t want to lose the benefits of static
-typing in order to gain the benefits of generics.
+Uma maneira diferente de usar interfaces para generics, que poderia contornar
+a necessidade de escrever os métodos você mesmo, seria fazer a linguagem
+definir métodos para alguns tipos de tipos.
+Isso não é algo que a linguagem suporte hoje, mas, por exemplo,
+a linguagem poderia definir que todo tipo slice tem um método Index
+que retorna um elemento.
+Mas para usar esse método na prática ele teria que retornar uma
+interface vazia, e então perdemos todos os benefícios da tipagem
+estática.
+Mais sutilmente, não haveria maneira de definir uma função generic que
+recebe dois slices diferentes com o mesmo tipo de elemento, ou que recebe um
+map de um tipo de elemento e retorna um slice do mesmo tipo de elemento.
+Go é uma linguagem estaticamente tipada porque isso torna mais fácil
+escrever programas grandes; não queremos perder os benefícios da tipagem
+estática para ganhar os benefícios de generics.
 
-Another approach would be to write a generic `Reverse` function using
-the reflect package, but that is so awkward to write and slow to run
-that few people do that.
-That approach also requires explicit type assertions and has no static
-type checking.
+Outra abordagem seria escrever uma função `Reverse` generic usando
+o pacote reflect, mas isso é tão estranho de escrever e lento de executar
+que poucas pessoas fazem isso.
+Essa abordagem também requer asserções de tipo explícitas e não tem
+verificação de tipo estática.
 
-Or, you could write a code generator that takes a type and generates a
-`Reverse` function for slices of that type.
-There are several code generators out there that do just that.
-But this adds another step to every package that needs `Reverse`,
-it complicates the build because all the different copies have to be
-compiled, and fixing a bug in the master source requires re-generating
-all the instances, some of which may be in different projects
-entirely.
+Ou, você poderia escrever um gerador de código que recebe um tipo e gera uma
+função `Reverse` para slices desse tipo.
+Existem vários geradores de código por aí que fazem exatamente isso.
+Mas isso adiciona outro passo a cada pacote que precisa de `Reverse`,
+complica a compilação porque todas as diferentes cópias têm que ser
+compiladas, e corrigir um bug na fonte mestra requer re-gerar
+todas as instâncias, algumas das quais podem estar em projetos diferentes
+inteiramente.
 
-All these approaches are awkward enough that I think most
-people who have to reverse a slice in Go just write the function for
-the specific slice type that they need.
-Then they'll need to write test cases for the function, to make sure
-they didn't make a simple mistake like the one I made initially.
-And they'll need to run those tests routinely.
+Todas essas abordagens são estranhas o suficiente para que eu acho que a maioria das
+pessoas que têm que inverter um slice em Go simplesmente escrevem a função para
+o tipo de slice específico de que precisam.
+Então elas precisarão escrever casos de teste para a função, para ter certeza
+de que não cometeram um erro simples como o que eu cometi inicialmente.
+E elas precisarão executar esses testes rotineiramente.
 
-However we do it, it means a lot of extra work just for a function that
-looks exactly the same except for the element type.
-It's not that it can't be done.
-It clearly can be done, and Go programmers are doing it.
-It's just that there ought to be a better way.
+De qualquer forma que façamos, significa muito trabalho extra apenas para uma função que
+parece exatamente a mesma exceto pelo tipo do elemento.
+Não é que não possa ser feito.
+Claramente pode ser feito, e os programadores Go estão fazendo.
+É só que deveria haver uma maneira melhor.
 
-For a statically typed language like Go, that better way is generics.
-What I wrote earlier is that generic programming enables the
-representation of functions and data structures in a generic form,
-with types factored out.
-That's exactly what we want here.
+Para uma linguagem estaticamente tipada como Go, essa maneira melhor é generics.
+O que escrevi anteriormente é que programação generic permite a
+representação de funções e estruturas de dados em uma forma generic,
+com tipos fatorados.
+É exatamente isso que queremos aqui.
 
-## What generics can bring to Go
+## O que generics podem trazer para Go
 
-The first and most important thing we want from generics in Go is to
-be able to write functions like `Reverse` without caring about the
-element type of the slice.
-We want to factor out that element type.
-Then we can write the function once, write the tests once, put them in
-a go-gettable package, and call them whenever we want.
+A primeira e mais importante coisa que queremos de generics em Go é
+poder escrever funções como `Reverse` sem se preocupar com o
+tipo do elemento do slice.
+Queremos fatorar esse tipo de elemento.
+Então podemos escrever a função uma vez, escrever os testes uma vez, colocá-los em
+um pacote go-gettable, e chamá-los sempre que quisermos.
 
-Even better, since this is an open source world, someone else can
-write `Reverse` once, and we can use their implementation.
+Melhor ainda, como este é um mundo de código aberto, outra pessoa pode
+escrever `Reverse` uma vez, e podemos usar sua implementação.
 
-At this point I should say that “generics” can mean a lot of different
-things.
-In this article, what I mean by “generics” is what I just described.
-In particular, I don’t mean templates as found in the C++ language,
-which support quite a bit more than what I’ve written here.
+Neste ponto devo dizer que "generics" podem significar muitas coisas diferentes.
+Neste artigo, o que quero dizer com "generics" é o que acabei de descrever.
+Em particular, não quero dizer templates como encontrados na linguagem C++,
+que suportam muito mais do que o que escrevi aqui.
 
-I went through `Reverse` in detail, but there are many other functions
-that we could write generically, such as:
+Passei por `Reverse` em detalhe, mas há muitas outras funções
+que poderíamos escrever genericamente, tais como:
 
-  - Find smallest/largest element in slice
-  - Find average/standard deviation of slice
-  - Compute union/intersection of maps
-  - Find shortest path in node/edge graph
-  - Apply transformation function to slice/map, returning new slice/map
+  - Encontrar menor/maior elemento em slice
+  - Encontrar média/desvio padrão de slice
+  - Calcular união/interseção de maps
+  - Encontrar caminho mais curto em grafo de nós/arestas
+  - Aplicar função de transformação a slice/map, retornando novo slice/map
 
-These examples are available in most other languages.
-In fact, I wrote this list by glancing at the C++ standard template
-library.
+Estes exemplos estão disponíveis na maioria das outras linguagens.
+Na verdade, escrevi esta lista olhando para a biblioteca de templates
+padrão do C++.
 
-There are also examples that are specific to Go with its strong
-support for concurrency.
+Também há exemplos que são específicos do Go com seu forte
+suporte para concorrência.
 
-  - Read from a channel with a timeout
-  - Combine two channels into a single channel
-  - Call a list of functions in parallel, returning a slice of results
-  - Call a list of functions, using a Context, return the result of the first function to finish, canceling and cleaning up extra goroutines
+  - Ler de um canal com timeout
+  - Combinar dois canais em um único canal
+  - Chamar uma lista de funções em paralelo, retornando um slice de resultados
+  - Chamar uma lista de funções, usando um Context, retornar o resultado da primeira função a terminar, cancelando e limpando goroutines extras
 
-I've seen all of these functions written out many times with different
-types.
-It's not hard to write them in Go.
-But it would be nice to be able to reuse an efficient and debugged
-implementation that works for any value type.
+Já vi todas essas funções escritas muitas vezes com diferentes
+tipos.
+Não é difícil escrevê-las em Go.
+Mas seria bom poder reutilizar uma implementação eficiente e depurada
+que funcione para qualquer tipo de valor.
 
-To be clear, these are just examples.
-There are many more general purpose functions that could be written
-more easily and safely using generics.
+Para deixar claro, estes são apenas exemplos.
+Há muitas outras funções de propósito geral que poderiam ser escritas
+mais facilmente e com segurança usando generics.
 
-Also, as I wrote earlier, it's not just functions.
-It's also data structures.
+Além disso, como escrevi anteriormente, não são apenas funções.
+São também estruturas de dados.
 
-Go has two general purpose generic data structures built into the
-language: slices and maps.
-Slices and maps can hold values of any data type, with static type
-checking for values stored and retrieved.
-The values are stored as themselves, not as interface types.
-That is, when I have a `[]int`, the slice holds ints directly, not
-ints converted to an interface type.
+Go tem duas estruturas de dados generic de propósito geral embutidas na
+linguagem: slices e maps.
+Slices e maps podem conter valores de qualquer tipo de dados, com verificação de tipo
+estática para valores armazenados e recuperados.
+Os valores são armazenados como eles mesmos, não como tipos de interface.
+Ou seja, quando tenho um `[]int`, o slice contém ints diretamente, não
+ints convertidos para um tipo de interface.
 
-Slices and maps are the most useful generic data structures, but they
-aren’t the only ones.
-Here are some other examples.
+Slices e maps são as estruturas de dados generic mais úteis, mas não são
+as únicas.
+Aqui estão alguns outros exemplos.
 
-  - Sets
-  - Self-balancing trees, with efficient insertion and traversal in sorted order
-  - Multimaps, with multiple instances of a key
-  - Concurrent hash maps, supporting parallel insertions and lookups with no single lock
+  - Conjuntos
+  - Árvores auto-balanceadas, com inserção e travessia eficientes em ordem ordenada
+  - Multimaps, com múltiplas instâncias de uma chave
+  - Mapas hash concorrentes, suportando inserções e buscas paralelas sem um único lock
 
-If we can write generic types, we can define new data structures, like
-these, that have the same type-checking advantages as slices and maps:
-the compiler can statically type-check the types of the values that
-they hold, and the values can be stored as themselves, not as
-interface types.
+Se pudermos escrever tipos generic, podemos definir novas estruturas de dados, como
+estas, que têm as mesmas vantagens de verificação de tipo que slices e maps:
+o compilador pode verificar estaticamente os tipos dos valores que
+eles contêm, e os valores podem ser armazenados como eles mesmos, não como
+tipos de interface.
 
-It should also be possible to take algorithms like the ones mentioned
-earlier and apply them to generic data structures.
+Também deveria ser possível pegar algoritmos como os mencionados
+anteriormente e aplicá-los a estruturas de dados generic.
 
-These examples should all be just like `Reverse`: generic functions
-and data structures written once, in a package, and reused whenever
-they are needed.
-They should work like slices and maps, in that they shouldn't store
-values of empty interface type, but should store specific types, and
-those types should be checked at compile time.
+Estes exemplos deveriam todos ser como `Reverse`: funções generic
+e estruturas de dados escritas uma vez, em um pacote, e reutilizadas sempre
+que forem necessárias.
+Eles deveriam funcionar como slices e maps, no sentido de que não deveriam armazenar
+valores do tipo de interface vazia, mas deveriam armazenar tipos específicos, e
+esses tipos deveriam ser verificados em tempo de compilação.
 
-So that's what Go can gain from generics.
-Generics can give us powerful building blocks that let us share code
-and build programs more easily.
+Então é isso que Go pode ganhar com generics.
+Generics podem nos dar blocos de construção poderosos que nos permitem compartilhar código
+e construir programas mais facilmente.
 
-I hope I’ve explained why this is worth looking into.
+Espero ter explicado por que vale a pena investigar isso.
 
-## Benefits and costs
+## Benefícios e custos
 
-But generics don't come from the
+Mas generics não vêm da
 [Big Rock Candy Mountain](https://mainlynorfolk.info/folk/songs/bigrockcandymountain.html),
-the land where the sun shines every day over the
+a terra onde o sol brilha todos os dias sobre as
 [lemonade springs](http://www.lat-long.com/Latitude-Longitude-773297-Montana-Lemonade_Springs.html).
-Every language change has a cost.
-There's no doubt that adding generics to Go will make the language
-more complicated.
-As with any change to the language, we need to talk about maximizing
-the benefit and minimizing the cost.
+Toda mudança de linguagem tem um custo.
+Não há dúvida de que adicionar generics ao Go tornará a linguagem
+mais complicada.
+Como com qualquer mudança na linguagem, precisamos falar sobre maximizar
+o benefício e minimizar o custo.
 
-In Go, we’ve aimed to reduce complexity through independent, orthogonal
-language features that can be combined freely.
-We reduce complexity by making the individual features simple, and we
-maximize the benefit of the features by permitting their free
-combination.
-We want to do the same with generics.
+Em Go, visamos reduzir a complexidade através de recursos de linguagem
+independentes e ortogonais que podem ser combinados livremente.
+Reduzimos a complexidade tornando os recursos individuais simples, e
+maximizamos o benefício dos recursos permitindo sua livre
+combinação.
+Queremos fazer o mesmo com generics.
 
-To make this more concrete I’m going to list a few guidelines we
-should follow.
+Para tornar isso mais concreto vou listar algumas diretrizes que
+deveríamos seguir.
 
-### Minimize new concepts
+### Minimizar novos conceitos
 
-We should add as few new concepts to the language as possible.
-That means a minimum of new syntax and a minimum of new keywords and
-other names.
+Devemos adicionar o mínimo possível de novos conceitos à linguagem.
+Isso significa um mínimo de nova sintaxe e um mínimo de novas palavras-chave e
+outros nomes.
 
-### Complexity falls on the writer of generic code, not the user
+### Complexidade recai sobre quem escreve código generic, não sobre o usuário
 
-As much as possible the complexity should fall on the programmer
-writing the generic package.
-We don't want the user of the package to have to worry about generics.
-This means that it should be possible to call generic functions in a
-natural way, and it means that any errors in using a generic package
-should be reported in a way that is easy to understand and to fix.
-It should also be easy to debug calls into generic code.
+O máximo possível da complexidade deve recair sobre o programador
+que escreve o pacote generic.
+Não queremos que o usuário do pacote tenha que se preocupar com generics.
+Isso significa que deve ser possível chamar funções generic de uma
+maneira natural, e significa que quaisquer erros no uso de um pacote generic
+devem ser reportados de uma forma que seja fácil de entender e corrigir.
+Também deve ser fácil depurar chamadas em código generic.
 
-### Writer and user can work independently
+### Quem escreve e usuário podem trabalhar independentemente
 
-Similarly, we should make it easy to separate the concerns of the
-writer of the generic code and its user, so that they can develop their
-code independently.
-They shouldn't have to worry about what the other is doing, any more
-than the writer and caller of a normal function in different packages
-have to worry.
-This sounds obvious, but it's not true of generics in every other
-programming language.
+Similarmente, devemos facilitar a separação das preocupações de quem
+escreve o código generic e seu usuário, para que eles possam desenvolver seu
+código independentemente.
+Eles não devem ter que se preocupar com o que o outro está fazendo, mais
+do que quem escreve e quem chama uma função normal em pacotes diferentes
+têm que se preocupar.
+Isso parece óbvio, mas não é verdade para generics em todas as outras
+linguagens de programação.
 
-### Short build times, fast execution times
+### Tempos de compilação curtos, tempos de execução rápidos
 
-Naturally, as much as possible, we want to keep the short build times
-and fast execution time that Go gives us today.
-Generics tend to introduce a tradeoff between fast builds and fast
-execution.
-As much as possible, we want both.
+Naturalmente, o máximo possível, queremos manter os tempos de compilação curtos
+e o tempo de execução rápido que Go nos dá hoje.
+Generics tendem a introduzir um trade-off entre compilações rápidas e
+execução rápida.
+O máximo possível, queremos ambos.
 
-### Preserve clarity and simplicity of Go
+### Preservar clareza e simplicidade do Go
 
-Most importantly, Go today is a simple language.
-Go programs are usually clear and easy to understand.
-A major part of our long process of exploring this space has been
-trying to understand how to add generics while preserving that clarity
-and simplicity.
-We need to find mechanisms that fit well into the existing language,
-without turning it into something quite different.
+Mais importante, Go hoje é uma linguagem simples.
+Programas Go são geralmente claros e fáceis de entender.
+Uma grande parte do nosso longo processo de exploração deste espaço tem sido
+tentar entender como adicionar generics preservando essa clareza
+e simplicidade.
+Precisamos encontrar mecanismos que se encaixem bem na linguagem existente,
+sem transformá-la em algo bem diferente.
 
-These guidelines should apply to any generics implementation in Go.
-That’s the most important message I want to leave you with today:
-**generics can bring a significant benefit to the language, but they are only worth doing if Go still feels like Go**.
+Estas diretrizes devem se aplicar a qualquer implementação de generics em Go.
+Essa é a mensagem mais importante que quero deixar com vocês hoje:
+**generics podem trazer um benefício significativo para a linguagem, mas só valem a pena se Go ainda parecer Go**.
 
-## Draft design
+## Rascunho de design
 
-Fortunately, I think it can be done.
-To finish up this article I’m going to shift from discussing why we
-want generics, and what the requirements on them are, to briefly
-discuss a design for how we think we can add them to the language.
+Felizmente, acho que pode ser feito.
+Para terminar este artigo vou mudar de discutir por que queremos
+generics, e quais são os requisitos sobre eles, para brevemente
+discutir um design de como achamos que podemos adicioná-los à linguagem.
 
-Note added January 2022: This blog post was written in 2019 and does
-not describe the version of generics that was finally adopted.
-For updated information please see the description of type parameters in
-[the language spec](/ref/spec) and
-[the generics design document](/design/43651-type-parameters).
+Nota adicionada em janeiro de 2022: Este post de blog foi escrito em 2019 e não
+descreve a versão de generics que foi finalmente adotada.
+Para informações atualizadas por favor veja a descrição de type parameters em
+[a especificação da linguagem](/ref/spec) e
+[o documento de design de generics](/design/43651-type-parameters).
 
-At this year's Gophercon Robert Griesemer and I published
-[a design draft](https://github.com/golang/proposal/blob/master/design/go2draft-contracts.md)
-for adding generics to Go.
-See the draft for full details.
-I'll go over some of the main points here.
+Na Gophercon deste ano Robert Griesemer e eu publicamos
+[um rascunho de design](https://github.com/golang/proposal/blob/master/design/go2draft-contracts.md)
+para adicionar generics ao Go.
+Veja o rascunho para detalhes completos.
+Vou passar por alguns dos pontos principais aqui.
 
-Here is the generic Reverse function in this design.
+Aqui está a função generic Reverse neste design.
 
 {{raw `
 	func Reverse (type Element) (s []Element) {
@@ -382,57 +382,57 @@ Here is the generic Reverse function in this design.
 	}
 `}}
 
-You'll notice that the body of the function is exactly the same.
-Only the signature has changed.
+Você notará que o corpo da função é exatamente o mesmo.
+Apenas a assinatura mudou.
 
-The element type of the slice has been factored out.
-It's now named `Element` and has become what we call a
+O tipo de elemento do slice foi fatorado.
+Agora é chamado de `Element` e tornou-se o que chamamos de
 _type parameter_.
-Instead of being part of the type of the slice parameter, it's now a
-separate, additional, type parameter.
+Em vez de fazer parte do tipo do parâmetro slice, agora é um
+parâmetro adicional, separado, de tipo.
 
-To call a function with a type parameter, in the general case you pass
-a type argument, which is like any other argument except that it's a
-type.
+Para chamar uma função com um type parameter, no caso geral você passa
+um argumento de tipo, que é como qualquer outro argumento exceto que é um
+tipo.
 
 	func ReverseAndPrint(s []int) {
 		Reverse(int)(s)
 		fmt.Println(s)
 	}
 
-That is the `(int)` seen after `Reverse` in this example.
+Esse é o `(int)` visto após `Reverse` neste exemplo.
 
-Fortunately, in most cases, including this one, the compiler can
-deduce the type argument from the types of the regular arguments, and
-you don't need to mention the type argument at all.
+Felizmente, na maioria dos casos, incluindo este, o compilador pode
+deduzir o argumento de tipo a partir dos tipos dos argumentos regulares, e
+você não precisa mencionar o argumento de tipo de forma alguma.
 
-Calling a generic function just looks like calling any other function.
+Chamar uma função generic parece simplesmente chamar qualquer outra função.
 
 	func ReverseAndPrint(s []int) {
 		Reverse(s)
 		fmt.Println(s)
 	}
 
-In other words, although the generic `Reverse` function is slightly
-more complex than `ReverseInts` and `ReverseStrings`, that complexity
-falls on the writer of the function, not the caller.
+Em outras palavras, embora a função generic `Reverse` seja ligeiramente
+mais complexa que `ReverseInts` e `ReverseStrings`, essa complexidade
+recai sobre quem escreve a função, não sobre quem a chama.
 
 ### Contracts
 
-Since Go is a statically typed language, we have to talk about the
-type of a type parameter.
-This _meta-type_ tells the compiler what sorts of type arguments are
-permitted when calling a generic function, and what sorts of
-operations the generic function can do with values of the type
+Como Go é uma linguagem estaticamente tipada, temos que falar sobre o
+tipo de um type parameter.
+Este _meta-tipo_ diz ao compilador que tipos de argumentos de tipo são
+permitidos ao chamar uma função generic, e que tipos de
+operações a função generic pode fazer com valores do type
 parameter.
 
-The `Reverse` function can work with slices of any type.
-The only thing it does with values of type `Element` is assignment,
-which works with any type in Go.
-For this kind of generic function, which is a very common case, we
-don't need to say anything special about the type parameter.
+A função `Reverse` pode funcionar com slices de qualquer tipo.
+A única coisa que ela faz com valores do tipo `Element` é atribuição,
+que funciona com qualquer tipo em Go.
+Para este tipo de função generic, que é um caso muito comum, não
+precisamos dizer nada especial sobre o type parameter.
 
-Let's take a quick look at a different function.
+Vamos dar uma olhada rápida em uma função diferente.
 
 {{raw `
 	func IndexByte (type T Sequence) (s T, b byte) int {
@@ -445,56 +445,56 @@ Let's take a quick look at a different function.
 	}
 `}}
 
-Currently both the bytes package and the strings package in the
-standard library have an `IndexByte` function.
-This function returns the index of `b` in the sequence `s`, where `s`
-is either a `string` or a `[]byte`.
-We could use this single generic function to replace the two functions
-in the bytes and strings packages.
-In practice we may not bother doing that, but this is a useful simple
-example.
+Atualmente tanto o pacote bytes quanto o pacote strings na
+biblioteca padrão têm uma função `IndexByte`.
+Esta função retorna o índice de `b` na sequência `s`, onde `s`
+é ou um `string` ou um `[]byte`.
+Poderíamos usar esta única função generic para substituir as duas funções
+nos pacotes bytes e strings.
+Na prática podemos não nos dar ao trabalho de fazer isso, mas este é um exemplo simples
+útil.
 
-Here we need to know that the type parameter `T` acts like a `string`
-or a `[]byte`.
-We can call `len` on it, and we can index to it, and we can compare
-the result of the index operation to a byte value.
+Aqui precisamos saber que o type parameter `T` age como um `string`
+ou um `[]byte`.
+Podemos chamar `len` nele, e podemos indexá-lo, e podemos comparar
+o resultado da operação de índice com um valor byte.
 
-To let this compile, the type parameter `T` itself needs a type.
-It's a meta-type, but because we sometimes need to describe multiple
-related types, and because it describes a relationship between the
-implementation of the generic function and its callers, we actually
-call the type of `T` a contract.
-Here the contract is named `Sequence`.
-It appears after the list of type parameters.
+Para permitir que isso compile, o type parameter `T` em si precisa de um tipo.
+É um meta-tipo, mas como às vezes precisamos descrever múltiplos
+tipos relacionados, e porque descreve uma relação entre a
+implementação da função generic e seus chamadores, na verdade
+chamamos o tipo de `T` de contract.
+Aqui o contract é chamado `Sequence`.
+Ele aparece após a lista de type parameters.
 
-This is how the Sequence contract is defined for this example.
+É assim que o contract Sequence é definido para este exemplo.
 
 	contract Sequence(T) {
 		T string, []byte
 	}
 
-It's pretty simple, since this is a simple example: the type parameter
-`T` can be either `string` or `[]byte`.
-Here `contract` may be a new keyword, or a special identifier
-recognized in package scope; see the design draft for details.
+É bem simples, já que este é um exemplo simples: o type parameter
+`T` pode ser ou `string` ou `[]byte`.
+Aqui `contract` pode ser uma nova palavra-chave, ou um identificador especial
+reconhecido em escopo de pacote; veja o rascunho de design para detalhes.
 
-Anybody who remembers [the design we presented at Gophercon 2018](https://github.com/golang/proposal/blob/4a530dae40977758e47b78fae349d8e5f86a6c0a/design/go2draft-contracts.md)
-will see that this way of writing a contract is a lot simpler.
-We got a lot of feedback on that earlier design that contracts were
-too complicated, and we've tried to take that into account.
-The new contracts are much simpler to write, and to read, and to
-understand.
+Qualquer um que se lembre [do design que apresentamos na Gophercon 2018](https://github.com/golang/proposal/blob/4a530dae40977758e47b78fae349d8e5f86a6c0a/design/go2draft-contracts.md)
+verá que esta forma de escrever um contract é muito mais simples.
+Recebemos muito feedback sobre aquele design anterior de que contracts eram
+muito complicados, e tentamos levar isso em conta.
+Os novos contracts são muito mais simples de escrever, e de ler, e de
+entender.
 
-They let you specify the underlying type of a type parameter, and/or
-list the methods of a type parameter.
-They also let you describe the relationship between different type
+Eles permitem que você especifique o tipo subjacente de um type parameter, e/ou
+liste os métodos de um type parameter.
+Eles também permitem que você descreva a relação entre diferentes type
 parameters.
 
-### Contracts with methods
+### Contracts com métodos
 
-Here is another simple example, of a function that uses the String
-method to return a `[]string` of the string representation of all the
-elements in `s`.
+Aqui está outro exemplo simples, de uma função que usa o método String
+para retornar um `[]string` da representação string de todos os
+elementos em `s`.
 
 	func ToStrings (type E Stringer) (s []E) []string {
 		r := make([]string, len(s))
@@ -504,33 +504,31 @@ elements in `s`.
 		return r
 	}
 
-It's pretty straightforward: walk through the slice, call the `String`
-method on each element, and return a slice of the resulting strings.
+É bem direto: percorre o slice, chama o método `String`
+em cada elemento, e retorna um slice das strings resultantes.
 
-This function requires that the element type implement the `String`
-method.
-The Stringer contract ensures that.
+Esta função requer que o tipo do elemento implemente o método `String`.
+O contract Stringer garante isso.
 
 	contract Stringer(T) {
 		T String() string
 	}
 
-The contract simply says that `T` has to implement the `String`
-method.
+O contract simplesmente diz que `T` tem que implementar o método `String`.
 
-You may notice that this contract looks like the `fmt.Stringer`
-interface, so it's worth pointing out that the argument of the
-`ToStrings` function is not a slice of `fmt.Stringer`.
-It's a slice of some element type, where the element type implements
+Você pode notar que este contract se parece com a interface `fmt.Stringer`,
+então vale a pena apontar que o argumento da função
+`ToStrings` não é um slice de `fmt.Stringer`.
+É um slice de algum tipo de elemento, onde o tipo de elemento implementa
 `fmt.Stringer`.
-The memory representation of a slice of the element type and a slice
-of `fmt`.Stringer are normally different, and Go does not support
-direct conversions between them.
-So this is worth writing, even though `fmt.Stringer` exists.
+A representação de memória de um slice do tipo de elemento e um slice
+de `fmt.Stringer` são normalmente diferentes, e Go não suporta
+conversões diretas entre eles.
+Então vale a pena escrever isso, mesmo que `fmt.Stringer` exista.
 
-### Contracts with multiple types
+### Contracts com múltiplos tipos
 
-Here is an example of a contract with multiple type parameters.
+Aqui está um exemplo de um contract com múltiplos type parameters.
 
 	type Graph (type Node, Edge G) struct { ... }
 
@@ -547,32 +545,32 @@ Here is an example of a contract with multiple type parameters.
 		...
 	}
 
-Here we're describing a graph, built from nodes and edges.
-We're not requiring a particular data structure for the graph.
-Instead, we're saying that the `Node` type has to have an `Edges`
-method that returns the list of edges that connect to the `Node`.
-And the `Edge` type has to have a `Nodes` method that returns the two
-`Nodes` that the `Edge` connects.
+Aqui estamos descrevendo um grafo, construído a partir de nós e arestas.
+Não estamos exigindo uma estrutura de dados particular para o grafo.
+Em vez disso, estamos dizendo que o tipo `Node` tem que ter um método `Edges`
+que retorna a lista de arestas que conectam ao `Node`.
+E o tipo `Edge` tem que ter um método `Nodes` que retorna os dois
+`Nodes` que a `Edge` conecta.
 
-I've skipped the implementation, but this shows the signature of a
-`New` function that returns a `Graph`, and the signature of a
-`ShortestPath` method on `Graph`.
+Omiti a implementação, mas isso mostra a assinatura de uma
+função `New` que retorna um `Graph`, e a assinatura de um
+método `ShortestPath` em `Graph`.
 
-The important takeaway here is that a contract isn't just about a
-single type.  It can describe the relationships between two or more
-types.
+O ponto importante aqui é que um contract não é apenas sobre um
+único tipo. Ele pode descrever as relações entre dois ou mais
+tipos.
 
-### Ordered types
+### Tipos ordenados
 
-One surprisingly common complaint about Go is that it doesn't have a
-`Min` function.
-Or, for that matter, a `Max` function.
-That's because a useful `Min` function should work for any ordered
-type, which means that it has to be generic.
+Uma reclamação surpreendentemente comum sobre Go é que ele não tem uma
+função `Min`.
+Ou, para falar nisso, uma função `Max`.
+Isso é porque uma função `Min` útil deveria funcionar para qualquer tipo
+ordenado, o que significa que tem que ser generic.
 
-While `Min` is pretty trivial to write yourself, any useful generics
-implementation should let us add it to the standard library.
-This is what it looks like with our design.
+Embora `Min` seja bem trivial de escrever você mesmo, qualquer implementação de generics
+útil deveria nos permitir adicioná-la à biblioteca padrão.
+É assim que fica com nosso design.
 
 {{raw `
 	func Min (type T Ordered) (a, b T) T {
@@ -583,9 +581,9 @@ This is what it looks like with our design.
 	}
 `}}
 
-The `Ordered` contract says that the type T has to be an ordered type,
-which means that it supports operators like less than, greater than,
-and so forth.
+O contract `Ordered` diz que o tipo T tem que ser um tipo ordenado,
+o que significa que suporta operadores como menor que, maior que,
+e assim por diante.
 
 	contract Ordered(T) {
 		T int, int8, int16, int32, int64,
@@ -594,30 +592,30 @@ and so forth.
 			string
 	}
 
-The `Ordered` contract is just a list of all the ordered types that
-are defined by the language.
-This contract accepts any of the listed types, or any named type whose
-underlying type is one of those types.
-Basically, any type you can use with the less than operator.
+O contract `Ordered` é apenas uma lista de todos os tipos ordenados que
+são definidos pela linguagem.
+Este contract aceita qualquer um dos tipos listados, ou qualquer tipo nomeado cujo
+tipo subjacente seja um desses tipos.
+Basicamente, qualquer tipo que você possa usar com o operador menor que.
 
-It turns out that it's much easier to simply enumerate the types that
-support the less than operator than it is to invent a new notation
-that works for all operators.
-After all, in Go, only built-in types support operators.
+Acontece que é muito mais fácil simplesmente enumerar os tipos que
+suportam o operador menor que do que inventar uma nova notação
+que funcione para todos os operadores.
+Afinal, em Go, apenas tipos embutidos suportam operadores.
 
-This same approach can be used for any operator, or more generally
-to write a contract for any generic function intended to work with
-builtin types.
-It lets the writer of the generic function specify clearly the set of
-types the function is expected to be used with.
-It lets the caller of the generic function clearly see whether the
-function is applicable for the types being used.
+Esta mesma abordagem pode ser usada para qualquer operador, ou mais geralmente
+para escrever um contract para qualquer função generic destinada a funcionar com
+tipos embutidos.
+Permite que quem escreve a função generic especifique claramente o conjunto de
+tipos com os quais a função é esperada ser usada.
+Permite que quem chama a função generic veja claramente se a
+função é aplicável para os tipos sendo usados.
 
-In practice this contract would probably go into the standard library,
-and so really the `Min` function (which will probably also be in the
-standard library somewhere) will look like this.
-Here we're just referring to the contract `Ordered` defined in the
-contracts package.
+Na prática este contract provavelmente iria para a biblioteca padrão,
+e então realmente a função `Min` (que provavelmente também estará na
+biblioteca padrão em algum lugar) ficará assim.
+Aqui estamos apenas nos referindo ao contract `Ordered` definido no
+pacote contracts.
 
 {{raw `
 	func Min (type T contracts.Ordered) (a, b T) T {
@@ -628,11 +626,11 @@ contracts package.
 	}
 `}}
 
-### Generic data structures
+### Estruturas de dados generic
 
-Finally, let's look at a simple generic data structure, a binary
-tree.  In this example the tree has a comparison function, so there
-are no requirements on the element type.
+Finalmente, vamos olhar para uma estrutura de dados generic simples, uma árvore
+binária. Neste exemplo a árvore tem uma função de comparação, então não há
+requisitos sobre o tipo do elemento.
 
 	type Tree (type E) struct {
 		root    *node(E)
@@ -644,15 +642,15 @@ are no requirements on the element type.
 		left, right *node(E)
 	}
 
-Here is how to create a new binary tree.
-The comparison function is passed to the `New` function.
+Aqui está como criar uma nova árvore binária.
+A função de comparação é passada para a função `New`.
 
 	func New (type E) (cmp func(E, E) int) *Tree(E) {
 		return &Tree(E){compare: cmp}
 	}
 
-An unexported method returns a pointer either to the slot holding v,
-or to the location in the tree where it should go.
+Um método não exportado retorna um ponteiro ou para o slot contendo v,
+ou para a localização na árvore onde deveria ir.
 
 {{raw `
 	func (t *Tree(E)) find(v E) **node(E) {
@@ -671,18 +669,18 @@ or to the location in the tree where it should go.
 	}
 `}}
 
-The details here don't really matter, especially since I haven't
-tested this code.
-I'm just trying to show what it looks like to write a simple generic
-data structure.
+Os detalhes aqui realmente não importam, especialmente já que não
+testei este código.
+Estou apenas tentando mostrar como fica escrever uma estrutura de dados
+generic simples.
 
-This is the code for testing whether the tree contains a value.
+Este é o código para testar se a árvore contém um valor.
 
 	func (t *Tree(E)) Contains(v E) bool {
 		return *t.find(e) != nil
 	}
 
-This is the code for inserting a new value.
+Este é o código para inserir um novo valor.
 
 	func (t *Tree(E)) Insert(v E) bool {
 		pn := t.find(v)
@@ -693,12 +691,12 @@ This is the code for inserting a new value.
 		return true
 	}
 
-Notice that the type `node` has a type argument `E`.
-This is what it looks like to write a generic data structure.
-As you can see, it looks like writing ordinary Go code, except that
-some type arguments are sprinkled in here and there.
+Note que o tipo `node` tem um argumento de tipo `E`.
+É assim que fica escrever uma estrutura de dados generic.
+Como você pode ver, parece escrever código Go comum, exceto que
+alguns argumentos de tipo são salpicados aqui e ali.
 
-Using the tree is pretty simple.
+Usar a árvore é bem simples.
 
 	var intTree = tree.New(func(a, b int) int { return a - b })
 
@@ -709,49 +707,49 @@ Using the tree is pretty simple.
 		}
 	}
 
-That's as it should be.
-It's a bit harder to write a generic data structure, because you often
-have to explicitly write out type arguments for supporting types, but
-as much as possible using one is no different from using an ordinary
-non-generic data structure.
+Isso é como deveria ser.
+É um pouco mais difícil escrever uma estrutura de dados generic, porque você frequentemente
+tem que escrever explicitamente argumentos de tipo para tipos de suporte, mas
+o máximo possível usar uma não é diferente de usar uma
+estrutura de dados comum não-generic.
 
-### Next steps
+### Próximos passos
 
-We are working on actual implementations to allow us to experiment
-with this design.
-It's important to be able to try out the design in practice, to make
-sure that we can write the kinds of programs we want to write.
-It hasn't gone as fast as we'd hoped, but we'll send out more detail
-on these implementations as they become available.
+Estamos trabalhando em implementações reais para nos permitir experimentar
+com este design.
+É importante poder experimentar o design na prática, para ter certeza
+de que podemos escrever os tipos de programas que queremos escrever.
+Não foi tão rápido quanto esperávamos, mas enviaremos mais detalhes
+sobre estas implementações à medida que ficarem disponíveis.
 
-Robert Griesemer has written a
-[preliminary CL](/cl/187317)
-that modifies the go/types package.
-This permits testing whether code using generics and contracts can
-type check.
-It’s incomplete right now, but it mostly works for a single package,
-and we’ll keep working on it.
+Robert Griesemer escreveu uma
+[CL preliminar](/cl/187317)
+que modifica o pacote go/types.
+Isso permite testar se código usando generics e contracts pode
+verificar tipos.
+Está incompleto agora, mas funciona principalmente para um único pacote,
+e continuaremos trabalhando nele.
 
-What we'd like people to do with this and future implementations is to
-try writing and using generic code and see what happens.
-We want to make sure that people can write the code they need, and
-that they can use it as expected.
-Of course not everything is going to work at first, and as we explore
-this space we may have to change things.
-And, to be clear, we're much more interested in feedback on the
-semantics than on details of the syntax.
+O que gostaríamos que as pessoas fizessem com esta e futuras implementações é
+tentar escrever e usar código generic e ver o que acontece.
+Queremos ter certeza de que as pessoas podem escrever o código de que precisam, e
+que podem usá-lo como esperado.
+Claro que nem tudo vai funcionar no início, e à medida que exploramos
+este espaço podemos ter que mudar coisas.
+E, para deixar claro, estamos muito mais interessados em feedback sobre a
+semântica do que em detalhes da sintaxe.
 
-I’d like to thank everyone who commented on the earlier design, and
-everyone who has discussed what generics can look like in Go.
-We’ve read all of the comments, and we greatly appreciate the work
-that people have put into this.
-We would not be where we are today without that work.
+Gostaria de agradecer a todos que comentaram sobre o design anterior, e
+a todos que discutiram como generics podem parecer em Go.
+Lemos todos os comentários, e apreciamos muito o trabalho
+que as pessoas colocaram nisso.
+Não estaríamos onde estamos hoje sem esse trabalho.
 
-Our goal is to arrive at a design that makes it possible to write the
-kinds of generic code I’ve discussed today, without making the
-language too complex to use or making it not feel like Go anymore.
-We hope that this design is a step toward that goal, and we expect to
-continue to adjust it as we learn, from our experiences and yours,
-what works and what doesn’t.
-If we do reach that goal, then we’ll have something that we can
-propose for future versions of Go.
+Nosso objetivo é chegar a um design que torne possível escrever os
+tipos de código generic que discuti hoje, sem tornar a
+linguagem muito complexa de usar ou fazendo com que não pareça mais Go.
+Esperamos que este design seja um passo em direção a esse objetivo, e esperamos
+continuar a ajustá-lo à medida que aprendemos, de nossas experiências e das suas,
+o que funciona e o que não funciona.
+Se chegarmos a esse objetivo, então teremos algo que podemos
+propor para versões futuras do Go.

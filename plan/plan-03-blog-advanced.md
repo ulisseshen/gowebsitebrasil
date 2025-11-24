@@ -17,7 +17,7 @@ Após traduzir cada arquivo, marque o checkpoint com `[x]`.
 
 ## Seção 1: Generics
 
-- [ ] `_content/blog/why-generics.md` - Why Generics
+- [x] `_content/blog/why-generics.md` - Why Generics
 - [ ] `_content/blog/when-generics.md` - When Generics
 - [ ] `_content/blog/generics-proposal.md` - Generics Proposal
 - [ ] `_content/blog/generics-next-step.md` - Generics Next Step
