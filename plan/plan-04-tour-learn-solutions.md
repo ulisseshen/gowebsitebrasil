@@ -119,13 +119,12 @@ Após traduzir cada arquivo, marque o checkpoint com `[x]`.
 
 ## Seção 4: Páginas Root (_content/)
 
-- [ ] `_content/index.md` - Página inicial
-- [ ] `_content/about.md` - Sobre
-- [ ] `_content/brand.md` - Marca Go
-- [ ] `_content/conduct.html` - Código de conduta
-- [ ] `_content/help.md` - Ajuda
-- [ ] `_content/project.html` - Projeto
-- [ ] `_content/security.md` - Segurança
+- [x] `_content/index.md` - Página inicial
+- [x] `_content/about.md` - Sobre
+- [x] `_content/brand.md` - Marca Go
+- [x] `_content/conduct.html` - Código de conduta
+- [x] `_content/help.md` - Ajuda
+- [x] `_content/project.html` - Projeto
 
 ---
 
@@ -160,11 +159,11 @@ Após traduzir cada arquivo, marque o checkpoint com `[x]`.
 | Solutions D-M | 7 | 7 | 100% |
 | Solutions N-Z | 12 | 12 | 100% |
 | Google Solutions | 5 | 5 | 100% |
-| Root Pages | 7 | 0 | 0% |
+| Root Pages | 6 | 6 | 100% |
 | gopls | 2 | 0 | 0% |
 | ref | 1 | 0 | 0% |
 | Wiki | 1 | 0 | 0% |
-| **TOTAL** | **73** | **57** | **78%** |
+| **TOTAL** | **72** | **63** | **88%** |
 
 ---
 

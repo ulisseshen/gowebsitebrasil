@@ -1,6 +1,7 @@
 ---
-title: The Go Programming Language
-summary: Go is an open source programming language that makes it simple to build secure, scalable systems.
+ia-translated: true
+title: A Linguagem de Programação Go
+summary: Go é uma linguagem de programação de código aberto que torna simples construir sistemas seguros e escaláveis.
 ---
 
 {{$canShare := not googleCN}}
@@ -8,31 +9,31 @@ summary: Go is an open source programming language that makes it simple to build
 <section class="Hero bluebg">
   <div class="Hero-gridContainer">
     <div class="Hero-blurb">
-      <h1>Build simple, secure, scalable systems with Go</h1>
+      <h1>Construa sistemas simples, seguros e escaláveis com Go</h1>
       <ul class="Hero-blurbList">
         <li>
           <svg width="12" height="10" viewBox="0 0 12 10" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M10.8519 0.52594L3.89189 7.10404L1.14811 4.51081L0 5.59592L3.89189 9.27426L12 1.61105L10.8519 0.52594Z" fill="white" fill-opacity="0.87">
           </svg>
-          An open-source programming language supported by Google
+          Uma linguagem de programação de código aberto com suporte do Google
         </li>
         <li>
           <svg width="12" height="10" viewBox="0 0 12 10" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M10.8519 0.52594L3.89189 7.10404L1.14811 4.51081L0 5.59592L3.89189 9.27426L12 1.61105L10.8519 0.52594Z" fill="white" fill-opacity="0.87">
           </svg>
-          Easy to learn and great for teams
+          Fácil de aprender e excelente para equipes
         </li>
         <li>
           <svg width="12" height="10" viewBox="0 0 12 10" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M10.8519 0.52594L3.89189 7.10404L1.14811 4.51081L0 5.59592L3.89189 9.27426L12 1.61105L10.8519 0.52594Z" fill="white" fill-opacity="0.87">
           </svg>
-          Built-in concurrency and a robust standard library
+          Concorrência integrada e uma biblioteca padrão robusta
         </li>
         <li>
           <svg width="12" height="10" viewBox="0 0 12 10" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M10.8519 0.52594L3.89189 7.10404L1.14811 4.51081L0 5.59592L3.89189 9.27426L12 1.61105L10.8519 0.52594Z" fill="white" fill-opacity="0.87">
           </svg>
-          Large ecosystem of partners, communities, and tools
+          Grande ecossistema de parceiros, comunidades e ferramentas
         </li>
       </ul>
     </div>
@@ -43,42 +44,42 @@ summary: Go is an open source programming language that makes it simple to build
         <a class="Primary" href="/learn/" aria-label="Get Started" aria-describedby="getStarted-description" role="button">Get Started</a>
         <a class="Secondary js-downloadBtn" href="/dl" aria-label="Download" aria-describedby="download-description" role="button">Download</a>
         <div class="screen-reader-only" id="getStarted-description" hidden>
-          Opens a new window with the Get Started guide.
+          Abre uma nova janela com o guia Get Started.
         </div>
         <div class="screen-reader-only" id="download-description" hidden>
-          Opens a new window to download Go.
+          Abre uma nova janela para baixar o Go.
         </div>
       </div>
       <div class="Hero-footnote">
         <p>
-          Download packages for
+          Baixe os pacotes para
           <a class="js-downloadWin">Windows 64-bit</a>,
           <a class="js-downloadMac">macOS</a>,
-          <a class="js-downloadLinux">Linux</a>, and
-          <a href="/dl/" aria-describedby="newwindow-description">more</a>
+          <a class="js-downloadLinux">Linux</a>, e
+          <a href="/dl/" aria-describedby="newwindow-description">mais</a>
         </p>
         <p>
-          The <code>go</code> command by default downloads and authenticates
-          modules using the Go module mirror and Go checksum database run by
-          Google. <a href="/dl" aria-describedby="newwindow-description">Learn more.</a>
+          O comando <code>go</code> por padrão baixa e autentica
+          módulos usando o Go module mirror e o Go checksum database mantidos pelo
+          Google. <a href="/dl" aria-describedby="newwindow-description">Saiba mais.</a>
         </p>
       </div>
     </div>
     <div class="screen-reader-only" id="newwindow-description" hidden>
-          Opens in new window.
+          Abre em nova janela.
     </div>
     <div class="Hero-gopher">
-      <img class="Hero-gopherLadder" src="/images/gophers/ladder.svg" alt="Go Gopher climbing a ladder.">
+      <img class="Hero-gopherLadder" src="/images/gophers/ladder.svg" alt="Go Gopher subindo uma escada.">
     </div>
   </div>
 </section>
 <section class="WhoUses">
   <div class="WhoUses-gridContainer">
     <div class="WhoUses-header">
-      <h2 class="WhoUses-headerH2">Companies using Go</h2>
-      <p class="WhoUses-subheader">Organizations in every industry use Go to power their software and services
+      <h2 class="WhoUses-headerH2">Empresas que usam Go</h2>
+      <p class="WhoUses-subheader">Organizações de todos os setores usam Go para alimentar seus softwares e serviços
         <a href="/solutions/" class="WhoUsesCaseStudyList-seeAll" aria-describedby="newwindow-description">
-        View all stories
+        Ver todas as histórias
        </a>
      </p>
     </div>
@@ -110,7 +111,7 @@ summary: Go is an open source programming language that makes it simple to build
               src="/images/logos/{{.logoSrc}}"
               class="WhoUsesCaseStudyList-logo"
               alt="">
-            <p>View case study</p>
+            <p>Ver estudo de caso</p>
           </a>
         </li>
       {{- end}}
@@ -151,11 +152,11 @@ summary: Go is an open source programming language that makes it simple to build
 <section class="Playground">
   <div class="Playground-gridContainer">
     <div class="Playground-headerContainer">
-      <h2 class="HomeSection-header">Try Go</h2>
+      <h2 class="HomeSection-header">Experimente Go</h2>
     </div>
     <div class="Playground-inputContainer">
       <div class="Playground-preContainer">
-        Press Esc to move out of the editor.
+        Pressione Esc para sair do editor.
       </div>
       <textarea class="Playground-input js-playgroundCodeEl" spellcheck="false" aria-label="Try Go" aria-describedby="editor-description" id="code">
 // You can edit this code!
@@ -167,7 +168,7 @@ func main() {
 }</textarea>
     </div>
     <div class="screen-reader-only" id="editor-description" hidden>
-      Press Esc to move out of the editor.
+      Pressione Esc para sair do editor.
     </div>
     <div class="Playground-outputContainer js-playgroundOutputEl">
       <pre class="Playground-output"><noscript>Hello, 世界</noscript></pre>
@@ -198,9 +199,9 @@ func main() {
 <section class="WhyGo">
   <div class="WhyGo-gridContainer">
     <div class="WhyGo-header">
-      <h2 class="WhyGo-headerH2">What’s possible with Go</h2>
+      <h2 class="WhyGo-headerH2">O que é possível com Go</h2>
       <p class="WhyGo-subheader">
-        Use Go for a variety of software development purposes
+        Use Go para uma variedade de propósitos de desenvolvimento de software
       </p>
     </div>
     <ul class="WhyGo-reasons">
@@ -222,7 +223,7 @@ func main() {
             <div class="WhyGo-reasonPackages">
               <div class="WhyGo-reasonPackagesHeader">
                 <img src="/images/icons/package.svg" alt="Packages.">
-                Popular Packages:
+                Packages Populares:
               </div>
               <ul class="WhyGo-reasonPackagesList">
                 {{- range .packages }}
@@ -235,7 +236,7 @@ func main() {
               </ul>
             </div>
             <div class="WhyGo-reasonLearnMoreLink">
-              <a href="{{.link}}" aria-describedby="newwindow-description">Learn More 
+              <a href="{{.link}}" aria-describedby="newwindow-description">Saiba Mais
               <i class="material-icons WhyGo-forwardArrowIcon" aria-hidden="true">arrow_forward</i></a>
             </div>
           </div>
@@ -251,10 +252,10 @@ func main() {
                 height="148"
                 width="229"
                 src="/images/gophers/biplane.svg"
-                alt="Go Gopher is skateboarding.">
+                alt="Go Gopher andando de skate.">
             </div>
             <div class="WhyGo-reasonShowMoreLink">
-              <a href="/solutions/use-cases" aria-describedby="newwindow-description">More use cases 
+              <a href="/solutions/use-cases" aria-describedby="newwindow-description">Mais casos de uso
               <i class="material-icons
               WhyGo-forwardArrowIcon" aria-hidden="true">arrow_forward</i></a>
             </div>
@@ -267,9 +268,9 @@ func main() {
 <section class="GettingStartedGo">
   <div class="GettingStartedGo-gridContainer">
     <div class="GettingStartedGo-header">
-      <h2 class="GettingStartedGo-headerH2">Get started with Go</h2>
+      <h2 class="GettingStartedGo-headerH2">Começando com Go</h2>
       <p class="GettingStartedGo-headerDesc">
-        Explore a wealth of learning resources, including guided journeys, courses, books, and more.
+        Explore uma riqueza de recursos de aprendizado, incluindo jornadas guiadas, cursos, livros e muito mais.
       </p>
       <div class="GettingStartedGo-ctas">
         <a class="GettingStartedGo-primaryCta" href="/learn/"aria-describedby="newwindow-description">Get Started</a>
@@ -279,30 +280,30 @@ func main() {
     <div class="GettingStartedGo-resourcesSection">
       <ul class="GettingStartedGo-resourcesList">
         <li class="GettingStartedGo-resourcesHeader">
-          Resources to start on your own
+          Recursos para começar por conta própria
         </li>
         <li class="GettingStartedGo-resourceItem">
           <a href="/learn#guided-learning-journeys" class="GettingStartedGo-resourceItemTitle" aria-describedby="newwindow-description">
-            Guided learning journeys
+            Jornadas de aprendizado guiadas
           </a>
           <div class="GettingStartedGo-resourceItemDescription">
-            Step-by-step tutorials to get your feet wet
+            Tutoriais passo a passo para dar seus primeiros passos
           </div>
         </li>
         <li class="GettingStartedGo-resourceItem">
           <a href="/learn#online-learning" class="GettingStartedGo-resourceItemTitle" aria-describedby="newwindow-description">
-            Online learning
+            Aprendizado online
           </a>
           <div class="GettingStartedGo-resourceItemDescription">
-            Browse resources and learn at your own pace
+            Navegue pelos recursos e aprenda no seu próprio ritmo
           </div>
         </li>
         <li class="GettingStartedGo-resourceItem">
           <a href="/learn#featured-books" class="GettingStartedGo-resourceItemTitle" aria-describedby="newwindow-description">
-            Featured books
+            Livros em destaque
           </a>
           <div class="GettingStartedGo-resourceItemDescription">
-            Read through structured chapters and theories
+            Leia capítulos estruturados e teorias
           </div>
         </li>
         <li class="GettingStartedGo-resourceItem">
@@ -310,13 +311,13 @@ func main() {
             Cloud Self-paced labs
           </a>
           <div class="GettingStartedGo-resourceItemDescription">
-            Jump in to deploying Go apps on GCP
+            Mergulhe no deploy de apps Go no GCP
           </div>
         </li>
       </ul>
       <ul class="GettingStartedGo-resourcesList">
         <li class="GettingStartedGo-resourcesHeader">
-          In-Person Trainings
+          Treinamentos Presenciais
         </li>
         {{- range first 4 (data "/learn/training.yaml")}}
           <li class="GettingStartedGo-resourceItem">

@@ -1,5 +1,6 @@
 ---
-title: "Help"
+ia-translated: true
+title: "Ajuda"
 template: true
 layout: "article"
 sidebar: "bug"
@@ -8,91 +9,91 @@ sidebar: "bug"
 <div id="manual-nav"></div>
 
 <section id="help" class="BigCard">
-<h2>Get help</h2>
+<h2>Obter ajuda</h2>
 <h3 id="mailinglist"><a href="https://groups.google.com/group/golang-nuts" aria-describedby="help-description">Go Nuts Mailing List</a></h3>
 <p>
-Get help from Go users, and share your work on the official mailing list.
+Obtenha ajuda de usuários Go e compartilhe seu trabalho na lista de discussão oficial.
 </p>
 <p>
-Search the <a href="https://groups.google.com/group/golang-nuts" aria-describedby="help-description">golang-nuts</a>
-archives and consult the <a href="/doc/go_faq.html">FAQ</a> and
-<a href="/wiki">wiki</a> before posting.
+Pesquise nos arquivos do <a href="https://groups.google.com/group/golang-nuts" aria-describedby="help-description">golang-nuts</a>
+e consulte a <a href="/doc/go_faq.html">FAQ</a> e
+<a href="/wiki">wiki</a> antes de postar.
 </p>
 
 <h3 id="forum"><a href="https://forum.golangbridge.org/" aria-describedby="help-description">Go Forum</a></h3>
 <p>
-The <a href="https://forum.golangbridge.org/" aria-describedby="help-description">Go Forum</a> is a discussion
-forum for Go programmers.
+O <a href="https://forum.golangbridge.org/" aria-describedby="help-description">Go Forum</a> é um fórum de discussão
+para programadores Go.
 </p>
 
 <h3 id="discord"><a href="https://discord.gg/golang" aria-describedby="help-description">Gophers Discord</a></h3>
 <p>
-Get live support and talk with other gophers on the Go Discord.
+Obtenha suporte ao vivo e converse com outros gophers no Discord do Go.
 </p>
 
 <h3 id="slack"><a href="https://blog.gopheracademy.com/gophers-slack-community/" aria-describedby="help-description">Gopher Slack</a></h3>
-<p>Get live support from other users in the Go Slack channel.</p>
+<p>Obtenha suporte ao vivo de outros usuários no canal Slack do Go.</p>
 
 <h3 id="irc"><a href="ircs:irc.libera.chat/go-nuts" aria-describedby="help-description">Go IRC Channel</a></h3>
-<p>Get live support at <code>#go-nuts</code> on <code>irc.libera.chat</code>,
-the Go IRC channel.</p>
+<p>Obtenha suporte ao vivo em <code>#go-nuts</code> no <code>irc.libera.chat</code>,
+o canal IRC do Go.</p>
 
-<h3 id="faq"><a href="/doc/faq" aria-describedby="help-description">Frequently Asked Questions (FAQ)</a></h3>
-<p>Answers to common questions about Go.</p>
+<h3 id="faq"><a href="/doc/faq" aria-describedby="help-description">Perguntas Frequentes (FAQ)</a></h3>
+<p>Respostas para perguntas comuns sobre Go.</p>
 </section>
 
 <section id="inform" class="BigCard">
-<h2>Stay informed</h2>
+<h2>Mantenha-se informado</h2>
 
 <h3 id="announce"><a href="https://groups.google.com/group/golang-announce" aria-describedby="help-description">Go Announcements Mailing List</a></h3>
 <p>
-Subscribe to
+Inscreva-se no
 <a href="https://groups.google.com/group/golang-announce" aria-describedby="help-description">golang-announce</a>
-for important announcements, such as the availability of new Go releases.
+para anúncios importantes, como a disponibilidade de novos lançamentos do Go.
 </p>
 
 <h3 id="blog"><a href="/blog/" aria-describedby="help-description">Go Blog</a></h3>
-<p>The Go project's official blog.</p>
+<p>O blog oficial do projeto Go.</p>
 
-<h3 id="twitter"><a href="https://twitter.com/golang" aria-describedby="help-description">@golang at Twitter</a></h3>
-<p>The Go project's official Twitter account.</p>
+<h3 id="twitter"><a href="https://twitter.com/golang" aria-describedby="help-description">@golang no Twitter</a></h3>
+<p>A conta oficial do projeto Go no Twitter.</p>
 
 <h3 id="reddit"><a href="https://reddit.com/r/golang" aria-describedby="help-description">golang sub-Reddit</a></h3>
 <p>
-The <a href="https://reddit.com/r/golang" aria-describedby="help-description">golang sub-Reddit</a> is a place
-for Go news and discussion.
+O <a href="https://reddit.com/r/golang" aria-describedby="help-description">golang sub-Reddit</a> é um lugar
+para notícias e discussões sobre Go.
 </p>
 
 <h3 id="gotime"><a href="https://changelog.com/gotime" aria-describedby="help-description">Go Time Podcast</a></h3>
 <p>
-The <a href="https://changelog.com/gotime" aria-describedby="help-description">Go Time podcast</a> is a panel of Go experts and special guests
-discussing the Go programming language, the community, and everything in between.
+O <a href="https://changelog.com/gotime" aria-describedby="help-description">podcast Go Time</a> é um painel de especialistas em Go e convidados especiais
+discutindo a linguagem de programação Go, a comunidade e tudo mais.
 </p>
 </section>
 
 
 <section id="community" class="BigCard">
-<h2>Community resources</h2>
+<h2>Recursos da comunidade</h2>
 
 <h3 id="go_user_groups"><a href="/wiki/GoUserGroups" aria-describedby="help-description">Go User Groups</a></h3>
 <p>
-Each month in places around the world, groups of Go programmers ("gophers")
-meet to talk about Go. Find a chapter near you.
+Todo mês, em lugares ao redor do mundo, grupos de programadores Go ("gophers")
+se reúnem para falar sobre Go. Encontre um capítulo perto de você.
 </p>
 
 <h3 id="playground"><a href="/play" aria-describedby="help-description">Go Playground</a></h3>
-<p>A place to write, run, and share Go code.</p>
+<p>Um lugar para escrever, executar e compartilhar código Go.</p>
 
 <h3 id="wiki"><a href="/wiki" aria-describedby="help-description">Go Wiki</a></h3>
-<p>A wiki maintained by the Go community.</p>
+<p>Uma wiki mantida pela comunidade Go.</p>
 
-<h3 id="conduct"><a href="/conduct" aria-describedby="help-description">Code of Conduct</a></h3>
+<h3 id="conduct"><a href="/conduct" aria-describedby="help-description">Código de Conduta</a></h3>
 <p>
-Guidelines for participating in Go community spaces
-and a reporting process for handling issues.
+Diretrizes para participar de espaços da comunidade Go
+e um processo de denúncia para lidar com problemas.
 </p>
 </section>
 
 <div class="screen-reader-only" id="help-description" hidden>
-          Opens in new window.
+          Abre em nova janela.
 </div>
