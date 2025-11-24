@@ -62,15 +62,15 @@ Após traduzir cada arquivo, marque o checkpoint com `[x]`.
 ## Seção 3: Solutions (Casos de Uso)
 
 ### 3.1 Páginas Principais
-- [ ] `_content/solutions/index.md` - Índice de solutions
-- [ ] `_content/solutions/case-studies.md` - Casos de estudo
-- [ ] `_content/solutions/use-cases.md` - Casos de uso
+- [x] `_content/solutions/index.md` - Índice de solutions
+- [x] `_content/solutions/case-studies.md` - Casos de estudo
+- [x] `_content/solutions/use-cases.md` - Casos de uso
 
 ### 3.2 Casos de Uso por Categoria
-- [ ] `_content/solutions/cloud.md` - Cloud
-- [ ] `_content/solutions/clis.md` - CLIs
-- [ ] `_content/solutions/devops.md` - DevOps
-- [ ] `_content/solutions/webdev.md` - Web Development
+- [x] `_content/solutions/cloud.md` - Cloud
+- [x] `_content/solutions/clis.md` - CLIs
+- [x] `_content/solutions/devops.md` - DevOps
+- [x] `_content/solutions/webdev.md` - Web Development
 
 ### 3.3 Estudos de Caso - Empresas (A-C)
 - [ ] `_content/solutions/allegro.md` - Allegro
@@ -155,7 +155,7 @@ Após traduzir cada arquivo, marque o checkpoint com `[x]`.
 | Tour Articles | 7 | 7 | 100% |
 | Tour Templates | 5 | 0 | 0% |
 | Learn | 8 | 8 | 100% |
-| Solutions Principal | 7 | 0 | 0% |
+| Solutions Principal | 7 | 7 | 100% |
 | Solutions A-C | 11 | 0 | 0% |
 | Solutions D-M | 7 | 1 | 14% |
 | Solutions N-Z | 12 | 2 | 17% |
@@ -164,7 +164,7 @@ Após traduzir cada arquivo, marque o checkpoint com `[x]`.
 | gopls | 2 | 0 | 0% |
 | ref | 1 | 0 | 0% |
 | Wiki | 1 | 0 | 0% |
-| **TOTAL** | **73** | **18** | **25%** |
+| **TOTAL** | **73** | **25** | **34%** |
 
 ---
 

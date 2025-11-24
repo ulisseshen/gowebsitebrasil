@@ -1,7 +1,8 @@
 ---
+ia-translated: true
 title: "Development Operations & Site Reliability Engineering"
 linkTitle: "Development Operations & Site Reliability Engineering"
-description: "With fast build times, lean syntax, an automatic formatter and doc generator, Go is built to support both DevOps and SRE."
+description: "Com tempos de build rápidos, sintaxe enxuta, um formatador automático e gerador de documentação, Go é construído para suportar tanto DevOps quanto SRE."
 date: 2019-10-03T17:16:43-04:00
 series: Use Cases
 books:
@@ -13,44 +14,35 @@ iconDark:
   alt: ops icon
 ---
 
-## Overview {#overview .sectionHeading}
+## Visão Geral {#overview .sectionHeading}
 
-### Go helps enterprises automate and scale
+### Go ajuda empresas a automatizar e escalar
 
-Development Operations (DevOps) teams help engineering organizations automate tasks and improve their continuous
-integration and continuous delivery and deployment (CI/CD) process. DevOps can topple developmental silos and implement
-tooling and automation to enhance software development, deployment, and support.
+Equipes de Development Operations (DevOps) ajudam organizações de engenharia a automatizar tarefas e melhorar seu processo de integração contínua e entrega e deployment contínuos (CI/CD). DevOps pode derrubar silos de desenvolvimento e implementar ferramentas e automação para aprimorar o desenvolvimento, deployment e suporte de software.
 
-Site Reliability Engineering (SRE) was born at Google to make the company’s “large-scale sites more reliable, efficient,
-and scalable,”[ writes Silvia Fressard](https://opensource.com/article/18/10/what-site-reliability-engineer), an
-independent DevOps consultant. “And the practices they developed responded so well to Google’s needs that other big tech
-companies, such as Amazon and Netflix, also adopted them.” SRE requires a mix of development and operations skills, and
-“[empowers software developers](https://stackify.com/site-reliability-engineering/) to own the ongoing daily operation
-of their applications in production.”
+Site Reliability Engineering (SRE) nasceu no Google para tornar os "sites de larga escala da empresa mais confiáveis, eficientes e escaláveis", [escreve Silvia Fressard](https://opensource.com/article/18/10/what-site-reliability-engineer), uma consultora DevOps independente. "E as práticas que eles desenvolveram responderam tão bem às necessidades do Google que outras grandes empresas de tecnologia, como Amazon e Netflix, também as adotaram." SRE requer uma mistura de habilidades de desenvolvimento e operações, e "[capacita desenvolvedores de software](https://stackify.com/site-reliability-engineering/) a possuir a operação diária contínua de suas aplicações em produção."
 
-Go serves both siblings, DevOps and SRE, from its fast build times and lean syntax to its security and reliability support. Go's concurrency and networking features also make it ideal for tools that manage cloud deployment—readily supporting automation while
-scaling for speed and code maintainability as development infrastructure grows over time.
+Go serve ambos os irmãos, DevOps e SRE, desde seus tempos de build rápidos e sintaxe enxuta até seu suporte a segurança e confiabilidade. Os recursos de concorrência e networking do Go também o tornam ideal para ferramentas que gerenciam deployment em cloud—suportando prontamente automação enquanto escala para velocidade e manutenibilidade de código à medida que a infraestrutura de desenvolvimento cresce ao longo do tempo.
 
-DevOps/SRE teams write software ranging from small scripts, to command-line interfaces (CLI), to complex automation and services, and Go’s feature set has benefits for every situation.
+Equipes de DevOps/SRE escrevem software que varia de pequenos scripts, a command-line interfaces (CLI), a serviços e automação complexos, e o conjunto de recursos do Go tem benefícios para cada situação.
 
-## Key Benefits {#key-benefits .sectionHeading}
+## Principais Benefícios {#key-benefits .sectionHeading}
 
-### Easily build small scripts with Go’s robust standard library and static typing
-Go’s fast build and startup times. Go’s extensive standard library—including packages for
-common needs like HTTP, file I/O, time, regular expressions, exec, and JSON/CSV formats—lets DevOps/SREs get right into their business logic. Plus, Go’s static type system and explicit error handling make even small scripts more robust.
+### Construa facilmente pequenos scripts com a biblioteca padrão robusta e tipagem estática do Go
+Os tempos de build e inicialização rápidos do Go. A extensa biblioteca padrão do Go—incluindo pacotes para necessidades comuns como HTTP, file I/O, time, expressões regulares, exec e formatos JSON/CSV—permite que DevOps/SREs entrem direto na sua lógica de negócio. Além disso, o sistema de tipos estático do Go e o tratamento explícito de erros tornam até scripts pequenos mais robustos.
 
-### Quickly deploy CLIs with Go’s fast build times
-Every site reliability engineer has written “one-time use” scripts that turned into CLIs used by dozens of other engineers every day. And small deployment automation scripts turn into rollout management services. With Go, DevOps/SREs are in a great position to be successful when software scope inevitably creeps. Starting with Go puts you in a great position to be successful when that happens.
+### Faça deploy rapidamente de CLIs com os tempos de build rápidos do Go
+Todo site reliability engineer já escreveu scripts de "uso único" que se tornaram CLIs usadas por dezenas de outros engenheiros todos os dias. E pequenos scripts de automação de deployment se transformam em serviços de gerenciamento de rollout. Com Go, DevOps/SREs estão em uma ótima posição para ter sucesso quando o escopo do software inevitavelmente aumenta. Começar com Go coloca você em uma ótima posição para ter sucesso quando isso acontecer.
 
-### Scale and maintain larger applications with Go’s low memory footprint and doc generator
-Go’s garbage collector means DevOps/SRE teams don’t have to worry about memory management. And Go’s automatic documentation generator (godoc) makes code self-documenting–lowering maintenance overhead and establishing best practices from the get-go.
+### Escale e mantenha aplicações maiores com o baixo footprint de memória do Go e gerador de documentação
+O garbage collector do Go significa que equipes de DevOps/SRE não precisam se preocupar com gerenciamento de memória. E o gerador automático de documentação do Go (godoc) torna o código auto-documentável–reduzindo a sobrecarga de manutenção e estabelecendo as melhores práticas desde o início.
 
 {{projects `
   - company: Docker
     url: https://docker.com/
     logoSrc: docker.svg
     logoSrcDark: docker.svg
-    desc: Docker is a software-as-a-service (SaaS) product, written in Go, that DevOps/SRE teams leverage to “drive secure automation and deployment at massive scale,” supporting their CI/CD efforts.
+    desc: Docker é um produto software-as-a-service (SaaS), escrito em Go, que equipes de DevOps/SRE aproveitam para "impulsionar automação segura e deployment em escala massiva", apoiando seus esforços de CI/CD.
     ctas:
       - text: Docker CI/CD
         url: https://www.docker.com/solutions/cicd
@@ -58,7 +50,7 @@ Go’s garbage collector means DevOps/SRE teams don’t have to worry about memo
     url: https://github.com/drone
     logoSrc: drone.svg
     logoSrcDark: drone.svg
-    desc: Drone is a Continuous Delivery system built on container technology, written in Go, that uses a simple YAML configuration file, a superset of docker-compose, to define and execute Pipelines inside Docker containers.
+    desc: Drone é um sistema de Continuous Delivery construído em tecnologia de containers, escrito em Go, que usa um arquivo de configuração YAML simples, um superset de docker-compose, para definir e executar Pipelines dentro de containers Docker.
     ctas:
       - text: Drone
         url: https://github.com/drone
@@ -66,7 +58,7 @@ Go’s garbage collector means DevOps/SRE teams don’t have to worry about memo
     url: https://github.com/etcd-io/etcd
     logoSrc: etcd.svg
     logoSrcDark: etcd.svg
-    desc: etcd is a strongly consistent, distributed key-value store that provides a reliable way to store data that needs to be accessed by a distributed system or cluster of machines, and it's written in Go.
+    desc: etcd é uma datastore chave-valor distribuída fortemente consistente que fornece uma maneira confiável de armazenar dados que precisam ser acessados por um sistema distribuído ou cluster de máquinas, e é escrita em Go.
     ctas:
       - text: etcd
         url: https://github.com/etcd-io/etcd
@@ -74,7 +66,7 @@ Go’s garbage collector means DevOps/SRE teams don’t have to worry about memo
     url: https://ibm.com/
     logoSrc: ibm.svg
     logoSrcDark: ibm.svg
-    desc: IBM’s DevOps teams use Go through Docker and Kubernetes, plus other DevOps and CI/CD tools written in Go. The company also supports connection to it’s messaging middleware through a Go-specific API.
+    desc: As equipes de DevOps da IBM usam Go através de Docker e Kubernetes, além de outras ferramentas DevOps e CI/CD escritas em Go. A empresa também suporta conexão ao seu middleware de mensagens através de uma API específica para Go.
     ctas:
       - text: IBM Applications in Golang
         url: https://developer.ibm.com/messaging/2019/02/05/simplified-ibm-mq-applications-golang/
@@ -82,7 +74,7 @@ Go’s garbage collector means DevOps/SRE teams don’t have to worry about memo
     url: https://netflix.com/
     logoSrc: netflix.svg
     logoSrcDark: netflix.svg
-    desc: Netflix uses Go to handle large scale data caching, with a service called Rend, which manages globally replicated storage for personalization data.
+    desc: Netflix usa Go para lidar com cache de dados em larga escala, com um serviço chamado Rend, que gerencia armazenamento replicado globalmente para dados de personalização.
     ctas:
       - text: Application Data Caching
         url: https://medium.com/netflix-techblog/application-data-caching-using-ssds-5bf25df851ef
@@ -92,7 +84,7 @@ Go’s garbage collector means DevOps/SRE teams don’t have to worry about memo
     url: https://microsoft.com/
     logoSrc: microsoft_light.svg
     logoSrcDark: microsoft_dark.svg
-    desc: Microsoft uses Go in Azure Red Hat OpenShift services. This Microsoft solution provides DevOps teams with OpenShift clusters to maintain regulatory compliance and focus on application development.
+    desc: Microsoft usa Go nos serviços Azure Red Hat OpenShift. Esta solução Microsoft fornece às equipes de DevOps clusters OpenShift para manter conformidade regulatória e focar no desenvolvimento de aplicações.
     ctas:
       - text: OpenShift
         url: https://azure.microsoft.com/en-us/services/openshift/
@@ -100,7 +92,7 @@ Go’s garbage collector means DevOps/SRE teams don’t have to worry about memo
     url: https://terraform.io/
     logoSrc: terraform-icon.svg
     logoSrcDark: terraform-icon.svg
-    desc: Terraform is a tool for building, changing, and versioning infrastructure safely and efficiently. It supports a number of cloud providers such as AWS, IBM Cloud, GCP, and Microsoft Azure - and it’s written in Go.
+    desc: Terraform é uma ferramenta para construir, alterar e versionar infraestrutura de forma segura e eficiente. Suporta vários provedores de cloud como AWS, IBM Cloud, GCP e Microsoft Azure - e é escrita em Go.
     ctas:
       - text: Terraform
         url: https://www.terraform.io/intro/index.html
@@ -108,7 +100,7 @@ Go’s garbage collector means DevOps/SRE teams don’t have to worry about memo
     url: https://github.com/prometheus/prometheus
     logoSrc: prometheus.svg
     logoSrcDark: prometheus.svg
-    desc: Prometheus is an open-source systems monitoring and alerting toolkit originally built at SoundCloud. Most Prometheus components are written in Go, making them easy to build and deploy as static binaries.
+    desc: Prometheus é um toolkit open-source de monitoramento de sistemas e alertas originalmente construído na SoundCloud. A maioria dos componentes do Prometheus são escritos em Go, tornando-os fáceis de construir e fazer deploy como binários estáticos.
     ctas:
       - text: Prometheus
         url: https://github.com/prometheus/prometheus
@@ -116,15 +108,15 @@ Go’s garbage collector means DevOps/SRE teams don’t have to worry about memo
     url: https://youtube.com/
     logoSrc: youtube.svg
     logoSrcDark: youtube.svg
-    desc: YouTube uses Go with Vitess (now part of PlanetScale), its database clustering system for horizontal scaling of MySQL through generalized sharding. Since 2011 it’s been a core component of YouTube’s database infrastructure, and has grown to encompass tens of thousands of MySQL nodes.
+    desc: YouTube usa Go com Vitess (agora parte da PlanetScale), seu sistema de clustering de banco de dados para escalamento horizontal de MySQL através de sharding generalizado. Desde 2011 ele tem sido um componente central da infraestrutura de banco de dados do YouTube, e cresceu para abranger dezenas de milhares de nós MySQL.
     ctas:
       - text: Vitess
         url: https://github.com/vitessio/vitess
 `}}
 
-## Get Started {#get-started .sectionHeading}
+## Comece Agora {#get-started .sectionHeading}
 
-### Go books on DevOps & SRE
+### Livros Go sobre DevOps & SRE
 
 {{books `
   - title: Go Programming for Network Operations
@@ -147,31 +139,31 @@ Go’s garbage collector means DevOps/SRE teams don’t have to worry about memo
     items:
       - text: open-telemetry/opentelemetry-go
         url: https://pkg.go.dev/go.opentelemetry.io/otel
-        desc: Vendor-neutral APIs and instrumentation for monitoring and distributed tracing
+        desc: APIs e instrumentação vendor-neutral para monitoramento e rastreamento distribuído
       - text: jaegertracing/jaeger-client-go
         url: https://pkg.go.dev/github.com/jaegertracing/jaeger-client-go?tab=overview
-        desc: An open source distributed tracing system developed by Uber formats
+        desc: Um sistema de rastreamento distribuído open source desenvolvido pela Uber
       - text: grafana/grafana
         url: https://pkg.go.dev/github.com/grafana/grafana?tab=overview
-        desc: An open-source platform for monitoring and observability
+        desc: Uma plataforma open-source para monitoramento e observabilidade
       - text: istio/istio
         url: https://pkg.go.dev/github.com/istio/istio?tab=overview
-        desc: An open-source service mesh and integratable platform
+        desc: Um service mesh open-source e plataforma integrável
   - title: CLI Libraries
     viewMoreUrl: https://pkg.go.dev/search?q=command%20line%20OR%20CLI
     items:
       - text: spf13/cobra
         url: https://pkg.go.dev/github.com/spf13/cobra?tab=overview
-        desc: A library for creating powerful modern CLI applications and a program to generate applications and CLI applications in Go
+        desc: Uma biblioteca para criar aplicações CLI modernas e poderosas e um programa para gerar aplicações e aplicações CLI em Go
       - text: spf13/viper
         url: https://pkg.go.dev/github.com/spf13/viper?tab=overview
-        desc: A complete configuration solution for Go applications, designed to work within an app to handle configuration needs and formats
+        desc: Uma solução completa de configuração para aplicações Go, projetada para funcionar dentro de uma aplicação para lidar com necessidades e formatos de configuração
       - text: urfave/cli
         url: https://pkg.go.dev/github.com/urfave/cli?tab=overview
-        desc: A minimal framework for creating and organizing command line Go applications
+        desc: Um framework minimalista para criar e organizar aplicações Go de linha de comando
   - title: Other projects
     items:
       - text: golang-migrate/migrate
         url: https://pkg.go.dev/github.com/golang-migrate/migrate?tab=overview
-        desc: A database migration tool written in Go
+        desc: Uma ferramenta de migração de banco de dados escrita em Go
 `}}
