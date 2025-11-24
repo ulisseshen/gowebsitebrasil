@@ -86,22 +86,22 @@ Após traduzir cada arquivo, marque o checkpoint com `[x]`.
 - [x] `_content/solutions/curve.md` - Curve
 
 ### 3.4 Estudos de Caso - Empresas (D-M)
-- [ ] `_content/solutions/dropbox.md` - Dropbox
-- [ ] `_content/solutions/facebook.md` - Facebook
-- [ ] `_content/solutions/firebase.md` - Firebase
-- [ ] `_content/solutions/grail.md` - Grail
+- [x] `_content/solutions/dropbox.md` - Dropbox
+- [x] `_content/solutions/facebook.md` - Facebook
+- [x] `_content/solutions/firebase.md` - Firebase
+- [x] `_content/solutions/grail.md` - Grail
 - [x] `_content/solutions/mercadolibre.md` - MercadoLibre
-- [ ] `_content/solutions/microsoft.md` - Microsoft
-- [ ] `_content/solutions/monzo.md` - Monzo
+- [x] `_content/solutions/microsoft.md` - Microsoft
+- [x] `_content/solutions/monzo.md` - Monzo
 
 ### 3.5 Estudos de Caso - Empresas (N-Z)
 - [x] `_content/solutions/netflix.md` - Netflix
-- [ ] `_content/solutions/paypal.md` - PayPal
-- [ ] `_content/solutions/riotgames.md` - Riot Games
-- [ ] `_content/solutions/salesforce.md` - Salesforce
-- [ ] `_content/solutions/sitereliability.md` - Site Reliability
-- [ ] `_content/solutions/sixt.md` - Sixt
-- [ ] `_content/solutions/stream.md` - Stream
+- [x] `_content/solutions/paypal.md` - PayPal
+- [x] `_content/solutions/riotgames.md` - Riot Games
+- [x] `_content/solutions/salesforce.md` - Salesforce
+- [x] `_content/solutions/sitereliability.md` - Site Reliability
+- [x] `_content/solutions/sixt.md` - Sixt
+- [x] `_content/solutions/stream.md` - Stream
 - [ ] `_content/solutions/trivago.md` - Trivago
 - [ ] `_content/solutions/twitch.md` - Twitch
 - [x] `_content/solutions/uber.md` - Uber
@@ -157,14 +157,14 @@ Após traduzir cada arquivo, marque o checkpoint com `[x]`.
 | Learn | 8 | 8 | 100% |
 | Solutions Principal | 7 | 7 | 100% |
 | Solutions A-C | 11 | 11 | 100% |
-| Solutions D-M | 7 | 1 | 14% |
-| Solutions N-Z | 12 | 2 | 17% |
+| Solutions D-M | 7 | 7 | 100% |
+| Solutions N-Z | 12 | 9 | 75% |
 | Google Solutions | 5 | 0 | 0% |
 | Root Pages | 7 | 0 | 0% |
 | gopls | 2 | 0 | 0% |
 | ref | 1 | 0 | 0% |
 | Wiki | 1 | 0 | 0% |
-| **TOTAL** | **73** | **36** | **49%** |
+| **TOTAL** | **73** | **48** | **66%** |
 
 ---
 

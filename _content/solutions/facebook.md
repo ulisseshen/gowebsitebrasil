@@ -1,8 +1,9 @@
 ---
-linkTitle: How Facebook built an entity framework in Go
-description: 
-  Learn about a Facebook engineering team's decision to write a new entity
-  framework (ORM) in Go.
+ia-translated: true
+linkTitle: Como o Facebook construiu um framework de entidades em Go
+description:
+  Aprenda sobre a decisão de uma equipe de engenharia do Facebook de escrever um novo
+  framework de entidades (ORM) em Go.
 company: Facebook
 series: Case Studies
 logoSrc: meta_light.svg
