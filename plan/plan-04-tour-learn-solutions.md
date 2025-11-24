@@ -90,12 +90,12 @@ Após traduzir cada arquivo, marque o checkpoint com `[x]`.
 - [ ] `_content/solutions/facebook.md` - Facebook
 - [ ] `_content/solutions/firebase.md` - Firebase
 - [ ] `_content/solutions/grail.md` - Grail
-- [ ] `_content/solutions/mercadolibre.md` - MercadoLibre
+- [x] `_content/solutions/mercadolibre.md` - MercadoLibre
 - [ ] `_content/solutions/microsoft.md` - Microsoft
 - [ ] `_content/solutions/monzo.md` - Monzo
 
 ### 3.5 Estudos de Caso - Empresas (N-Z)
-- [ ] `_content/solutions/netflix.md` - Netflix
+- [x] `_content/solutions/netflix.md` - Netflix
 - [ ] `_content/solutions/paypal.md` - PayPal
 - [ ] `_content/solutions/riotgames.md` - Riot Games
 - [ ] `_content/solutions/salesforce.md` - Salesforce
@@ -104,7 +104,7 @@ Após traduzir cada arquivo, marque o checkpoint com `[x]`.
 - [ ] `_content/solutions/stream.md` - Stream
 - [ ] `_content/solutions/trivago.md` - Trivago
 - [ ] `_content/solutions/twitch.md` - Twitch
-- [ ] `_content/solutions/uber.md` - Uber
+- [x] `_content/solutions/uber.md` - Uber
 - [ ] `_content/solutions/wildlifestudios.md` - Wildlife Studios
 - [ ] `_content/solutions/x.md` - X (Twitter)
 
@@ -157,14 +157,14 @@ Após traduzir cada arquivo, marque o checkpoint com `[x]`.
 | Learn | 8 | 0 | 0% |
 | Solutions Principal | 7 | 0 | 0% |
 | Solutions A-C | 11 | 0 | 0% |
-| Solutions D-M | 7 | 0 | 0% |
-| Solutions N-Z | 12 | 0 | 0% |
+| Solutions D-M | 7 | 1 | 14% |
+| Solutions N-Z | 12 | 2 | 17% |
 | Google Solutions | 5 | 0 | 0% |
 | Root Pages | 7 | 0 | 0% |
 | gopls | 2 | 0 | 0% |
 | ref | 1 | 0 | 0% |
 | Wiki | 1 | 0 | 0% |
-| **TOTAL** | **73** | **3** | **4%** |
+| **TOTAL** | **73** | **6** | **8%** |
 
 ---
 
