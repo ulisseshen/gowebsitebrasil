@@ -1,156 +1,157 @@
 ---
-title: "Go Slices: usage and internals"
+ia-translated: true
+title: "Go Slices: uso e detalhes internos"
 date: 2011-01-05
 by:
 - Andrew Gerrand
 tags:
 - slice
 - technical
-summary: How to use Go slices, and how they work.
+summary: Como usar slices do Go e como elas funcionam.
 ---
 
-## Introduction
+## Introdução
 
-Go's slice type provides a convenient and efficient means of working with
-sequences of typed data.
-Slices are analogous to arrays in other languages,
-but have some unusual properties.
-This article will look at what slices are and how they are used.
+O tipo slice do Go fornece uma maneira conveniente e eficiente de trabalhar com
+sequências de dados tipados.
+Slices são análogos a arrays em outras linguagens,
+mas possuem algumas propriedades incomuns.
+Este artigo examinará o que são slices e como são usados.
 
 ## Arrays
 
-The slice type is an abstraction built on top of Go's array type,
-and so to understand slices we must first understand arrays.
+O tipo slice é uma abstração construída sobre o tipo array do Go,
+e então para entender slices devemos primeiro entender arrays.
 
-An array type definition specifies a length and an element type.
-For example, the type `[4]int` represents an array of four integers.
-An array's size is fixed; its length is part of its type (`[4]int` and `[5]int` are distinct,
-incompatible types).
-Arrays can be indexed in the usual way, so the expression `s[n]` accesses
-the nth element, starting from zero.
+Uma definição de tipo array especifica um comprimento e um tipo de elemento.
+Por exemplo, o tipo `[4]int` representa um array de quatro inteiros.
+O tamanho de um array é fixo; seu comprimento faz parte de seu tipo (`[4]int` e `[5]int` são tipos distintos
+e incompatíveis).
+Arrays podem ser indexados da maneira usual, então a expressão `s[n]` acessa
+o elemento n, começando do zero.
 
 	var a [4]int
 	a[0] = 1
 	i := a[0]
 	// i == 1
 
-Arrays do not need to be initialized explicitly;
-the zero value of an array is a ready-to-use array whose elements are themselves zeroed:
+Arrays não precisam ser inicializados explicitamente;
+o zero value de um array é um array pronto para uso cujos elementos são eles mesmos zerados:
 
 	// a[2] == 0, the zero value of the int type
 
-The in-memory representation of `[4]int` is just four integer values laid out sequentially:
+A representação na memória de `[4]int` são apenas quatro valores inteiros dispostos sequencialmente:
 
 {{image "slices-intro/slice-array.png"}}
 
-Go's arrays are values. An array variable denotes the entire array;
-it is not a pointer to the first array element (as would be the case in C).
-This means that when you assign or pass around an array value you will make
-a copy of its contents.
-(To avoid the copy you could pass a _pointer_ to the array,
-but then that's a pointer to an array, not an array.) One way to think about
-arrays is as a sort of struct but with indexed rather than named fields:
-a fixed-size composite value.
+Os arrays do Go são valores. Uma variável array denota o array inteiro;
+não é um pointer para o primeiro elemento do array (como seria o caso em C).
+Isso significa que quando você atribui ou passa um valor array você fará
+uma cópia de seu conteúdo.
+(Para evitar a cópia você poderia passar um _pointer_ para o array,
+mas então isso é um pointer para um array, não um array.) Uma maneira de pensar sobre
+arrays é como um tipo de struct, mas com campos indexados em vez de nomeados:
+um valor composto de tamanho fixo.
 
-An array literal can be specified like so:
+Um literal array pode ser especificado assim:
 
 	b := [2]string{"Penn", "Teller"}
 
-Or, you can have the compiler count the array elements for you:
+Ou você pode deixar o compilador contar os elementos do array para você:
 
 	b := [...]string{"Penn", "Teller"}
 
-In both cases, the type of `b` is `[2]string`.
+Em ambos os casos, o tipo de `b` é `[2]string`.
 
 ## Slices
 
-Arrays have their place, but they're a bit inflexible,
-so you don't see them too often in Go code.
-Slices, though, are everywhere. They build on arrays to provide great power and convenience.
+Arrays têm seu lugar, mas são um pouco inflexíveis,
+então você não os vê com tanta frequência no código Go.
+Slices, no entanto, estão em toda parte. Eles se constroem sobre arrays para fornecer grande poder e conveniência.
 
-The type specification for a slice is `[]T`,
-where `T` is the type of the elements of the slice.
-Unlike an array type, a slice type has no specified length.
+A especificação de tipo para um slice é `[]T`,
+onde `T` é o tipo dos elementos do slice.
+Diferentemente de um tipo array, um tipo slice não tem comprimento especificado.
 
-A slice literal is declared just like an array literal, except you leave out the element count:
+Um literal slice é declarado como um literal array, exceto que você deixa de fora a contagem de elementos:
 
 	letters := []string{"a", "b", "c", "d"}
 
-A slice can be created with the built-in function called `make`, which has the signature,
+Um slice pode ser criado com a função built-in chamada `make`, que tem a assinatura,
 
 	func make([]T, len, cap) []T
 
-where T stands for the element type of the slice to be created.
-The `make` function takes a type, a length,
-and an optional capacity.
-When called, `make` allocates an array and returns a slice that refers to that array.
+onde T representa o tipo de elemento do slice a ser criado.
+A função `make` recebe um tipo, um comprimento,
+e uma capacidade opcional.
+Quando chamada, `make` aloca um array e retorna um slice que se refere a esse array.
 
 	var s []byte
 	s = make([]byte, 5, 5)
 	// s == []byte{0, 0, 0, 0, 0}
 
-When the capacity argument is omitted, it defaults to the specified length.
-Here's a more succinct version of the same code:
+Quando o argumento de capacidade é omitido, ele assume por padrão o comprimento especificado.
+Aqui está uma versão mais sucinta do mesmo código:
 
 	s := make([]byte, 5)
 
-The length and capacity of a slice can be inspected using the built-in `len` and `cap` functions.
+O comprimento e a capacidade de um slice podem ser inspecionados usando as funções built-in `len` e `cap`.
 
 	len(s) == 5
 	cap(s) == 5
 
-The next two sections discuss the relationship between length and capacity.
+As próximas duas seções discutem a relação entre comprimento e capacidade.
 
-The zero value of a slice is `nil`. The `len` and `cap` functions will both return 0 for a nil slice.
+O zero value de um slice é `nil`. As funções `len` e `cap` retornarão ambas 0 para um nil slice.
 
-A slice can also be formed by "slicing" an existing slice or array.
-Slicing is done by specifying a half-open range with two indices separated by a colon.
-For example, the expression `b[1:4]` creates a slice including elements
-1 through 3 of `b` (the indices of the resulting slice will be 0 through 2).
+Um slice também pode ser formado "fatiando" um slice ou array existente.
+O fatiamento é feito especificando um intervalo semi-aberto com dois índices separados por dois-pontos.
+Por exemplo, a expressão `b[1:4]` cria um slice incluindo os elementos
+1 a 3 de `b` (os índices do slice resultante serão 0 a 2).
 
 	b := []byte{'g', 'o', 'l', 'a', 'n', 'g'}
 	// b[1:4] == []byte{'o', 'l', 'a'}, sharing the same storage as b
 
-The start and end indices of a slice expression are optional; they default to zero and the slice's length respectively:
+Os índices de início e fim de uma expressão slice são opcionais; eles assumem por padrão zero e o comprimento do slice respectivamente:
 
 	// b[:2] == []byte{'g', 'o'}
 	// b[2:] == []byte{'l', 'a', 'n', 'g'}
 	// b[:] == b
 
-This is also the syntax to create a slice given an array:
+Esta também é a sintaxe para criar um slice dado um array:
 
 	x := [3]string{"Лайка", "Белка", "Стрелка"}
 	s := x[:] // a slice referencing the storage of x
 
-## Slice internals
+## Detalhes internos de slices
 
-A slice is a descriptor of an array segment.
-It consists of a pointer to the array, the length of the segment,
-and its capacity (the maximum length of the segment).
+Um slice é um descritor de um segmento de array.
+Ele consiste de um pointer para o array, o comprimento do segmento,
+e sua capacidade (o comprimento máximo do segmento).
 
 {{image "slices-intro/slice-struct.png"}}
 
-Our variable `s`, created earlier by `make([]byte, 5)`, is structured like this:
+Nossa variável `s`, criada anteriormente por `make([]byte, 5)`, está estruturada assim:
 
 {{image "slices-intro/slice-1.png"}}
 
-The length is the number of elements referred to by the slice.
-The capacity is the number of elements in the underlying array (beginning
-at the element referred to by the slice pointer).
-The distinction between length and capacity will be made clear as we walk
-through the next few examples.
+O comprimento é o número de elementos referenciados pelo slice.
+A capacidade é o número de elementos no array subjacente (começando
+no elemento referenciado pelo pointer do slice).
+A distinção entre comprimento e capacidade ficará clara conforme percorremos
+os próximos exemplos.
 
-As we slice `s`, observe the changes in the slice data structure and their relation to the underlying array:
+À medida que fatiamos `s`, observe as mudanças na estrutura de dados do slice e sua relação com o array subjacente:
 
 	s = s[2:4]
 
 {{image "slices-intro/slice-2.png"}}
 
-Slicing does not copy the slice's data. It creates a new slice value that
-points to the original array.
-This makes slice operations as efficient as manipulating array indices.
-Therefore, modifying the _elements_ (not the slice itself) of a re-slice
-modifies the elements of the original slice:
+Fatiar não copia os dados do slice. Ele cria um novo valor slice que
+aponta para o array original.
+Isso torna as operações de slice tão eficientes quanto manipular índices de array.
+Portanto, modificar os _elementos_ (não o slice em si) de um re-slice
+modifica os elementos do slice original:
 
 	d := []byte{'r', 'o', 'a', 'd'}
 	e := d[2:]
@@ -159,26 +160,26 @@ modifies the elements of the original slice:
 	// e == []byte{'a', 'm'}
 	// d == []byte{'r', 'o', 'a', 'm'}
 
-Earlier we sliced `s` to a length shorter than its capacity. We can grow s to its capacity by slicing it again:
+Anteriormente fatiamos `s` para um comprimento menor que sua capacidade. Podemos aumentar s até sua capacidade fatiando-o novamente:
 
 	s = s[:cap(s)]
 
 {{image "slices-intro/slice-3.png"}}
 
-A slice cannot be grown beyond its capacity.
-Attempting to do so will cause a runtime panic,
-just as when indexing outside the bounds of a slice or array.
-Similarly, slices cannot be re-sliced below zero to access earlier elements in the array.
+Um slice não pode ser aumentado além de sua capacidade.
+Tentar fazer isso causará um runtime panic,
+assim como ao indexar fora dos limites de um slice ou array.
+Da mesma forma, slices não podem ser re-fatiados abaixo de zero para acessar elementos anteriores no array.
 
-## Growing slices (the copy and append functions)
+## Aumentando slices (as funções copy e append)
 
-To increase the capacity of a slice one must create a new,
-larger slice and copy the contents of the original slice into it.
-This technique is how dynamic array implementations from other languages
-work behind the scenes.
-The next example doubles the capacity of `s` by making a new slice,
-`t`, copying the contents of `s` into `t`,
-and then assigning the slice value `t` to `s`:
+Para aumentar a capacidade de um slice é necessário criar um novo
+slice maior e copiar o conteúdo do slice original para ele.
+Esta técnica é como implementações de arrays dinâmicos de outras linguagens
+funcionam nos bastidores.
+O próximo exemplo dobra a capacidade de `s` criando um novo slice,
+`t`, copiando o conteúdo de `s` para `t`,
+e então atribuindo o valor slice `t` a `s`:
 
 	t := make([]byte, len(s), (cap(s)+1)*2) // +1 in case cap(s) == 0
 	for i := range s {
@@ -186,27 +187,27 @@ and then assigning the slice value `t` to `s`:
 	}
 	s = t
 
-The looping piece of this common operation is made easier by the built-in copy function.
-As the name suggests, copy copies data from a source slice to a destination slice.
-It returns the number of elements copied.
+A parte de loop desta operação comum é facilitada pela função built-in copy.
+Como o nome sugere, copy copia dados de um slice de origem para um slice de destino.
+Ela retorna o número de elementos copiados.
 
 	func copy(dst, src []T) int
 
-The `copy` function supports copying between slices of different lengths
-(it will copy only up to the smaller number of elements).
-In addition, `copy` can handle source and destination slices that share
-the same underlying array,
-handling overlapping slices correctly.
+A função `copy` suporta copiar entre slices de comprimentos diferentes
+(ela copiará apenas até o menor número de elementos).
+Além disso, `copy` pode lidar com slices de origem e destino que compartilham
+o mesmo array subjacente,
+lidando com slices sobrepostos corretamente.
 
-Using `copy`, we can simplify the code snippet above:
+Usando `copy`, podemos simplificar o trecho de código acima:
 
 	t := make([]byte, len(s), (cap(s)+1)*2)
 	copy(t, s)
 	s = t
 
-A common operation is to append data to the end of a slice.
-This function appends byte elements to a slice of bytes,
-growing the slice if necessary, and returns the updated slice value:
+Uma operação comum é adicionar dados ao final de um slice.
+Esta função adiciona elementos byte a um slice de bytes,
+aumentando o slice se necessário, e retorna o valor slice atualizado:
 
 	func AppendByte(slice []byte, data ...byte) []byte {
 	    m := len(slice)
@@ -222,41 +223,41 @@ growing the slice if necessary, and returns the updated slice value:
 	    return slice
 	}
 
-One could use `AppendByte` like this:
+Pode-se usar `AppendByte` assim:
 
 	p := []byte{2, 3, 5}
 	p = AppendByte(p, 7, 11, 13)
 	// p == []byte{2, 3, 5, 7, 11, 13}
 
-Functions like `AppendByte` are useful because they offer complete control
-over the way the slice is grown.
-Depending on the characteristics of the program,
-it may be desirable to allocate in smaller or larger chunks,
-or to put a ceiling on the size of a reallocation.
+Funções como `AppendByte` são úteis porque oferecem controle completo
+sobre a maneira como o slice é aumentado.
+Dependendo das características do programa,
+pode ser desejável alocar em pedaços menores ou maiores,
+ou colocar um limite no tamanho de uma realocação.
 
-But most programs don't need complete control,
-so Go provides a built-in `append` function that's good for most purposes;
-it has the signature
+Mas a maioria dos programas não precisa de controle completo,
+então Go fornece uma função built-in `append` que é boa para a maioria dos propósitos;
+ela tem a assinatura
 
 	func append(s []T, x ...T) []T
 
-The `append` function appends the elements `x` to the end of the slice `s`,
-and grows the slice if a greater capacity is needed.
+A função `append` adiciona os elementos `x` ao final do slice `s`,
+e aumenta o slice se uma capacidade maior for necessária.
 
 	a := make([]int, 1)
 	// a == []int{0}
 	a = append(a, 1, 2, 3)
 	// a == []int{0, 1, 2, 3}
 
-To append one slice to another, use `...` to expand the second argument to a list of arguments.
+Para adicionar um slice a outro, use `...` para expandir o segundo argumento para uma lista de argumentos.
 
 	a := []string{"John", "Paul"}
 	b := []string{"George", "Ringo", "Pete"}
 	a = append(a, b...) // equivalent to "append(a, b[0], b[1], b[2])"
 	// a == []string{"John", "Paul", "George", "Ringo", "Pete"}
 
-Since the zero value of a slice (`nil`) acts like a zero-length slice,
-you can declare a slice variable and then append to it in a loop:
+Como o zero value de um slice (`nil`) age como um slice de comprimento zero,
+você pode declarar uma variável slice e então adicionar a ela em um loop:
 
 	// Filter returns a new slice holding only
 	// the elements of s that satisfy fn()
@@ -270,16 +271,16 @@ you can declare a slice variable and then append to it in a loop:
 	    return p
 	}
 
-## A possible "gotcha"
+## Uma possível "armadilha"
 
-As mentioned earlier, re-slicing a slice doesn't make a copy of the underlying array.
-The full array will be kept in memory until it is no longer referenced.
-Occasionally this can cause the program to hold all the data in memory when
-only a small piece of it is needed.
+Como mencionado anteriormente, re-fatiar um slice não faz uma cópia do array subjacente.
+O array completo será mantido na memória até que não seja mais referenciado.
+Ocasionalmente isso pode fazer com que o programa mantenha todos os dados na memória quando
+apenas uma pequena parte deles é necessária.
 
-For example, this `FindDigits` function loads a file into memory and searches
-it for the first group of consecutive numeric digits,
-returning them as a new slice.
+Por exemplo, esta função `FindDigits` carrega um arquivo na memória e procura
+por ele pelo primeiro grupo de dígitos numéricos consecutivos,
+retornando-os como um novo slice.
 
 	var digitRegexp = regexp.MustCompile("[0-9]+")
 
@@ -288,13 +289,13 @@ returning them as a new slice.
 	    return digitRegexp.Find(b)
 	}
 
-This code behaves as advertised, but the returned `[]byte` points into an
-array containing the entire file.
-Since the slice references the original array,
-as long as the slice is kept around the garbage collector can't release the array;
-the few useful bytes of the file keep the entire contents in memory.
+Este código se comporta como anunciado, mas o `[]byte` retornado aponta para um
+array contendo o arquivo inteiro.
+Como o slice referencia o array original,
+enquanto o slice for mantido por perto o garbage collector não pode liberar o array;
+os poucos bytes úteis do arquivo mantêm o conteúdo inteiro na memória.
 
-To fix this problem one can copy the interesting data to a new slice before returning it:
+Para corrigir este problema pode-se copiar os dados interessantes para um novo slice antes de retorná-lo:
 
 	func CopyDigits(filename string) []byte {
 	    b, _ := ioutil.ReadFile(filename)
@@ -304,16 +305,16 @@ To fix this problem one can copy the interesting data to a new slice before retu
 	    return c
 	}
 
-A more concise version of this function could be constructed by using `append`.
-This is left as an exercise for the reader.
+Uma versão mais concisa desta função poderia ser construída usando `append`.
+Isso fica como exercício para o leitor.
 
-## Further Reading
+## Leitura adicional
 
-[Effective Go](/doc/effective_go.html) contains an in-depth
-treatment of [slices](/doc/effective_go.html#slices)
-and [arrays](/doc/effective_go.html#arrays),
-and the Go [language specification](/doc/go_spec.html)
-defines [slices](/doc/go_spec.html#Slice_types) and
-their [associated](/doc/go_spec.html#Length_and_capacity)
-[helper](/doc/go_spec.html#Making_slices_maps_and_channels)
-[functions](/doc/go_spec.html#Appending_and_copying_slices).
+[Effective Go](/doc/effective_go.html) contém um tratamento aprofundado de
+[slices](/doc/effective_go.html#slices)
+e [arrays](/doc/effective_go.html#arrays),
+e a [especificação da linguagem](/doc/go_spec.html) Go
+define [slices](/doc/go_spec.html#Slice_types) e
+suas [funções](/doc/go_spec.html#Length_and_capacity)
+[auxiliares](/doc/go_spec.html#Making_slices_maps_and_channels)
+[associadas](/doc/go_spec.html#Appending_and_copying_slices).
