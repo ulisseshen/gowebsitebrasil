@@ -1,44 +1,45 @@
 <!--{
-	"Title": "Writing Web Applications",
+	"ia-translated": true,
+	"Title": "Escrevendo Aplicações Web",
 	"Template": true,
 	"Breadcrumb": true
 }-->
 
-<h2>Introduction</h2>
+<h2>Introdução</h2>
 
 <p>
-Covered in this tutorial:
+Coberto neste tutorial:
 </p>
 <ul>
-<li>Creating a data structure with load and save methods</li>
-<li>Using the <code>net/http</code> package to build web applications
-<li>Using the <code>html/template</code> package to process HTML templates</li>
-<li>Using the <code>regexp</code> package to validate user input</li>
-<li>Using closures</li>
+<li>Criar uma estrutura de dados com métodos load e save</li>
+<li>Usar o package <code>net/http</code> para construir aplicações web
+<li>Usar o package <code>html/template</code> para processar templates HTML</li>
+<li>Usar o package <code>regexp</code> para validar entrada do usuário</li>
+<li>Usar closures</li>
 </ul>
 
 <p>
-Assumed knowledge:
+Conhecimento assumido:
 </p>
 <ul>
-<li>Programming experience</li>
-<li>Understanding of basic web technologies (HTTP, HTML)</li>
-<li>Some UNIX/DOS command-line knowledge</li>
+<li>Experiência em programação</li>
+<li>Compreensão de tecnologias web básicas (HTTP, HTML)</li>
+<li>Algum conhecimento de linha de comando UNIX/DOS</li>
 </ul>
 
-<h2>Getting Started</h2>
+<h2>Começando</h2>
 
 <p>
-At present, you need to have a FreeBSD, Linux, macOS, or Windows machine to run Go.
-We will use <code>$</code> to represent the command prompt.
+No momento, você precisa ter uma máquina FreeBSD, Linux, macOS ou Windows para executar Go.
+Usaremos <code>$</code> para representar o prompt de comando.
 </p>
 
 <p>
-Install Go (see the <a href="/doc/install">Installation Instructions</a>).
+Instale Go (veja as <a href="/doc/install">Instruções de Instalação</a>).
 </p>
 
 <p>
-Make a new directory for this tutorial inside your <code>GOPATH</code> and cd to it:
+Crie um novo diretório para este tutorial dentro do seu <code>GOPATH</code> e entre nele:
 </p>
 
 <pre>
@@ -47,8 +48,8 @@ $ cd gowiki
 </pre>
 
 <p>
-Create a file named <code>wiki.go</code>, open it in your favorite editor, and
-add the following lines:
+Crie um arquivo chamado <code>wiki.go</code>, abra-o no seu editor favorito e
+adicione as seguintes linhas:
 </p>
 
 <pre>
@@ -61,120 +62,119 @@ import (
 </pre>
 
 <p>
-We import the <code>fmt</code> and <code>os</code> packages from the Go
-standard library. Later, as we implement additional functionality, we will
-add more packages to this <code>import</code> declaration.
+Importamos os packages <code>fmt</code> e <code>os</code> da biblioteca
+padrão do Go. Posteriormente, à medida que implementarmos funcionalidades adicionais, adicionaremos
+mais packages a esta declaração <code>import</code>.
 </p>
 
-<h2>Data Structures</h2>
+<h2>Estruturas de Dados</h2>
 
 <p>
-Let's start by defining the data structures. A wiki consists of a series of
-interconnected pages, each of which has a title and a body (the page content).
-Here, we define <code>Page</code> as a struct with two fields representing
-the title and body.
+Vamos começar definindo as estruturas de dados. Uma wiki consiste em uma série de
+páginas interconectadas, cada uma com um título e um corpo (o conteúdo da página).
+Aqui, definimos <code>Page</code> como uma struct com dois campos representando
+o título e o corpo.
 </p>
 
 {{code "part1.go" `/^type Page/` `/}/`}}
 
 <p>
-The type <code>[]byte</code> means "a <code>byte</code> slice".
-(See <a href="/doc/articles/slices_usage_and_internals.html">Slices: usage and
-internals</a> for more on slices.)
-The <code>Body</code> element is a <code>[]byte</code> rather than
-<code>string</code> because that is the type expected by the <code>io</code>
-libraries we will use, as you'll see below.
+O tipo <code>[]byte</code> significa "um slice de <code>byte</code>".
+(Veja <a href="/doc/articles/slices_usage_and_internals.html">Slices: uso e
+internals</a> para mais sobre slices.)
+O elemento <code>Body</code> é um <code>[]byte</code> em vez de
+<code>string</code> porque esse é o tipo esperado pelas bibliotecas <code>io</code>
+que usaremos, como você verá adiante.
 </p>
 
 <p>
-The <code>Page</code> struct describes how page data will be stored in memory.
-But what about persistent storage? We can address that by creating a
-<code>save</code> method on <code>Page</code>:
+A struct <code>Page</code> descreve como os dados da página serão armazenados na memória.
+Mas e quanto ao armazenamento persistente? Podemos resolver isso criando um
+método <code>save</code> em <code>Page</code>:
 </p>
 
 {{code "part1.go" `/^func.*Page.*save/` `/}/`}}
 
 <p>
-This method's signature reads: "This is a method named <code>save</code> that
-takes as its receiver <code>p</code>, a pointer to <code>Page</code> . It takes
-no parameters, and returns a value of type <code>error</code>."
+A assinatura deste método diz: "Este é um método chamado <code>save</code> que
+recebe como receptor <code>p</code>, um ponteiro para <code>Page</code>. Ele não recebe
+parâmetros e retorna um valor do tipo <code>error</code>."
 </p>
 
 <p>
-This method will save the <code>Page</code>'s <code>Body</code> to a text
-file. For simplicity, we will use the <code>Title</code> as the file name.
+Este método salvará o <code>Body</code> da <code>Page</code> em um arquivo
+de texto. Por simplicidade, usaremos o <code>Title</code> como nome do arquivo.
 </p>
 
 <p>
-The <code>save</code> method returns an <code>error</code> value because
-that is the return type of <code>WriteFile</code> (a standard library function
-that writes a byte slice to a file).  The <code>save</code> method returns the
-error value, to let the application handle it should anything go wrong while
-writing the file.  If all goes well, <code>Page.save()</code> will return
-<code>nil</code> (the zero-value for pointers, interfaces, and some other
-types).
+O método <code>save</code> retorna um valor <code>error</code> porque
+esse é o tipo de retorno de <code>WriteFile</code> (uma função da biblioteca padrão
+que escreve um slice de bytes em um arquivo). O método <code>save</code> retorna o
+valor do erro, para permitir que a aplicação o trate caso algo dê errado ao
+escrever o arquivo. Se tudo correr bem, <code>Page.save()</code> retornará
+<code>nil</code> (o valor zero para ponteiros, interfaces e alguns outros
+tipos).
 </p>
 
 <p>
-The octal integer literal <code>0600</code>, passed as the third parameter to
-<code>WriteFile</code>, indicates that the file should be created with
-read-write permissions for the current user only. (See the Unix man page
-<code>open(2)</code> for details.)
+O literal inteiro octal <code>0600</code>, passado como terceiro parâmetro para
+<code>WriteFile</code>, indica que o arquivo deve ser criado com
+permissões de leitura-escrita apenas para o usuário atual. (Veja a página de manual Unix
+<code>open(2)</code> para detalhes.)
 </p>
 
 <p>
-In addition to saving pages, we will want to load pages, too:
+Além de salvar páginas, também queremos carregar páginas:
 </p>
 
 {{code "part1-noerror.go" `/^func loadPage/` `/^}/`}}
 
 <p>
-The function <code>loadPage</code> constructs the file name from the title
-parameter, reads the file's contents into a new variable <code>body</code>, and
-returns a pointer to a <code>Page</code> literal constructed with the proper
-title and body values.
+A função <code>loadPage</code> constrói o nome do arquivo a partir do parâmetro title,
+lê o conteúdo do arquivo em uma nova variável <code>body</code> e
+retorna um ponteiro para um literal <code>Page</code> construído com o
+título e corpo apropriados.
 </p>
 
 <p>
-Functions can return multiple values. The standard library function
-<code>os.ReadFile</code> returns <code>[]byte</code> and <code>error</code>.
-In <code>loadPage</code>, error isn't being handled yet; the "blank identifier"
-represented by the underscore (<code>_</code>) symbol is used to throw away the
-error return value (in essence, assigning the value to nothing).
+Funções podem retornar múltiplos valores. A função da biblioteca padrão
+<code>os.ReadFile</code> retorna <code>[]byte</code> e <code>error</code>.
+Em <code>loadPage</code>, o erro ainda não está sendo tratado; o "identificador em branco"
+representado pelo símbolo underscore (<code>_</code>) é usado para descartar o
+valor de retorno do erro (em essência, atribuindo o valor a nada).
 </p>
 
 <p>
-But what happens if <code>ReadFile</code> encounters an error?  For example,
-the file might not exist. We should not ignore such errors.  Let's modify the
-function to return <code>*Page</code> and <code>error</code>.
+Mas o que acontece se <code>ReadFile</code> encontrar um erro? Por exemplo,
+o arquivo pode não existir. Não devemos ignorar tais erros. Vamos modificar a
+função para retornar <code>*Page</code> e <code>error</code>.
 </p>
 
 {{code "part1.go" `/^func loadPage/` `/^}/`}}
 
 <p>
-Callers of this function can now check the second parameter; if it is
-<code>nil</code> then it has successfully loaded a Page. If not, it will be an
-<code>error</code> that can be handled by the caller (see the
-<a href="/ref/spec#Errors">language specification</a> for details).
+Os chamadores desta função agora podem verificar o segundo parâmetro; se for
+<code>nil</code>, então ela carregou uma Page com sucesso. Caso contrário, será um
+<code>error</code> que pode ser tratado pelo chamador (veja a
+<a href="/ref/spec#Errors">especificação da linguagem</a> para detalhes).
 </p>
 
 <p>
-At this point we have a simple data structure and the ability to save to and
-load from a file. Let's write a <code>main</code> function to test what we've
-written:
+Neste ponto, temos uma estrutura de dados simples e a capacidade de salvar e
+carregar de um arquivo. Vamos escrever uma função <code>main</code> para testar o que escrevemos:
 </p>
 
 {{code "part1.go" `/^func main/` `/^}/`}}
 
 <p>
-After compiling and executing this code, a file named <code>TestPage.txt</code>
-would be created, containing the contents of <code>p1</code>. The file would
-then be read into the struct <code>p2</code>, and its <code>Body</code> element
-printed to the screen.
+Após compilar e executar este código, um arquivo chamado <code>TestPage.txt</code>
+seria criado, contendo o conteúdo de <code>p1</code>. O arquivo então seria
+lido na struct <code>p2</code>, e seu elemento <code>Body</code>
+impresso na tela.
 </p>
 
 <p>
-You can compile and run the program like this:
+Você pode compilar e executar o programa assim:
 </p>
 
 <pre>
@@ -184,74 +184,74 @@ This is a sample Page.
 </pre>
 
 <p>
-(If you're using Windows you must type "<code>wiki</code>" without the
-"<code>./</code>" to run the program.)
+(Se você estiver usando Windows, deve digitar "<code>wiki</code>" sem o
+"<code>./</code>" para executar o programa.)
 </p>
 
 <p>
-<a href="part1.go">Click here to view the code we've written so far.</a>
+<a href="part1.go">Clique aqui para ver o código que escrevemos até agora.</a>
 </p>
 
-<h2>Introducing the <code>net/http</code> package (an interlude)</h2>
+<h2>Introduzindo o package <code>net/http</code> (um interlúdio)</h2>
 
 <p>
-Here's a full working example of a simple web server:
+Aqui está um exemplo funcional completo de um servidor web simples:
 </p>
 
 {{code "http-sample.go"}}
 
 <p>
-The <code>main</code> function begins with a call to
-<code>http.HandleFunc</code>, which tells the <code>http</code> package to
-handle all requests to the web root (<code>"/"</code>) with
+A função <code>main</code> começa com uma chamada a
+<code>http.HandleFunc</code>, que diz ao package <code>http</code> para
+tratar todas as requisições para a raiz web (<code>"/"</code>) com
 <code>handler</code>.
 </p>
 
 <p>
-It then calls <code>http.ListenAndServe</code>, specifying that it should
-listen on port 8080 on any interface (<code>":8080"</code>). (Don't
-worry about its second parameter, <code>nil</code>, for now.)
-This function will block until the program is terminated.
+Ela então chama <code>http.ListenAndServe</code>, especificando que deve
+escutar na porta 8080 em qualquer interface (<code>":8080"</code>). (Não se
+preocupe com seu segundo parâmetro, <code>nil</code>, por enquanto.)
+Esta função bloqueará até que o programa seja terminado.
 </p>
 
 <p>
-<code>ListenAndServe</code> always returns an error, since it only returns when an
-unexpected error occurs.
-In order to log that error we wrap the function call with <code>log.Fatal</code>.
+<code>ListenAndServe</code> sempre retorna um erro, pois só retorna quando um
+erro inesperado ocorre.
+Para registrar esse erro, envolvemos a chamada da função com <code>log.Fatal</code>.
 </p>
 
 <p>
-The function <code>handler</code> is of the type <code>http.HandlerFunc</code>.
-It takes an <code>http.ResponseWriter</code> and an <code>http.Request</code> as
-its arguments.
+A função <code>handler</code> é do tipo <code>http.HandlerFunc</code>.
+Ela recebe um <code>http.ResponseWriter</code> e um <code>http.Request</code> como
+seus argumentos.
 </p>
 
 <p>
-An <code>http.ResponseWriter</code> value assembles the HTTP server's response; by writing
-to it, we send data to the HTTP client.
+Um valor <code>http.ResponseWriter</code> monta a resposta do servidor HTTP; ao escrever
+nele, enviamos dados para o cliente HTTP.
 </p>
 
 <p>
-An <code>http.Request</code> is a data structure that represents the client
-HTTP request. <code>r.URL.Path</code> is the path component
-of the request URL. The trailing <code>[1:]</code> means
-"create a sub-slice of <code>Path</code> from the 1st character to the end."
-This drops the leading "/" from the path name.
+Um <code>http.Request</code> é uma estrutura de dados que representa a requisição
+HTTP do cliente. <code>r.URL.Path</code> é o componente de caminho
+da URL da requisição. O <code>[1:]</code> no final significa
+"criar um sub-slice de <code>Path</code> do 1º caractere até o final."
+Isso remove a "/" inicial do nome do caminho.
 </p>
 
 <p>
-If you run this program and access the URL:
+Se você executar este programa e acessar a URL:
 </p>
 <pre>http://localhost:8080/monkeys</pre>
 <p>
-the program would present a page containing:
+o programa apresentaria uma página contendo:
 </p>
 <pre>Hi there, I love monkeys!</pre>
 
-<h2>Using <code>net/http</code> to serve wiki pages</h2>
+<h2>Usando <code>net/http</code> para servir páginas wiki</h2>
 
 <p>
-To use the <code>net/http</code> package, it must be imported:
+Para usar o package <code>net/http</code>, ele deve ser importado:
 </p>
 
 <pre>
@@ -264,52 +264,52 @@ import (
 </pre>
 
 <p>
-Let's create a handler, <code>viewHandler</code> that will allow users to
-view a wiki page. It will handle URLs prefixed with "/view/".
+Vamos criar um handler, <code>viewHandler</code>, que permitirá aos usuários
+visualizar uma página wiki. Ele tratará URLs prefixadas com "/view/".
 </p>
 
 {{code "part2.go" `/^func viewHandler/` `/^}/`}}
 
 <p>
-Again, note the use of <code>_</code> to ignore the <code>error</code>
-return value from <code>loadPage</code>. This is done here for simplicity
-and generally considered bad practice. We will attend to this later.
+Novamente, note o uso de <code>_</code> para ignorar o valor de retorno <code>error</code>
+de <code>loadPage</code>. Isso é feito aqui por simplicidade
+e geralmente é considerado má prática. Vamos cuidar disso mais tarde.
 </p>
 
 <p>
-First, this function extracts the page title from <code>r.URL.Path</code>,
-the path component of the request URL.
-The <code>Path</code> is re-sliced with <code>[len("/view/"):]</code> to drop
-the leading <code>"/view/"</code> component of the request path.
-This is because the path will invariably begin with <code>"/view/"</code>,
-which is not part of the page's title.
+Primeiro, esta função extrai o título da página de <code>r.URL.Path</code>,
+o componente de caminho da URL da requisição.
+O <code>Path</code> é re-fatiado com <code>[len("/view/"):]</code> para descartar
+o componente <code>"/view/"</code> inicial do caminho da requisição.
+Isso ocorre porque o caminho sempre começará com <code>"/view/"</code>,
+que não faz parte do título da página.
 </p>
 
 <p>
-The function then loads the page data, formats the page with a string of simple
-HTML, and writes it to <code>w</code>, the <code>http.ResponseWriter</code>.
+A função então carrega os dados da página, formata a página com uma string de HTML simples,
+e escreve em <code>w</code>, o <code>http.ResponseWriter</code>.
 </p>
 
 <p>
-To use this handler, we rewrite our <code>main</code> function to
-initialize <code>http</code> using the <code>viewHandler</code> to handle
-any requests under the path <code>/view/</code>.
+Para usar este handler, reescrevemos nossa função <code>main</code> para
+inicializar <code>http</code> usando o <code>viewHandler</code> para tratar
+quaisquer requisições sob o caminho <code>/view/</code>.
 </p>
 
 {{code "part2.go" `/^func main/` `/^}/`}}
 
 <p>
-<a href="part2.go">Click here to view the code we've written so far.</a>
+<a href="part2.go">Clique aqui para ver o código que escrevemos até agora.</a>
 </p>
 
 <p>
-Let's create some page data (as <code>test.txt</code>), compile our code, and
-try serving a wiki page.
+Vamos criar alguns dados de página (como <code>test.txt</code>), compilar nosso código e
+tentar servir uma página wiki.
 </p>
 
 <p>
-Open <code>test.txt</code> file in your editor, and save the string "Hello world" (without quotes)
-in it.
+Abra o arquivo <code>test.txt</code> no seu editor e salve a string "Hello world" (sem aspas)
+nele.
 </p>
 
 <pre>
@@ -318,56 +318,56 @@ $ ./wiki
 </pre>
 
 <p>
-(If you're using Windows you must type "<code>wiki</code>" without the
-"<code>./</code>" to run the program.)
+(Se você estiver usando Windows, deve digitar "<code>wiki</code>" sem o
+"<code>./</code>" para executar o programa.)
 </p>
 
 <p>
-With this web server running, a visit to <code><a
+Com este servidor web rodando, uma visita a <code><a
 href="http://localhost:8080/view/test">http://localhost:8080/view/test</a></code>
-should show a page titled "test" containing the words "Hello world".
+deve mostrar uma página intitulada "test" contendo as palavras "Hello world".
 </p>
 
-<h2>Editing Pages</h2>
+<h2>Editando Páginas</h2>
 
 <p>
-A wiki is not a wiki without the ability to edit pages. Let's create two new
-handlers: one named <code>editHandler</code> to display an 'edit page' form,
-and the other named <code>saveHandler</code> to save the data entered via the
-form.
+Uma wiki não é uma wiki sem a capacidade de editar páginas. Vamos criar dois novos
+handlers: um chamado <code>editHandler</code> para exibir um formulário de 'editar página',
+e outro chamado <code>saveHandler</code> para salvar os dados inseridos via o
+formulário.
 </p>
 
 <p>
-First, we add them to <code>main()</code>:
+Primeiro, os adicionamos a <code>main()</code>:
 </p>
 
 {{code "final-noclosure.go" `/^func main/` `/^}/`}}
 
 <p>
-The function <code>editHandler</code> loads the page
-(or, if it doesn't exist, create an empty <code>Page</code> struct),
-and displays an HTML form.
+A função <code>editHandler</code> carrega a página
+(ou, se ela não existir, cria uma struct <code>Page</code> vazia),
+e a exibe como um formulário HTML.
 </p>
 
 {{code "notemplate.go" `/^func editHandler/` `/^}/`}}
 
 <p>
-This function will work fine, but all that hard-coded HTML is ugly.
-Of course, there is a better way.
+Esta função funcionará bem, mas todo esse HTML hard-coded é feio.
+Claro, há uma maneira melhor.
 </p>
 
-<h2>The <code>html/template</code> package</h2>
+<h2>O package <code>html/template</code></h2>
 
 <p>
-The <code>html/template</code> package is part of the Go standard library.
-We can use <code>html/template</code> to keep the HTML in a separate file,
-allowing us to change the layout of our edit page without modifying the
-underlying Go code.
+O package <code>html/template</code> faz parte da biblioteca padrão do Go.
+Podemos usar <code>html/template</code> para manter o HTML em um arquivo separado,
+permitindo-nos alterar o layout da nossa página de edição sem modificar o
+código Go subjacente.
 </p>
 
 <p>
-First, we must add <code>html/template</code> to the list of imports. We
-also won't be using <code>fmt</code> anymore, so we have to remove that.
+Primeiro, devemos adicionar <code>html/template</code> à lista de imports. Também
+não usaremos mais <code>fmt</code>, então precisamos remover isso.
 </p>
 
 <pre>
@@ -379,261 +379,258 @@ import (
 </pre>
 
 <p>
-Let's create a template file containing the HTML form.
-Open a new file named <code>edit.html</code>, and add the following lines:
+Vamos criar um arquivo de template contendo o formulário HTML.
+Abra um novo arquivo chamado <code>edit.html</code> e adicione as seguintes linhas:
 </p>
 
 {{code "edit.html"}}
 
 <p>
-Modify <code>editHandler</code> to use the template, instead of the hard-coded
-HTML:
+Modifique <code>editHandler</code> para usar o template, em vez do
+HTML hard-coded:
 </p>
 
 {{code "final-noerror.go" `/^func editHandler/` `/^}/`}}
 
 <p>
-The function <code>template.ParseFiles</code> will read the contents of
-<code>edit.html</code> and return a <code>*template.Template</code>.
+A função <code>template.ParseFiles</code> lerá o conteúdo de
+<code>edit.html</code> e retornará um <code>*template.Template</code>.
 </p>
 
 <p>
-The method <code>t.Execute</code> executes the template, writing the
-generated HTML to the <code>http.ResponseWriter</code>.
-The <code>.Title</code> and <code>.Body</code> dotted identifiers refer to
-<code>p.Title</code> and <code>p.Body</code>.
+O método <code>t.Execute</code> executa o template, escrevendo o
+HTML gerado para o <code>http.ResponseWriter</code>.
+Os identificadores pontilhados <code>.Title</code> e <code>.Body</code> referem-se a
+<code>p.Title</code> e <code>p.Body</code>.
 </p>
 
 <p>
-Template directives are enclosed in double curly braces.
-The <code>printf "%s" .Body</code> instruction is a function call
-that outputs <code>.Body</code> as a string instead of a stream of bytes,
-the same as a call to <code>fmt.Printf</code>.
-The <code>html/template</code> package helps guarantee that only safe and
-correct-looking HTML is generated by template actions. For instance, it
-automatically escapes any greater than sign (<code>&gt;</code>), replacing it
-with <code>&#x26;gt;</code>, to make sure user data does not corrupt the form
-HTML.
+As diretivas de template são delimitadas por chaves duplas.
+A instrução <code>printf "%s" .Body</code> é uma chamada de função
+que produz <code>.Body</code> como uma string em vez de um stream de bytes,
+o mesmo que uma chamada a <code>fmt.Printf</code>.
+O package <code>html/template</code> ajuda a garantir que apenas HTML seguro e
+de aparência correta seja gerado pelas ações do template. Por exemplo, ele
+automaticamente escapa qualquer sinal de maior que (<code>&gt;</code>), substituindo-o
+por <code>&#x26;gt;</code>, para garantir que os dados do usuário não corrompam o
+HTML do formulário.
 </p>
 
 <p>
-Since we're working with templates now, let's create a template for our
-<code>viewHandler</code> called <code>view.html</code>:
+Como estamos trabalhando com templates agora, vamos criar um template para nosso
+<code>viewHandler</code> chamado <code>view.html</code>:
 </p>
 
 {{code "view.html"}}
 
 <p>
-Modify <code>viewHandler</code> accordingly:
+Modifique <code>viewHandler</code> adequadamente:
 </p>
 
 {{code "final-noerror.go" `/^func viewHandler/` `/^}/`}}
 
 <p>
-Notice that we've used almost exactly the same templating code in both
-handlers. Let's remove this duplication by moving the templating code
-to its own function:
+Observe que usamos quase exatamente o mesmo código de template em ambos
+os handlers. Vamos remover essa duplicação movendo o código de template
+para sua própria função:
 </p>
 
 {{code "final-template.go" `/^func renderTemplate/` `/^}/`}}
 
 <p>
-And modify the handlers to use that function:
+E modificar os handlers para usar essa função:
 </p>
 
 {{code "final-template.go" `/^func viewHandler/` `/^}/`}}
 {{code "final-template.go" `/^func editHandler/` `/^}/`}}
 
 <p>
-If we comment out the registration of our unimplemented save handler in
-<code>main</code>, we can once again build and test our program.
-<a href="part3.go">Click here to view the code we've written so far.</a>
+Se comentarmos o registro do nosso handler save não implementado em
+<code>main</code>, podemos mais uma vez construir e testar nosso programa.
+<a href="part3.go">Clique aqui para ver o código que escrevemos até agora.</a>
 </p>
 
-<h2>Handling non-existent pages</h2>
+<h2>Tratando páginas não-existentes</h2>
 
 <p>
-What if you visit <a href="http://localhost:8080/view/APageThatDoesntExist">
-<code>/view/APageThatDoesntExist</code></a>? You'll see a page containing
-HTML. This is because it ignores the error return value from
-<code>loadPage</code> and continues to try and fill out the template
-with no data. Instead, if the requested Page doesn't exist, it should
-redirect the client to the edit Page so the content may be created:
+E se você visitar <a href="http://localhost:8080/view/APageThatDoesntExist">
+<code>/view/APageThatDoesntExist</code></a>? Você verá uma página contendo
+HTML. Isso ocorre porque ele ignora o valor de retorno de erro de
+<code>loadPage</code> e continua tentando preencher o template
+sem dados. Em vez disso, se a Page solicitada não existir, ela deve
+redirecionar o cliente para a Page de edição para que o conteúdo possa ser criado:
 </p>
 
 {{code "part3-errorhandling.go" `/^func viewHandler/` `/^}/`}}
 
 <p>
-The <code>http.Redirect</code> function adds an HTTP status code of
-<code>http.StatusFound</code> (302) and a <code>Location</code>
-header to the HTTP response.
+A função <code>http.Redirect</code> adiciona um código de status HTTP de
+<code>http.StatusFound</code> (302) e um cabeçalho <code>Location</code>
+à resposta HTTP.
 </p>
 
-<h2>Saving Pages</h2>
+<h2>Salvando Páginas</h2>
 
 <p>
-The function <code>saveHandler</code> will handle the submission of forms
-located on the edit pages. After uncommenting the related line in
-<code>main</code>, let's implement the handler:
+A função <code>saveHandler</code> tratará o envio de formulários
+localizados nas páginas de edição. Após descomentar a linha relacionada em
+<code>main</code>, vamos implementar o handler:
 </p>
 
 {{code "final-template.go" `/^func saveHandler/` `/^}/`}}
 
 <p>
-The page title (provided in the URL) and the form's only field,
-<code>Body</code>, are stored in a new <code>Page</code>.
-The <code>save()</code> method is then called to write the data to a file,
-and the client is redirected to the <code>/view/</code> page.
+O título da página (fornecido na URL) e o único campo do formulário,
+<code>Body</code>, são armazenados em uma nova <code>Page</code>.
+O método <code>save()</code> é então chamado para escrever os dados em um arquivo,
+e o cliente é redirecionado para a página <code>/view/</code>.
 </p>
 
 <p>
-The value returned by <code>FormValue</code> is of type <code>string</code>.
-We must convert that value to <code>[]byte</code> before it will fit into
-the <code>Page</code> struct. We use <code>[]byte(body)</code> to perform
-the conversion.
+O valor retornado por <code>FormValue</code> é do tipo <code>string</code>.
+Devemos converter esse valor para <code>[]byte</code> antes que ele se encaixe na
+struct <code>Page</code>. Usamos <code>[]byte(body)</code> para realizar
+a conversão.
 </p>
 
-<h2>Error handling</h2>
+<h2>Tratamento de erros</h2>
 
 <p>
-There are several places in our program where errors are being ignored.  This
-is bad practice, not least because when an error does occur the program will
-have unintended behavior. A better solution is to handle the errors and return
-an error message to the user. That way if something does go wrong, the server
-will function exactly how we want and the user can be notified.
+Há vários lugares em nosso programa onde os erros estão sendo ignorados. Esta
+é uma má prática, especialmente porque quando um erro ocorre o programa terá
+comportamento não intencional. Uma solução melhor é tratar os erros e retornar
+uma mensagem de erro ao usuário. Dessa forma, se algo der errado, o servidor
+funcionará exatamente como queremos e o usuário pode ser notificado.
 </p>
 
 <p>
-First, let's handle the errors in <code>renderTemplate</code>:
+Primeiro, vamos tratar os erros em <code>renderTemplate</code>:
 </p>
 
 {{code "final-parsetemplate.go" `/^func renderTemplate/` `/^}/`}}
 
 <p>
-The <code>http.Error</code> function sends a specified HTTP response code
-(in this case "Internal Server Error") and error message.
-Already the decision to put this in a separate function is paying off.
+A função <code>http.Error</code> envia um código de resposta HTTP especificado
+(neste caso "Internal Server Error") e uma mensagem de erro.
+Já a decisão de colocar isso em uma função separada está valendo a pena.
 </p>
 
 <p>
-Now let's fix up <code>saveHandler</code>:
+Agora vamos consertar <code>saveHandler</code>:
 </p>
 
 {{code "part3-errorhandling.go" `/^func saveHandler/` `/^}/`}}
 
 <p>
-Any errors that occur during <code>p.save()</code> will be reported
-to the user.
+Quaisquer erros que ocorram durante <code>p.save()</code> serão reportados
+ao usuário.
 </p>
 
-<h2>Template caching</h2>
+<h2>Cache de templates</h2>
 
 <p>
-There is an inefficiency in this code: <code>renderTemplate</code> calls
-<code>ParseFiles</code> every time a page is rendered.
-A better approach would be to call <code>ParseFiles</code> once at program
-initialization, parsing all templates into a single <code>*Template</code>.
-Then we can use the
+Há uma ineficiência neste código: <code>renderTemplate</code> chama
+<code>ParseFiles</code> toda vez que uma página é renderizada.
+Uma abordagem melhor seria chamar <code>ParseFiles</code> uma vez na
+inicialização do programa, analisando todos os templates em um único <code>*Template</code>.
+Então podemos usar o método
 <a href="/pkg/html/template/#Template.ExecuteTemplate"><code>ExecuteTemplate</code></a>
-method to render a specific template.
+para renderizar um template específico.
 </p>
 
 <p>
-First we create a global variable named <code>templates</code>, and initialize
-it with <code>ParseFiles</code>.
+Primeiro criamos uma variável global chamada <code>templates</code> e a inicializamos
+com <code>ParseFiles</code>.
 </p>
 
 {{code "final.go" `/var templates/`}}
 
 <p>
-The function <code>template.Must</code> is a convenience wrapper that panics
-when passed a non-nil <code>error</code> value, and otherwise returns the
-<code>*Template</code> unaltered. A panic is appropriate here; if the templates
-can't be loaded the only sensible thing to do is exit the program.
+A função <code>template.Must</code> é um wrapper de conveniência que entra em pânico
+quando recebe um valor <code>error</code> não-nil, e caso contrário retorna o
+<code>*Template</code> inalterado. Um pânico é apropriado aqui; se os templates
+não puderem ser carregados, a única coisa sensata a fazer é sair do programa.
 </p>
 
 <p>
-The <code>ParseFiles</code> function takes any number of string arguments that
-identify our template files, and parses those files into templates that are
-named after the base file name. If we were to add more templates to our
-program, we would add their names to the <code>ParseFiles</code> call's
-arguments.
+A função <code>ParseFiles</code> recebe qualquer número de argumentos string que
+identificam nossos arquivos de template, e analisa esses arquivos em templates que são
+nomeados após o nome base do arquivo. Se fôssemos adicionar mais templates ao nosso
+programa, adicionaríamos seus nomes aos argumentos da chamada de <code>ParseFiles</code>.
 </p>
 
 <p>
-We then modify the <code>renderTemplate</code> function to call the
-<code>templates.ExecuteTemplate</code> method with the name of the appropriate
-template:
+Então modificamos a função <code>renderTemplate</code> para chamar o método
+<code>templates.ExecuteTemplate</code> com o nome do template apropriado:
 </p>
 
 {{code "final.go" `/func renderTemplate/` `/^}/`}}
 
 <p>
-Note that the template name is the template file name, so we must
-append <code>".html"</code> to the <code>tmpl</code> argument.
+Observe que o nome do template é o nome do arquivo de template, então devemos
+anexar <code>".html"</code> ao argumento <code>tmpl</code>.
 </p>
 
-<h2>Validation</h2>
+<h2>Validação</h2>
 
 <p>
-As you may have observed, this program has a serious security flaw: a user
-can supply an arbitrary path to be read/written on the server. To mitigate
-this, we can write a function to validate the title with a regular expression.
+Como você pode ter observado, este programa tem uma falha de segurança séria: um usuário
+pode fornecer um caminho arbitrário para ser lido/escrito no servidor. Para mitigar
+isso, podemos escrever uma função para validar o título com uma expressão regular.
 </p>
 
 <p>
-First, add <code>"regexp"</code> to the <code>import</code> list.
-Then we can create a global variable to store our validation
-expression:
+Primeiro, adicione <code>"regexp"</code> à lista de <code>import</code>.
+Então podemos criar uma variável global para armazenar nossa expressão de
+validação:
 </p>
 
 {{code "final-noclosure.go" `/^var validPath/`}}
 
 <p>
-The function <code>regexp.MustCompile</code> will parse and compile the
-regular expression, and return a <code>regexp.Regexp</code>.
-<code>MustCompile</code> is distinct from <code>Compile</code> in that it will
-panic if the expression compilation fails, while <code>Compile</code> returns
-an <code>error</code> as a second parameter.
+A função <code>regexp.MustCompile</code> analisará e compilará a
+expressão regular, e retornará um <code>regexp.Regexp</code>.
+<code>MustCompile</code> é distinta de <code>Compile</code> pois ela entrará
+em pânico se a compilação da expressão falhar, enquanto <code>Compile</code> retorna
+um <code>error</code> como segundo parâmetro.
 </p>
 
 <p>
-Now, let's write a function that uses the <code>validPath</code>
-expression to validate path and extract the page title:
+Agora, vamos escrever uma função que usa a expressão <code>validPath</code>
+para validar o caminho e extrair o título da página:
 </p>
 
 {{code "final-noclosure.go" `/func getTitle/` `/^}/`}}
 
 <p>
-If the title is valid, it will be returned along with a <code>nil</code>
-error value. If the title is invalid, the function will write a
-"404 Not Found" error to the HTTP connection, and return an error to the
-handler. To create a new error, we have to import the <code>errors</code>
-package.
+Se o título for válido, ele será retornado junto com um valor <code>nil</code>
+de erro. Se o título for inválido, a função escreverá um
+erro "404 Not Found" na conexão HTTP, e retornará um erro ao
+handler. Para criar um novo erro, temos que importar o package <code>errors</code>.
 </p>
 
 <p>
-Let's put a call to <code>getTitle</code> in each of the handlers:
+Vamos colocar uma chamada a <code>getTitle</code> em cada um dos handlers:
 </p>
 
 {{code "final-noclosure.go" `/^func viewHandler/` `/^}/`}}
 {{code "final-noclosure.go" `/^func editHandler/` `/^}/`}}
 {{code "final-noclosure.go" `/^func saveHandler/` `/^}/`}}
 
-<h2>Introducing Function Literals and Closures</h2>
+<h2>Introduzindo Literais de Função e Closures</h2>
 
 <p>
-Catching the error condition in each handler introduces a lot of repeated code.
-What if we could wrap each of the handlers in a function that does this
-validation and error checking? Go's
-<a href="/ref/spec#Function_literals">function
-literals</a> provide a powerful means of abstracting functionality
-that can help us here.
+Capturar a condição de erro em cada handler introduz muito código repetido.
+E se pudéssemos envolver cada um dos handlers em uma função que faz essa
+validação e verificação de erro? Os
+<a href="/ref/spec#Function_literals">literais de função</a>
+do Go fornecem um meio poderoso de abstrair funcionalidade
+que pode nos ajudar aqui.
 </p>
 
 <p>
-First, we re-write the function definition of each of the handlers to accept
-a title string:
+Primeiro, reescrevemos a definição de função de cada um dos handlers para aceitar
+uma string de título:
 </p>
 
 <pre>
@@ -643,72 +640,71 @@ func saveHandler(w http.ResponseWriter, r *http.Request, title string)
 </pre>
 
 <p>
-Now let's define a wrapper function that <i>takes a function of the above
-type</i>, and returns a function of type <code>http.HandlerFunc</code>
-(suitable to be passed to the function <code>http.HandleFunc</code>):
+Agora vamos definir uma função wrapper que <i>recebe uma função do tipo
+acima</i>, e retorna uma função do tipo <code>http.HandlerFunc</code>
+(adequada para ser passada à função <code>http.HandleFunc</code>):
 </p>
 
 <pre>
 func makeHandler(fn func (http.ResponseWriter, *http.Request, string)) http.HandlerFunc {
     return func(w http.ResponseWriter, r *http.Request) {
-        // Here we will extract the page title from the Request,
-        // and call the provided handler 'fn'
+        // Aqui vamos extrair o título da página da Request,
+        // e chamar o handler fornecido 'fn'
     }
 }
 </pre>
 
 <p>
-The returned function is called a closure because it encloses values defined
-outside of it. In this case, the variable <code>fn</code> (the single argument
-to <code>makeHandler</code>) is enclosed by the closure. The variable
-<code>fn</code> will be one of our save, edit, or view handlers.
+A função retornada é chamada de closure porque ela encapsula valores definidos
+fora dela. Neste caso, a variável <code>fn</code> (o único argumento
+de <code>makeHandler</code>) é encapsulada pelo closure. A variável
+<code>fn</code> será um dos nossos handlers save, edit ou view.
 </p>
 
 <p>
-Now we can take the code from <code>getTitle</code> and use it here
-(with some minor modifications):
+Agora podemos pegar o código de <code>getTitle</code> e usá-lo aqui
+(com algumas modificações menores):
 </p>
 
 {{code "final.go" `/func makeHandler/` `/^}/`}}
 
 <p>
-The closure returned by <code>makeHandler</code> is a function that takes
-an <code>http.ResponseWriter</code> and <code>http.Request</code> (in other
-words, an <code>http.HandlerFunc</code>).
-The closure extracts the <code>title</code> from the request path, and
-validates it with the <code>validPath</code> regexp. If the
-<code>title</code> is invalid, an error will be written to the
-<code>ResponseWriter</code> using the <code>http.NotFound</code> function.
-If the <code>title</code> is valid, the enclosed handler function
-<code>fn</code> will be called with the <code>ResponseWriter</code>,
-<code>Request</code>, and <code>title</code> as arguments.
+O closure retornado por <code>makeHandler</code> é uma função que recebe
+um <code>http.ResponseWriter</code> e <code>http.Request</code> (em outras
+palavras, um <code>http.HandlerFunc</code>).
+O closure extrai o <code>title</code> do caminho da requisição e
+o valida com a regexp <code>validPath</code>. Se o
+<code>title</code> for inválido, um erro será escrito no
+<code>ResponseWriter</code> usando a função <code>http.NotFound</code>.
+Se o <code>title</code> for válido, a função handler encapsulada
+<code>fn</code> será chamada com o <code>ResponseWriter</code>,
+<code>Request</code> e <code>title</code> como argumentos.
 </p>
 
 <p>
-Now we can wrap the handler functions with <code>makeHandler</code> in
-<code>main</code>, before they are registered with the <code>http</code>
-package:
+Agora podemos envolver as funções handler com <code>makeHandler</code> em
+<code>main</code>, antes de serem registradas com o package <code>http</code>:
 </p>
 
 {{code "final.go" `/func main/` `/^}/`}}
 
 <p>
-Finally we remove the calls to <code>getTitle</code> from the handler functions,
-making them much simpler:
+Finalmente removemos as chamadas a <code>getTitle</code> das funções handler,
+tornando-as muito mais simples:
 </p>
 
 {{code "final.go" `/^func viewHandler/` `/^}/`}}
 {{code "final.go" `/^func editHandler/` `/^}/`}}
 {{code "final.go" `/^func saveHandler/` `/^}/`}}
 
-<h2>Try it out!</h2>
+<h2>Experimente!</h2>
 
 <p>
-<a href="final.go">Click here to view the final code listing.</a>
+<a href="final.go">Clique aqui para ver a listagem do código final.</a>
 </p>
 
 <p>
-Recompile the code, and run the app:
+Recompile o código e execute o app:
 </p>
 
 <pre>
@@ -717,26 +713,26 @@ $ ./wiki
 </pre>
 
 <p>
-Visiting <a href="http://localhost:8080/view/ANewPage">http://localhost:8080/view/ANewPage</a>
-should present you with the page edit form. You should then be able to
-enter some text, click 'Save', and be redirected to the newly created page.
+Visitar <a href="http://localhost:8080/view/ANewPage">http://localhost:8080/view/ANewPage</a>
+deve apresentar o formulário de edição de página. Você deve então ser capaz de
+inserir algum texto, clicar em 'Save' e ser redirecionado para a página recém-criada.
 </p>
 
-<h2>Other tasks</h2>
+<h2>Outras tarefas</h2>
 
 <p>
-Here are some simple tasks you might want to tackle on your own:
+Aqui estão algumas tarefas simples que você pode querer tentar por conta própria:
 </p>
 
 <ul>
-<li>Store templates in <code>tmpl/</code> and page data in <code>data/</code>.
-<li>Add a handler to make the web root redirect to
+<li>Armazenar templates em <code>tmpl/</code> e dados de página em <code>data/</code>.
+<li>Adicionar um handler para fazer a raiz web redirecionar para
 	<code>/view/FrontPage</code>.</li>
-<li>Spruce up the page templates by making them valid HTML and adding some
-	CSS rules.</li>
-<li>Implement inter-page linking by converting instances of
-	<code>[PageName]</code> to <br>
+<li>Embelezar os templates de página tornando-os HTML válido e adicionando algumas
+	regras CSS.</li>
+<li>Implementar ligação entre páginas convertendo instâncias de
+	<code>[PageName]</code> para <br>
 	<code>&lt;a href="/view/PageName"&gt;PageName&lt;/a&gt;</code>.
-	(hint: you could use <code>regexp.ReplaceAllFunc</code> to do this)
+	(dica: você pode usar <code>regexp.ReplaceAllFunc</code> para fazer isso)
 	</li>
 </ul>

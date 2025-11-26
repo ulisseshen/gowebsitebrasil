@@ -1,65 +1,66 @@
 <!--{
-  "Title": "Deprecation of 'go get' for installing executables",
+  "ia-translated": true,
+  "Title": "Deprecação do 'go get' para instalar executáveis",
   "Path": "/doc/go-get-install-deprecation",
   "Breadcrumb": true
 }-->
 
-## Overview
+## Visão Geral
 
-Starting in Go 1.17, installing executables with `go get` is deprecated.
-`go install` may be used instead.
+A partir do Go 1.17, instalar executáveis com `go get` está deprecated.
+`go install` pode ser usado em vez disso.
 
-In Go 1.18, `go get` will no longer build packages; it will only
-be used to add, update, or remove dependencies in `go.mod`. Specifically,
-`go get` will always act as if the `-d` flag were enabled.
+No Go 1.18, `go get` não construirá mais packages; ele será usado apenas
+para adicionar, atualizar ou remover dependências em `go.mod`. Especificamente,
+`go get` sempre agirá como se a flag `-d` estivesse habilitada.
 
-## What to use instead
+## O que usar em vez disso
 
-To install an executable in the context of the current module, use `go install`,
-without a version suffix, as below. This applies version requirements and
-other directives from the `go.mod` file in the current directory or a parent
-directory.
+Para instalar um executável no contexto do módulo atual, use `go install`,
+sem um sufixo de versão, como abaixo. Isso aplica requisitos de versão e
+outras diretivas do arquivo `go.mod` no diretório atual ou um diretório
+pai.
 
 ```
 go install example.com/cmd
 ```
 
-To install an executable while ignoring the current module, use `go install`
-*with* a [version suffix](/ref/mod#version-queries) like `@v1.2.3` or `@latest`,
-as below. When used with a version suffix, `go install` does not read or update
-the `go.mod` file in the current directory or a parent directory.
+Para instalar um executável ignorando o módulo atual, use `go install`
+*com* um [sufixo de versão](/ref/mod#version-queries) como `@v1.2.3` ou `@latest`,
+como abaixo. Quando usado com um sufixo de versão, `go install` não lê ou atualiza
+o arquivo `go.mod` no diretório atual ou um diretório pai.
 
 ```
-# Install a specific version.
+# Instalar uma versão específica.
 go install example.com/cmd@v1.2.3
 
-# Install the highest available version.
+# Instalar a versão mais alta disponível.
 go install example.com/cmd@latest
 ```
 
-In order to avoid ambiguity, when `go install` is used with a version suffix,
-all arguments must refer to `main` packages in the same module at the same
-version. If that module has a `go.mod` file, it must not contain directives like
-`replace` or `exclude` that would cause it to be interpreted differently if it
-were the main module. The module's `vendor` directory is not used.
+Para evitar ambiguidade, quando `go install` é usado com um sufixo de versão,
+todos os argumentos devem referir-se a packages `main` no mesmo módulo na mesma
+versão. Se aquele módulo tem um arquivo `go.mod`, ele não deve conter diretivas como
+`replace` ou `exclude` que fariam com que ele fosse interpretado diferentemente se
+fosse o módulo principal. O diretório `vendor` do módulo não é usado.
 
-See [`go install`](/ref/mod#go-install) for details.
+Veja [`go install`](/ref/mod#go-install) para detalhes.
 
-## Why this is happening
+## Por que isso está acontecendo
 
-Since modules were introduced, the `go get` command has been used both to update
-dependencies in `go.mod` and to install commands. This combination is frequently
-confusing and inconvenient: in most cases, developers want to update a
-dependency or install a command but not both at the same time.
+Desde que os módulos foram introduzidos, o comando `go get` tem sido usado tanto para atualizar
+dependências em `go.mod` quanto para instalar comandos. Esta combinação é frequentemente
+confusa e inconveniente: na maioria dos casos, desenvolvedores querem atualizar uma
+dependência ou instalar um comando, mas não ambos ao mesmo tempo.
 
-Since Go 1.16, `go install` can install a command at a version specified on the
-command line while ignoring the `go.mod` file in the current directory (if one
-exists). `go install` should now be used to install commands in most cases.
+Desde o Go 1.16, `go install` pode instalar um comando em uma versão especificada na
+linha de comando enquanto ignora o arquivo `go.mod` no diretório atual (se houver
+um). `go install` agora deve ser usado para instalar comandos na maioria dos casos.
 
-`go get`'s ability to build and install commands is now deprecated, since that
-functionality is redundant with `go install`. Removing this functionality
-will make `go get` faster, since it won't compile or link packages by default.
-`go get` also won't report an error when updating a package that can't be built
-for the current platform.
+A capacidade do `go get` de construir e instalar comandos está agora deprecated, já que essa
+funcionalidade é redundante com `go install`. Remover esta funcionalidade
+tornará `go get` mais rápido, já que ele não compilará ou linkará packages por padrão.
+`go get` também não reportará um erro ao atualizar um package que não pode ser construído
+para a plataforma atual.
 
-See proposal [#40276](/issue/40276) for the full discussion.
+Veja a proposta [#40276](/issue/40276) para a discussão completa.

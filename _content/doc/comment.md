@@ -1,52 +1,52 @@
 ---
-title: "Go Doc Comments"
+ia-translated: true
+title: "Comentários de Documentação no Go"
 layout: article
 date: 2022-06-01T00:00:00Z
 ---
 
-Table of Contents:
+Índice:
 
  [Packages](#package)\
- [Commands](#cmd)\
- [Types](#type)\
+ [Comandos](#cmd)\
+ [Tipos](#type)\
  [Funcs](#func)\
  [Consts](#const)\
  [Vars](#var)\
- [Syntax](#syntax)\
- [Common mistakes and pitfalls](#mistakes)
+ [Sintaxe](#syntax)\
+ [Erros comuns e armadilhas](#mistakes)
 
-“Doc comments” are comments that appear immediately before top-level package,
-const, func, type, and var declarations with no intervening newlines.
-Every exported (capitalized) name should have a doc comment.
+"Doc comments" (comentários de documentação) são comentários que aparecem imediatamente antes de declarações de package, const, func, type e var de nível superior sem novas linhas intermediárias.
+Todo nome exportado (começando com letra maiúscula) deve ter um doc comment.
 
-The [go/doc](/pkg/go/doc) and [go/doc/comment](/pkg/go/doc/comment) packages
-provide the ability to extract documentation from Go source code,
-and a variety of tools make use of this functionality.
-The [`go` `doc`](/cmd/go#hdr-Show_documentation_for_package_or_symbol)
-command looks up and prints the doc comment for a given package or symbol.
-(A symbol is a top-level const, func, type, or var.)
-The web server [pkg.go.dev](https://pkg.go.dev/) shows the documentation
-for public Go packages (when their licenses permit that use).
-The program serving that site is
+Os packages [go/doc](/pkg/go/doc) e [go/doc/comment](/pkg/go/doc/comment)
+fornecem a capacidade de extrair documentação do código fonte Go,
+e uma variedade de ferramentas fazem uso desta funcionalidade.
+O comando [`go` `doc`](/cmd/go#hdr-Show_documentation_for_package_or_symbol)
+procura e imprime o doc comment de um dado package ou símbolo.
+(Um símbolo é uma const, func, type ou var de nível superior.)
+O servidor web [pkg.go.dev](https://pkg.go.dev/) mostra a documentação
+para packages Go públicos (quando suas licenças permitem esse uso).
+O programa que serve aquele site é
 [golang.org/x/pkgsite/cmd/pkgsite](https://pkg.go.dev/golang.org/x/pkgsite/cmd/pkgsite),
-which can also be run locally to view documentation for private modules
-or without an internet connection.
-The language server [gopls](https://pkg.go.dev/golang.org/x/tools/gopls)
-provides documentation when editing Go source files in IDEs.
+que também pode ser executado localmente para ver documentação para módulos privados
+ou sem conexão com a internet.
+O language server [gopls](https://pkg.go.dev/golang.org/x/tools/gopls)
+fornece documentação ao editar arquivos fonte Go em IDEs.
 
-The rest of this page documents how to write Go doc comments.
+O restante desta página documenta como escrever doc comments no Go.
 
 ## Packages {#package}
 
-Every package should have a package comment introducing the package.
-It provides information relevant to the package as a whole
-and generally sets expectations for the package.
-Especially in large packages, it can be helpful for the package comment
-to give a brief overview of the most important parts of the API,
-linking to other doc comments as needed.
+Todo package deve ter um package comment introduzindo o package.
+Ele fornece informações relevantes ao package como um todo
+e geralmente define expectativas para o package.
+Especialmente em packages grandes, pode ser útil que o package comment
+dê uma breve visão geral das partes mais importantes da API,
+linkando para outros doc comments conforme necessário.
 
-If the package is simple, the package comment can be brief.
-For example:
+Se o package é simples, o package comment pode ser breve.
+Por exemplo:
 
 	// Package path implements utility routines for manipulating slash-separated
 	// paths.
@@ -57,23 +57,23 @@ For example:
 	// operating system paths, use the [path/filepath] package.
 	package path
 
-The square brackets in `[path/filepath]` create a [documentation link](#links).
+Os colchetes em `[path/filepath]` criam um [link de documentação](#links).
 
-As can be seen in this example, Go doc comments use complete sentences.
-For a package comment, that means the [first sentence](/pkg/go/doc/#Package.Synopsis)
-begins with “Package <name>”.
+Como pode ser visto neste exemplo, doc comments do Go usam sentenças completas.
+Para um package comment, isso significa que a [primeira sentença](/pkg/go/doc/#Package.Synopsis)
+começa com "Package <nome>".
 
-For multi-file packages, the package comment should only be in one source file.
-If multiple files have package comments, they are concatenated to form one
-large comment for the entire package.
+Para packages com múltiplos arquivos, o package comment deve estar em apenas um arquivo fonte.
+Se múltiplos arquivos têm package comments, eles são concatenados para formar um
+único comentário grande para o package inteiro.
 
-## Commands {#cmd}
+## Comandos {#cmd}
 
-A package comment for a command is similar, but it describes the behavior
-of the program rather than the Go symbols in the package.
-The first sentence conventionally begins with the name of the program itself,
-capitalized because it is at the start of a sentence.
-For example, here is an abridged version of the package comment for [gofmt](/cmd/gofmt):
+Um package comment para um comando é similar, mas ele descreve o comportamento
+do programa em vez dos símbolos Go no package.
+A primeira sentença convencionalmente começa com o nome do programa em si,
+com letra maiúscula porque está no início de uma sentença.
+Por exemplo, aqui está uma versão resumida do package comment para [gofmt](/cmd/gofmt):
 
 	/*
 	Gofmt formats Go programs.
@@ -110,15 +110,15 @@ For example, here is an abridged version of the package comment for [gofmt](/cmd
 	*/
 	package main
 
-The beginning of the comment is written using
+O início do comentário é escrito usando
 [semantic linefeeds](https://rhodesmill.org/brandon/2012/one-sentence-per-line/),
-in which each new sentence or long phrase is on a line by itself,
-which can make diffs easier to read as code and comments evolve.
-The later paragraphs happen not to follow this convention
-and have been wrapped by hand.
-Whatever is best for your code base is fine.
-Either way, `go` `doc` and `pkgsite` rewrap doc comment text when printing it.
-For example:
+em que cada nova sentença ou frase longa está em uma linha própria,
+o que pode tornar diffs mais fáceis de ler à medida que código e comentários evoluem.
+Os parágrafos posteriores não seguem esta convenção
+e foram quebrados manualmente.
+O que for melhor para sua codebase está bom.
+De qualquer forma, `go` `doc` e `pkgsite` re-quebram o texto do doc comment ao imprimi-lo.
+Por exemplo:
 
 	$ go doc gofmt
 	Gofmt formats Go programs. It uses tabs for indentation and blanks for
@@ -141,16 +141,16 @@ For example:
 			to standard output.
 	...
 
-The indented lines are treated as preformatted text:
-they are not rewrapped and are printed in code font
-in HTML and Markdown presentations.
-(The [Syntax](#syntax) section below gives the details.)
+As linhas indentadas são tratadas como texto pré-formatado:
+elas não são re-quebradas e são impressas em fonte de código
+em apresentações HTML e Markdown.
+(A seção [Sintaxe](#syntax) abaixo dá os detalhes.)
 
-## Types {#type}
+## Tipos {#type}
 
-A type's doc comment should explain what each instance of that type represents or provides.
-If the API is simple, the doc comment can be quite short.
-For example:
+O doc comment de um tipo deve explicar o que cada instância daquele tipo representa ou fornece.
+Se a API é simples, o doc comment pode ser bem curto.
+Por exemplo:
 
 	package zip
 
@@ -159,10 +159,10 @@ For example:
 		...
 	}
 
-By default, programmers should expect that a type is safe for use only by
-a single goroutine at a time.
-If a type provides stronger guarantees, the doc comment should state them.
-For example:
+Por padrão, programadores devem esperar que um tipo seja seguro para uso apenas por
+uma única goroutine por vez.
+Se um tipo fornece garantias mais fortes, o doc comment deve declarar isso.
+Por exemplo:
 
 	package regexp
 
@@ -173,8 +173,8 @@ For example:
 		...
 	}
 
-Go types should also aim to make the zero value have a useful meaning.
-If it isn't obvious, that meaning should be documented. For example:
+Tipos Go também devem buscar fazer o valor zero ter um significado útil.
+Se não for óbvio, esse significado deve ser documentado. Por exemplo:
 
 	package bytes
 
@@ -184,9 +184,9 @@ If it isn't obvious, that meaning should be documented. For example:
 		...
 	}
 
-For a struct with exported fields, either the doc comment or per-field comments
-should explain the meaning of each exported field.
-For example, this type's doc comment explains the fields:
+Para uma struct com campos exportados, ou o doc comment ou comentários por campo
+devem explicar o significado de cada campo exportado.
+Por exemplo, o doc comment deste tipo explica os campos:
 
 {{raw `
 	package io
@@ -201,7 +201,7 @@ For example, this type's doc comment explains the fields:
 	}
 `}}
 
-In contrast, this type's doc comment leaves the explanations to per-field comments:
+Em contraste, o doc comment deste tipo deixa as explicações para comentários por campo:
 
 {{raw `
 	package comment
@@ -220,12 +220,12 @@ In contrast, this type's doc comment leaves the explanations to per-field commen
 	}
 `}}
 
-As with packages (above) and funcs (below), doc comments for types
-start with complete sentences naming the declared symbol.
-An explicit subject often makes the wording clearer,
-and it makes the text easier to search, whether on a web page
-or a command line.
-For example:
+Assim como para packages (acima) e funcs (abaixo), doc comments para tipos
+começam com sentenças completas nomeando o símbolo declarado.
+Um sujeito explícito frequentemente torna o texto mais claro,
+e torna o texto mais fácil de buscar, seja em uma página web
+ou na linha de comando.
+Por exemplo:
 
 	$ go doc -all regexp | grep pairs
 	pairs within the input string: result[2*n:2*n+2] identifies the indexes
@@ -236,13 +236,13 @@ For example:
 
 ## Funcs {#func}
 
-A function's doc comment should explain what the function returns
-or, for functions called for side effects, what it does.
-Named parameters and results can be referred to directly in
-the comment, without any special syntax like backquotes.
-(A consequence of this convention is that names like `a`,
-which might be mistaken for ordinary words, are typically avoided.)
-For example:
+O doc comment de uma função deve explicar o que a função retorna
+ou, para funções chamadas por efeitos colaterais, o que ela faz.
+Parâmetros e resultados nomeados podem ser referidos diretamente no
+comentário, sem nenhuma sintaxe especial como crase.
+(Uma consequência desta convenção é que nomes como `a`,
+que podem ser confundidos com palavras comuns, são tipicamente evitados.)
+Por exemplo:
 
 	package strconv
 
@@ -253,7 +253,7 @@ For example:
 		...
 	}
 
-And:
+E:
 
 	package os
 
@@ -266,20 +266,20 @@ And:
 		...
 	}
 
-Doc comments typically use the phrase “reports whether”
-to describe functions that return a boolean.
-The phrase “or not” is unnecessary.
-For example:
+Doc comments tipicamente usam a frase "reports whether" (reporta se)
+para descrever funções que retornam um boolean.
+A frase "or not" (ou não) é desnecessária.
+Por exemplo:
 
 	package strings
 
 	// HasPrefix reports whether the string s begins with prefix.
 	func HasPrefix(s, prefix string) bool
 
-If a doc comment needs to explain multiple results,
-naming the results can make the doc comment more understandable,
-even if the names are not used in the body of the function.
-For example:
+Se um doc comment precisa explicar múltiplos resultados,
+nomear os resultados pode tornar o doc comment mais compreensível,
+mesmo se os nomes não forem usados no corpo da função.
+Por exemplo:
 
 	package io
 
@@ -294,13 +294,13 @@ For example:
 		...
 	}
 
-Conversely, when the results don't need to be named in the doc comment,
-they are usually omitted in the code as well, like in the `Quote` example above,
-to avoid cluttering the presentation.
+Inversamente, quando os resultados não precisam ser nomeados no doc comment,
+eles geralmente são omitidos no código também, como no exemplo `Quote` acima,
+para evitar poluir a apresentação.
 
-These rules all apply both to plain functions and to methods.
-For methods, using the same receiver name avoids needless
-variation when listing all the methods of a type:
+Essas regras se aplicam tanto a funções simples quanto a métodos.
+Para métodos, usar o mesmo nome de receiver evita
+variação desnecessária ao listar todos os métodos de um tipo:
 
 	$ go doc bytes.Buffer
 	package bytes // import "bytes"
@@ -322,23 +322,23 @@ variation when listing all the methods of a type:
 	func (b *Buffer) ReadByte() (byte, error)
 	...
 
-This example also shows that top-level functions returning a type `T` or pointer `*T`,
-perhaps with an additional error result,
-are shown alongside the type `T` and its methods,
-under the assumption that they are `T`'s constructors.
+Este exemplo também mostra que funções de nível superior retornando um tipo `T` ou ponteiro `*T`,
+talvez com um resultado de erro adicional,
+são mostradas junto com o tipo `T` e seus métodos,
+sob a suposição de que são construtores de `T`.
 
-By default, programmers can assume that a top-level function
-is safe to call from multiple goroutines;
-this fact need not be stated explicitly.
+Por padrão, programadores podem assumir que uma função de nível superior
+é segura para chamar de múltiplas goroutines;
+este fato não precisa ser declarado explicitamente.
 
-On the other hand, as noted in the previous section,
-using an instance of a type in any way,
-including calling a method, is typically assumed
-to be restricted to a single goroutine at a time.
-If the methods that are safe for concurrent use
-are not documented in the type's doc comment,
-they should be documented in per-method comments.
-For example:
+Por outro lado, como notado na seção anterior,
+usar uma instância de um tipo de qualquer maneira,
+incluindo chamar um método, é tipicamente assumido
+como sendo restrito a uma única goroutine por vez.
+Se os métodos que são seguros para uso concorrente
+não estão documentados no doc comment do tipo,
+eles devem ser documentados em comentários por método.
+Por exemplo:
 
 	package sql
 
@@ -351,11 +351,11 @@ For example:
 		...
 	}
 
-Note that function and method doc comments focus on
-what the operation returns or does,
-detailing what the caller needs to know.
-Special cases can be particularly important to document.
-For example:
+Note que doc comments de funções e métodos focam em
+o que a operação retorna ou faz,
+detalhando o que o chamador precisa saber.
+Casos especiais podem ser particularmente importantes de documentar.
+Por exemplo:
 
 {{raw `
 	package math
@@ -373,12 +373,12 @@ For example:
 	}
 `}}
 
-Doc comments should not explain internal details
-such as the algorithm used in the current implementation.
-Those are best left to comments inside the function body.
-It may be appropriate to give asymptotic time or space bounds
-when that detail is particularly important to callers.
-For example:
+Doc comments não devem explicar detalhes internos
+como o algoritmo usado na implementação atual.
+Esses são melhor deixados para comentários dentro do corpo da função.
+Pode ser apropriado dar limites assintóticos de tempo ou espaço
+quando esse detalhe é particularmente importante para chamadores.
+Por exemplo:
 
 	package sort
 
@@ -389,15 +389,15 @@ For example:
 		...
 	}
 
-Because this doc comment makes no mention of which sorting algorithm is used,
-it is easier to change the implementation to use a different algorithm in the future.
+Porque este doc comment não menciona qual algoritmo de ordenação é usado,
+é mais fácil mudar a implementação para usar um algoritmo diferente no futuro.
 
 ## Consts {#const}
 
-Go's declaration syntax allows grouping of declarations,
-in which case a single doc comment can introduce a group of related constants,
-with individual constants only documented by short end-of-line comments.
-For example:
+A sintaxe de declaração do Go permite agrupamento de declarações,
+caso em que um único doc comment pode introduzir um grupo de constantes relacionadas,
+com constantes individuais apenas documentadas por curtos comentários de fim de linha.
+Por exemplo:
 
 	package scanner // import "text/scanner"
 
@@ -411,7 +411,7 @@ For example:
 		...
 	)
 
-Sometimes the group needs no doc comment at all. For example:
+Às vezes o grupo não precisa de doc comment algum. Por exemplo:
 
 	package unicode // import "unicode"
 
@@ -422,18 +422,18 @@ Sometimes the group needs no doc comment at all. For example:
 		MaxLatin1       = '\u00FF'     // maximum Latin-1 value.
 	)
 
-On the other hand, ungrouped constants typically warrant a full
-doc comment starting with a complete sentence. For example:
+Por outro lado, constantes desagrupadas tipicamente justificam um
+doc comment completo começando com uma sentença completa. Por exemplo:
 
 	package unicode
 
 	// Version is the Unicode edition from which the tables are derived.
 	const Version = "13.0.0"
 
-Typed constants are displayed next to the declaration of their type
-and as a result often omit a const group doc comment in favor of
-the type's doc comment.
-For example:
+Constantes tipadas são exibidas junto à declaração de seu tipo
+e como resultado frequentemente omitem um doc comment de grupo const em favor do
+doc comment do tipo.
+Por exemplo:
 
 	package syntax
 
@@ -449,12 +449,12 @@ For example:
 		...
 	)
 
-(See [pkg.go.dev/regexp/syntax#Op](https://pkg.go.dev/regexp/syntax#Op) for the HTML presentation.)
+(Veja [pkg.go.dev/regexp/syntax#Op](https://pkg.go.dev/regexp/syntax#Op) para a apresentação HTML.)
 
 ## Vars {#var}
 
-The conventions for variables are the same as those for constants.
-For example, here is a set of grouped variables:
+As convenções para variáveis são as mesmas para constantes.
+Por exemplo, aqui está um conjunto de variáveis agrupadas:
 
 	package fs
 
@@ -469,7 +469,7 @@ For example, here is a set of grouped variables:
 		ErrClosed     = errClosed()     // "file already closed"
 	)
 
-And a single variable:
+E uma variável única:
 
 	package unicode
 
@@ -483,70 +483,70 @@ And a single variable:
 		...
 	}
 
-## Syntax {#syntax}
+## Sintaxe {#syntax}
 
-Go doc comments are written in a simple syntax that supports
-paragraphs, headings, links, lists, and preformatted code blocks.
-To keep comments lightweight and readable in source files,
-there is no support for complex features like font changes or raw HTML.
-Markdown aficionados can view the syntax as a simplified subset of Markdown.
+Doc comments do Go são escritos em uma sintaxe simples que suporta
+parágrafos, cabeçalhos, links, listas e blocos de código pré-formatados.
+Para manter comentários leves e legíveis em arquivos fonte,
+não há suporte para recursos complexos como mudanças de fonte ou HTML bruto.
+Aficionados por Markdown podem ver a sintaxe como um subconjunto simplificado de Markdown.
 
-The standard formatter [gofmt](/cmd/gofmt) reformats doc comments
-to use a canonical formatting for each of these features.
-Gofmt aims for readability and user control over how comments
-are written in source code but will adjust presentation to make
-the semantic meaning of a particular comment clearer,
-analogous to reformatting `1+2 * 3` to `1 + 2*3` in ordinary source code.
+O formatador padrão [gofmt](/cmd/gofmt) reformata doc comments
+para usar uma formatação canônica para cada um desses recursos.
+Gofmt busca legibilidade e controle do usuário sobre como comentários
+são escritos no código fonte, mas ajustará a apresentação para fazer
+o significado semântico de um comentário particular mais claro,
+analogamente a reformatar `1+2 * 3` para `1 + 2*3` em código fonte comum.
 
-Gofmt removes leading and trailing blank lines in doc comments.
-If all lines in a doc comment begin with the same sequence of
-spaces and tabs, gofmt removes that prefix.
+Gofmt remove linhas em branco iniciais e finais em doc comments.
+Se todas as linhas em um doc comment começam com a mesma sequência de
+espaços e tabs, gofmt remove esse prefixo.
 
-### Paragraphs {#paragraphs}
+### Parágrafos {#paragraphs}
 
-A paragraph is a span of unindented non-blank lines.
-We've already seen many examples of paragraphs.
+Um parágrafo é um intervalo de linhas não indentadas e não vazias.
+Já vimos muitos exemplos de parágrafos.
 
-A pair of consecutive backticks (\` U+0060)
-is interpreted as a Unicode left quote (“ U+201C),
-and a pair of consecutive single quotes (\' U+0027)
-is interpreted as a Unicode right quote (” U+201D).
+Um par de crases consecutivas (\` U+0060)
+é interpretado como uma aspas esquerda Unicode (" U+201C),
+e um par de aspas simples consecutivas (\' U+0027)
+é interpretado como uma aspas direita Unicode (" U+201D).
 
-Gofmt preserves line breaks in paragraph text: it does not rewrap the text.
-This allows the use of [semantic linefeeds](https://rhodesmill.org/brandon/2012/one-sentence-per-line/),
-as seen earlier.
-Gofmt replaces duplicated blank lines between paragraphs
-with a single blank line.
-Gofmt also reformats consecutive backticks or single quotes
-to their Unicode interpretations.
+Gofmt preserva quebras de linha em texto de parágrafo: ele não re-quebra o texto.
+Isso permite o uso de [semantic linefeeds](https://rhodesmill.org/brandon/2012/one-sentence-per-line/),
+como visto anteriormente.
+Gofmt substitui linhas em branco duplicadas entre parágrafos
+com uma única linha em branco.
+Gofmt também reformata crases ou aspas simples consecutivas
+para suas interpretações Unicode.
 
 #### Notes {#notes}
 
-Notes are special comments of the form `MARKER(uid): body`.
-MARKER should consist of 2 or more upper case `[A-Z]` letters,
-identifying the type of note, while uid is at least 1 character,
-usually a username of someone who can provide more information.
-The `:` following the uid is optional.
+Notes são comentários especiais da forma `MARKER(uid): body`.
+MARKER deve consistir de 2 ou mais letras maiúsculas `[A-Z]`,
+identificando o tipo de nota, enquanto uid é pelo menos 1 caractere,
+geralmente um nome de usuário de alguém que pode fornecer mais informações.
+O `:` seguindo o uid é opcional.
 
-Notes are collected and rendered in their own section on pkg.go.dev.
+Notes são coletadas e renderizadas em sua própria seção no pkg.go.dev.
 
-For example:
+Por exemplo:
 
 	// TODO(user1): refactor to use standard library context
 	// BUG(user2): not cleaned up
 	var ctx context.Context
 
-#### Deprecations {#deprecations}
+#### Deprecações {#deprecations}
 
-Paragraphs starting with `Deprecated: ` are treated as deprecation notices.
-Some tools will warn when deprecated identifiers are used.
-[pkg.go.dev](https://pkg.go.dev) will hide their docs by default.
+Parágrafos começando com `Deprecated: ` são tratados como avisos de deprecação.
+Algumas ferramentas avisarão quando identificadores deprecated forem usados.
+[pkg.go.dev](https://pkg.go.dev) esconderá seus docs por padrão.
 
-Deprecation notices are followed by some information about the deprecation,
-and a recommendation on what to use instead, if applicable.
-The paragraph does not have to be the last paragraph in the doc comment.
+Avisos de deprecação são seguidos por algumas informações sobre a deprecação,
+e uma recomendação sobre o que usar em vez disso, se aplicável.
+O parágrafo não precisa ser o último parágrafo no doc comment.
 
-For example:
+Por exemplo:
 
 	// Package rc4 implements the RC4 stream cipher.
 	//
@@ -562,13 +562,13 @@ For example:
 	// the process's memory.
 	func (c *Cipher) Reset()
 
-### Headings {#headings}
+### Cabeçalhos {#headings}
 
-A heading is a line beginning with a number sign (U+0023) and then a space and the heading text.
-To be recognized as a heading, the line must be unindented and set off from adjacent paragraph text
-by blank lines.
+Um cabeçalho é uma linha começando com um sinal de número (U+0023) e depois um espaço e o texto do cabeçalho.
+Para ser reconhecida como um cabeçalho, a linha deve estar não indentada e separada do texto de parágrafo adjacente
+por linhas em branco.
 
-For example:
+Por exemplo:
 
 	// Package strconv implements conversions to and from string representations
 	// of basic data types.
@@ -579,7 +579,7 @@ For example:
 	...
 	package strconv
 
-On the other hand:
+Por outro lado:
 
 	// #This is not a heading, because there is no space.
 	//
@@ -598,69 +598,69 @@ On the other hand:
 	//
 	//     # This is not a heading, because it is indented.
 
-The # syntax was added in Go 1.19.
-Before Go 1.19, headings were identified implicitly by single-line paragraphs
-satisfying certain conditions, most notably the lack of any terminating punctuation.
+A sintaxe # foi adicionada no Go 1.19.
+Antes do Go 1.19, cabeçalhos eram identificados implicitamente por parágrafos de uma única linha
+satisfazendo certas condições, mais notavelmente a falta de qualquer pontuação final.
 
-Gofmt reformats [lines treated as implicit headings](https://github.com/golang/proposal/blob/master/design/51082-godocfmt.md#headings)
-by earlier versions of Go to use # headings instead.
-If the reformatting is not appropriate—that is, if the line was not meant to be a heading—the easiest
-way to make it a paragraph is to introduce terminating punctuation
-such as a period or colon, or to break it into two lines.
+Gofmt reformata [linhas tratadas como cabeçalhos implícitos](https://github.com/golang/proposal/blob/master/design/51082-godocfmt.md#headings)
+por versões anteriores do Go para usar cabeçalhos # em vez disso.
+Se a reformatação não for apropriada—isto é, se a linha não era para ser um cabeçalho—a maneira mais fácil
+de torná-la um parágrafo é introduzir pontuação final
+como um ponto ou dois pontos, ou quebrá-la em duas linhas.
 
 ### Links {#links}
 
-A span of unindented non-blank lines defines link targets
-when every line is of the form “[Text]: URL”.
-In other text in the same doc comment,
-“[Text]” represents a link to URL using the given text—in HTML,
-\<a href="URL">Text\</a>.
-For example:
+Um intervalo de linhas não indentadas e não vazias define alvos de link
+quando cada linha é da forma "[Texto]: URL".
+Em outro texto no mesmo doc comment,
+"[Texto]" representa um link para URL usando o texto dado—em HTML,
+\<a href="URL">Texto\</a>.
+Por exemplo:
 
 	// Package json implements encoding and decoding of JSON as defined in
 	// [RFC 7159]. The mapping between JSON and Go values is described
 	// in the documentation for the Marshal and Unmarshal functions.
 	//
 	// For an introduction to this package, see the article
-	// “[JSON and Go].”
+	// "[JSON and Go]."
 	//
 	// [RFC 7159]: https://tools.ietf.org/html/rfc7159
 	// [JSON and Go]: https://golang.org/doc/articles/json_and_go.html
 	package json
 
-By keeping URLs in a separate section,
-this format only minimally interrupts the flow of the actual text.
-It also roughly matches the Markdown
-[shortcut reference link format](https://spec.commonmark.org/0.30/#shortcut-reference-link),
-without the optional title text.
+Ao manter URLs em uma seção separada,
+este formato interrompe minimamente o fluxo do texto real.
+Ele também corresponde aproximadamente ao
+[formato de link de referência encurtado do Markdown](https://spec.commonmark.org/0.30/#shortcut-reference-link),
+sem o texto de título opcional.
 
-If there is no corresponding URL declaration,
-then (except for doc links, described in the next section)
-“[Text]” is not a hyperlink, and the square brackets are preserved
-when displayed.
-Each doc comment is considered independently:
-link target definitions in one comment do not affect other comments.
+Se não houver declaração de URL correspondente,
+então (exceto para doc links, descritos na próxima seção)
+"[Texto]" não é um hiperlink, e os colchetes são preservados
+quando exibidos.
+Cada doc comment é considerado independentemente:
+definições de alvos de link em um comentário não afetam outros comentários.
 
-Although link target definition blocks may be interleaved with
-ordinary paragraphs, gofmt moves all link target definitions to
-the end of the doc comment,
-in up to two blocks: first a block containing all the link targets
-that are referenced in the comment, and then a block
-containing all the targets _not_ referenced in the comment.
-The separate block makes unused targets easy
-to notice and fix (in case the links or the definitions have typos)
-or to delete (in case the definitions are no longer needed).
+Embora blocos de definição de alvos de link possam ser intercalados com
+parágrafos comuns, gofmt move todas as definições de alvos de link para
+o final do doc comment,
+em até dois blocos: primeiro um bloco contendo todos os alvos de link
+que são referenciados no comentário, e depois um bloco
+contendo todos os alvos _não_ referenciados no comentário.
+O bloco separado torna alvos não usados fáceis
+de notar e corrigir (caso os links ou as definições tenham erros)
+ou deletar (caso as definições não sejam mais necessárias).
 
-Plain text that is recognized as a URL is automatically linked in HTML renderings.
+Texto simples que é reconhecido como uma URL é automaticamente linkado em renderizações HTML.
 
 ### Doc links {#doclinks}
 
-Doc links are links of the form “[Name1]” or “[Name1.Name2]” to refer
-to exported identifiers in the current package, or “[pkg]”,
-“[pkg.Name1]”, or “[pkg.Name1.Name2]” to refer to identifiers in other
+Doc links são links da forma "[Nome1]" ou "[Nome1.Nome2]" para referir-se
+a identificadores exportados no package atual, ou "[pkg]",
+"[pkg.Nome1]", ou "[pkg.Nome1.Nome2]" para referir-se a identificadores em outros
 packages.
 
-For example:
+Por exemplo:
 
 	package bytes
 
@@ -672,52 +672,52 @@ For example:
 		...
 	}
 
-The bracketed text for a symbol link
-can include an optional leading star, making it easy to refer to
-pointer types, such as \[\*bytes.Buffer\].
+O texto entre colchetes para um link de símbolo
+pode incluir um asterisco inicial opcional, tornando fácil referir-se a
+tipos de ponteiro, como \[\*bytes.Buffer\].
 
-When referring to other packages, “pkg” can be either a full import path
-or the assumed package name of an existing import. The assumed package
-name is either the identifier in a renamed import or else
-[the name assumed by
+Ao referir-se a outros packages, "pkg" pode ser tanto um caminho de import completo
+quanto o nome de package assumido de um import existente. O nome de package assumido
+é ou o identificador em um import renomeado ou então
+[o nome assumido por
 goimports](https://pkg.go.dev/golang.org/x/tools/internal/imports#ImportPathToAssumedName).
-(Goimports inserts renamings when that assumption is not correct, so
-this rule should work for essentially all Go code.)
-For example, if the current package imports encoding/json,
-then “[json.Decoder]” can be written in place of “[encoding/json.Decoder]”
-to link to the docs for encoding/json's Decoder.
-If different source files in a package import different packages using the same name,
-then the shorthand is ambiguous and cannot be used.
+(Goimports insere renomeações quando essa suposição não está correta, então
+esta regra deve funcionar para essencialmente todo código Go.)
+Por exemplo, se o package atual importa encoding/json,
+então "[json.Decoder]" pode ser escrito no lugar de "[encoding/json.Decoder]"
+para linkar para os docs do Decoder do encoding/json.
+Se diferentes arquivos fonte em um package importam diferentes packages usando o mesmo nome,
+então o atalho é ambíguo e não pode ser usado.
 
-A “pkg” is only
-assumed to be a full import path if it starts with a domain name (a
-path element with a dot) or is one of the packages from the standard
-library (“[os]”, “[encoding/json]”, and so on).
-For example, `[os.File]` and `[example.com/sys.File]` are documentation links
-(the latter will be a broken link),
-but `[os/sys.File]` is not, because there is no os/sys package in the standard library.
+Um "pkg" é apenas
+assumido ser um caminho de import completo se começar com um nome de domínio (um
+elemento de caminho com um ponto) ou for um dos packages da biblioteca
+padrão ("[os]", "[encoding/json]", e assim por diante).
+Por exemplo, `[os.File]` e `[example.com/sys.File]` são links de documentação
+(o último será um link quebrado),
+mas `[os/sys.File]` não é, porque não há package os/sys na biblioteca padrão.
 
-To avoid problems with
-maps, generics, and array types, doc links must be both preceded and
-followed by punctuation, spaces, tabs, or the start or end of a line.
-For example, the text “map[ast.Expr]TypeAndValue” does not contain
-a doc link.
+Para evitar problemas com
+maps, generics e tipos de array, doc links devem ser tanto precedidos quanto
+seguidos por pontuação, espaços, tabs, ou o início ou fim de uma linha.
+Por exemplo, o texto "map[ast.Expr]TypeAndValue" não contém
+um doc link.
 
-### Lists {#lists}
+### Listas {#lists}
 
-A list is a span of indented or blank lines
-(which would otherwise be a code block,
-as described in the next section)
-in which the first indented line begins with
-a bullet list marker or a numbered list marker.
+Uma lista é um intervalo de linhas indentadas ou vazias
+(que de outra forma seria um bloco de código,
+como descrito na próxima seção)
+em que a primeira linha indentada começa com
+um marcador de lista com bullets ou um marcador de lista numerada.
 
-A bullet list marker is a star, plus, dash, or Unicode bullet
+Um marcador de lista com bullets é uma estrela, mais, traço ou bullet Unicode
 (*, +, -, •; U+002A, U+002B, U+002D, U+2022)
-followed by a space or tab and then text.
-In a bullet list, each line beginning with a bullet list
-marker starts a new list item.
+seguido por um espaço ou tab e depois texto.
+Em uma lista com bullets, cada linha começando com um marcador de lista com bullets
+inicia um novo item de lista.
 
-For example:
+Por exemplo:
 
 	package url
 
@@ -739,12 +739,12 @@ For example:
 		...
 	}
 
-A numbered list marker is a decimal number of any length
-followed by a period or right parenthesis, then a space or tab, and then text.
-In a numbered list, each line beginning with a number list marker starts a new list item.
-Item numbers are left as is, never renumbered.
+Um marcador de lista numerada é um número decimal de qualquer comprimento
+seguido por um ponto ou parêntese direito, depois um espaço ou tab, e depois texto.
+Em uma lista numerada, cada linha começando com um marcador de lista de número inicia um novo item de lista.
+Números de itens são deixados como estão, nunca renumerados.
 
-For example:
+Por exemplo:
 
 	package path
 
@@ -764,35 +764,35 @@ For example:
 	// If the result of this process is an empty string, Clean
 	// returns the string ".".
 	//
-	// See also Rob Pike, “[Lexical File Names in Plan 9].”
+	// See also Rob Pike, "[Lexical File Names in Plan 9]."
 	//
 	// [Lexical File Names in Plan 9]: https://9p.io/sys/doc/lexnames.html
 	func Clean(path string) string {
 		...
 	}
 
-List items only contain paragraphs, not code blocks or nested lists.
-This avoids any space-counting subtlety as well as questions about
-how many spaces a tab counts for in inconsistent indentation.
+Itens de lista apenas contêm parágrafos, não blocos de código ou listas aninhadas.
+Isso evita qualquer sutileza de contagem de espaços, bem como questões sobre
+quantos espaços um tab conta em indentação inconsistente.
 
-Gofmt reformats bullet lists to use a dash as the bullet marker,
-two spaces of indentation before the dash,
-and four spaces of indentation for continuation lines.
+Gofmt reformata listas com bullets para usar um traço como marcador de bullet,
+dois espaços de indentação antes do traço,
+e quatro espaços de indentação para linhas de continuação.
 
-Gofmt reformats numbered lists to use a single space before the number,
-a period after the number, and again
-four spaces of indentation for continuation lines.
+Gofmt reformata listas numeradas para usar um único espaço antes do número,
+um ponto após o número, e novamente
+quatro espaços de indentação para linhas de continuação.
 
-Gofmt preserves but does not require a blank line between a list and the preceding paragraph.
-It inserts a blank line between a list and the following paragraph or heading.
+Gofmt preserva mas não requer uma linha em branco entre uma lista e o parágrafo precedente.
+Ele insere uma linha em branco entre uma lista e o parágrafo ou cabeçalho seguinte.
 
-### Code blocks {#code}
+### Blocos de código {#code}
 
-A code block is a span of indented or blank lines
-not starting with a bullet list marker or numbered list marker.
-It is rendered as preformatted text (a \<pre> block in HTML).
+Um bloco de código é um intervalo de linhas indentadas ou vazias
+não começando com um marcador de lista com bullets ou marcador de lista numerada.
+Ele é renderizado como texto pré-formatado (um bloco \<pre> em HTML).
 
-Code blocks often contain Go code. For example:
+Blocos de código frequentemente contêm código Go. Por exemplo:
 
 {{raw `
 	package sort
@@ -816,7 +816,7 @@ Code blocks often contain Go code. For example:
 	}
 `}}
 
-Of course, code blocks also often contain preformatted text besides code. For example:
+Claro, blocos de código também frequentemente contêm texto pré-formatado além de código. Por exemplo:
 
 {{raw `
 	package path
@@ -847,19 +847,19 @@ Of course, code blocks also often contain preformatted text besides code. For ex
 	}
 `}}
 
-Gofmt indents all lines in a code block by a single tab,
-replacing any other indentation the non-blank lines have in common.
-Gofmt also inserts a blank line before and after each code block,
-distinguishing the code block clearly from the surrounding paragraph text.
+Gofmt indenta todas as linhas em um bloco de código por um único tab,
+substituindo qualquer outra indentação que as linhas não vazias tenham em comum.
+Gofmt também insere uma linha em branco antes e depois de cada bloco de código,
+distinguindo o bloco de código claramente do texto de parágrafo circundante.
 
-### Directives {#directives}
+### Diretivas {#directives}
 
-Directive comments such as `//go:generate` are not
-considered part of a doc comment and are omitted from
-rendered documentation.
-Gofmt moves directive comments to the end of the doc comment,
-preceded by a blank line.
-For example:
+Comentários de diretiva como `//go:generate` não são
+considerados parte de um doc comment e são omitidos de
+documentação renderizada.
+Gofmt move comentários de diretiva para o final do doc comment,
+precedidos por uma linha em branco.
+Por exemplo:
 
 	package regexp
 
@@ -868,35 +868,35 @@ For example:
 	//go:generate stringer -type Op -trimprefix Op
 	type Op uint8
 
-A directive comment is a line starting with the regular expression
+Um comentário de diretiva é uma linha começando com a expressão regular
 `//(line |extern |export |[a-z0-9]+:[a-z0-9])`.
 
-Tools may define their own directive comments using the form
+Ferramentas podem definir seus próprios comentários de diretiva usando a forma
 `//toolname:directive arguments`.
-Tool directives match the regular expression
-`//([a-z0-9]+):([a-z0-9]\PZ*)($|\pZ+)(.*)`, where the first group
-is the tool name and the second group is the directive name.
-Optional arguments are separated from the directive name by
-one or more Unicode whitespace characters.
-Each tool may define its own argument syntax, but a common convention is a
-sequence of space-separated arguments, where an argument may be
-a bare word, or a double-quoted or backtick-quoted Go string.
-The tool name `go` is reserved for use by the Go toolchain.
+Diretivas de ferramenta correspondem à expressão regular
+`//([a-z0-9]+):([a-z0-9]\PZ*)($|\pZ+)(.*)`, onde o primeiro grupo
+é o nome da ferramenta e o segundo grupo é o nome da diretiva.
+Argumentos opcionais são separados do nome da diretiva por
+um ou mais caracteres de espaço em branco Unicode.
+Cada ferramenta pode definir sua própria sintaxe de argumento, mas uma convenção comum é uma
+sequência de argumentos separados por espaços, onde um argumento pode ser
+uma palavra simples, ou uma string Go entre aspas duplas ou crases.
+O nome de ferramenta `go` é reservado para uso pela toolchain do Go.
 
-The [`go/ast.ParseDirective`](/pkg/go/ast#ParseDirective) function and its
-related types parse the tool directive syntax.
+A função [`go/ast.ParseDirective`](/pkg/go/ast#ParseDirective) e seus
+tipos relacionados analisam a sintaxe de diretiva de ferramenta.
 
-## Common mistakes and pitfalls {#mistakes}
+## Erros comuns e armadilhas {#mistakes}
 
-The rule that any span of indented or blank lines
-in a doc comment is rendered as a code block
-dates to the earliest days of Go.
-Unfortunately, the lack of support for doc comments in gofmt
-has led to many existing comments that use indentation
-without meaning to create a code block.
+A regra de que qualquer intervalo de linhas indentadas ou vazias
+em um doc comment é renderizado como um bloco de código
+data dos primeiros dias do Go.
+Infelizmente, a falta de suporte para doc comments no gofmt
+levou a muitos comentários existentes que usam indentação
+sem a intenção de criar um bloco de código.
 
-For example, this unindented list has always been interpreted
-by godoc as a three-line paragraph followed by a one-line code block:
+Por exemplo, esta lista não indentada sempre foi interpretada
+pelo godoc como um parágrafo de três linhas seguido por um bloco de código de uma linha:
 
 	package http
 
@@ -908,7 +908,7 @@ by godoc as a three-line paragraph followed by a one-line code block:
 		...
 	}
 
-This always rendered in `go` `doc` as:
+Isso sempre renderizou em `go` `doc` como:
 
 	cancelTimerBody is an io.ReadCloser that wraps rc with two features:
 	1) On Read error or close, the stop func is called. 2) On Read failure,
@@ -916,8 +916,8 @@ This always rendered in `go` `doc` as:
 
 	    marked as net.Error that hit its timeout.
 
-Similarly, the command in this comment is a one-line paragraph
-followed by a one-line code block:
+Similarmente, o comando neste comentário é um parágrafo de uma linha
+seguido por um bloco de código de uma linha:
 
 	package smtp
 
@@ -927,7 +927,7 @@ followed by a one-line code block:
 	//     --ca --start-date "Jan 1 00:00:00 1970" --duration=1000000h
 	var localhostCert = []byte(`...`)
 
-This rendered in `go` `doc` as:
+Isso renderizou em `go` `doc` como:
 
 	localhostCert is a PEM-encoded TLS cert generated from src/crypto/tls:
 
@@ -935,8 +935,8 @@ This rendered in `go` `doc` as:
 
 	    --ca --start-date "Jan 1 00:00:00 1970" --duration=1000000h
 
-And this comment is a two-line paragraph (the second line is “{”),
-followed by a six-line indented code block and a one-line paragraph (“}”).
+E este comentário é um parágrafo de duas linhas (a segunda linha é "{"),
+seguido por um bloco de código indentado de seis linhas e um parágrafo de uma linha ("}").
 
 	// On the wire, the JSON will look something like this:
 	// {
@@ -948,7 +948,7 @@ followed by a six-line indented code block and a one-line paragraph (“}”).
 	//	},
 	// }
 
-And this rendered in `go` `doc` as:
+E isso renderizou em `go` `doc` como:
 
 	On the wire, the JSON will look something like this: {
 
@@ -961,22 +961,22 @@ And this rendered in `go` `doc` as:
 
 	}
 
-Another common mistake was an unindented Go function definition
-or block statement, similarly bracketed by “{” and “}”.
+Outro erro comum era uma definição de função Go não indentada
+ou declaração de bloco, similarmente delimitado por "{" e "}".
 
-The introduction of doc comment reformatting in Go 1.19's gofmt makes mistakes
-like these more visible by adding blank lines around the code blocks.
+A introdução da reformatação de doc comment no gofmt do Go 1.19 torna erros
+como esses mais visíveis ao adicionar linhas em branco ao redor dos blocos de código.
 
-Analysis in 2022 found that only 3% of doc comments in public Go modules
-were reformatted at all by the draft Go 1.19 gofmt.
-Limiting ourselves to those comments, about 87% of gofmt's reformattings
-preserved the structure that a person would infer from reading the comment;
-about 6% were tripped up by these kinds of unindented lists,
-unindented multiline shell commands, and unindented brace-delimited code blocks.
+Análise em 2022 encontrou que apenas 3% dos doc comments em módulos Go públicos
+foram reformatados de qualquer forma pelo rascunho do gofmt do Go 1.19.
+Limitando-nos a esses comentários, cerca de 87% das reformatações do gofmt
+preservaram a estrutura que uma pessoa inferiria ao ler o comentário;
+cerca de 6% foram prejudicadas por esses tipos de listas não indentadas,
+comandos shell multi-linha não indentados e blocos de código delimitados por chaves não indentados.
 
-Based on this analysis, the Go 1.19 gofmt applies a few heuristics to merge
-unindented lines into an adjacent indented list or code block.
-With those adjustments, the Go 1.19 gofmt reformats the above examples to:
+Com base nesta análise, o gofmt do Go 1.19 aplica algumas heurísticas para mesclar
+linhas não indentadas em uma lista ou bloco de código indentado adjacente.
+Com esses ajustes, o gofmt do Go 1.19 reformata os exemplos acima para:
 
 	// cancelTimerBody is an io.ReadCloser that wraps rc with two features:
 	//  1. On Read error or close, the stop func is called.
@@ -999,15 +999,15 @@ With those adjustments, the Go 1.19 gofmt reformats the above examples to:
 	//		},
 	//	}
 
-This reformatting makes the meaning clearer as well as making the doc comments
-render correctly in earlier versions of Go.
-If the heuristic ever makes a bad decision, it can be overridden by inserting
-a blank line to clearly separate the paragraph text from non-paragraph text.
+Esta reformatação torna o significado mais claro, bem como fazendo os doc comments
+renderizarem corretamente em versões anteriores do Go.
+Se a heurística fizer uma má decisão, pode ser sobreposta inserindo
+uma linha em branco para separar claramente o texto de parágrafo do texto de não-parágrafo.
 
-Even with these heuristics, other existing comments will need manual
-adjustment to correct their rendering.
-The most common mistake is indenting a wrapped unindented line of text.
-For example:
+Mesmo com essas heurísticas, outros comentários existentes precisarão de ajuste
+manual para corrigir sua renderização.
+O erro mais comum é indentar uma linha quebrada não indentada de texto.
+Por exemplo:
 
 	// TODO Revisit this design. It may make sense to walk those nodes
 	//      only once.
@@ -1016,11 +1016,11 @@ For example:
 	// "The alignment factor (in bytes) that is used to align the raw data of sections in
 	//  the image file. The value should be a power of 2 between 512 and 64 K, inclusive."
 
-In both of these, the last line is indented, making it a code block.
-The fix is to unindent the lines.
+Em ambos, a última linha está indentada, tornando-a um bloco de código.
+A correção é desindentar as linhas.
 
-Another common mistake is not indenting a wrapped indented line of a list or code block.
-For example:
+Outro erro comum é não indentar uma linha quebrada indentada de uma lista ou bloco de código.
+Por exemplo:
 
 	// Uses of this error model include:
 	//
@@ -1034,9 +1034,9 @@ For example:
 	// may
 	//     have a `Status` message for error reporting.
 
-The fix is to indent the wrapped lines.
+A correção é indentar as linhas quebradas.
 
-Go doc comments do not support nested lists, so gofmt reformats
+Doc comments do Go não suportam listas aninhadas, então o gofmt reformata
 
 	// Here is a list:
 	//
@@ -1046,7 +1046,7 @@ Go doc comments do not support nested lists, so gofmt reformats
 	//  - Item 2.
 	//  - Item 3.
 
-to
+para
 
 	// Here is a list:
 	//
@@ -1056,12 +1056,12 @@ to
 	//  - Item 2.
 	//  - Item 3.
 
-Rewriting the text to avoid nested lists usually
-improves the documentation and is the best solution.
-Another potential workaround is to mix list markers,
-since bullet markers do not introduce list items in a numbered list,
-nor vice versa.
-For example:
+Reescrever o texto para evitar listas aninhadas geralmente
+melhora a documentação e é a melhor solução.
+Outra solução alternativa potencial é misturar marcadores de lista,
+já que marcadores de bullets não introduzem itens de lista em uma lista numerada,
+nem vice-versa.
+Por exemplo:
 
 	// Here is a list:
 	//
