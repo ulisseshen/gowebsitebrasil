@@ -18,29 +18,29 @@ Após traduzir cada arquivo, marque o checkpoint com `[x]`.
 ## Seção 1: Páginas Principais (doc/)
 
 ### 1.1 Páginas de Entrada
-- [ ] `_content/doc/index.html` - Página principal da documentação
-- [ ] `_content/doc/install.html` - Instalação do Go
-- [ ] `_content/doc/manage-install.html` - Gerenciar instalações
-- [ ] `_content/doc/code.html` - Como escrever código Go
+- [x] `_content/doc/index.html` - Página principal da documentação
+- [x] `_content/doc/install.html` - Instalação do Go
+- [x] `_content/doc/manage-install.html` - Gerenciar instalações
+- [x] `_content/doc/code.html` - Como escrever código Go
 - [ ] `_content/doc/effective_go.html` - Effective Go (IMPORTANTE)
 - [ ] `_content/doc/faq.md` - Perguntas frequentes
-- [ ] `_content/doc/go_faq.md` - FAQ adicional
-- [ ] `_content/doc/help.md` - Página de ajuda
+- [x] `_content/doc/go_faq.md` - FAQ adicional
+- [x] `_content/doc/help.md` - Página de ajuda
 
 ### 1.2 Referência e Compatibilidade
-- [ ] `_content/doc/go1compat.html` - Promessa de compatibilidade Go 1
-- [ ] `_content/doc/cmd.html` - Documentação de comandos
-- [ ] `_content/doc/editors.html` - Editores e IDEs
-- [ ] `_content/doc/diagnostics.html` - Diagnósticos
+- [x] `_content/doc/go1compat.html` - Promessa de compatibilidade Go 1
+- [x] `_content/doc/cmd.html` - Documentação de comandos
+- [x] `_content/doc/editors.html` - Editores e IDEs
+- [x] `_content/doc/diagnostics.html` - Diagnósticos
 - [ ] `_content/doc/gc-guide.html` - Guia do Garbage Collector
-- [ ] `_content/doc/toolchain.md` - Toolchain
+- [x] `_content/doc/toolchain.md` - Toolchain
 
 ### 1.3 Contribuição e Comunidade
-- [ ] `_content/doc/conduct.md` - Código de conduta
+- [x] `_content/doc/conduct.md` - Código de conduta
 - [ ] `_content/doc/contribute.html` - Como contribuir
-- [ ] `_content/doc/contrib.md` - Contribuição adicional
-- [ ] `_content/doc/copyright.md` - Copyright
-- [ ] `_content/doc/tos.html` - Termos de serviço
+- [x] `_content/doc/contrib.md` - Contribuição adicional
+- [x] `_content/doc/copyright.md` - Copyright
+- [x] `_content/doc/tos.html` - Termos de serviço
 
 ---
 
