@@ -1,293 +1,293 @@
 <!--{
-  "Title": "Module release and versioning workflow"
+  "Title": "Module release and versioning workflow",
+  "ia-translated": true
 }-->
 
-When you develop modules for use by other developers, you can follow a workflow
-that helps ensure a reliable, consistent experience for developers using the
-module. This topic describes the high-level steps in that workflow.
+Quando você desenvolve módulos para uso por outros desenvolvedores, você pode seguir um workflow
+que ajuda a garantir uma experiência confiável e consistente para desenvolvedores usando o
+módulo. Este tópico descreve os passos de alto nível nesse workflow.
 
-For an overview of module development, see [Developing and publishing
+Para uma visão geral do desenvolvimento de módulos, consulte [Developing and publishing
 modules](developing).
 
-**See also**
+**Veja também**
 
-* If you're merely wanting to use external packages in your code, be sure to
-  see [Managing dependencies](/doc/modules/managing-dependencies).
-* With each new version, you signal the changes to your module with its
-  version number. For more, see [Module version numbering](/doc/modules/version-numbers).
+* Se você está apenas querendo usar packages externos no seu código, certifique-se de
+  consultar [Managing dependencies](/doc/modules/managing-dependencies).
+* Com cada nova versão, você sinaliza as mudanças no seu módulo com seu
+  número de versão. Para mais, consulte [Module version numbering](/doc/modules/version-numbers).
 
-## Common workflow steps {#common-steps}
+## Passos comuns do workflow {#common-steps}
 
-The following sequence illustrates release and versioning workflow steps for an
-example new module. For more about each step, see the sections in this topic.
+A seguinte sequência ilustra passos de workflow de release e versionamento para um
+novo módulo de exemplo. Para mais sobre cada passo, consulte as seções neste tópico.
 
-1.  **Begin a module** and organize its sources to make it easier for developers
-    to use and for you to maintain.
+1.  **Iniciar um módulo** e organizar seus sources para facilitar para desenvolvedores
+    usarem e para você manter.
 
-    If you're brand new to developing modules, check out [Tutorial: Create a Go
+    Se você é completamente novo em desenvolver módulos, confira [Tutorial: Create a Go
     module](/doc/tutorial/create-module).
 
-    In Go's decentralized module publishing system, how you organize your code
-    matters. For more, see [Managing module source](/doc/modules/managing-source).
+    No sistema de publicação de módulos descentralizado do Go, como você organiza seu código
+    importa. Para mais, consulte [Managing module source](/doc/modules/managing-source).
 
-1.  Set up to **write local client code** that calls functions in the
-    unpublished module.
+1.  Configurar para **escrever código cliente local** que chama funções no
+    módulo não publicado.
 
-    Before you publish a module, it's unavailable for the typical dependency
-    management workflow using commands such as `go get`. A good way to test your
-    module code at this stage is to try it while it is in a directory local to
-    your calling code.
+    Antes de você publicar um módulo, ele está indisponível para o workflow típico de gerenciamento de dependências
+    usando comandos como `go get`. Uma boa maneira de testar seu
+    código de módulo neste estágio é experimentá-lo enquanto ele está em um diretório local para
+    seu código chamador.
 
-    See [Coding against an unpublished module](#unpublished) for more about
-    local development.
+    Consulte [Coding against an unpublished module](#unpublished) para mais sobre
+    desenvolvimento local.
 
-1.  When the module's code is ready for other developers to try it out,
-    **begin publishing v0 pre-releases** such as alphas and betas. See
-    [Publishing pre-release versions](#pre-release) for more.
+1.  Quando o código do módulo estiver pronto para outros desenvolvedores experimentarem,
+    **começar a publicar pre-releases v0** como alphas e betas. Consulte
+    [Publishing pre-release versions](#pre-release) para mais.
 
-1.  **Release a v0** that's not guaranteed to be stable, but which users can try
-    out. For more, see [Publishing the first (unstable) version](#first-unstable).
+1.  **Lançar um v0** que não é garantido ser estável, mas que usuários podem experimentar.
+    Para mais, consulte [Publishing the first (unstable) version](#first-unstable).
 
-1.  After your v0 version is published, you can (and should!) continue to
-    **release new versions** of it.
+1.  Após sua versão v0 ser publicada, você pode (e deve!) continuar a
+    **lançar novas versões** dela.
 
-    These new versions might include bug fixes (patch releases), additions to
-    the module's public API (minor releases), and even breaking changes. Because
-    a v0 release makes no guarantees of stability or backward compatibility, you
-    can make breaking changes in its versions.
+    Essas novas versões podem incluir correções de bugs (patch releases), adições à
+    API pública do módulo (minor releases), e até mudanças breaking. Porque
+    um release v0 não faz garantias de estabilidade ou compatibilidade retroativa, você
+    pode fazer mudanças breaking em suas versões.
 
-    For more, see [Publishing bug fixes](#bug-fixes) and [Publishing
+    Para mais, consulte [Publishing bug fixes](#bug-fixes) e [Publishing
     non-breaking API changes](#non-breaking).
 
-1.  When you're getting a stable version ready for release, you **publish
-    pre-releases as alphas and betas**. For more, see [Publishing pre-release
+1.  Quando você está preparando uma versão estável para release, você **publica
+    pre-releases como alphas e betas**. Para mais, consulte [Publishing pre-release
     versions](#pre-release).
 
-1.  Release a v1 as the **first stable release**.
+1.  Lançar um v1 como o **primeiro release estável**.
 
-    This is the first release that makes commitments about the module's
-    stability. For more, see [Publishing the first stable
+    Este é o primeiro release que faz compromissos sobre a
+    estabilidade do módulo. Para mais, consulte [Publishing the first stable
     version](#first-stable).
 
-1.  In the v1 version, **continue to fix bugs** and, where necessary, make
-    additions to the module's public API.
+1.  Na versão v1, **continuar a corrigir bugs** e, onde necessário, fazer
+    adições à API pública do módulo.
 
-    For more, see [Publishing bug fixes](#bug-fixes) and [Publishing
+    Para mais, consulte [Publishing bug fixes](#bug-fixes) e [Publishing
     non-breaking API changes](#non-breaking).
 
-1.  When it can't be avoided, publish breaking changes in a **new major version**.
+1.  Quando não puder ser evitado, publicar mudanças breaking em uma **nova versão major**.
 
-    A major version update -- such as from v1.x.x to v2.x.x -- can be a very
-    disruptive upgrade for your module's users. It should be a last resort. For
-    more, see [Publishing breaking API changes](#breaking).
+    Uma atualização de versão major -- como de v1.x.x para v2.x.x -- pode ser uma
+    atualização muito disruptiva para os usuários do seu módulo. Deve ser um último recurso. Para
+    mais, consulte [Publishing breaking API changes](#breaking).
 
-## Coding against an unpublished module {#unpublished}
+## Codificando contra um módulo não publicado {#unpublished}
 
-When you begin developing a module or a new version of a module, you won't yet
-have published it. Before you publish a module, you won't be able to use Go
-commands to add the module as a dependency. Instead, at first, when writing
-client code in a different module that calls functions in the unpublished
-module, you'll need to reference a copy of the module on the local file system.
+Quando você começa a desenvolver um módulo ou uma nova versão de um módulo, você ainda não
+terá publicado ele. Antes de publicar um módulo, você não será capaz de usar comandos
+Go para adicionar o módulo como uma dependência. Em vez disso, no início, ao escrever
+código cliente em um módulo diferente que chama funções no módulo não publicado,
+você precisará referenciar uma cópia do módulo no sistema de arquivos local.
 
-You can reference a module locally from the client module's go.mod file by using
-the `replace` directive in the client module's go.mod file. For more
-information, see in [Requiring module code in a local
+Você pode referenciar um módulo localmente do arquivo go.mod do módulo cliente usando
+a diretiva `replace` no arquivo go.mod do módulo cliente. Para mais
+informação, consulte [Requiring module code in a local
 directory](managing-dependencies#local_directory).
 
-## Publishing pre-release versions {#pre-release}
+## Publicando versões pre-release {#pre-release}
 
-You can publish pre-release versions to make a module available for others to
-try it out and give you feedback. A pre-release version includes no guarantee of
-stability.
+Você pode publicar versões pre-release para disponibilizar um módulo para outros
+experimentarem e lhe darem feedback. Uma versão pre-release não inclui garantia de
+estabilidade.
 
-Pre-release version numbers are appended with a pre-release identifier. For more
-on version numbers, see [Module version numbering](/doc/modules/version-numbers).
+Números de versão pre-release são anexados com um identificador de pre-release. Para mais
+sobre números de versão, consulte [Module version numbering](/doc/modules/version-numbers).
 
-Here are two examples:
+Aqui estão dois exemplos:
 
 ```
 v0.2.1-beta.1
 v1.2.3-alpha
 ```
 
-When making a pre-release available, keep in mind that developers using the
-pre-release will need to explicitly specify it by version with the `go get`
-command. That's because, by default, the `go` command prefers release versions
-over pre-release versions when locating the module you're asking for. So
-developers must get the pre-release by specifying it explicitly, as in the
-following example:
+Ao disponibilizar um pre-release, tenha em mente que desenvolvedores usando o
+pre-release precisarão especificá-lo explicitamente por versão com o comando `go get`. Isso porque, por padrão, o comando `go` prefere versões de release
+sobre versões pre-release ao localizar o módulo que você está pedindo. Então
+desenvolvedores devem obter o pre-release especificando-o explicitamente, como no
+exemplo a seguir:
 
 ```
 go get example.com/theirmodule@v1.2.3-alpha
 ```
 
-You publish a pre-release by tagging the module code in your repository,
-specifying the pre-release identifier in the tag. For more, see [Publishing a
+Você publica um pre-release tagueando o código do módulo no seu repositório,
+especificando o identificador de pre-release na tag. Para mais, consulte [Publishing a
 module](publishing).
 
-## Publishing the first (unstable) version {#first-unstable}
+## Publicando a primeira versão (instável) {#first-unstable}
 
-As when you publish a pre-release version, you can publish release versions that
-don't guarantee stability or backward compatibility, but give your users an
-opportunity to try out the module and give you feedback.
+Assim como quando você publica uma versão pre-release, você pode publicar versões de release que
+não garantem estabilidade ou compatibilidade retroativa, mas dão aos seus usuários uma
+oportunidade de experimentar o módulo e lhe dar feedback.
 
-Unstable releases are those whose version numbers are in the v0.x.x range. A v0
-version makes no stability or backward compatibility guarantees. But it gives
-you a way to get feedback and refine your API before making stability
-commitments with v1 and later. For more see, [Module version
+Releases instáveis são aqueles cujos números de versão estão no intervalo v0.x.x. Uma versão v0
+não faz garantias de estabilidade ou compatibilidade retroativa. Mas ela lhe dá
+uma maneira de obter feedback e refinar sua API antes de fazer compromissos de estabilidade
+com v1 e posteriores. Para mais consulte, [Module version
 numbering](version-numbers).
 
-As with other published versions, you can increment the minor and patch parts of
-the v0 version number as you make changes toward releasing a stable v1 version.
-For example, after releasing a v.0.0.0, you might release a v0.0.1 with the
-first set of bug fixes.
+Assim como com outras versões publicadas, você pode incrementar as partes minor e patch do
+número de versão v0 conforme você faz mudanças para lançar uma versão v1 estável.
+Por exemplo, após lançar um v.0.0.0, você pode lançar um v0.0.1 com o
+primeiro conjunto de correções de bugs.
 
-Here's an example version number:
+Aqui está um exemplo de número de versão:
 
 ```
 v0.1.3
 ```
 
-You publish an unstable release by tagging the module code in your repository,
-specifying a v0 version number in the tag. For more, see [Publishing a
+Você publica um release instável tagueando o código do módulo no seu repositório,
+especificando um número de versão v0 na tag. Para mais, consulte [Publishing a
 module](publishing).
 
-## Publishing the first stable version {#first-stable}
+## Publicando a primeira versão estável {#first-stable}
 
-Your first stable release will have a v1.x.x version number. The first stable
-release follows pre-release and v0 releases through which you got feedback,
-fixed bugs, and stabilized the module for users.
+Seu primeiro release estável terá um número de versão v1.x.x. O primeiro release estável
+segue releases pre-release e v0 através dos quais você obteve feedback,
+corrigiu bugs, e estabilizou o módulo para usuários.
 
-With a v1 release, you're making the following commitments to developers using
-your module:
+Com um release v1, você está fazendo os seguintes compromissos com desenvolvedores usando
+seu módulo:
 
-* They can upgrade to the major version's subsequent minor and patch releases
-  without breaking their own code.
-* You won't be making further changes to the module's public API -- including
-  its function and method signatures -- that break backward compatibility.
-* You won't be removing any exported types, which would break backward
-  compatibility.
-* Future changes to your API (such as adding a new field to a struct) will be
-  backward compatible and will be included in a new minor release.
-* Bug fixes (such as a security fix) will be included in a patch release or as
-  part of a minor release.
+* Eles podem atualizar para os releases minor e patch subsequentes da versão major
+  sem quebrar seu próprio código.
+* Você não fará mais mudanças na API pública do módulo -- incluindo
+  suas assinaturas de função e método -- que quebrem compatibilidade retroativa.
+* Você não removerá quaisquer tipos exportados, o que quebraria compatibilidade
+  retroativa.
+* Mudanças futuras à sua API (como adicionar um novo campo a uma struct) serão
+  compatíveis retroativamente e serão incluídas em um novo release minor.
+* Correções de bugs (como uma correção de segurança) serão incluídas em um patch release ou como
+  parte de um release minor.
 
-**Note:** While your first major version might be a v0 release, a v0 version
-does not signal stability or backward compatibility guarantees. As a result,
-when you increment from v0 to v1, you needn't be mindful of breaking backward
-compatibility because the v0 release was not considered stable.
+**Nota:** Embora sua primeira versão major possa ser um release v0, uma versão v0
+não sinaliza garantias de estabilidade ou compatibilidade retroativa. Como resultado,
+quando você incrementa de v0 para v1, você não precisa se preocupar em quebrar compatibilidade
+retroativa porque o release v0 não foi considerado estável.
 
-For more about version numbers, see [Module version numbering](/doc/modules/version-numbers).
+Para mais sobre números de versão, consulte [Module version numbering](/doc/modules/version-numbers).
 
-Here's an example of a stable version number:
+Aqui está um exemplo de um número de versão estável:
 
 ```
 v1.0.0
 ```
 
-You publish a first stable release by tagging the module code in your
-repository, specifying a v1 version number in the tag. For more, see [Publishing
+Você publica um primeiro release estável tagueando o código do módulo no seu
+repositório, especificando um número de versão v1 na tag. Para mais, consulte [Publishing
 a module](publishing).
 
-## Publishing bug fixes {#bug-fixes}
+## Publicando correções de bugs {#bug-fixes}
 
-You can publish a release in which the changes are limited to bug fixes. This is
-known as a patch release.
+Você pode publicar um release no qual as mudanças são limitadas a correções de bugs. Isso é
+conhecido como um patch release.
 
-A _patch release_ includes only minor changes. In particular, it includes no
-changes to the module's public API. Developers of consuming code can upgrade to
-this version safely and without needing to change their code.
+Um _patch release_ inclui apenas mudanças menores. Em particular, não inclui
+mudanças na API pública do módulo. Desenvolvedores de código consumidor podem atualizar para
+esta versão com segurança e sem precisar mudar seu código.
 
-**Note:** Your patch release should try not to upgrade any of that module's own
-transitive dependencies by more than a patch release. Otherwise, someone
-upgrading to the patch of your module could wind up accidentally pulling in a
-more invasive change to a transitive dependency that they use.
+**Nota:** Seu patch release deveria tentar não atualizar quaisquer das próprias
+dependências transitivas daquele módulo em mais do que um patch release. Caso contrário, alguém
+atualizando para o patch do seu módulo poderia acabar acidentalmente puxando uma
+mudança mais invasiva para uma dependência transitiva que eles usam.
 
-A patch release increments the patch part of the module's version number. For
-more see, [Module version numbering](/doc/modules/version-numbers).
+Um patch release incrementa a parte patch do número de versão do módulo. Para
+mais consulte, [Module version numbering](/doc/modules/version-numbers).
 
-In the following example, v1.0.1 is a patch release.
+No exemplo a seguir, v1.0.1 é um patch release.
 
-Old version: `v1.0.0`
+Versão antiga: `v1.0.0`
 
-New version: `v1.0.1`
+Nova versão: `v1.0.1`
 
-You publish a patch release by tagging the module code in your repository,
-incrementing the patch version number in the tag. For more, see [Publishing a
+Você publica um patch release tagueando o código do módulo no seu repositório,
+incrementando o número de versão patch na tag. Para mais, consulte [Publishing a
 module](publishing).
 
-## Publishing non-breaking API changes {#non-breaking}
+## Publicando mudanças de API não-breaking {#non-breaking}
 
-You can make non-breaking changes to your module's public API and publish those
-changes in a _minor_ version release.
+Você pode fazer mudanças não-breaking na API pública do seu módulo e publicar essas
+mudanças em um release de versão _minor_.
 
-This version changes the API, but not in a way that breaks calling code. This
-might include changes to a module’s own dependencies or the addition of new
-functions, methods, struct fields, or types. Even with the changes it includes,
-this kind of release guarantees backward compatibility and stability for
-existing code that calls the module's functions.
+Esta versão muda a API, mas não de uma maneira que quebra código chamador. Isso
+pode incluir mudanças nas próprias dependências de um módulo ou a adição de novas
+funções, métodos, campos de struct, ou tipos. Mesmo com as mudanças que inclui,
+este tipo de release garante compatibilidade retroativa e estabilidade para
+código existente que chama as funções do módulo.
 
-A minor release increments the minor part of the module's version number. For
-more, see [Module version numbering](/doc/modules/version-numbers).
+Um release minor incrementa a parte minor do número de versão do módulo. Para
+mais, consulte [Module version numbering](/doc/modules/version-numbers).
 
-In the following example, v1.1.0 is a minor release.
+No exemplo a seguir, v1.1.0 é um release minor.
 
-Old version: `v1.0.1`
+Versão antiga: `v1.0.1`
 
-New version: `v1.1.0`
+Nova versão: `v1.1.0`
 
-You publish a minor release by tagging the module code in your repository,
-incrementing the minor version number in the tag. For more, see [Publishing a
+Você publica um release minor tagueando o código do módulo no seu repositório,
+incrementando o número de versão minor na tag. Para mais, consulte [Publishing a
 module](publishing).
 
-## Publishing breaking API changes {#breaking}
+## Publicando mudanças de API breaking {#breaking}
 
-You can publish a version that breaks backward compatibility by publishing a
-_major_ version release.
+Você pode publicar uma versão que quebra compatibilidade retroativa publicando um
+release de versão _major_.
 
-A major version release doesn't guarantee backward compatibility, typically
-because it includes changes to the module's public API that would break code
-using the module's previous versions.
+Um release de versão major não garante compatibilidade retroativa, tipicamente
+porque inclui mudanças na API pública do módulo que quebrariam código
+usando as versões anteriores do módulo.
 
-Given the disruptive effect a major version upgrade can have on code relying on
-the module, you should avoid a major version update if you can. For more about
-major version updates, see [Developing a major version update](/doc/modules/major-version).
-For strategies to avoid making breaking changes, see the blog post [Keeping your
+Dado o efeito disruptivo que uma atualização de versão major pode ter em código que depende do
+módulo, você deveria evitar uma atualização de versão major se puder. Para mais sobre
+atualizações de versão major, consulte [Developing a major version update](/doc/modules/major-version).
+Para estratégias para evitar fazer mudanças breaking, consulte o post do blog [Keeping your
 modules compatible](/blog/module-compatibility).
 
-Where publishing other kinds of versions requires essentially tagging the module
-code with the version number, publishing a major version update requires more
-steps.
+Enquanto publicar outros tipos de versões requer essencialmente taguear o código do
+módulo com o número de versão, publicar uma atualização de versão major requer mais
+passos.
 
-1.  Before beginning development of the new major version, in your repository
-    create a place for the new version's source.
+1.  Antes de começar o desenvolvimento da nova versão major, no seu repositório
+    crie um lugar para o código-fonte da nova versão.
 
-    One way to do this is to create a new branch in your repository that is
-    specifically for the new major version and its subsequent minor and patch
-    versions. For more, see [Managing module source](/doc/modules/managing-source).
+    Uma maneira de fazer isso é criar um novo branch no seu repositório que é
+    especificamente para a nova versão major e seus releases minor e patch
+    subsequentes. Para mais, consulte [Managing module source](/doc/modules/managing-source).
 
-1.  In the module's go.mod file, revise the module path to append the new major
-    version number, as in the following example:
+1.  No arquivo go.mod do módulo, revise o caminho do módulo para anexar o novo número de
+    versão major, como no exemplo a seguir:
 
     ```
     example.com/mymodule/v2
     ```
 
-    Given that the module path is the module's identifier, this change
-    effectively creates a new module. It also changes the package path, ensuring
-    that developers won't unintentionally import a version that breaks their
-    code. Instead, those wanting to upgrade will explicitly replace occurrences
-    of the old path with the new one.
+    Dado que o caminho do módulo é o identificador do módulo, esta mudança
+    efetivamente cria um novo módulo. Também muda o caminho do package, garantindo
+    que desenvolvedores não importarão inadvertidamente uma versão que quebra seu
+    código. Em vez disso, aqueles querendo atualizar explicitamente substituirão ocorrências
+    do caminho antigo com o novo.
 
-1.  In your code, change any package paths where you're importing packages in
-    the module you're updating, including packages in the module you're updating.
-    You need to do this because you changed your module path.
+1.  No seu código, mude quaisquer caminhos de package onde você está importando packages no
+    módulo que você está atualizando, incluindo packages no módulo que você está atualizando.
+    Você precisa fazer isso porque você mudou o caminho do seu módulo.
 
-1.  As with any new release, you should publish pre-release versions to get
-    feedback and bug reports before publishing an official release.
+1.  Como com qualquer novo release, você deveria publicar versões pre-release para obter
+    feedback e relatórios de bugs antes de publicar um release oficial.
 
-1.  Publish the new major version by tagging the module code in your repository,
-    incrementing the major version number in the tag -- such as from v1.5.2 to
+1.  Publique a nova versão major tagueando o código do módulo no seu repositório,
+    incrementando o número de versão major na tag -- como de v1.5.2 para
     v2.0.0.
 
-    For more, see [Publishing a module](/doc/modules/publishing).
+    Para mais, consulte [Publishing a module](/doc/modules/publishing).
