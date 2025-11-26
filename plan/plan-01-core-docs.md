@@ -139,7 +139,7 @@ Após traduzir cada arquivo, marque o checkpoint com `[x]`.
 ## Seção 7: Instalação e Desenvolvimento
 
 ### 7.1 Instalação
-- [ ] `_content/doc/install/source.html` - Instalação do fonte
+- [x] `_content/doc/install/source.html` - Instalação do fonte (813 linhas)
 - [ ] `_content/doc/install/gccgo.html` - GCC Go
 - [ ] `_content/doc/install-source.md` - Fonte adicional
 - [ ] `_content/doc/gccgo_install.md` - Instalação GCC Go
