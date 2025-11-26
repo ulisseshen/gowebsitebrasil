@@ -1,47 +1,48 @@
 <!--{
   "Title": "Go Fuzzing technical details",
-  "Breadcrumb": true
+  "Breadcrumb": true,
+  "ia-translated": true
 }-->
 
-This document provides an overview of the technical details of the native fuzzing implementation, and is intended to be a resource for contributors.
+Este documento fornece uma visão geral dos detalhes técnicos da implementação nativa de fuzzing, e destina-se a ser um recurso para contribuidores.
 
-## General architecture
+## Arquitetura geral
 
-The fuzzer uses a single coordinator process, which manages the corpus, and multiple worker processes, which mutate inputs and execute the fuzz target. The coordinator and worker processes communicate using a piped JSON-based RPC protocol, and shared regions of virtual memory.
+O fuzzer usa um único processo coordenador, que gerencia o corpus, e múltiplos processos worker, que mutam entradas e executam o fuzz target. Os processos coordenador e worker se comunicam usando um protocolo RPC baseado em JSON via pipe, e regiões compartilhadas de memória virtual.
 
-For each worker the coordinator creates a goroutine which spawns the worker process and sets up the cross-process communication. Each goroutine then reads from a shared channel which is fed by the main coordinator loop, sending instructions it reads from the channel to the relevant worker processes.
+Para cada worker, o coordenador cria uma goroutine que spawna o processo worker e configura a comunicação entre processos. Cada goroutine então lê de um canal compartilhado que é alimentado pelo loop principal do coordenador, enviando instruções que lê do canal para os processos worker relevantes.
 
-The main coordinator loop picks inputs from the corpus, sending them to the shared worker channel. Whichever worker picks up that input from the channel will send a fuzzing request to the corresponding worker process. This process sits in a loop, mutating the input and executing the fuzz target until an execution either causes an increase in the coverage counters, causes a panic or crash, or passes a predetermined deadline.
+O loop principal do coordenador escolhe entradas do corpus, enviando-as para o canal compartilhado de workers. Qualquer worker que pegue aquela entrada do canal enviará uma requisição de fuzzing para o processo worker correspondente. Este processo fica em um loop, mutando a entrada e executando o fuzz target até que uma execução cause um aumento nos contadores de cobertura, cause um panic ou crash, ou passe de um prazo predeterminado.
 
-If the worker process executes a mutated input which causes an increase in coverage counters or a recoverable panic, it signals this to the coordinator which is then able to reconstruct the mutated input. The coordinator will attempt to [minimize the input](#input-minimization), then either add it to the corpus for further fuzzing, in the case of finding increased coverage, or write it to the testdata directory, in the case of an input which causes an error or panic.
+Se o processo worker executa uma entrada mutada que causa um aumento nos contadores de cobertura ou um panic recuperável, ele sinaliza isso ao coordenador que então é capaz de reconstruir a entrada mutada. O coordenador tentará [minimizar a entrada](#input-minimization), então ou adicioná-la ao corpus para fuzzing adicional, no caso de encontrar aumento de cobertura, ou escrevê-la no diretório testdata, no caso de uma entrada que causa um erro ou panic.
 
-If a non-recoverable error occurs while fuzzing which causes the worker process to shut down (e.g. infinite loop, os.Exit, memory exhaustion, etc), minimization will not be attempted, and the failing input will be written to the testdata directory and reported.
+Se um erro não recuperável ocorre durante fuzzing que causa o processo worker desligar (por exemplo, loop infinito, os.Exit, exaustão de memória, etc), minimização não será tentada, e a entrada com falha será escrita no diretório testdata e reportada.
 
-<img alt="Sequence diagram of the interaction between coordinator and worker, as described above." src="/security/fuzz/seq-diagram.png"/>
+<img alt="Diagrama de sequência da interação entre coordenador e worker, conforme descrito acima." src="/security/fuzz/seq-diagram.png"/>
 
-### Cross-process communication
+### Comunicação entre processos
 
-When spawning the child worker processes, the coordinator sets up two methods of communication: a pipe, which is used to pass JSON-based RPC messages, and a shared memory region, which is used to pass inputs and RNG state. Each worker process has its own pipe and shared memory region.
+Ao spawnar os processos worker filhos, o coordenador configura dois métodos de comunicação: um pipe, que é usado para passar mensagens RPC baseadas em JSON, e uma região de memória compartilhada, que é usada para passar entradas e estado RNG. Cada processo worker tem seu próprio pipe e região de memória compartilhada.
 
-The RPC pipe is used by the coordinator to control the worker process, sending it either fuzzing or minimization instructions, and by the worker to relay results of its operations to the coordinator (i.e. whether the input expanded coverage, caused a crash, was successfully minimized, etc).
+O pipe RPC é usado pelo coordenador para controlar o processo worker, enviando-lhe instruções de fuzzing ou minimização, e pelo worker para repassar resultados de suas operações ao coordenador (isto é, se a entrada expandiu cobertura, causou um crash, foi minimizada com sucesso, etc).
 
-The shared memory region is used to pass specific information back and forth with the workers. The coordinator uses the region to pass the corpus entry to fuzz to the worker, and is used by the worker to store its current RNG state. The RNG state is used by the coordinator to reconstruct the mutations that were applied to the input by the worker when it has finished executing the target (this reconstruction happens both when the worker exits cleanly, and when it crashes.)
+A região de memória compartilhada é usada para passar informações específicas de ida e volta com os workers. O coordenador usa a região para passar a entrada de corpus para fuzz ao worker, e é usada pelo worker para armazenar seu estado RNG atual. O estado RNG é usado pelo coordenador para reconstruir as mutações que foram aplicadas à entrada pelo worker quando ele terminou de executar o target (esta reconstrução acontece tanto quando o worker sai normalmente, quanto quando ele crasheia.)
 
-## Input selection
+## Seleção de entrada
 
-The coordinator currently does not implement any advanced form of input prioritization. It cycles through the entire corpus, looping after it exhausts the entries.
+O coordenador atualmente não implementa nenhuma forma avançada de priorização de entrada. Ele cicla através de todo o corpus, fazendo loop após esgotar as entradas.
 
-Similarly, the coordinator does not implement any type of corpus minimization (not to be confused with input minimization, [discussed below](#input-minimization)).
+Similarmente, o coordenador não implementa nenhum tipo de minimização de corpus (não deve ser confundido com minimização de entrada, [discutida abaixo](#input-minimization)).
 
-## Coverage guidance
+## Orientação de cobertura
 
-The fuzzer uses [libFuzzer compatible](https://clang.llvm.org/docs/SanitizerCoverage.html#inline-8bit-counters) inline 8 bit coverage counters. These counters are inserted during compilation at each code edge, and are incremented on entry. Counters are not protected against overflow, so that they don't become saturated.
+O fuzzer usa contadores de cobertura inline de 8 bits [compatíveis com libFuzzer](https://clang.llvm.org/docs/SanitizerCoverage.html#inline-8bit-counters). Esses contadores são inseridos durante a compilação em cada borda de código, e são incrementados na entrada. Contadores não são protegidos contra overflow, para que não fiquem saturados.
 
-Similarly to AFL and libFuzzer, when tracking coverage, the counters are quantized to the nearest power of two. This allows the fuzzer to differentiate between insignificant and significant changes in execution flow. In order to track these changes, the fuzzer holds a slice of bytes which map to the inline counters, the bits of which indicate if there is at least one input in the corpus which increments the related counter at least 2^bit-position times. These bytes can become saturated, if there are inputs which cause counters to hit each quantized value, at which point the related counter fails to provide further useful coverage information.
+Similarmente ao AFL e libFuzzer, ao rastrear cobertura, os contadores são quantizados para a potência de dois mais próxima. Isso permite que o fuzzer diferencie entre mudanças insignificantes e significativas no fluxo de execução. Para rastrear essas mudanças, o fuzzer mantém um slice de bytes que mapeia para os contadores inline, cujos bits indicam se há pelo menos uma entrada no corpus que incrementa o contador relacionado pelo menos 2^bit-position vezes. Esses bytes podem ficar saturados, se houver entradas que fazem contadores atingirem cada valor quantizado, ponto em que o contador relacionado falha em fornecer informações de cobertura úteis adicionais.
 
-As coverage counters are added to every edge during compilation, code not being fuzzed is also instrumented, which can cause the worker to detect coverage expansion that is unrelated to the target being executed (for instance if some new code path is triggered in a goroutine unrelated to the fuzz target). The worker attempts to reduce this in two ways: firstly it resets all counters immediately before executing the fuzz target and then snapshots the counters immediately after the target returns, and secondly by explicitly ignoring a set of packages which are likely to be "noisy"
+Como contadores de cobertura são adicionados a cada borda durante a compilação, código que não está sendo fuzzed também é instrumentado, o que pode fazer com que o worker detecte expansão de cobertura que não está relacionada ao target sendo executado (por exemplo, se algum novo caminho de código é disparado em uma goroutine não relacionada ao fuzz target). O worker tenta reduzir isso de duas maneiras: primeiro ele reseta todos os contadores imediatamente antes de executar o fuzz target e então tira um snapshot dos contadores imediatamente após o target retornar, e segundo ignorando explicitamente um conjunto de packages que provavelmente serão "ruidosos"
 
-A number of packages explicitly do not have counters inserted, since they are likely to introduce counter noise that is unrelated to the target being executed. These packages are:
+Um número de packages explicitamente não têm contadores inseridos, já que é provável que introduzam ruído de contador que não está relacionado ao target sendo executado. Esses packages são:
 
 * `context`
 * `internal/fuzz`
@@ -53,9 +54,9 @@ A number of packages explicitly do not have counters inserted, since they are li
 * `testing`
 * `time`
 
-## Mutation engine
+## Motor de mutação
 
-When the worker receives a new input, it applies mutations to the input before executing the target with the input. After each mutation, the fuzz target is executed with the new input, and if coverage is not expanded, further mutations are applied. In order to prevent inputs from massively diverging from their initial state, after five mutations are applied to an input, it is reset to its original state before further mutations are applied. For example for the input `hello world`, the mutation strategy may look like the following:
+Quando o worker recebe uma nova entrada, ele aplica mutações à entrada antes de executar o target com a entrada. Após cada mutação, o fuzz target é executado com a nova entrada, e se a cobertura não for expandida, mutações adicionais são aplicadas. Para evitar que as entradas divirjam massivamente de seu estado inicial, após cinco mutações serem aplicadas a uma entrada, ela é resetada para seu estado original antes que mutações adicionais sejam aplicadas. Por exemplo, para a entrada `hello world`, a estratégia de mutação pode parecer com o seguinte:
 
 ```
 0. hello world [initial state]
@@ -68,17 +69,17 @@ When the worker receives a new input, it applies mutations to the input before e
 ...
 ```
 
-The mutators attempt to bias towards producing smaller inputs, rather than larger inputs, in order to prevent rapid growth of the corpus size.
+Os mutadores tentam viesar em direção a produzir entradas menores, em vez de entradas maiores, para evitar crescimento rápido do tamanho do corpus.
 
-There are numerous mutators for `[]byte` and `string` types, and a smaller number of mutators for all the `int`, `uint`, and `float` types.
+Há numerosos mutadores para tipos `[]byte` e `string`, e um número menor de mutadores para todos os tipos `int`, `uint`, e `float`.
 
-There are currently no execution driven mutation strategies implemented (such as input-to-comparison correspondence), nor dictionary based mutators.
+Atualmente não há estratégias de mutação orientadas por execução implementadas (como correspondência entrada-para-comparação), nem mutadores baseados em dicionário.
 
-## Input minimization
+## Minimização de entrada
 
-In order to prevent the corpus from ballooning (which bogs down the fuzzer both in terms of performance, and reducing the probability that a mutation will actually touch interesting data) we attempt to minimize each input discovered which expands coverage or causes a recoverable crash (non-recoverable crashes, such as those caused by memory exhaustion, are not minimized, as the process would be extremely slow). The employed strategy for minimization is rather simple, sequentially attempting to remove bytes from the input while maintaining the initial coverage found. In particular the minimization mechanism uses the following strategy:
+Para evitar que o corpus infle (o que sobrecarrega o fuzzer tanto em termos de desempenho, quanto reduzindo a probabilidade de que uma mutação realmente toque dados interessantes) tentamos minimizar cada entrada descoberta que expande cobertura ou causa um crash recuperável (crashes não recuperáveis, como aqueles causados por exaustão de memória, não são minimizados, pois o processo seria extremamente lento). A estratégia empregada para minimização é bastante simples, tentando sequencialmente remover bytes da entrada enquanto mantém a cobertura inicial encontrada. Em particular, o mecanismo de minimização usa a seguinte estratégia:
 
-1. Attempt to cut an exponentially smaller chunk of bytes off the end of the input
-2. Attempt to remove each individual byte
-3. Attempt to remove each possible subset of bytes
-4. Attempt to replace each non-human readable byte with a human readable byte (i.e. something in the ASCII set of bytes)
+1. Tentar cortar um pedaço exponencialmente menor de bytes do final da entrada
+2. Tentar remover cada byte individual
+3. Tentar remover cada possível subconjunto de bytes
+4. Tentar substituir cada byte não legível por humanos por um byte legível por humanos (isto é, algo no conjunto ASCII de bytes)

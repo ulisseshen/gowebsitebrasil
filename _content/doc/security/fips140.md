@@ -1,138 +1,137 @@
 ---
 title: FIPS 140-3 Compliance
 layout: article
+ia-translated: true
 ---
 
-Starting with Go 1.24, Go binaries can natively operate in a mode that
-facilitates FIPS 140-3 compliance. Moreover, the toolchain can build against
-frozen versions of the cryptography packages that constitute the Go
-Cryptographic Module.
+A partir do Go 1.24, binários Go podem operar nativamente em um modo que
+facilita a conformidade com FIPS 140-3. Além disso, a toolchain pode compilar contra
+versões congeladas dos packages de criptografia que constituem o
+Módulo Criptográfico Go.
 
 ## FIPS 140-3
 
-NIST FIPS 140-3 is a U.S. Government compliance regime for cryptography
-applications that amongst other things requires the use of a set of approved
-algorithms, and the use of
-[CMVP](https://csrc.nist.gov/projects/cryptographic-module-validation-program)-validated
-cryptographic modules tested in the target operating environments.
+NIST FIPS 140-3 é um regime de conformidade do Governo dos EUA para aplicações
+de criptografia que entre outras coisas requer o uso de um conjunto de algoritmos
+aprovados, e o uso de módulos criptográficos
+[CMVP](https://csrc.nist.gov/projects/cryptographic-module-validation-program)-validados
+testados nos ambientes operacionais alvo.
 
-The mechanisms described in this page facilitate compliance for Go applications.
+Os mecanismos descritos nesta página facilitam a conformidade para aplicações Go.
 
-Applications that have no need for FIPS 140-3 compliance can safely ignore them,
-and should not enable FIPS 140-3 mode.
+Aplicações que não têm necessidade de conformidade com FIPS 140-3 podem ignorá-los
+com segurança, e não devem habilitar o modo FIPS 140-3.
 
-**NOTE:** Simply using a FIPS 140-3 compliant and validated cryptographic module
-may not—on its own—satisfy all relevant regulatory requirements. The Go team cannot provide any
-guarantees or support around how usage of the provided FIPS 140-3
-mode may, or may not, satisfy specific regulatory requirements for individual
-users. Care should be taken in determining if usage of this module satisfies
-your specific requirements.
+**NOTA:** Simplesmente usar um módulo criptográfico compatível e validado com FIPS 140-3
+pode não—por si só—satisfazer todos os requisitos regulatórios relevantes. A equipe Go não pode fornecer nenhuma
+garantia ou suporte sobre como o uso do modo FIPS 140-3 fornecido pode, ou não, satisfazer requisitos regulatórios específicos para usuários
+individuais. Deve-se ter cuidado ao determinar se o uso deste módulo satisfaz
+seus requisitos específicos.
 
-## The Go Cryptographic Module
+## O Módulo Criptográfico Go
 
-The Go Cryptographic Module is a collection of standard library Go packages
-under `crypto/internal/fips140/...` that implement FIPS 140-3 approved
-algorithms.
+O Módulo Criptográfico Go é uma coleção de packages da biblioteca padrão Go
+sob `crypto/internal/fips140/...` que implementam algoritmos aprovados pelo FIPS 140-3.
 
-Public API packages such as `crypto/ecdsa` and `crypto/rand` transparently use
-the Go Cryptographic Module to implement FIPS 140-3 algorithms.
+Packages de API pública como `crypto/ecdsa` e `crypto/rand` usam transparentemente
+o Módulo Criptográfico Go para implementar algoritmos FIPS 140-3.
 
-## FIPS 140-3 mode
+## Modo FIPS 140-3
 
-The run-time `fips140` [GODEBUG](/doc/godebug) option controls whether the Go
-Cryptographic Module operates in FIPS 140-3 mode. It defaults to `off`. It can't
-be changed after the program has started.
+A opção de tempo de execução `fips140` [GODEBUG](/doc/godebug) controla se o
+Módulo Criptográfico Go opera no modo FIPS 140-3. O padrão é `off`. Não pode
+ser alterado após o programa ter iniciado.
 
-When operating in FIPS 140-3 mode (the `fips140` GODEBUG setting is `on`):
+Ao operar no modo FIPS 140-3 (a configuração GODEBUG `fips140` é `on`):
 
- - The Go Cryptographic Module automatically performs an integrity self-check at
-   `init` time, comparing the checksum of the module's object file computed at
-   build time with the symbols loaded in memory.
+ - O Módulo Criptográfico Go executa automaticamente uma auto-verificação de integridade no
+   tempo de `init`, comparando o checksum do arquivo objeto do módulo calculado em
+   tempo de compilação com os símbolos carregados na memória.
 
- - All algorithms perform known-answer self-tests according to the relevant FIPS
-   140-3 Implementation Guidance, either at `init` time, or on first use.
+ - Todos os algoritmos executam testes de resposta conhecida (known-answer self-tests) de acordo com a
+   Orientação de Implementação FIPS 140-3 relevante, seja no tempo de `init`, ou no primeiro uso.
 
- - Pairwise consistency tests are performed on generated cryptographic keys.
-   Note that this can cause a slowdown of up to 2x for certain key types, which
-   is especially relevant for ephemeral keys.
+ - Testes de consistência aos pares são executados em chaves criptográficas geradas.
+   Note que isso pode causar uma desaceleração de até 2x para certos tipos de chave, o que
+   é especialmente relevante para chaves efêmeras.
 
- - [`crypto/rand.Reader`](/pkg/crypto/rand/#Reader) is implemented in terms of a
-   NIST SP 800-90A DRBG. To guarantee the same level of security as
-   `GODEBUG=fips140=off`, random bytes are also sourced from the platform's CSPRNG at
-   every `Read` and mixed into the output as uncredited additional data.
+ - [`crypto/rand.Reader`](/pkg/crypto/rand/#Reader) é implementado em termos de um
+   DRBG NIST SP 800-90A. Para garantir o mesmo nível de segurança que
+   `GODEBUG=fips140=off`, bytes aleatórios também são obtidos do CSPRNG da plataforma a
+   cada `Read` e misturados na saída como dados adicionais não creditados.
 
- - The [`crypto/tls`](/pkg/crypto/tls/) package will ignore and not negotiate
-   any protocol version, cipher suite, signature algorithm, or key exchange
-   mechanism that is not FIPS 140-3 approved.
+ - O package [`crypto/tls`](/pkg/crypto/tls/) irá ignorar e não negociar
+   nenhuma versão de protocolo, conjunto de cifras, algoritmo de assinatura ou mecanismo de troca
+   de chave que não seja aprovado pelo FIPS 140-3.
 
- - [`crypto/rsa.SignPSS`](/pkg/crypto/rsa/#SignPSS) with
-   [`PSSSaltLengthAuto`](/pkg/crypto/rsa/#PSSSaltLengthAuto) will cap the length
-   of the salt at the length of the hash.
+ - [`crypto/rsa.SignPSS`](/pkg/crypto/rsa/#SignPSS) com
+   [`PSSSaltLengthAuto`](/pkg/crypto/rsa/#PSSSaltLengthAuto) irá limitar o comprimento
+   do salt ao comprimento do hash.
 
-When `GODEBUG=fips140=only` is used, in addition to the above, cryptographic
-algorithms that are not FIPS 140-3 compliant will return an error or panic. Note
-that this mode is a best effort and can't guarantee compliance with all FIPS
-140-3 requirements.
+Quando `GODEBUG=fips140=only` é usado, além do acima, algoritmos
+criptográficos que não são compatíveis com FIPS 140-3 retornarão um erro ou panic. Note
+que este modo é um esforço de melhor intenção e não pode garantir conformidade com todos os
+requisitos FIPS 140-3.
 
-`GODEBUG=fips140=on` and `only` are not supported on OpenBSD, Wasm, AIX, and
-32-bit Windows platforms.
+`GODEBUG=fips140=on` e `only` não são suportados em plataformas OpenBSD, Wasm, AIX e
+Windows de 32 bits.
 
-## The `crypto/fips140` package
+## O package `crypto/fips140`
 
-The [`crypto/fips140.Enabled`](/pkg/crypto/fips140/#Enabled) function reports
-whether FIPS 140-3 mode is active.
+A função [`crypto/fips140.Enabled`](/pkg/crypto/fips140/#Enabled) reporta
+se o modo FIPS 140-3 está ativo.
 
-## The `GOFIPS140` environment variable
+## A variável de ambiente `GOFIPS140`
 
-The `GOFIPS140` environment variable can be used with `go build`, `go install`,
-and `go test` to select the version of the Go Cryptographic Module to be linked
-into the executable program.
+A variável de ambiente `GOFIPS140` pode ser usada com `go build`, `go install`,
+e `go test` para selecionar a versão do Módulo Criptográfico Go a ser vinculada
+ao programa executável.
 
- - `off` is the default, and uses the `crypto/internal/fips140/...` packages in
-   the standard library tree in use.
+ - `off` é o padrão, e usa os packages `crypto/internal/fips140/...` na
+   árvore da biblioteca padrão em uso.
 
- - `latest` is like `off`, but enables FIPS 140-3 mode by default.
+ - `latest` é como `off`, mas habilita o modo FIPS 140-3 por padrão.
 
- - `v1.0.0` uses Go Cryptographic Module version v1.0.0, frozen in early 2025
-   and first shipped with Go 1.24. It enables FIPS 140-3 mode by default.
+ - `v1.0.0` usa o Módulo Criptográfico Go versão v1.0.0, congelado no início de 2025
+   e lançado pela primeira vez com o Go 1.24. Ele habilita o modo FIPS 140-3 por padrão.
 
-## Module Validations
+## Validações de Módulo
 
-Google currently has a contractual relationship with [Geomys](https://geomys.org/)
-to facilitate at least yearly CMVP validations of the Go Cryptographic Module.
-At the time of validation we will freeze the Go Cryptographic Module and create
-a new module version for submission.
+O Google atualmente tem uma relação contratual com [Geomys](https://geomys.org/)
+para facilitar validações CMVP anuais do Módulo Criptográfico Go.
+No momento da validação, vamos congelar o Módulo Criptográfico Go e criar
+uma nova versão de módulo para submissão.
 
-These validations are tested on a comprehensive set of Operating
-Environments, supporting many popular operating system and hardware platform
-combinations.
+Essas validações são testadas em um conjunto abrangente de Ambientes
+Operacionais, suportando muitas combinações populares de sistema operacional e plataforma
+de hardware.
 
-Off-cycle validations may be performed if security issues are discovered in
-the module.
+Validações fora de ciclo podem ser realizadas se problemas de segurança forem descobertos
+no módulo.
 
-###  Validated Module Versions
+###  Versões de Módulo Validadas
 
-List of module versions which have completed [CMVP validation](https://csrc.nist.gov/projects/cryptographic-module-validation-program/validated-modules/search?SearchMode=Basic&ModuleName=Go+Cryptographic+Module&CertificateStatus=Active&ValidationYear=0):
+Lista de versões de módulo que completaram [validação CMVP](https://csrc.nist.gov/projects/cryptographic-module-validation-program/validated-modules/search?SearchMode=Basic&ModuleName=Go+Cryptographic+Module&CertificateStatus=Active&ValidationYear=0):
 
-_There are currently no module versions which have completed validation._
+_Atualmente não há versões de módulo que completaram a validação._
 
-### In Process Module Versions
+### Versões de Módulo Em Processo
 
-List of module versions which are currently in the [CMVP Modules In Process List](https://csrc.nist.gov/Projects/cryptographic-module-validation-program/modules-in-process/modules-in-process-list):
+Lista de versões de módulo que estão atualmente na [Lista de Módulos Em Processo do CMVP](https://csrc.nist.gov/Projects/cryptographic-module-validation-program/modules-in-process/modules-in-process-list):
 
-* v1.0.0 ([CAVP Certificate A6650](https://csrc.nist.gov/projects/cryptographic-algorithm-validation-program/details?validation=39260)), Review Pending, available in Go 1.24+
+* v1.0.0 ([Certificado CAVP A6650](https://csrc.nist.gov/projects/cryptographic-algorithm-validation-program/details?validation=39260)), Revisão Pendente, disponível no Go 1.24+
 
-### Implementation Under Test Module Versions
+### Versões de Módulo de Implementação Sob Teste
 
-List of module versions which are currently in the [CMVP Implementation Under Test List](https://csrc.nist.gov/Projects/cryptographic-module-validation-program/modules-in-process/iut-list):
+Lista de versões de módulo que estão atualmente na [Lista de Implementação Sob Teste do CMVP](https://csrc.nist.gov/Projects/cryptographic-module-validation-program/modules-in-process/iut-list):
 
-_There are currently no module versions under test._
+_Atualmente não há versões de módulo sob teste._
 
 ## Go+BoringCrypto
 
-The previous, unsupported mechanism to use the BoringCrypto module for certain
-FIPS 140-3 approved algorithms is currently still available, but it is meant to
-be removed and replaced with the mechanism described in this page in a future
-release.
+O mecanismo anterior, sem suporte, para usar o módulo BoringCrypto para certos
+algoritmos aprovados pelo FIPS 140-3 ainda está disponível atualmente, mas está planejado para
+ser removido e substituído pelo mecanismo descrito nesta página em um
+release futuro.
 
-Go+BoringCrypto is incompatible with the native FIPS 140-3 mode.
+Go+BoringCrypto é incompatível com o modo FIPS 140-3 nativo.

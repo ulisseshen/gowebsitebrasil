@@ -1,41 +1,42 @@
 ---
 title: Go CNA Policy
 layout: article
+ia-translated: true
 ---
 
-[Back to Go Vulnerability Management](/security/vuln)
+[Voltar para Gerenciamento de Vulnerabilidades do Go](/security/vuln)
 
-## Overview
+## Visão Geral
 
-The Go CNA is a
-[CVE Numbering Authority](https://www.cve.org/ProgramOrganization/CNAs), which issues
-[CVE IDs](https://www.cve.org/ResourcesSupport/Glossary?activeTerm=glossaryCVEID) and publishes
-[CVE Records](https://www.cve.org/ResourcesSupport/Glossary?activeTerm=glossaryRecord)
-for public vulnerabilities in the Go ecosystem. It is a sub-CNA of the Google CNA.
+A CNA do Go é uma
+[CVE Numbering Authority](https://www.cve.org/ProgramOrganization/CNAs), que emite
+[IDs CVE](https://www.cve.org/ResourcesSupport/Glossary?activeTerm=glossaryCVEID) e publica
+[Registros CVE](https://www.cve.org/ResourcesSupport/Glossary?activeTerm=glossaryRecord)
+para vulnerabilidades públicas no ecossistema Go. É uma sub-CNA da CNA do Google.
 
-## Scope
+## Escopo
 
-The Go CNA covers vulnerabilities in the Go project (the Go
-[standard library](/pkg) and
-[sub-repositories](https://pkg.go.dev/golang.org/x)) and public vulnerabilities
-in importable Go modules that are not already covered by another CNA.
+A CNA do Go cobre vulnerabilidades no projeto Go (a
+[biblioteca padrão](/pkg) do Go e
+[sub-repositórios](https://pkg.go.dev/golang.org/x)) e vulnerabilidades públicas
+em módulos Go importáveis que ainda não são cobertos por outra CNA.
 
-This scope is intended to explicitly exclude vulnerabilities in applications or
-packages written in Go that are not importable (for example, anything in
-package `main`). See [go.dev/security/vuln/database#excluded-reports](/security/vuln/database#excluded-reports) for more information on excluded reports.
+Este escopo destina-se a excluir explicitamente vulnerabilidades em aplicações ou
+packages escritos em Go que não são importáveis (por exemplo, qualquer coisa no
+package `main`). Veja [go.dev/security/vuln/database#excluded-reports](/security/vuln/database#excluded-reports) para mais informações sobre relatórios excluídos.
 
-To report potential new vulnerabilities in the Go project, refer to
+Para reportar potenciais novas vulnerabilidades no projeto Go, consulte
 [go.dev/security/policy](/security/policy).
 
-## Requesting a CVE ID for a public vulnerability
+## Solicitando um ID CVE para uma vulnerabilidade pública
 
-**IMPORTANT**: The form linked below creates a public issue on the issue tracker, and therefore
-*must not* be used to report undisclosed vulnerabilities in Go (see our
-[security policy](/security/policy) for instructions on reporting
-undisclosed issues).
+**IMPORTANTE**: O formulário vinculado abaixo cria um issue público no rastreador de issues, e portanto
+*não deve* ser usado para reportar vulnerabilidades não divulgadas em Go (veja nossa
+[política de segurança](/security/policy) para instruções sobre como reportar
+problemas não divulgados).
 
-To request a CVE ID for an existing PUBLIC vulnerability in the Go ecosystem,
-[submit a request via this form](/s/vulndb-report-new).
+Para solicitar um ID CVE para uma vulnerabilidade PÚBLICA existente no ecossistema Go,
+[envie uma solicitação via este formulário](/s/vulndb-report-new).
 
-A vulnerability is considered public if it has already been disclosed publicly, or it exists in a
-package you maintain, and you are ready to disclose it publicly.
+Uma vulnerabilidade é considerada pública se já foi divulgada publicamente, ou existe em um
+package que você mantém, e você está pronto para divulgá-la publicamente.

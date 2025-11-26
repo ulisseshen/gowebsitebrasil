@@ -1,288 +1,289 @@
 ---
 title: Go Vulnerability Database
 layout: article
+ia-translated: true
 ---
 
-[Back to Go Vulnerability Management](/security/vuln)
+[Voltar para Gerenciamento de Vulnerabilidades do Go](/security/vuln)
 
-## Overview
+## Visão Geral
 
-The Go vulnerability database ([https://vuln.go.dev](https://vuln.go.dev))
-serves Go vulnerability information in the
-[Open Source Vulnerability (OSV) schema](https://ossf.github.io/osv-schema/).
+O banco de dados de vulnerabilidades do Go ([https://vuln.go.dev](https://vuln.go.dev))
+serve informações de vulnerabilidade do Go no
+[schema Open Source Vulnerability (OSV)](https://ossf.github.io/osv-schema/).
 
-You can also browse vulnerabilities in the database at [pkg.go.dev/vuln](https://pkg.go.dev/vuln).
+Você também pode navegar pelas vulnerabilidades no banco de dados em [pkg.go.dev/vuln](https://pkg.go.dev/vuln).
 
-**Do not** rely on the contents of the x/vulndb Git repository. The YAML files in that
-repository are maintained using an internal format that may change
-without warning.
+**Não** confie no conteúdo do repositório Git x/vulndb. Os arquivos YAML naquele
+repositório são mantidos usando um formato interno que pode mudar
+sem aviso.
 
-## Contributing
+## Contribuindo
 
-We would love for all Go package maintainers to [contribute](/s/vulndb-report-new)
-information about public vulnerabilities in their own projects,
-and [update](/s/vulndb-report-feedback) existing information about vulnerabilities
-in their Go packages.
+Adoraríamos que todos os mantenedores de packages Go [contribuíssem](/s/vulndb-report-new)
+informações sobre vulnerabilidades públicas em seus próprios projetos,
+e [atualizassem](/s/vulndb-report-feedback) informações existentes sobre vulnerabilidades
+em seus packages Go.
 
-We aim to make reporting a low friction process,
-so feel free to [send us your suggestions](/s/vuln-feedback).
+Visamos tornar o processo de relatório de baixa fricção,
+então sinta-se à vontade para [nos enviar suas sugestões](/s/vuln-feedback).
 
-Please **do not** use the forms above to report a vulnerability in the Go
-standard library or sub-repositories.
-Instead, follow the process at [go.dev/security/policy](/security/policy)
-for vulnerabilities about the Go project.
+Por favor **não** use os formulários acima para reportar uma vulnerabilidade na
+biblioteca padrão do Go ou sub-repositórios.
+Em vez disso, siga o processo em [go.dev/security/policy](/security/policy)
+para vulnerabilidades sobre o projeto Go.
 
 ## API
 
-The canonical Go vulnerability database, [https://vuln.go.dev](https://vuln.go.dev),
-is an HTTP server that can respond to GET requests for the endpoints specified below.
+O banco de dados canônico de vulnerabilidades do Go, [https://vuln.go.dev](https://vuln.go.dev),
+é um servidor HTTP que pode responder a requisições GET para os endpoints especificados abaixo.
 
-The endpoints have no query parameters, and no specific headers are required.
-Because of this, even a site serving from a fixed file system (including a `file://` URL)
-can implement this API.
+Os endpoints não têm parâmetros de query, e nenhum header específico é necessário.
+Por causa disso, até mesmo um site servindo de um sistema de arquivos fixo (incluindo uma URL `file://`)
+pode implementar esta API.
 
-Each endpoint returns a JSON-encoded response, in either uncompressed
-(if requested as `.json`) or gzipped form (if requested as `.json.gz`).
+Cada endpoint retorna uma resposta codificada em JSON, seja em forma descompactada
+(se requisitado como `.json`) ou em forma gzipada (se requisitado como `.json.gz`).
 
-The endpoints are:
+Os endpoints são:
 
 - `/index/db.json[.gz]`
 
-  Returns metadata about the database:
+  Retorna metadados sobre o banco de dados:
 
   ```json
   {
-    // The latest time the database should be considered
-    // to have been modified, as an RFC3339-formatted UTC
-    // timestamp ending in "Z".
+    // O último momento em que o banco de dados deve ser considerado
+    // como tendo sido modificado, como um timestamp UTC formatado em RFC3339
+    // terminando em "Z".
     "modified": string
   }
   ```
 
-  Note that the modified time *should not* be compared to wall clock time,
-  e.g. for purposes of cache invalidation, as there may a delay in making
-  database modifications live.
+  Note que o tempo modificado *não deve* ser comparado com o tempo do relógio de parede,
+  por exemplo, para propósitos de invalidação de cache, pois pode haver um atraso em tornar
+  modificações do banco de dados públicas.
 
-  See [/index/db.json](https://vuln.go.dev/index/db.json) for a live example.
+  Veja [/index/db.json](https://vuln.go.dev/index/db.json) para um exemplo ao vivo.
 
 - `/index/modules.json[.gz]`
 
-  Returns a list containing metadata about each module in the database:
+  Retorna uma lista contendo metadados sobre cada módulo no banco de dados:
 
   ```json
   [ {
-    // The module path.
+    // O caminho do módulo.
     "path": string,
-    // The vulnerabilities that affect this module.
+    // As vulnerabilidades que afetam este módulo.
     "vulns":
       [ {
-        // The vulnerability ID.
+        // O ID da vulnerabilidade.
         "id": string,
-        // The latest time the vulnerability should be considered
-        // to have been modified, as an RFC3339-formatted UTC
-        // timestamp ending in "Z".
+        // O último momento em que a vulnerabilidade deve ser considerada
+        // como tendo sido modificada, como um timestamp UTC formatado em RFC3339
+        // terminando em "Z".
         "modified": string,
-        // (Optional) The module version (in SemVer 2.0.0 format)
-        // that contains the latest fix for the vulnerability.
-        // If unknown or unavailable, this should be omitted.
+        // (Opcional) A versão do módulo (no formato SemVer 2.0.0)
+        // que contém a última correção para a vulnerabilidade.
+        // Se desconhecido ou indisponível, isto deve ser omitido.
         "fixed": string,
       } ]
   } ]
   ```
 
-  See [/index/modules.json](https://vuln.go.dev/index/modules.json) for a live example.
+  Veja [/index/modules.json](https://vuln.go.dev/index/modules.json) para um exemplo ao vivo.
 
 - `/index/vulns.json[.gz]`
 
-  Returns a list containing metadata about each vulnerability in the database:
+  Retorna uma lista contendo metadados sobre cada vulnerabilidade no banco de dados:
 
   ```json
    [ {
-       // The vulnerability ID.
+       // O ID da vulnerabilidade.
        "id": string,
-       // The latest time the vulnerability should be considered
-       // to have been modified, as an RFC3339-formatted UTC
-       // timestamp ending in "Z".
+       // O último momento em que a vulnerabilidade deve ser considerada
+       // como tendo sido modificada, como um timestamp UTC formatado em RFC3339
+       // terminando em "Z".
        "modified": string,
-       // A list of IDs of the same vulnerability in other databases.
+       // Uma lista de IDs da mesma vulnerabilidade em outros bancos de dados.
        "aliases": [ string ]
    } ]
   ```
 
-  See [/index/vulns.json](https://vuln.go.dev/index/vulns.json) for a live example.
+  Veja [/index/vulns.json](https://vuln.go.dev/index/vulns.json) para um exemplo ao vivo.
 
 - `/ID/$id.json[.gz]`
 
-  Returns the individual report for the vulnerability with ID `$id`,
-  in OSV format (described below in [Schema](#schema)).
+  Retorna o relatório individual para a vulnerabilidade com ID `$id`,
+  no formato OSV (descrito abaixo em [Schema](#schema)).
 
-  See [/ID/GO-2022-0191.json](https://vuln.go.dev/ID/GO-2022-0191.json)
-  for a live example.
+  Veja [/ID/GO-2022-0191.json](https://vuln.go.dev/ID/GO-2022-0191.json)
+  para um exemplo ao vivo.
 
-### Bulk download
+### Download em massa
 
-To make it easier to download the entire Go vulnerability database,
-a zip file containing all the index and OSV files is available at
+Para facilitar o download do banco de dados completo de vulnerabilidades do Go,
+um arquivo zip contendo todos os arquivos de índice e OSV está disponível em
 [vuln.go.dev/vulndb.zip](https://vuln.go.dev/vulndb.zip).
 
-### Usage in `govulncheck`
+### Uso em `govulncheck`
 
-By default, `govulncheck` uses the canonical Go vulnerability database at [vuln.go.dev](https://vuln.go.dev).
+Por padrão, `govulncheck` usa o banco de dados canônico de vulnerabilidades do Go em [vuln.go.dev](https://vuln.go.dev).
 
-The command can be configured to contact a different vulnerability database using the `-db` flag,which accepts a vulnerability database URL with protocol `http://`, `https://`, or `file://`.
+O comando pode ser configurado para contatar um banco de dados de vulnerabilidades diferente usando a flag `-db`, que aceita uma URL de banco de dados de vulnerabilidades com protocolo `http://`, `https://`, ou `file://`.
 
-To work correctly with `govulncheck`, the vulnerability database specified must implement the API described above. The `govulncheck` command uses compressed ".json.gz" endpoints when reading from an http(s) source, and the ".json" endpoints when reading from a file source.
+Para funcionar corretamente com `govulncheck`, o banco de dados de vulnerabilidades especificado deve implementar a API descrita acima. O comando `govulncheck` usa endpoints comprimidos ".json.gz" ao ler de uma fonte http(s), e os endpoints ".json" ao ler de uma fonte file.
 
-### Legacy API
+### API Legada
 
-The canonical database contains some additional endpoints that are part of a legacy API.
-We plan to remove support for these endpoints soon. If you are relying on the legacy API
-and need additional time to migrate, [please let us know](/s/govulncheck-feedback).
+O banco de dados canônico contém alguns endpoints adicionais que fazem parte de uma API legada.
+Planejamos remover o suporte para esses endpoints em breve. Se você está confiando na API legada
+e precisa de tempo adicional para migrar, [por favor nos avise](/s/govulncheck-feedback).
 
 ## Schema
 
-Reports use the
-[Open Source Vulnerability (OSV) schema](https://ossf.github.io/osv-schema/).
-The Go vulnerability database assigns the following meanings to the fields:
+Relatórios usam o
+[schema Open Source Vulnerability (OSV)](https://ossf.github.io/osv-schema/).
+O banco de dados de vulnerabilidades do Go atribui os seguintes significados aos campos:
 
 ### id
 
-The id field is a unique identifier for the vulnerability entry. It is a string
-of the format GO-\<YEAR>-\<ENTRYID>.
+O campo id é um identificador único para a entrada de vulnerabilidade. É uma string
+no formato GO-\<ANO>-\<ENTRYID>.
 
 ### affected
 
-The [affected](https://ossf.github.io/osv-schema/#affected-fields) field is a
-JSON array containing objects that describes the module versions that contain
-the vulnerability.
+O campo [affected](https://ossf.github.io/osv-schema/#affected-fields) é um
+array JSON contendo objetos que descrevem as versões de módulo que contêm
+a vulnerabilidade.
 
 #### affected[].package
 
-The
+O campo
 [affected[].package](https://ossf.github.io/osv-schema/#affectedpackage-field)
-field is a JSON object identifying the affected _module._ The object has two
-required fields:
+é um objeto JSON identificando o _módulo_ afetado. O objeto tem dois
+campos obrigatórios:
 
-- **ecosystem**: this will always be "Go"
-- **name**: this is the Go module path
-  - Importable packages in the standard library will have the name _stdlib_.
-  - The go command will have the name _toolchain_.
+- **ecosystem**: este sempre será "Go"
+- **name**: este é o caminho do módulo Go
+  - Packages importáveis na biblioteca padrão terão o nome _stdlib_.
+  - O comando go terá o nome _toolchain_.
 
 #### affected[].ecosystem_specific
 
-The
+O campo
 [affected[].ecosystem_specific](https://ossf.github.io/osv-schema/#affectedecosystem_specific-field)
-field is a JSON object with additional information about the vulnerability,
-which is used by Go's vulnerability detection tools.
+é um objeto JSON com informações adicionais sobre a vulnerabilidade,
+que é usado pelas ferramentas de detecção de vulnerabilidade do Go.
 
-For now, ecosystem specific will always be an object with a single field,
+Por enquanto, ecosystem specific sempre será um objeto com um único campo,
 `imports`.
 
 ##### affected[].ecosystem_specific.imports
 
-The `affected[].ecosystem_specific.imports` field is a JSON array containing
-the packages and symbols affected by the vulnerability. Each object in the
-array will have these two fields:
+O campo `affected[].ecosystem_specific.imports` é um array JSON contendo
+os packages e símbolos afetados pela vulnerabilidade. Cada objeto no
+array terá esses dois campos:
 
-- **path:** a string with the import path of the package containing the vulnerability
-- **symbols:** a string array with the names of the symbols (function or method) that contains the vulnerability
-- **goos**: a string array with the execution operating system where the symbols appear, if known
-- **goarch**: a string array with the architecture where the symbols appear, if known
+- **path:** uma string com o caminho de importação do package contendo a vulnerabilidade
+- **symbols:** um array de strings com os nomes dos símbolos (função ou método) que contém a vulnerabilidade
+- **goos**: um array de strings com o sistema operacional de execução onde os símbolos aparecem, se conhecido
+- **goarch**: um array de strings com a arquitetura onde os símbolos aparecem, se conhecido
 
 ### database_specific
 
-The `database_specific` field contains custom fields specific to the Go vulnerability database.
+O campo `database_specific` contém campos customizados específicos ao banco de dados de vulnerabilidades do Go.
 
 #### database_specific.url
 
-The `database_specific.url` field is a string representing the fully-qualified
-URL of the Go vulnerability report, e.g, "https://pkg.go.dev/vuln/GO-2023-1621".
+O campo `database_specific.url` é uma string representando a
+URL totalmente qualificada do relatório de vulnerabilidade do Go, por exemplo, "https://pkg.go.dev/vuln/GO-2023-1621".
 
 #### database_specific.review_status
 
-The `database_specific.review_status` field is a string representing the review
-status of the vulnerability report. If not present, the report should be
-considered `REVIEWED`. The possible values are:
+O campo `database_specific.review_status` é uma string representando o status de revisão
+do relatório de vulnerabilidade. Se não estiver presente, o relatório deve ser
+considerado `REVIEWED`. Os valores possíveis são:
 
-- `UNREVIEWED`: The report was automatically generated based on another source, such as
-a CVE or GHSA. Its data may be limited and has not been verified by the Go team.
-- `REVIEWED`: The report originated from the Go team, or was generated based on an external source.
-A member of the Go team has reviewed the report, and where appropriate, added additional data.
+- `UNREVIEWED`: O relatório foi gerado automaticamente com base em outra fonte, como
+um CVE ou GHSA. Seus dados podem ser limitados e não foram verificados pela equipe Go.
+- `REVIEWED`: O relatório se originou da equipe Go, ou foi gerado com base em uma fonte externa.
+Um membro da equipe Go revisou o relatório, e onde apropriado, adicionou dados adicionais.
 
-For information on other fields in the schema, refer to the [OSV spec](https://ossf.github.io/osv-schema).
+Para informações sobre outros campos no schema, consulte a [especificação OSV](https://ossf.github.io/osv-schema).
 
-## Note on Versions
+## Nota sobre Versões
 
-Our tooling attempts to automatically map modules and versions in
-source advisories to canonical Go modules and versions, in accordance with
-standard [Go module version numbers](/doc/modules/version-numbers). Tools like
-`govulncheck` are designed to rely on these standard versions to determine
-whether a Go project is affected by a vulnerability in a dependency or not.
+Nossas ferramentas tentam mapear automaticamente módulos e versões em
+avisos de fonte para módulos e versões Go canônicos, de acordo com
+os [números de versão de módulo Go](/doc/modules/version-numbers) padrão. Ferramentas como
+`govulncheck` são projetadas para confiar nessas versões padrão para determinar
+se um projeto Go é afetado por uma vulnerabilidade em uma dependência ou não.
 
-In some cases, such as when a Go project uses its own versioning scheme,
-the mapping to standard Go versions can fail. When this happens, the Go
-vulnerability database report may conservatively list all Go versions as
-affected. This ensures that tools such as `govulncheck` do not fail to report
-vulnerabilities due to unrecognized version ranges (false negatives).
-However, conservatively listing all versions as affected may cause tools to
-incorrectly report a fixed version of a module as containing the vulnerability
-(false positives).
+Em alguns casos, como quando um projeto Go usa seu próprio esquema de versionamento,
+o mapeamento para versões padrão Go pode falhar. Quando isso acontece, o
+relatório do banco de dados de vulnerabilidades do Go pode conservadoramente listar todas as versões Go como
+afetadas. Isso garante que ferramentas como `govulncheck` não deixem de reportar
+vulnerabilidades devido a faixas de versão não reconhecidas (falsos negativos).
+No entanto, listar conservadoramente todas as versões como afetadas pode fazer com que as ferramentas
+incorretamente reportem uma versão corrigida de um módulo como contendo a vulnerabilidade
+(falsos positivos).
 
-If you believe `govulncheck` is incorrectly reporting (or failing to report) a
-vulnerability, please
-[suggest an edit](https://github.com/golang/vulndb/issues/new?assignees=&labels=Needs+Triage%2CSuggested+Edit&template=suggest_edit.yaml&title=x%2Fvulndb%3A+suggestion+regarding+GO-2024-2965&report=GO-XXXX-YYYY)
-to the vulnerability report and we will review it.
+Se você acredita que `govulncheck` está incorretamente reportando (ou deixando de reportar) uma
+vulnerabilidade, por favor
+[sugira uma edição](https://github.com/golang/vulndb/issues/new?assignees=&labels=Needs+Triage%2CSuggested+Edit&template=suggest_edit.yaml&title=x%2Fvulndb%3A+suggestion+regarding+GO-2024-2965&report=GO-XXXX-YYYY)
+ao relatório de vulnerabilidade e nós iremos revisá-lo.
 
-## Examples
+## Exemplos
 
-All vulnerabilities in the Go vulnerability database use the OSV schema
-described above.
+Todas as vulnerabilidades no banco de dados de vulnerabilidades do Go usam o schema OSV
+descrito acima.
 
-See the links below for examples of different Go vulnerabilities:
+Veja os links abaixo para exemplos de diferentes vulnerabilidades Go:
 
-- **Go standard library vulnerability** (GO-2022-0191):
+- **Vulnerabilidade na biblioteca padrão Go** (GO-2022-0191):
   [JSON](https://vuln.go.dev/ID/GO-2022-0191.json),
   [HTML](https://pkg.go.dev/vuln/GO-2022-0191)
-- **Go toolchain vulnerability** (GO-2022-0189):
+- **Vulnerabilidade na toolchain Go** (GO-2022-0189):
   [JSON](https://vuln.go.dev/ID/GO-2022-0189.json),
   [HTML](https://pkg.go.dev/vuln/GO-2022-0189)
-- **Vulnerability in Go module** (GO-2020-0015):
+- **Vulnerabilidade em módulo Go** (GO-2020-0015):
   [JSON](https://vuln.go.dev/ID/GO-2020-0015.json),
   [HTML](https://pkg.go.dev/vuln/GO-2020-0015)
 
-## Excluded Reports
+## Relatórios Excluídos
 
-The reports in the Go vulnerability database are collected from different
-sources and curated by the Go Security team. We may come across a vulnerability advisory
-(for example, a CVE or GHSA) and choose to exclude it for a variety of reasons.
-In these cases, a minimal report will be created in the x/vulndb repository,
-under
+Os relatórios no banco de dados de vulnerabilidades do Go são coletados de diferentes
+fontes e curados pela equipe de Segurança do Go. Podemos nos deparar com um aviso de vulnerabilidade
+(por exemplo, um CVE ou GHSA) e optar por excluí-lo por várias razões.
+Nesses casos, um relatório mínimo será criado no repositório x/vulndb,
+sob
 [x/vulndb/data/excluded](https://github.com/golang/vulndb/tree/master/data/excluded).
 
-Reports may be excluded for these reasons:
+Relatórios podem ser excluídos por estas razões:
 
-- `NOT_GO_CODE`: The vulnerability is not in a Go package,
-  but it was marked as a security advisory for the Go ecosystem by another source.
-  This vulnerability cannot affect any
-  Go packages. (For example, a vulnerability in  a C++ library.)
-- `NOT_IMPORTABLE`: The vulnerability occurs in package `main`, an `internal/`
-  package only imported by package `main`, or some  other location which can
-  never be imported by another module.
-- `EFFECTIVELY_PRIVATE`: While the vulnerability occurs in a Go package which
-  can be imported by another module, the package is not intended for external
-  use and is not likely to ever be imported outside the module in which it is
-  defined.
-- `DEPENDENT_VULNERABILITY`: This vulnerability is a subset of another
-  vulnerability in the database. For example, if package A contains a
-  vulnerability, package B depends on package A, and there are separate CVE IDs
-  for packages A and B, we might mark the report for B as a dependent
-  vulnerability entirely superseded by the report for A.
-- `NOT_A_VULNERABILITY`: While a CVE ID or GHSA has been assigned, there is no
-  known vulnerability associated with it.
-- `WITHDRAWN`: The vulnerability has been withdrawn by its source.
+- `NOT_GO_CODE`: A vulnerabilidade não está em um package Go,
+  mas foi marcada como um aviso de segurança para o ecossistema Go por outra fonte.
+  Esta vulnerabilidade não pode afetar nenhum
+  package Go. (Por exemplo, uma vulnerabilidade em uma biblioteca C++.)
+- `NOT_IMPORTABLE`: A vulnerabilidade ocorre no package `main`, um package `internal/`
+  importado apenas pelo package `main`, ou algum outro local que
+  nunca pode ser importado por outro módulo.
+- `EFFECTIVELY_PRIVATE`: Embora a vulnerabilidade ocorra em um package Go que
+  pode ser importado por outro módulo, o package não é destinado para uso
+  externo e provavelmente nunca será importado fora do módulo em que está
+  definido.
+- `DEPENDENT_VULNERABILITY`: Esta vulnerabilidade é um subconjunto de outra
+  vulnerabilidade no banco de dados. Por exemplo, se o package A contém uma
+  vulnerabilidade, o package B depende do package A, e há IDs CVE separados
+  para packages A e B, podemos marcar o relatório para B como uma vulnerabilidade
+  dependente totalmente subsumida pelo relatório para A.
+- `NOT_A_VULNERABILITY`: Embora um ID CVE ou GHSA tenha sido atribuído, não há
+  vulnerabilidade conhecida associada a ele.
+- `WITHDRAWN`: A vulnerabilidade foi retirada por sua fonte.
 
-At the moment, excluded reports are not served via
-[vuln.go.dev](https://vuln.go.dev) API. However, if you have
-a specific use case and it would be helpful to have access to this information
-through the API,
-[please let us know](/s/govulncheck-feedback).
+No momento, relatórios excluídos não são servidos via
+API [vuln.go.dev](https://vuln.go.dev). No entanto, se você tem
+um caso de uso específico e seria útil ter acesso a essas informações
+através da API,
+[por favor nos avise](/s/govulncheck-feedback).
