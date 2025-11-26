@@ -1,23 +1,24 @@
 <!--{
-  "Title": "Organizing a Go module"
+  "Title": "Organizing a Go module",
+  "ia-translated": true
 }-->
 
-A common question developers new to Go have is "How do I organize my Go
-project?", in terms of the layout of files and folders. The goal of this
-document is to provide some guidelines that will help answer this question. To
-make the most of this document, make sure you're familiar with the basics of Go
-modules by reading [the tutorial](/doc/tutorial/create-module) and
+Uma pergunta comum de desenvolvedores novos em Go é "Como organizo meu
+projeto Go?", em termos de layout de arquivos e pastas. O objetivo deste
+documento é fornecer algumas diretrizes que ajudarão a responder esta pergunta. Para
+aproveitar ao máximo este documento, certifique-se de estar familiarizado com os conceitos básicos de
+módulos Go lendo [o tutorial](/doc/tutorial/create-module) e
 [managing module source](/doc/modules/managing-source).
 
-Go projects can include packages, command-line programs or a combination of the
-two. This guide is organized by project type.
+Projetos Go podem incluir packages, programas de linha de comando ou uma combinação dos
+dois. Este guia é organizado por tipo de projeto.
 
-### Basic package
+### Package básico
 
-A basic Go package has all its code in the project's root directory. The project
-consists of a single module, which consists of a single package. The package
-name matches the last path component of the module name. For a very simple
-package requiring a single Go file, the project structure is:
+Um package Go básico tem todo seu código no diretório raiz do projeto. O projeto
+consiste de um único módulo, que consiste de um único package. O nome do package
+corresponde ao último componente do caminho do nome do módulo. Para um package muito simples
+que requer um único arquivo Go, a estrutura do projeto é:
 
 ```
 project-root-directory/
@@ -26,13 +27,13 @@ project-root-directory/
   modname_test.go
 ```
 
-_[throughout this document, file/package names are entirely arbitrary]_
+_[em todo este documento, nomes de arquivo/package são totalmente arbitrários]_
 
-Assuming this directory is uploaded to a GitHub repository at
-`github.com/someuser/modname`, the `module` line in the `go.mod` file should say
+Assumindo que este diretório seja enviado para um repositório GitHub em
+`github.com/someuser/modname`, a linha `module` no arquivo `go.mod` deve dizer
 `module github.com/someuser/modname`.
 
-The code in `modname.go` declares the package with:
+O código em `modname.go` declara o package com:
 
 ```
 package modname
@@ -40,14 +41,14 @@ package modname
 // ... package code here
 ```
 
-Users can then rely on this package by `import`-ing it in their Go code with:
+Usuários podem então depender deste package `import`-ando-o em seu código Go com:
 
 ```
 import "github.com/someuser/modname"
 ```
 
-A Go package can be split into multiple files, all residing within the same
-directory, e.g.:
+Um package Go pode ser dividido em múltiplos arquivos, todos residindo no mesmo
+diretório, ex.:
 
 ```
 project-root-directory/
@@ -60,14 +61,14 @@ project-root-directory/
   hash_test.go
 ```
 
-All the files in the directory declare `package modname`.
+Todos os arquivos no diretório declaram `package modname`.
 
-### Basic command
+### Comando básico
 
-A basic executable program (or command-line tool) is structured according to its
-complexity and code size. The simplest program can consist of a single Go file
-where `func main` is defined. Larger programs can have their code split across
-multiple files, all declaring `package main`:
+Um programa executável básico (ou ferramenta de linha de comando) é estruturado de acordo com sua
+complexidade e tamanho de código. O programa mais simples pode consistir de um único arquivo Go
+onde `func main` é definido. Programas maiores podem ter seu código dividido em
+múltiplos arquivos, todos declarando `package main`:
 
 ```
 project-root-directory/
@@ -78,35 +79,35 @@ project-root-directory/
   main.go
 ```
 
-Here the `main.go` file contains `func main`, but this is just a convention. The
-"main" file can also be called `modname.go` (for an appropriate value of
-`modname`) or anything else.
+Aqui o arquivo `main.go` contém `func main`, mas isso é apenas uma convenção. O
+arquivo "main" também pode ser chamado `modname.go` (para um valor apropriado de
+`modname`) ou qualquer outra coisa.
 
-Assuming this directory is uploaded to a GitHub repository at
-`github.com/someuser/modname`, the `module` line in the `go.mod` file should
-say:
+Assumindo que este diretório seja enviado para um repositório GitHub em
+`github.com/someuser/modname`, a linha `module` no arquivo `go.mod` deve
+dizer:
 
 ```
 module github.com/someuser/modname
 ```
 
-And a user should be able to install it on their machine with:
+E um usuário deve ser capaz de instalá-lo em sua máquina com:
 
 ```
 $ go install github.com/someuser/modname@latest
 ```
 
-### Package or command with supporting packages
+### Package ou comando com packages de suporte
 
-Larger packages or commands may benefit from splitting off some functionality
-into supporting packages. Initially, it's recommended placing such packages into
-a directory named `internal`;
-[this prevents](https://pkg.go.dev/cmd/go#hdr-Internal_Directories) other
-modules from depending on packages we don't necessarily want to expose and
-support for external uses. Since other projects cannot import code from our
-`internal` directory, we're free to refactor its API and generally move things
-around without breaking external users. The project structure for a package is
-thus:
+Packages ou comandos maiores podem se beneficiar de separar alguma funcionalidade
+em packages de suporte. Inicialmente, é recomendado colocar tais packages em
+um diretório chamado `internal`;
+[isso previne](https://pkg.go.dev/cmd/go#hdr-Internal_Directories) que outros
+módulos dependam de packages que não necessariamente queremos expor e
+suportar para usos externos. Como outros projetos não podem importar código do nosso
+diretório `internal`, somos livres para refatorar sua API e geralmente mover coisas
+sem quebrar usuários externos. A estrutura do projeto para um package é
+assim:
 
 ```
 project-root-directory/
@@ -122,22 +123,22 @@ project-root-directory/
   modname_test.go
 ```
 
-The `modname.go` file declares `package modname`, `auth.go` declares `package
-auth` and so on. `modname.go` can import the `auth` package as follows:
+O arquivo `modname.go` declara `package modname`, `auth.go` declara `package
+auth` e assim por diante. `modname.go` pode importar o package `auth` da seguinte forma:
 
 ```
 import "github.com/someuser/modname/internal/auth"
 ```
 
-The layout for a command with supporting packages in an `internal` directory is
-very similar, except that the file(s) in the root directory declare `package
+O layout para um comando com packages de suporte em um diretório `internal` é
+muito similar, exceto que o(s) arquivo(s) no diretório raiz declaram `package
 main`.
 
-### Multiple packages
+### Múltiplos packages
 
-A module can consist of multiple importable packages; each package has its own
-directory, and can be structured hierarchically. Here's a sample project
-structure:
+Um módulo pode consistir de múltiplos packages importáveis; cada package tem seu próprio
+diretório, e pode ser estruturado hierarquicamente. Aqui está uma estrutura de projeto
+exemplo:
 
 ```
 project-root-directory/
@@ -157,20 +158,20 @@ project-root-directory/
       trace.go
 ```
 
-As a reminder, we assume that the `module` line in `go.mod` says:
+Como lembrete, assumimos que a linha `module` em `go.mod` diz:
 
 ```
 module github.com/someuser/modname
 ```
 
-The `modname` package resides in the root directory, declares `package modname`
-and can be imported by users with:
+O package `modname` reside no diretório raiz, declara `package modname`
+e pode ser importado por usuários com:
 
 ```
 import "github.com/someuser/modname"
 ```
 
-Sub-packages can be imported by users as follows:
+Sub-packages podem ser importados por usuários da seguinte forma:
 
 ```
 import "github.com/someuser/modname/auth"
@@ -178,12 +179,12 @@ import "github.com/someuser/modname/auth/token"
 import "github.com/someuser/modname/hash"
 ```
 
-Package `trace` that resides in `internal/trace` cannot be imported outside this
-module. It's recommended to keep packages in `internal` as much as possible.
+O package `trace` que reside em `internal/trace` não pode ser importado fora deste
+módulo. É recomendado manter packages em `internal` tanto quanto possível.
 
-### Multiple commands
+### Múltiplos comandos
 
-Multiple programs in the same repository will typically have separate directories:
+Múltiplos programas no mesmo repositório tipicamente terão diretórios separados:
 
 ```
 project-root-directory/
@@ -196,27 +197,27 @@ project-root-directory/
     main.go
 ```
 
-In each directory, the program's Go files declare `package main`. A top-level
-`internal` directory can contain shared packages used by all commands in the
-repository.
+Em cada diretório, os arquivos Go do programa declaram `package main`. Um diretório
+`internal` de nível superior pode conter packages compartilhados usados por todos os comandos no
+repositório.
 
-Users can install these programs as follows:
+Usuários podem instalar esses programas da seguinte forma:
 
 ```
 $ go install github.com/someuser/modname/prog1@latest
 $ go install github.com/someuser/modname/prog2@latest
 ```
 
-A common convention is placing all commands in a repository into a `cmd`
-directory; while this isn't strictly necessary in a repository that consists
-only of commands, it's very useful in a mixed repository that has both commands
-and importable packages, as we will discuss next.
+Uma convenção comum é colocar todos os comandos em um repositório em um diretório `cmd`;
+embora isso não seja estritamente necessário em um repositório que consiste
+apenas de comandos, é muito útil em um repositório misto que tem tanto comandos
+quanto packages importáveis, como discutiremos a seguir.
 
-### Packages and commands in the same repository
+### Packages e comandos no mesmo repositório
 
-Sometimes a repository will provide both importable packages and installable
-commands with related functionality. Here's a sample project structure for such
-a repository:
+Às vezes um repositório fornecerá tanto packages importáveis quanto
+comandos instaláveis com funcionalidade relacionada. Aqui está uma estrutura de projeto exemplo para tal
+repositório:
 
 ```
 project-root-directory/
@@ -235,35 +236,35 @@ project-root-directory/
       main.go
 ```
 
-Assuming this module is called `github.com/someuser/modname`, users can now both
-import packages from it:
+Assumindo que este módulo se chama `github.com/someuser/modname`, usuários podem agora tanto
+importar packages dele:
 
 ```
 import "github.com/someuser/modname"
 import "github.com/someuser/modname/auth"
 ```
 
-And install programs from it:
+Quanto instalar programas dele:
 
 ```
 $ go install github.com/someuser/modname/cmd/prog1@latest
 $ go install github.com/someuser/modname/cmd/prog2@latest
 ```
 
-### Server project
+### Projeto de servidor
 
-Go is a common language choice for implementing *servers*. There is a very large
-variance in the structure of such projects, given the many aspects of server
-development: protocols (REST? gRPC?), deployments, front-end files,
-containerization, scripts and so on. We will focus our guidance here on the
-parts of the project written in Go.
+Go é uma escolha de linguagem comum para implementar *servidores*. Há uma variância muito grande
+na estrutura de tais projetos, dadas as muitas facetas do desenvolvimento
+de servidor: protocolos (REST? gRPC?), deployments, arquivos de front-end,
+containerização, scripts e assim por diante. Vamos focar nossa orientação aqui nas
+partes do projeto escritas em Go.
 
-Server projects typically won't have packages for export, since a server is
-usually a self-contained binary (or a group of binaries). Therefore, it's
-recommended to keep the Go packages implementing the server's logic in the
-`internal` directory. Moreover, since the project is likely to have many other
-directories with non-Go files, it's a good idea to keep all Go commands together
-in a `cmd` directory:
+Projetos de servidor tipicamente não terão packages para exportação, já que um servidor é
+geralmente um binário autocontido (ou um grupo de binários). Portanto, é
+recomendado manter os packages Go implementando a lógica do servidor no
+diretório `internal`. Além disso, como o projeto provavelmente terá muitos outros
+diretórios com arquivos não-Go, é uma boa ideia manter todos os comandos Go juntos
+em um diretório `cmd`:
 
 ```
 project-root-directory/
@@ -284,5 +285,5 @@ project-root-directory/
   ... the project's other directories with non-Go code
 ```
 
-In case the server repository grows packages that become useful for sharing with
-other projects, it's best to split these off to separate modules.
+Caso o repositório do servidor cresça packages que se tornam úteis para compartilhar com
+outros projetos, é melhor separá-los em módulos separados.

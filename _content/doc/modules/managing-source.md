@@ -1,63 +1,63 @@
 <!--{
-  "Title": "Managing module source"
+  "Title": "Managing module source",
+  "ia-translated": true
 }-->
 
-When you're developing modules to publish for others to use, you can help ensure
-that your modules are easier for other developers to use by following the
-repository conventions described in this topic.
+Quando você está desenvolvendo módulos para publicar para outros usarem, você pode ajudar a garantir
+que seus módulos sejam mais fáceis para outros desenvolvedores usarem seguindo as
+convenções de repositório descritas neste tópico.
 
-This topic describes actions you might take when managing your module
-repository. For information about the sequence of workflow steps you'd take when
-revising from version to version, see [Module release and versioning
+Este tópico descreve ações que você pode tomar ao gerenciar seu
+repositório de módulo. Para informações sobre a sequência de passos de workflow que você seguiria ao
+revisar de versão para versão, consulte [Module release and versioning
 workflow](release-workflow).
 
-Some of the conventions described here are required in modules, while others are
-best practices. This content assumes you're familiar with the basic module use
-practices described in [Managing dependencies](/doc/modules/managing-dependencies).
+Algumas das convenções descritas aqui são exigidas em módulos, enquanto outras são
+melhores práticas. Este conteúdo assume que você está familiarizado com as práticas básicas de uso
+de módulo descritas em [Managing dependencies](/doc/modules/managing-dependencies).
 
-Go supports the following repositories for publishing modules: Git, Subversion,
-Mercurial, Bazaar, and Fossil.
+Go suporta os seguintes repositórios para publicar módulos: Git, Subversion,
+Mercurial, Bazaar, e Fossil.
 
-For an overview of module development, see [Developing and publishing
+Para uma visão geral do desenvolvimento de módulos, consulte [Developing and publishing
 modules](developing).
 
-## How Go tools find your published module {#tools}
+## Como as ferramentas Go encontram seu módulo publicado {#tools}
 
-In Go's decentralized system for publishing modules and retrieving their code,
-you can publish your module while leaving the code in your repository. Go tools
-rely on naming rules that have repository paths and repository tags indicating a
-module's name and version number. When your repository follows these
-requirements, your module code is downloadable from your repository by Go tools
-such as the [`go get`
-command](/ref/mod#go-get).
+No sistema descentralizado do Go para publicar módulos e recuperar seu código,
+você pode publicar seu módulo deixando o código em seu repositório. As ferramentas Go
+dependem de regras de nomenclatura que têm caminhos de repositório e tags de repositório indicando o
+nome e número de versão de um módulo. Quando seu repositório segue esses
+requisitos, seu código de módulo é baixável do seu repositório pelas ferramentas Go
+como o comando [`go get`](/ref/mod#go-get).
 
-When a developer uses the `go get` command to get source code for packages their
-code imports, the command does the following:
+Quando um desenvolvedor usa o comando `go get` para obter código fonte para packages que seu
+código importa, o comando faz o seguinte:
 
-1. From `import` statements in Go source code, `go get` identifies the module
-  path within the package path.
-1. Using a URL derived from the module path, the command locates the module
-  source on a module proxy server or at its repository directly.
-1. Locates source for the module version to download by matching the module's
-  version number to a repository tag to discover the code in the repository.
-  When a version number to use is not yet known, `go get` locates the latest
-  release version.
-1. Retrieves module source and downloads it to the developer's local module cache.
+1. De declarações `import` no código fonte Go, `go get` identifica o caminho do módulo
+  dentro do caminho do package.
+1. Usando uma URL derivada do caminho do módulo, o comando localiza a fonte do módulo
+  em um servidor proxy de módulo ou em seu repositório diretamente.
+1. Localiza fonte para a versão do módulo a baixar combinando o
+  número de versão do módulo com uma tag de repositório para descobrir o código no repositório.
+  Quando um número de versão a usar ainda não é conhecido, `go get` localiza a
+  versão de release mais recente.
+1. Recupera a fonte do módulo e baixa para o cache de módulo local do desenvolvedor.
 
-## Organizing code in the repository {#repository}
+## Organizando código no repositório {#repository}
 
-You can keep maintenance simple and improve developers' experience with your
-module by following the conventions described here. Getting your module code
-into a repository is generally as simple as with other code.
+Você pode manter a manutenção simples e melhorar a experiência dos desenvolvedores com seu
+módulo seguindo as convenções descritas aqui. Colocar seu código de módulo
+em um repositório é geralmente tão simples quanto com outro código.
 
-The following diagram illustrates a source hierarchy for a simple module with
-two packages.
+O diagrama a seguir ilustra uma hierarquia de fonte para um módulo simples com
+dois packages.
 
 <img src="images/source-hierarchy.png"
-     alt="Diagram illustrating a module source code hierarchy"
+     alt="Diagrama ilustrando uma hierarquia de código fonte de módulo"
      style="width: 250px;" />
 
-Your initial commit should include files listed in the following table:
+Seu commit inicial deve incluir arquivos listados na tabela a seguir:
 
 <table id="module-files" class="DocTable">
   <thead>
@@ -69,44 +69,44 @@ Your initial commit should include files listed in the following table:
   <tbody>
     <tr class="DocTable-row">
       <td class="DocTable-cell">LICENSE</td>
-      <td class="DocTable-cell">The module's license.</td>
+      <td class="DocTable-cell">A licença do módulo.</td>
     </tr>
     <tr class="DocTable-row">
       <td class="DocTable-cell">go.mod</td>
-      <td class="DocTable-cell"><p>Describes the module, including its module
-        path (in effect, its name) and its dependencies. For more, see the
-        <a href="gomod-ref">go.mod reference</a>.</p>
-      <p>The module path will be given in a module directive, such as:</p>
+      <td class="DocTable-cell"><p>Descreve o módulo, incluindo seu caminho de módulo
+        (efetivamente, seu nome) e suas dependências. Para mais, consulte a
+        <a href="gomod-ref">referência go.mod</a>.</p>
+      <p>O caminho do módulo será dado em uma diretiva module, como:</p>
       <pre>module example.com/mymodule</pre>
-      <p>For more about choosing a module path, see
+      <p>Para mais sobre escolher um caminho de módulo, consulte
           <a href="/doc/modules/managing-dependencies#naming_module">Managing
           dependencies</a>.</p>
-      <p>Though you can edit the go.mod file, you'll find it more reliable to
-          make changes through <code>go</code> commands.</p>
+      <p>Embora você possa editar o arquivo go.mod, você achará mais confiável
+          fazer mudanças através de comandos <code>go</code>.</p>
       </td>
     </tr>
     <tr class="DocTable-row">
       <td class="DocTable-cell">go.sum</td>
-      <td class="DocTable-cell"><p>Contains cryptographic hashes that represent
-        the module's dependencies. Go tools use these hashes to authenticate
-        downloaded modules, attempting to confirm that the downloaded module is
-        authentic. Where this confirmation fails, Go will display a security error.<p>
-      <p>The file will be empty or not present when there are no dependencies.
-        You shouldn't edit this file except by using the <code>go mod tidy</code>
-        command, which removes unneeded entries.</p>
+      <td class="DocTable-cell"><p>Contém hashes criptográficos que representam
+        as dependências do módulo. As ferramentas Go usam esses hashes para autenticar
+        módulos baixados, tentando confirmar que o módulo baixado é
+        autêntico. Onde esta confirmação falha, Go exibirá um erro de segurança.<p>
+      <p>O arquivo estará vazio ou não presente quando não houver dependências.
+        Você não deve editar este arquivo exceto usando o comando <code>go mod tidy</code>,
+        que remove entradas desnecessárias.</p>
       </td>
     </tr>
     <tr class="DocTable-row">
-      <td class="DocTable-cell">Package directories and .go sources.</td>
-      <td class="DocTable-cell">Directories and .go files that comprise the Go
-      packages and sources in the module.</td>
+      <td class="DocTable-cell">Diretórios de package e fontes .go.</td>
+      <td class="DocTable-cell">Diretórios e arquivos .go que compõem os packages
+      e fontes Go no módulo.</td>
     </tr>
   </tbody>
 </table>
 
-From the command-line, you can create an empty repository, add the files that
-will be part of your initial commit, and commit with a message. Here's an
-example using git:
+Da linha de comando, você pode criar um repositório vazio, adicionar os arquivos que
+serão parte do seu commit inicial, e fazer commit com uma mensagem. Aqui está um
+exemplo usando git:
 
 
 ```
@@ -116,53 +116,52 @@ $ git commit -m "mycode: initial commit"
 $ git push
 ```
 
-## Choosing repository scope {#repository-scope}
+## Escolhendo escopo de repositório {#repository-scope}
 
-You publish code in a module when the code should be versioned independently
-from code in other modules.
+Você publica código em um módulo quando o código deve ser versionado independentemente
+do código em outros módulos.
 
-Designing your repository so that it hosts a single module at its root directory
-will help keep maintenance simpler, particularly over time as you publish new
-minor and patch versions, branch into new major versions, and so on. However, if
-your needs require it, you can instead maintain a collection of modules in a
-single repository.
+Projetar seu repositório para que hospede um único módulo em seu diretório raiz
+ajudará a manter a manutenção mais simples, particularmente ao longo do tempo conforme você publica novas
+versões minor e patch, ramifica em novas versões major, e assim por diante. No entanto, se
+suas necessidades exigirem, você pode em vez disso manter uma coleção de módulos em um
+único repositório.
 
-### Sourcing one module per repository {#one-module-source}
+### Fornecendo um módulo por repositório {#one-module-source}
 
-You can maintain a repository that has a single module's source in it. In this
-model, you place your go.mod file at the repository root, with package
-subdirectories containing Go source beneath.
+Você pode manter um repositório que tem a fonte de um único módulo nele. Neste
+modelo, você coloca seu arquivo go.mod na raiz do repositório, com package
+subdiretórios contendo fonte Go abaixo.
 
-This is the simplest approach, making your module likely easier to manage over
-time. It helps you avoid the need to prefix a module version number with a
-directory path.
+Esta é a abordagem mais simples, tornando seu módulo provavelmente mais fácil de gerenciar ao longo
+do tempo. Ajuda você a evitar a necessidade de prefixar um número de versão de módulo com um
+caminho de diretório.
 
 <img src="images/single-module.png"
-     alt="Diagram illustrating a single module's source in its repository"
+     alt="Diagrama ilustrando a fonte de um único módulo em seu repositório"
      style="width: 425px;" />
 
-### Sourcing multiple modules in a single repository {#multiple-module-source}
+### Fornecendo múltiplos módulos em um único repositório {#multiple-module-source}
 
-You can publish multiple modules from a single repository. For example, you
-might have code in a single repository that constitutes multiple modules, but
-want to version those modules separately.
+Você pode publicar múltiplos módulos de um único repositório. Por exemplo, você
+pode ter código em um único repositório que constitui múltiplos módulos, mas
+quer versionar esses módulos separadamente.
 
-Each subdirectory that is a module root directory must have its own go.mod file.
+Cada subdiretório que é um diretório raiz de módulo deve ter seu próprio arquivo go.mod.
 
-Sourcing module code in subdirectories changes the form of the version tag you
-must use when publishing a module. You must prefix the version number part of
-the tag with the name of the subdirectory that is the module root. For more
-about version numbers, see [Module version numbering](/doc/modules/version-numbers).
+Fornecer código de módulo em subdiretórios altera a forma da tag de versão que você
+deve usar ao publicar um módulo. Você deve prefixar a parte do número de versão da
+tag com o nome do subdiretório que é a raiz do módulo. Para mais
+sobre números de versão, consulte [Module version numbering](/doc/modules/version-numbers).
 
-For example, for module `example.com/mymodules/module1` below, you would have
-the following for version v1.2.3:
+Por exemplo, para o módulo `example.com/mymodules/module1` abaixo, você teria
+o seguinte para a versão v1.2.3:
 
-*   Module path: `example.com/mymodules/module1`
-*   Version tag: `module1/v1.2.3`
-*   Package path imported by a user: `example.com/mymodules/module1/package1`
-*   Module path and version as specified in a user's require directive: `example.com/mymodules/module1 v1.2.3`
+*   Caminho do módulo: `example.com/mymodules/module1`
+*   Tag de versão: `module1/v1.2.3`
+*   Caminho do package importado por um usuário: `example.com/mymodules/module1/package1`
+*   Caminho do módulo e versão conforme especificado na diretiva require de um usuário: `example.com/mymodules/module1 v1.2.3`
 
 <img src="images/multiple-modules.png"
-     alt="Diagram illustrating two modules in a single repository"
+     alt="Diagrama ilustrando dois módulos em um único repositório"
      style="width: 480px;" />
-
