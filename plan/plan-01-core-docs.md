@@ -85,16 +85,16 @@ Após traduzir cada arquivo, marque o checkpoint com `[x]`.
 
 ## Seção 4: Módulos (doc/modules/)
 
-- [ ] `_content/doc/modules/managing-dependencies.md` - Gerenciar dependências
-- [ ] `_content/doc/modules/developing.md` - Desenvolver módulos
-- [ ] `_content/doc/modules/publishing.md` - Publicar módulos
-- [ ] `_content/doc/modules/version-numbers.md` - Números de versão
-- [ ] `_content/doc/modules/major-version.md` - Versões major
-- [ ] `_content/doc/modules/release-workflow.md` - Workflow de release
-- [ ] `_content/doc/modules/managing-source.md` - Gerenciar código fonte
-- [ ] `_content/doc/modules/layout.md` - Layout de módulos
-- [ ] `_content/doc/modules/pruning.md` - Pruning
-- [ ] `_content/doc/modules/gomod-ref.md` - Referência go.mod
+- [x] `_content/doc/modules/managing-dependencies.md` - Gerenciar dependências
+- [x] `_content/doc/modules/developing.md` - Desenvolver módulos
+- [x] `_content/doc/modules/publishing.md` - Publicar módulos
+- [x] `_content/doc/modules/version-numbers.md` - Números de versão
+- [x] `_content/doc/modules/major-version.md` - Versões major
+- [x] `_content/doc/modules/release-workflow.md` - Workflow de release
+- [x] `_content/doc/modules/managing-source.md` - Gerenciar código fonte
+- [x] `_content/doc/modules/layout.md` - Layout de módulos
+- [x] `_content/doc/modules/pruning.md` - Pruning
+- [x] `_content/doc/modules/gomod-ref.md` - Referência go.mod
 
 ---
 
