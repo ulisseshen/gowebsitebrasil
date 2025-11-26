@@ -62,7 +62,7 @@ Após traduzir cada arquivo, marque o checkpoint com `[x]`.
 - [x] `_content/doc/tutorial/database-access.md` - Acesso a banco de dados
 - [x] `_content/doc/tutorial/web-service-gin.md` - Web service com Gin
 - [x] `_content/doc/tutorial/generics.md` - Generics
-- [ ] `_content/doc/tutorial/fuzz.md` - Fuzzing
+- [x] `_content/doc/tutorial/fuzz.md` - Fuzzing
 - [x] `_content/doc/tutorial/workspaces.md` - Workspaces
 - [x] `_content/doc/tutorial/govulncheck.md` - Govulncheck
 - [x] `_content/doc/tutorial/govulncheck-ide.md` - Govulncheck no IDE
@@ -71,15 +71,15 @@ Após traduzir cada arquivo, marque o checkpoint com `[x]`.
 
 ## Seção 3: Banco de Dados (doc/database/)
 
-- [ ] `_content/doc/database/index.md` - Índice de banco de dados
-- [ ] `_content/doc/database/open-handle.md` - Abrir conexão
-- [ ] `_content/doc/database/querying.md` - Consultas
-- [ ] `_content/doc/database/change-data.md` - Modificar dados
-- [ ] `_content/doc/database/prepared-statements.md` - Prepared statements
-- [ ] `_content/doc/database/execute-transactions.md` - Transações
-- [ ] `_content/doc/database/cancel-operations.md` - Cancelar operações
-- [ ] `_content/doc/database/manage-connections.md` - Gerenciar conexões
-- [ ] `_content/doc/database/sql-injection.md` - SQL Injection
+- [x] `_content/doc/database/index.md` - Índice de banco de dados
+- [x] `_content/doc/database/open-handle.md` - Abrir conexão
+- [x] `_content/doc/database/querying.md` - Consultas
+- [x] `_content/doc/database/change-data.md` - Modificar dados
+- [x] `_content/doc/database/prepared-statements.md` - Prepared statements
+- [x] `_content/doc/database/execute-transactions.md` - Transações
+- [x] `_content/doc/database/cancel-operations.md` - Cancelar operações
+- [x] `_content/doc/database/manage-connections.md` - Gerenciar conexões
+- [x] `_content/doc/database/sql-injection.md` - SQL Injection
 
 ---
 

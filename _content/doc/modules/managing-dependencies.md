@@ -1,358 +1,352 @@
 <!--{
-  "Title": "Managing dependencies"
+  "Title": "Managing dependencies",
+  "ia-translated": true
 }-->
 
-When your code uses external packages, those packages (distributed as modules)
-become dependencies. Over time, you may need to upgrade them or replace them. Go
-provides dependency management tools that help you keep your Go applications
-secure as you incorporate external dependencies.
+Quando seu código usa packages externos, esses packages (distribuídos como módulos)
+se tornam dependências. Com o tempo, você pode precisar atualizá-los ou substituí-los. Go
+fornece ferramentas de gerenciamento de dependências que ajudam você a manter suas aplicações Go
+seguras conforme você incorpora dependências externas.
 
-This topic describes how to perform tasks to manage dependencies you take on in
-your code. You can perform most of these with Go tools. This topic also
-describes how to perform a few other dependency-related tasks you might find
-useful.
+Este tópico descreve como executar tarefas para gerenciar dependências que você assume no
+seu código. Você pode executar a maioria delas com ferramentas Go. Este tópico também
+descreve como executar algumas outras tarefas relacionadas a dependências que você pode achar
+úteis.
 
-**See also**
+**Veja também**
 
-*   If you're new to working with dependencies as modules, take a look at the
-    [Getting started tutorial](/doc/tutorial/getting-started)
-    for a brief introduction.
-*   Using the `go` command to manage dependencies helps ensure that your
-    requirements remain consistent and the content of your go.mod file is valid.
-    For reference on the commands, see [Command go](/cmd/go/).
-    You can also get help from the command line by typing `go help`
-    _command-name_, as with `go help mod tidy`.
-*   Go commands you use to make dependency changes edit your go.mod file. For
-    more about the contents of the file, see [go.mod file reference](/doc/modules/gomod-ref).
-*   Making your editor or IDE aware of Go modules can make the work of managing
-    them easier. For more on editors that support Go, see [Editor plugins and
+*   Se você é novo em trabalhar com dependências como módulos, dê uma olhada no
+    [Tutorial Getting started](/doc/tutorial/getting-started)
+    para uma breve introdução.
+*   Usar o comando `go` para gerenciar dependências ajuda a garantir que seus
+    requisitos permaneçam consistentes e o conteúdo do seu arquivo go.mod seja válido.
+    Para referência sobre os comandos, consulte [Command go](/cmd/go/).
+    Você também pode obter ajuda da linha de comando digitando `go help`
+    _command-name_, como em `go help mod tidy`.
+*   Comandos Go que você usa para fazer mudanças de dependência editam seu arquivo go.mod. Para
+    mais sobre o conteúdo do arquivo, consulte [go.mod file reference](/doc/modules/gomod-ref).
+*   Tornar seu editor ou IDE ciente dos módulos Go pode facilitar o trabalho de gerenciá-los.
+    Para mais sobre editores que suportam Go, consulte [Editor plugins and
     IDEs](/doc/editors.html).
-*   This topic doesn't describe how to develop, publish, and version modules for
-    others to use. For more on that, see [Developing and publishing
+*   Este tópico não descreve como desenvolver, publicar e versionar módulos para
+    outros usarem. Para mais sobre isso, consulte [Developing and publishing
     modules](developing).
 
-## Workflow for using and managing dependencies {#workflow}
+## Workflow para usar e gerenciar dependências {#workflow}
 
-You can get and use useful packages with Go tools. On
-[pkg.go.dev](https://pkg.go.dev), you can search for packages you might find
-useful, then use the `go` command to import those packages into your own code to
-call their functions.
+Você pode obter e usar packages úteis com ferramentas Go. Em
+[pkg.go.dev](https://pkg.go.dev), você pode pesquisar packages que você pode achar
+úteis, depois usar o comando `go` para importar esses packages no seu próprio código para
+chamar suas funções.
 
-The following lists the most common dependency management steps. For more about
-each, see the sections in this topic.
+A lista a seguir apresenta os passos mais comuns de gerenciamento de dependências. Para mais sobre
+cada um, consulte as seções neste tópico.
 
-1. [Locate useful packages](#locating_packages) on [pkg.go.dev](https://pkg.go.dev).
-1. [Import the packages](#locating_packages) you want in your code.
-1. Add your code to a module for dependency tracking (if it isn't in a module
-    already). See [Enabling dependency tracking](#enable_tracking)
-1. [Add external packages as dependencies](#adding_dependency) so you can manage
-    them.
-1. [Upgrade or downgrade dependency versions](#upgrading) as needed over time.
+1. [Localizar packages úteis](#locating_packages) em [pkg.go.dev](https://pkg.go.dev).
+1. [Importar os packages](#locating_packages) que você quer no seu código.
+1. Adicionar seu código a um módulo para rastreamento de dependências (se ainda não estiver em um módulo).
+    Consulte [Enabling dependency tracking](#enable_tracking)
+1. [Adicionar packages externos como dependências](#adding_dependency) para que você possa gerenciá-los.
+1. [Atualizar ou fazer downgrade de versões de dependência](#upgrading) conforme necessário ao longo do tempo.
 
-## Managing dependencies as modules {#modules}
+## Gerenciando dependências como módulos {#modules}
 
-In Go, you manage dependencies as modules that contain the packages you import.
-This process is supported by:
+Em Go, você gerencia dependências como módulos que contêm os packages que você importa.
+Este processo é suportado por:
 
-*   A **decentralized system for publishing** modules and retrieving their code.
-    Developers make their modules available for other developers to use from
-    their own repository and publish with a version number.
-*   A **package search engine** and documentation browser (pkg.go.dev) at which
-    you can find modules. See [Locating and importing useful packages](#locating_packages).
-*   A module **version numbering convention** to help you understand a module's
-    stability and backward compatibility guarantees. See [Module version
+*   Um **sistema descentralizado para publicar** módulos e recuperar seu código.
+    Desenvolvedores disponibilizam seus módulos para outros desenvolvedores usarem de
+    seu próprio repositório e publicam com um número de versão.
+*   Um **motor de busca de packages** e navegador de documentação (pkg.go.dev) no qual
+    você pode encontrar módulos. Consulte [Locating and importing useful packages](#locating_packages).
+*   Uma **convenção de numeração de versão de módulo** para ajudá-lo a entender a
+    estabilidade de um módulo e garantias de compatibilidade retroativa. Consulte [Module version
     numbering](version-numbers).
-*   **Go tools** that make it easier for you to manage dependencies, including
-    getting a module's source, upgrading, and so on. See sections of this topic
-    for more.
+*   **Ferramentas Go** que facilitam para você gerenciar dependências, incluindo
+    obter o código-fonte de um módulo, atualizar, e assim por diante. Consulte seções deste tópico
+    para mais.
 
-## Locating and importing useful packages {#locating_packages}
+## Localizando e importando packages úteis {#locating_packages}
 
-You can search [pkg.go.dev](https://pkg.go.dev) to find packages with functions
-you might find useful.
+Você pode pesquisar em [pkg.go.dev](https://pkg.go.dev) para encontrar packages com funções
+que você pode achar úteis.
 
-When you've found a package you want to use in your code, locate the package
-path at the top of the page and click the Copy path button to copy the path to
-your clipboard. In your own code, paste the path into an import statement, as in
-the following example:
+Quando você encontrou um package que você quer usar no seu código, localize o caminho do package
+no topo da página e clique no botão Copy path para copiar o caminho para
+sua área de transferência. No seu próprio código, cole o caminho em um statement import, como no
+exemplo a seguir:
 
 ```
 import "rsc.io/quote"
 ```
 
-After your code imports the package, enable dependency tracking and get the
-package's code to compile with. For more, see [Enabling dependency tracking in
-your code](#enable_tracking) and [Adding a dependency](#adding_dependency).
+Após seu código importar o package, habilite o rastreamento de dependências e obtenha o
+código do package para compilar. Para mais, consulte [Enabling dependency tracking in
+your code](#enable_tracking) e [Adding a dependency](#adding_dependency).
 
-## Enabling dependency tracking in your code {#enable_tracking}
+## Habilitando rastreamento de dependências no seu código {#enable_tracking}
 
-To track and manage the dependencies you add, you begin by putting your code in
-its own module. This creates a go.mod file at the root of your source tree.
-Dependencies you add will be listed in that file.
+Para rastrear e gerenciar as dependências que você adiciona, você começa colocando seu código no
+seu próprio módulo. Isso cria um arquivo go.mod na raiz da sua árvore de código-fonte.
+Dependências que você adicionar serão listadas nesse arquivo.
 
-To add your code to its own module, use the
-[`go mod init` command](/ref/mod#go-mod-init). For example, from the command
-line, change to your code's root directory, then run the command as in the
-following example:
+Para adicionar seu código ao seu próprio módulo, use o
+comando [`go mod init`](/ref/mod#go-mod-init). Por exemplo, da linha de
+comando, mude para o diretório raiz do seu código, depois execute o comando como no
+exemplo a seguir:
 
 ```
 $ go mod init example/mymodule
 ```
 
-The `go mod init` command's argument is your module's module path. If possible,
-the module path should be the repository location of your source code.
+O argumento do comando `go mod init` é o caminho do módulo do seu módulo. Se possível,
+o caminho do módulo deve ser o local do repositório do seu código-fonte.
 
-If at first you don't know the module's eventual repository location, use a
-safe substitute. This might be the name of a domain you own or another name you
-control (such as your company name), along with a path following from the
-module's name or source directory. For more, see
+Se no início você não souber o local eventual do repositório do módulo, use um
+substituto seguro. Isso pode ser o nome de um domínio que você possui ou outro nome que você
+controla (como o nome da sua empresa), junto com um caminho seguindo do
+nome do módulo ou diretório de código-fonte. Para mais, consulte
 [Naming a module](#naming_module).
 
-As you use Go tools to manage dependencies, the tools update the go.mod file so
-that it maintains a current list of your dependencies.
+Conforme você usa ferramentas Go para gerenciar dependências, as ferramentas atualizam o arquivo go.mod para
+que ele mantenha uma lista atual de suas dependências.
 
-When you add dependencies, Go tools also create a go.sum file that contains
-checksums of modules you depend on. Go uses this to verify the integrity of
-downloaded module files, especially for other developers working on your
-project.
+Quando você adiciona dependências, as ferramentas Go também criam um arquivo go.sum que contém
+checksums dos módulos dos quais você depende. Go usa isso para verificar a integridade dos
+arquivos de módulo baixados, especialmente para outros desenvolvedores trabalhando no seu
+projeto.
 
-Include the go.mod and go.sum files in your repository with your code.
+Inclua os arquivos go.mod e go.sum no seu repositório com seu código.
 
-See the [go.mod reference](/doc/modules/gomod-ref) for more.
+Consulte a [referência go.mod](/doc/modules/gomod-ref) para mais.
 
-## Naming a module {#naming_module}
+## Nomeando um módulo {#naming_module}
 
-When you run `go mod init` to create a module for tracking dependencies, you
-specify a module path that serves as the module's name. The module path
-becomes the import path prefix for packages in the module. Be sure to specify
-a module path that won't conflict with the module path of other modules.
+Quando você executa `go mod init` para criar um módulo para rastreamento de dependências, você
+especifica um caminho de módulo que serve como o nome do módulo. O caminho do módulo
+se torna o prefixo de caminho de import para packages no módulo. Certifique-se de especificar
+um caminho de módulo que não entrará em conflito com o caminho de módulo de outros módulos.
 
-At a minimum, a module path need only indicate something about its origin, such
-as a company or author or owner name. But the path might also be more
-descriptive about what the module is or does.
+No mínimo, um caminho de módulo precisa apenas indicar algo sobre sua origem, como
+uma empresa, autor ou nome de proprietário. Mas o caminho também pode ser mais
+descritivo sobre o que o módulo é ou faz.
 
-The module path is typically of the following form:
+O caminho do módulo é tipicamente da seguinte forma:
 
 ```
 <prefix>/<descriptive-text>
 ```
 
-* The _prefix_ is typically a string that partially describes the module, such
-    as a string that describes its origin. This might be:
+* O _prefix_ é tipicamente uma string que descreve parcialmente o módulo, como
+    uma string que descreve sua origem. Isso pode ser:
 
-    *   The location of the repository where Go tools can find the module's source
-        code (required if you're publishing the module).
+    *   O local do repositório onde as ferramentas Go podem encontrar o código-fonte do módulo
+        (obrigatório se você está publicando o módulo).
 
-        For example, it might be `github.com/<project-name>/`.
+        Por exemplo, pode ser `github.com/<project-name>/`.
 
-        Use this best practice if you think you might publish the module for
-        others to use. For more about publishing, see
+        Use esta melhor prática se você acha que pode publicar o módulo para
+        outros usarem. Para mais sobre publicação, consulte
         [Developing and publishing modules](/doc/modules/developing).
 
-    *   A name you control.
+    *   Um nome que você controla.
 
-        If you're not using a repository name, be sure to choose a prefix that
-        you're confident won't be used by others. A good choice is your
-        company's name. Avoid common terms such as `widgets`, `utilities`, or
+        Se você não está usando um nome de repositório, certifique-se de escolher um prefixo que
+        você esteja confiante de que não será usado por outros. Uma boa escolha é o
+        nome da sua empresa. Evite termos comuns como `widgets`, `utilities`, ou
         `app`.
 
-* For the _descriptive text_, a good choice would be a project name. Remember
-    that package names carry most of the weight of describing functionality.
-    The module path creates a namespace for those package names.
+* Para o _descriptive text_, uma boa escolha seria um nome de projeto. Lembre-se
+    de que nomes de packages carregam a maior parte do peso de descrever funcionalidade.
+    O caminho do módulo cria um namespace para esses nomes de packages.
 
-**Reserved module path prefixes**
+**Prefixos de caminho de módulo reservados**
 
-Go guarantees that the following strings won't be used in package names.
+Go garante que as seguintes strings não serão usadas em nomes de packages.
 
-- `test` -- You can use `test` as a module path prefix for a module whose code
-    is designed to locally test functions in another module.
+- `test` -- Você pode usar `test` como um prefixo de caminho de módulo para um módulo cujo código
+    é projetado para testar localmente funções em outro módulo.
 
-    Use the `test` path prefix for modules that are created as part of a test.
-    For example, your test itself might run `go mod init test` and then set up
-    that module in some particular way in order to test with a Go source code
-    analysis tool.
+    Use o prefixo de caminho `test` para módulos que são criados como parte de um teste.
+    Por exemplo, seu próprio teste pode executar `go mod init test` e depois configurar
+    esse módulo de alguma maneira particular para testar com uma ferramenta de análise de código-fonte Go.
 
-- `example` -- Used as a module path prefix in some Go documentation, such as
-    in tutorials where you're creating a module just to track dependencies.
+- `example` -- Usado como um prefixo de caminho de módulo em alguma documentação Go, como
+    em tutoriais onde você está criando um módulo apenas para rastrear dependências.
 
-    Note that Go documentation also uses `example.com` to illustrate when the
-    example might be a published module.
+    Observe que a documentação Go também usa `example.com` para ilustrar quando o
+    exemplo pode ser um módulo publicado.
 
-## Adding a dependency {#adding_dependency}
+## Adicionando uma dependência {#adding_dependency}
 
-Once you're importing packages from a published module, you can add that module
-to manage as a dependency by using the [`go get`
-command](/cmd/go/#hdr-Add_dependencies_to_current_module_and_install_them).
+Uma vez que você está importando packages de um módulo publicado, você pode adicionar esse módulo
+para gerenciar como uma dependência usando o [comando `go get`](/cmd/go/#hdr-Add_dependencies_to_current_module_and_install_them).
 
-The command does the following:
+O comando faz o seguinte:
 
-*   If needed, it adds `require` directives to your go.mod file for modules
-    needed to build packages named on the command line. A `require` directive
-    tracks the minimum version of a module that your module depends on. See the
-    [go.mod reference](/doc/modules/gomod-ref) for more.
-*   If needed, it downloads module source code so you can compile packages that
-    depend on them. It can download modules from a module proxy like
-    proxy.golang.org or directly from version control repositories. The source
-    is cached locally.
+*   Se necessário, adiciona diretivas `require` ao seu arquivo go.mod para módulos
+    necessários para compilar packages nomeados na linha de comando. Uma diretiva `require`
+    rastreia a versão mínima de um módulo do qual seu módulo depende. Consulte a
+    [referência go.mod](/doc/modules/gomod-ref) para mais.
+*   Se necessário, baixa código-fonte de módulos para que você possa compilar packages que
+    dependem deles. Pode baixar módulos de um proxy de módulos como
+    proxy.golang.org ou diretamente de repositórios de controle de versão. O código-fonte
+    é armazenado em cache localmente.
 
-    You can set the location from which Go tools download modules. For more, see
+    Você pode definir o local de onde as ferramentas Go baixam módulos. Para mais, consulte
     [Specifying a module proxy server](#proxy_server).
 
-The following describes a few examples.
+Os exemplos a seguir descrevem alguns casos.
 
-*   To add all dependencies for a package in your module, run a command like the
-    one below ("." refers to the package in the current directory):
+*   Para adicionar todas as dependências para um package no seu módulo, execute um comando como o
+    abaixo ("." refere-se ao package no diretório atual):
 
     ```
     $ go get .
     ```
 
-*   To add a specific dependency, specify its module path as an argument to the
-    command.
+*   Para adicionar uma dependência específica, especifique seu caminho de módulo como um argumento para o
+    comando.
 
     ```
     $ go get example.com/theirmodule
     ```
 
-The command also authenticates each module it downloads. This ensures that it's
-unchanged from when the module was published. If the module has changed since it
-was published -- for example, the developer changed the contents of the commit
--- Go tools will present a security error. This authentication check protects
-you from modules that might have been tampered with.
+O comando também autentica cada módulo que baixa. Isso garante que ele está
+inalterado desde quando o módulo foi publicado. Se o módulo mudou desde que foi
+publicado -- por exemplo, o desenvolvedor mudou o conteúdo do commit
+-- ferramentas Go apresentarão um erro de segurança. Essa verificação de autenticação protege
+você de módulos que podem ter sido adulterados.
 
-## Getting a specific dependency version {#getting_version}
+## Obtendo uma versão de dependência específica {#getting_version}
 
-You can get a specific version of a dependency module by specifying its version
-in the `go get` command. The command updates the `require` directive in your
-go.mod file (though you can also update that manually).
+Você pode obter uma versão específica de um módulo de dependência especificando sua versão
+no comando `go get`. O comando atualiza a diretiva `require` no seu
+arquivo go.mod (embora você também possa atualizá-la manualmente).
 
-You might want to do this if:
+Você pode querer fazer isso se:
 
-*   You want to get a specific pre-release version of a module to try out.
-*   You've discovered that the version you're currently requiring isn't working
-    for you, so you want to get a version you know you can rely on.
-*   You want to upgrade or downgrade a module you're already requiring.
+*   Você quer obter uma versão de pré-lançamento específica de um módulo para experimentar.
+*   Você descobriu que a versão que você está exigindo atualmente não está funcionando
+    para você, então você quer obter uma versão que você sabe que pode confiar.
+*   Você quer atualizar ou fazer downgrade de um módulo que você já está exigindo.
 
-Here are examples for using the [`go get`
-command](/ref/mod#go-get):
+Aqui estão exemplos para usar o [comando `go get`](/ref/mod#go-get):
 
-*   To get a specific numbered version, append the module path with an @ sign
-    followed by the version you want:
+*   Para obter uma versão numerada específica, anexe o caminho do módulo com um sinal @ seguido da versão que você quer:
 
     ```
     $ go get example.com/theirmodule@v1.3.4
     ```
 
-*   To get the latest version, append the module path with `@latest`:
+*   Para obter a versão mais recente, anexe o caminho do módulo com `@latest`:
 
     ```
     $ go get example.com/theirmodule@latest
     ```
 
-The following go.mod file `require` directive example (see the [go.mod
-reference](/doc/modules/gomod-ref) for more) illustrates how to require a specific version
-number:
+O exemplo de diretiva `require` do arquivo go.mod a seguir (consulte a [referência
+go.mod](/doc/modules/gomod-ref) para mais) ilustra como exigir um número de versão específico:
 
 ```
 require example.com/theirmodule v1.3.4
 ```
 
-## Discovering available updates {#discovering_updates}
+## Descobrindo atualizações disponíveis {#discovering_updates}
 
-You can check to see if there are newer versions of dependencies you're already
-using in your current module. Use the `go list` command to display a list of
-your module's dependencies, along with the latest version available for that
-module. Once you've discovered available upgrades, you can try them out with your
-code to decide whether or not to upgrade to new versions.
+Você pode verificar se há versões mais recentes de dependências que você já está
+usando no seu módulo atual. Use o comando `go list` para exibir uma lista de
+dependências do seu módulo, junto com a versão mais recente disponível para aquele
+módulo. Uma vez que você descobriu atualizações disponíveis, você pode experimentá-las com seu
+código para decidir se atualizar ou não para novas versões.
 
-For more about the `go list` command, see [`go list -m`](/ref/mod#go-list-m).
+Para mais sobre o comando `go list`, consulte [`go list -m`](/ref/mod#go-list-m).
 
-Here are a couple of examples.
+Aqui estão alguns exemplos.
 
-*   List all of the modules that are dependencies of your current module,
-    along with the latest version available for each:
+*   Listar todos os módulos que são dependências do seu módulo atual,
+    junto com a versão mais recente disponível para cada:
 
     ```
     $ go list -m -u all
     ```
 
-*   Display the latest version available for a specific module:
+*   Exibir a versão mais recente disponível para um módulo específico:
 
     ```
     $ go list -m -u example.com/theirmodule
     ```
 
-## Upgrading or downgrading a dependency {#upgrading}
+## Atualizando ou fazendo downgrade de uma dependência {#upgrading}
 
-You can upgrade or downgrade a dependency module by using Go tools to discover
-available versions, then add a different version as a dependency.
+Você pode atualizar ou fazer downgrade de um módulo de dependência usando ferramentas Go para descobrir
+versões disponíveis, depois adicionar uma versão diferente como uma dependência.
 
-1. To discover new versions use the `go list` command as described in
+1. Para descobrir novas versões use o comando `go list` como descrito em
     [Discovering available updates](#discovering_updates).
 
-1. To add a particular version as a dependency, use the `go get` command as
-    described in [Getting a specific dependency version](#getting_version).
+1. Para adicionar uma versão particular como uma dependência, use o comando `go get` como
+    descrito em [Getting a specific dependency version](#getting_version).
 
-## Synchronizing your code's dependencies {#synchronizing}
+## Sincronizando as dependências do seu código {#synchronizing}
 
-You can ensure that you're managing dependencies for all of your code's imported
-packages while also removing dependencies for packages you're no longer
-importing.
+Você pode garantir que está gerenciando dependências para todos os packages importados do seu código
+enquanto também remove dependências para packages que você não está mais
+importando.
 
-This can be useful when you've been making changes to your code and
-dependencies, possibly creating a collection of managed dependencies and
-downloaded modules that no longer match the collection specifically required by
-the packages imported in your code.
+Isso pode ser útil quando você esteve fazendo mudanças no seu código e
+dependências, possivelmente criando uma coleção de dependências gerenciadas e
+módulos baixados que não correspondem mais à coleção especificamente exigida pelos
+packages importados no seu código.
 
-To keep your managed dependency set tidy, use the `go mod tidy` command. Using
-the set of packages imported in your code, this command edits your go.mod file
-to add modules that are necessary but missing. It also removes unused modules
-that don't provide any relevant packages.
+Para manter seu conjunto de dependências gerenciadas organizado, use o comando `go mod tidy`. Usando
+o conjunto de packages importados no seu código, este comando edita seu arquivo go.mod
+para adicionar módulos que são necessários mas ausentes. Ele também remove módulos não usados
+que não fornecem quaisquer packages relevantes.
 
-The command has no arguments except for one flag, -v, that prints information
-about removed modules.
+O comando não tem argumentos exceto por uma flag, -v, que imprime informação
+sobre módulos removidos.
 
 ```
 $ go mod tidy
 ```
 
-## Developing and testing against unpublished module code {#unpublished}
+## Desenvolvendo e testando contra código de módulo não publicado {#unpublished}
 
-You can specify that your code should use dependency modules that may not be
-published. The code for these modules might be in their respective repositories,
-in a fork of those repositories, or on a drive with the current module that
-consumes them.
+Você pode especificar que seu código deve usar módulos de dependência que podem não estar
+publicados. O código para esses módulos pode estar em seus respectivos repositórios,
+em um fork desses repositórios, ou em um drive com o módulo atual que
+os consome.
 
-You might want to do this when:
+Você pode querer fazer isso quando:
 
-*   You want to make your own changes to an external module's code, such as
-    after forking and/or cloning it. For example, you might want to prepare a
-    fix to the module, then send it as a pull request to the module's developer.
-*   You're building a new module and haven't yet published it, so it's
-    unavailable on a repository where the `go get` command can reach it.
+*   Você quer fazer suas próprias mudanças no código de um módulo externo, como
+    depois de fazer fork e/ou cloná-lo. Por exemplo, você pode querer preparar uma
+    correção para o módulo, depois enviá-la como um pull request para o desenvolvedor do módulo.
+*   Você está construindo um novo módulo e ainda não o publicou, então ele está
+    indisponível em um repositório onde o comando `go get` pode alcançá-lo.
 
-### Requiring module code in a local directory {#local_directory}
+### Exigindo código de módulo em um diretório local {#local_directory}
 
-You can specify that the code for a required module is on the same local drive
-as the code that requires it. You might find this useful when you are:
+Você pode especificar que o código para um módulo exigido está no mesmo drive local
+que o código que o exige. Você pode achar isso útil quando você está:
 
-*   Developing your own separate module and want to test from the current module.
-*   Fixing issues in or adding features to an external module and want to test
-    from the current module. (Note that you can also require the external module
-    from your own fork of its repository. For more, see [Requiring external
+*   Desenvolvendo seu próprio módulo separado e quer testar do módulo atual.
+*   Corrigindo problemas em ou adicionando funcionalidades a um módulo externo e quer testar
+    do módulo atual. (Observe que você também pode exigir o módulo externo
+    do seu próprio fork do repositório dele. Para mais, consulte [Requiring external
     module code from your own repository fork](#external_fork).)
 
-To tell Go commands to use the local copy of the module's code, use the
-`replace` directive in your go.mod file to replace the module path given in a
-`require` directive. See the [go.mod reference](/doc/modules/gomod-ref) for
-more about directives.
+Para dizer às ferramentas Go para usar a cópia local do código do módulo, use a
+diretiva `replace` no seu arquivo go.mod para substituir o caminho do módulo dado em uma
+diretiva `require`. Consulte a [referência go.mod](/doc/modules/gomod-ref) para
+mais sobre diretivas.
 
-In the following go.mod file example, the current module requires the external
-module `example.com/theirmodule`, with a nonexistent version number
-(`v0.0.0-unpublished`) used to ensure the replacement works correctly. The
-`replace` directive then replaces the original module path with
-`../theirmodule`, a directory that is at the same level as the current module's
-directory.
+No exemplo de arquivo go.mod a seguir, o módulo atual exige o módulo externo
+`example.com/theirmodule`, com um número de versão inexistente
+(`v0.0.0-unpublished`) usado para garantir que a substituição funcione corretamente. A
+diretiva `replace` então substitui o caminho do módulo original com
+`../theirmodule`, um diretório que está no mesmo nível que o diretório do módulo atual.
 
 ```
 module example.com/mymodule
@@ -364,42 +358,42 @@ require example.com/theirmodule v0.0.0-unpublished
 replace example.com/theirmodule v0.0.0-unpublished => ../theirmodule
 ```
 
-When setting up a `require`/`replace` pair, use the
-[`go mod edit`](/ref/mod#go-mod-edit) and [`go get`](/ref/mod#go-get) commands
-to ensure that requirements described by the file remain consistent:
+Ao configurar um par `require`/`replace`, use os
+comandos [`go mod edit`](/ref/mod#go-mod-edit) e [`go get`](/ref/mod#go-get)
+para garantir que os requisitos descritos pelo arquivo permaneçam consistentes:
 
 ```
 $ go mod edit -replace=example.com/theirmodule@v0.0.0-unpublished=../theirmodule
 $ go get example.com/theirmodule@v0.0.0-unpublished
 ```
 
-**Note:** When you use the replace directive, Go tools don't authenticate
-external modules as described in [Adding a dependency](#adding_dependency).
+**Nota:** Quando você usa a diretiva replace, as ferramentas Go não autenticam
+módulos externos como descrito em [Adding a dependency](#adding_dependency).
 
-For more about version numbers, see [Module version numbering](/doc/modules/version-numbers).
+Para mais sobre números de versão, consulte [Module version numbering](/doc/modules/version-numbers).
 
-### Requiring external module code from your own repository fork {#external_fork}
+### Exigindo código de módulo externo do seu próprio fork de repositório {#external_fork}
 
-When you have forked an external module's repository (such as to fix an issue in
-the module's code or to add a feature), you can have Go tools use your fork for
-the module's source. This can be useful for testing changes from your own code.
-(Note that you can also require the module code in a directory that's on the
-local drive with the module that requires it. For more, see [Requiring module
+Quando você fez fork do repositório de um módulo externo (como para corrigir um problema no
+código do módulo ou para adicionar uma funcionalidade), você pode fazer as ferramentas Go usarem seu fork para
+o código-fonte do módulo. Isso pode ser útil para testar mudanças do seu próprio código.
+(Observe que você também pode exigir o código do módulo em um diretório que está no
+drive local com o módulo que o exige. Para mais, consulte [Requiring module
 code in a local directory](#local_directory).)
 
-You do this by using a `replace` directive in your go.mod file to replace the
-external module's original module path with a path to the fork in your
-repository. This directs Go tools to use the replacement path (the fork's
-location) when compiling, for example, while allowing you to leave `import`
-statements unchanged from the original module path.
+Você faz isso usando uma diretiva `replace` no seu arquivo go.mod para substituir o
+caminho do módulo original do módulo externo com um caminho para o fork no seu
+repositório. Isso direciona as ferramentas Go para usar o caminho de substituição (a localização do fork)
+ao compilar, por exemplo, enquanto permite que você deixe statements `import`
+inalterados do caminho do módulo original.
 
-For more about the `replace` directive, see the [go.mod file
-reference](gomod-ref).
+Para mais sobre a diretiva `replace`, consulte a [referência do arquivo
+go.mod](gomod-ref).
 
-In the following go.mod file example, the current module requires the external
-module `example.com/theirmodule`. The `replace` directive then replaces the
-original module path with `example.com/myfork/theirmodule`, a fork of the
-module's own repository.
+No exemplo de arquivo go.mod a seguir, o módulo atual exige o módulo externo
+`example.com/theirmodule`. A diretiva `replace` então substitui o
+caminho do módulo original com `example.com/myfork/theirmodule`, um fork do
+próprio repositório do módulo.
 
 ```
 module example.com/mymodule
@@ -411,11 +405,11 @@ require example.com/theirmodule v1.2.3
 replace example.com/theirmodule v1.2.3 => example.com/myfork/theirmodule v1.2.3-fixed
 ```
 
-When setting up a `require`/`replace` pair, use Go tool commands to ensure that
-requirements described by the file remain consistent. Use the [`go
-list`](/ref/mod#go-list-m) command to get the version in use by the current
-module. Then use the [`go mod edit`](/ref/mod#go-mod-edit) command to replace
-the required module with the fork:
+Ao configurar um par `require`/`replace`, use comandos de ferramenta Go para garantir que
+requisitos descritos pelo arquivo permaneçam consistentes. Use o comando [`go
+list`](/ref/mod#go-list-m) para obter a versão em uso pelo módulo atual.
+Depois use o comando [`go mod edit`](/ref/mod#go-mod-edit) para substituir
+o módulo exigido com o fork:
 
 ```
 $ go list -m example.com/theirmodule
@@ -423,174 +417,172 @@ example.com/theirmodule v1.2.3
 $ go mod edit -replace=example.com/theirmodule@v1.2.3=example.com/myfork/theirmodule@v1.2.3-fixed
 ```
 
-**Note:** When you use the `replace` directive, Go tools don't authenticate
-external modules as described in [Adding a dependency](#adding_dependency).
+**Nota:** Quando você usa a diretiva `replace`, as ferramentas Go não autenticam
+módulos externos como descrito em [Adding a dependency](#adding_dependency).
 
-For more about version numbers, see [Module version numbering](/doc/modules/version-numbers).
+Para mais sobre números de versão, consulte [Module version numbering](/doc/modules/version-numbers).
 
-## Getting a specific commit using a repository identifier {#repo_identifier}
+## Obtendo um commit específico usando um identificador de repositório {#repo_identifier}
 
-You can use the `go get` command to add unpublished code for a module from a
-specific commit in its repository.
+Você pode usar o comando `go get` para adicionar código não publicado para um módulo de um
+commit específico no seu repositório.
 
-To do this, you use the `go get` command, specifying the code you want with an
-`@` sign. When you use `go get`, the command will add to your go.mod file a
-`require` directive that requires the external module, using a pseudo-version
-number based on details about the commit.
+Para fazer isso, você usa o comando `go get`, especificando o código que você quer com um
+sinal `@`. Quando você usa `go get`, o comando adicionará ao seu arquivo go.mod uma
+diretiva `require` que exige o módulo externo, usando um número de pseudo-versão
+baseado em detalhes sobre o commit.
 
-The following examples provide a few illustrations. These are based on a module
-whose source is in a git repository.
+Os exemplos a seguir fornecem algumas ilustrações. Estes são baseados em um módulo
+cujo código-fonte está em um repositório git.
 
-*   To get the module at a specific commit, append the form @<em>commithash</em>:
+*   Para obter o módulo em um commit específico, anexe a forma @<em>commithash</em>:
 
     ```
     $ go get example.com/theirmodule@4cf76c2
     ```
 
-*   To get the module at a specific branch, append the form @<em>branchname</em>:
+*   Para obter o módulo em um branch específico, anexe a forma @<em>branchname</em>:
 
     ```
     $ go get example.com/theirmodule@bugfixes
     ```
 
-## Removing a dependency {#removing_dependency}
+## Removendo uma dependência {#removing_dependency}
 
-When your code no longer uses any packages in a module, you can stop tracking
-the module as a dependency.
+Quando seu código não usa mais nenhum package em um módulo, você pode parar de rastrear
+o módulo como uma dependência.
 
-To stop tracking all unused modules, run the [`go mod tidy`
-command](/ref/mod#go-mod-tidy). This command may also add missing dependencies
-needed to build packages in your module.
+Para parar de rastrear todos os módulos não usados, execute o [comando `go mod tidy`](/ref/mod#go-mod-tidy). Este comando também pode adicionar dependências ausentes
+necessárias para compilar packages no seu módulo.
 
 ```
 $ go mod tidy
 ```
 
-To remove a specific dependency, use the [`go get`
-command](/ref/mod#go-get), specifying the module's module path and appending
-`@none`, as in the following example:
+Para remover uma dependência específica, use o [comando `go get`](/ref/mod#go-get), especificando o caminho do módulo do módulo e anexando
+`@none`, como no exemplo a seguir:
 
 ```
 $ go get example.com/theirmodule@none
 ```
 
-The `go get` command will also downgrade or remove other dependencies that
-depend on the removed module.
+O comando `go get` também fará downgrade ou removerá outras dependências que
+dependem do módulo removido.
 
-## Tool dependencies {#tools}
+## Dependências de ferramentas {#tools}
 
-Tool dependencies let you manage developer tools that are written in Go and used
-when working on your module. For example, you might use
-[`stringer`](https://pkg.go.dev/golang.org/x/tools/cmd/stringer) with [`go
-generate`](/blog/generate), or a specific linter or formatter as part of
-preparing your change for submission.
+Dependências de ferramentas permitem que você gerencie ferramentas de desenvolvedor que são escritas em Go e usadas
+ao trabalhar no seu módulo. Por exemplo, você pode usar
+[`stringer`](https://pkg.go.dev/golang.org/x/tools/cmd/stringer) com [`go
+generate`](/blog/generate), ou um linter ou formatador específico como parte de
+preparar sua mudança para submissão.
 
-In Go 1.24 and above, you can add a tool dependency with:
+No Go 1.24 e acima, você pode adicionar uma dependência de ferramenta com:
 
 ```
 $ go get -tool golang.org/x/tools/cmd/stringer
 ```
 
-This will add a [`tool` directive](/ref/mod/#go-mod-file-tool) to your `go.mod` file, and ensure the
-necessary require directives are present. Once this directive is added you can
-run the tool by passing the last [non-major-version](/ref/mod#major-version-suffixes)
-component of the tool's import path to `go tool`:
+Isso adicionará uma [diretiva `tool`](/ref/mod/#go-mod-file-tool) ao seu arquivo `go.mod`, e garantirá que as
+diretivas require necessárias estejam presentes. Uma vez que esta diretiva for adicionada, você pode
+executar a ferramenta passando o último componente [non-major-version](/ref/mod#major-version-suffixes)
+do caminho de import da ferramenta para `go tool`:
 
 ```
 $ go tool stringer
 ```
 
-In the case that multiple tools share the last path fragment, or the path fragment
-matches one of the tools shipped with the Go distribution, you must pass the full
-package path instead:
+No caso de múltiplas ferramentas compartilharem o último fragmento de caminho, ou o fragmento de caminho
+corresponder a uma das ferramentas enviadas com a distribuição Go, você deve passar o
+caminho completo do package em vez disso:
 
 ```
 $ go tool golang.org/x/tools/cmd/stringer
 ```
 
-To see a list of all tools currently available, run `go tool` with no arguments:
+Para ver uma lista de todas as ferramentas atualmente disponíveis, execute `go tool` sem argumentos:
 
 ```
 $ go tool
 ```
 
-You can manually add a `tool` directive to your `go.mod`, but you must ensure
-that there is a `require` directive for the module that defines the tool. The
-easiest way to add any missing `require` directives is to run:
+Você pode adicionar manualmente uma diretiva `tool` ao seu `go.mod`, mas deve garantir
+que haja uma diretiva `require` para o módulo que define a ferramenta. A
+maneira mais fácil de adicionar quaisquer diretivas `require` faltantes é executar:
 
 ```
 $ go mod tidy
 ```
 
-Requirements needed to satisfy tool dependencies behave like any other
-requirements in your [module graph](/ref/mod#glos-module-graph). They
-participate in [minimal version selection](/ref/mod#minimal-version-selection)
-and respect `require`, `replace` and `exclude` directives. Due to module
-pruning, when you depend on a module that itself has a tool dependency,
-requirements that exist just to satisfy that tool dependency do not usually
-become requirements of your module.
+Requisitos necessários para satisfazer dependências de ferramentas se comportam como quaisquer outros
+requisitos no seu [grafo de módulos](/ref/mod#glos-module-graph). Eles
+participam da [seleção de versão mínima](/ref/mod#minimal-version-selection)
+e respeitam diretivas `require`, `replace` e `exclude`. Devido ao
+pruning de módulos, quando você depende de um módulo que em si tem uma dependência de ferramenta,
+requisitos que existem apenas para satisfazer essa dependência de ferramenta normalmente não
+se tornam requisitos do seu módulo.
 
-The `tool` [meta-pattern](/cmd/go#hdr-Package_lists_and_patterns) provides a way to perform operations on all tools simultaneously. For example you can upgrade all tools with `go get -u tool`, or install them all to $GOBIN with `go install tool`.
+O [meta-padrão](/cmd/go#hdr-Package_lists_and_patterns) `tool` fornece uma maneira de executar operações em todas as ferramentas simultaneamente. Por exemplo, você pode atualizar todas as ferramentas com `go get -u tool`, ou instalá-las todas em $GOBIN com `go install tool`.
 
-In Go versions before 1.24, you can acheive something similar to a `tool`
-directive by adding a blank import to a go file within the module that is
-excluded from the build using [build
-constraints](/pkg/go/build/#hdr-Build_Constraints). If you do this, you can then
-use `go run` with the full package path to run the tool.
+Em versões Go antes de 1.24, você pode alcançar algo similar a uma diretiva `tool`
+adicionando um blank import a um arquivo go dentro do módulo que é
+excluído da compilação usando [build
+constraints](/pkg/go/build/#hdr-Build_Constraints). Se você fizer isso, pode então
+usar `go run` com o caminho completo do package para executar a ferramenta.
 
-## Specifying a module proxy server {#proxy_server}
+## Especificando um servidor proxy de módulos {#proxy_server}
 
-When you use Go tools to work with modules, the tools by default download
-modules from proxy.golang.org (a public Google-run module mirror) or directly
-from the module's repository. You can specify that Go tools should instead use
-another proxy server for downloading and authenticating modules.
+Quando você usa ferramentas Go para trabalhar com módulos, as ferramentas por padrão baixam
+módulos de proxy.golang.org (um espelho de módulos público operado pelo Google) ou diretamente
+do repositório do módulo. Você pode especificar que as ferramentas Go devem em vez disso usar
+outro servidor proxy para baixar e autenticar módulos.
 
-You might want to do this if you (or your team) have set up or chosen a
-different module proxy server that you want to use. For example, some set up a
-module proxy server in order to have greater control over how dependencies are
-used.
+Você pode querer fazer isso se você (ou sua equipe) configurou ou escolheu um
+servidor proxy de módulos diferente que você quer usar. Por exemplo, alguns configuram um
+servidor proxy de módulos para ter maior controle sobre como dependências são
+usadas.
 
-To specify another module proxy server for Go tools use, set the `GOPROXY`
-environment variable to the URL of one or more servers. Go tools will try each
-URL in the order you specify. By default, `GOPROXY` specifies a public
-Google-run module proxy first, then direct download from the module's repository
-(as specified in its module path):
+Para especificar outro servidor proxy de módulos para ferramentas Go usarem, defina a variável de
+ambiente `GOPROXY` para a URL de um ou mais servidores. Ferramentas Go tentarão cada
+URL na ordem que você especificar. Por padrão, `GOPROXY` especifica um
+proxy de módulos público operado pelo Google primeiro, depois download direto do repositório do módulo
+(conforme especificado no seu caminho de módulo):
 
 ```
 GOPROXY="https://proxy.golang.org,direct"
 ```
 
-For more about the `GOPROXY` environment variable, including values to support
-other behavior, see the [`go` command
-reference](/cmd/go/#hdr-Module_downloading_and_verification).
+Para mais sobre a variável de ambiente `GOPROXY`, incluindo valores para suportar
+outro comportamento, consulte a [referência do comando
+`go`](/cmd/go/#hdr-Module_downloading_and_verification).
 
-You can set the variable to URLs for other module proxy servers, separating URLs
-with either a comma or a pipe.
+Você pode definir a variável para URLs de outros servidores proxy de módulos, separando URLs
+com uma vírgula ou um pipe.
 
-*   When you use a comma, Go tools will try the next URL in the list only if the
-    current URL returns an HTTP 404 or 410.
+*   Quando você usa uma vírgula, ferramentas Go tentarão a próxima URL na lista apenas se a
+    URL atual retornar um HTTP 404 ou 410.
 
     ```
     GOPROXY="https://proxy.example.com,https://proxy2.example.com"
     ```
 
-*   When you use a pipe, Go tools will try the next URL in the list regardless
-    of the HTTP error code.
+*   Quando você usa um pipe, ferramentas Go tentarão a próxima URL na lista independentemente
+    do código de erro HTTP.
 
     ```
     GOPROXY="https://proxy.example.com|https://proxy2.example.com"
     ```
 
 
-Go modules are frequently developed and distributed on version control servers
-and module proxies that aren’t available on the public internet. You can set the
-`GOPRIVATE` environment variable to configure the `go` command
-to download and build modules from private sources.
-Then the go command can download and build modules from private sources.
+Módulos Go são frequentemente desenvolvidos e distribuídos em servidores de controle de versão
+e proxies de módulos que não estão disponíveis na internet pública. Você pode definir a
+variável de ambiente `GOPRIVATE` para configurar o comando `go`
+para baixar e compilar módulos de fontes privadas.
+Então o comando go pode baixar e compilar módulos de fontes privadas.
 
-The `GOPRIVATE` or `GONOPROXY` environment variables may be set to lists of glob
-patterns matching module prefixes that are private and should not be requested
-from any proxy. For example:
+As variáveis de ambiente `GOPRIVATE` ou `GONOPROXY` podem ser definidas para listas de padrões glob
+correspondendo a prefixos de módulo que são privados e não devem ser solicitados
+de nenhum proxy. Por exemplo:
 
 ```
 GOPRIVATE=*.corp.example.com,*.research.example.com
