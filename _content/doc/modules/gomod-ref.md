@@ -1,53 +1,52 @@
 <!--{
-  "Title": "go.mod file reference"
+  "Title": "go.mod file reference",
+  "ia-translated": true
 }-->
 
-Each Go module is defined by a go.mod file that describes the module's
-properties, including its dependencies on other modules and on versions of Go.
+Cada módulo Go é definido por um arquivo go.mod que descreve as
+propriedades do módulo, incluindo suas dependências em outros módulos e em versões do Go.
 
-These properties include:
+Essas propriedades incluem:
 
-* The current module's **module path**. This should be a location from which
-the module can be downloaded by Go tools, such as the module code's
-repository location. This serves as a unique identifier, when combined
-with the module's version number. It is also the prefix of the package path for
-all packages in the module. For more about how Go locates the module, see the
-<a href="/ref/mod#vcs-find">Go Modules Reference</a>.
-* The minimum **version of Go** required by the current module.
-* A list of minimum versions of other **modules required** by the current module.
-* Instructions, optionally, to **replace** a required module with another
-  module version or a local directory, or to **exclude** a specific version of
-  a required module.
+* O **caminho do módulo** do módulo atual. Este deve ser um local de onde
+o módulo pode ser baixado pelas ferramentas Go, como o local do repositório
+do código do módulo. Isso serve como um identificador único, quando combinado
+com o número de versão do módulo. Também é o prefixo do caminho do package para
+todos os packages no módulo. Para mais sobre como Go localiza o módulo, consulte a
+<a href="/ref/mod#vcs-find">Referência de Módulos Go</a>.
+* A **versão mínima do Go** exigida pelo módulo atual.
+* Uma lista de versões mínimas de outros **módulos exigidos** pelo módulo atual.
+* Instruções, opcionalmente, para **substituir** um módulo exigido com outro
+  módulo versão ou um diretório local, ou para **excluir** uma versão específica de
+  um módulo exigido.
 
-Go generates a go.mod file when you run the [`go mod init`
-command](/ref/mod#go-mod-init). The following example creates a go.mod file,
-setting the module's module path to example/mymodule:
+Go gera um arquivo go.mod quando você executa o [comando `go mod init`](/ref/mod#go-mod-init). O exemplo a seguir cria um arquivo go.mod,
+definindo o caminho do módulo do módulo para example/mymodule:
 
 ```
 $ go mod init example/mymodule
 ```
 
-Use `go` commands to manage dependencies. The commands ensure that the
-requirements described in your go.mod file remain consistent and the content of
-your go.mod file is valid. These commands include the [`go get`](/ref/mod#go-get)
-and [`go mod tidy`](/ref/mod#go-mod-tidy) and [`go mod edit`](/ref/mod#go-mod-edit)
-commands.
+Use comandos `go` para gerenciar dependências. Os comandos garantem que os
+requisitos descritos no seu arquivo go.mod permaneçam consistentes e o conteúdo do
+seu arquivo go.mod seja válido. Esses comandos incluem os comandos [`go get`](/ref/mod#go-get)
+e [`go mod tidy`](/ref/mod#go-mod-tidy) e [`go mod edit`](/ref/mod#go-mod-edit).
 
-For reference on `go` commands, see [Command go](/cmd/go/).
-You can get help from the command line by typing `go help` _command-name_, as
-with `go help mod tidy`.
+Para referência sobre comandos `go`, consulte [Command go](/cmd/go/).
+Você pode obter ajuda da linha de comando digitando `go help` _command-name_, como
+em `go help mod tidy`.
 
-**See also**
+**Veja também**
 
-* Go tools make changes to your go.mod file as you use them to manage
-  dependencies. For more, see [Managing dependencies](/doc/modules/managing-dependencies).
-* For more details and constraints related to go.mod files, see the [Go modules
-  reference](/ref/mod#go-mod-file).
+* Ferramentas Go fazem mudanças no seu arquivo go.mod conforme você as usa para gerenciar
+  dependências. Para mais, consulte [Managing dependencies](/doc/modules/managing-dependencies).
+* Para mais detalhes e restrições relacionadas a arquivos go.mod, consulte a [referência de
+  módulos Go](/ref/mod#go-mod-file).
 
-## Example {#example}
+## Exemplo {#example}
 
-A go.mod file includes directives as shown in the following example. These are
-described elsewhere in this topic.
+Um arquivo go.mod inclui diretivas como mostrado no exemplo a seguir. Estas são
+descritas em outro lugar neste tópico.
 
 ```
 module example.com/mymodule
@@ -66,67 +65,67 @@ exclude example.com/thismodule v1.3.0
 
 ## module {#module}
 
-Declares the module's module path, which is the module's unique identifier
-(when combined with the module version number). The module path becomes the
-import prefix for all packages the module contains.
+Declara o caminho do módulo do módulo, que é o identificador único do módulo
+(quando combinado com o número de versão do módulo). O caminho do módulo se torna o
+prefixo de import para todos os packages que o módulo contém.
 
-For more, see [`module` directive](/ref/mod#go-mod-file-module) in the
-Go Modules Reference.
+Para mais, consulte [diretiva `module`](/ref/mod#go-mod-file-module) na
+Referência de Módulos Go.
 
-### Syntax {#module-syntax}
+### Sintaxe {#module-syntax}
 
 <pre>module <var>module-path</var></pre>
 
 <dl>
     <dt>module-path</dt>
-    <dd>The module's module path, usually the repository location from which
-      the module can be downloaded by Go tools. For module versions v2 and
-      later, this value must end with the major version number, such as
+    <dd>O caminho do módulo do módulo, geralmente o local do repositório de onde
+      o módulo pode ser baixado pelas ferramentas Go. Para versões de módulo v2 e
+      posteriores, este valor deve terminar com o número de versão major, como
       <code>/v2</code>.</dd>
 </dl>
 
-### Examples {#module-examples}
+### Exemplos {#module-examples}
 
-The following examples substitute `example.com` for a repository domain from
-which the module could be downloaded.
+Os exemplos a seguir substituem `example.com` por um domínio de repositório de onde
+o módulo poderia ser baixado.
 
-* Module declaration for a v0 or v1 module:
+* Declaração de módulo para um módulo v0 ou v1:
   ```
   module example.com/mymodule
   ```
-* Module path for a v2 module:
+* Caminho de módulo para um módulo v2:
   ```
   module example.com/mymodule/v2
   ```
 
-### Notes {#module-notes}
+### Notas {#module-notes}
 
-The module path must uniquely identify your module. For most modules, the path
-is a URL where the `go` command can find the code (or a redirect to the code).
-For modules that won't ever be downloaded directly, the module path
-can be just some name you control that will ensure uniqueness. The prefix
-`example/` is also reserved for use in examples like these.
+O caminho do módulo deve identificar seu módulo de forma única. Para a maioria dos módulos, o caminho
+é uma URL onde o comando `go` pode encontrar o código (ou um redirecionamento para o código).
+Para módulos que nunca serão baixados diretamente, o caminho do módulo
+pode ser apenas algum nome que você controle que garantirá unicidade. O prefixo
+`example/` também é reservado para uso em exemplos como estes.
 
-For more details, see [Managing dependencies](/doc/modules/managing-dependencies#naming_module).
+Para mais detalhes, consulte [Managing dependencies](/doc/modules/managing-dependencies#naming_module).
 
-In practice, the module path is typically the module source's repository domain
-and path to the module code within the repository. The `go` command
-relies on this form when downloading module versions to resolve dependencies
-on the module user's behalf.
+Na prática, o caminho do módulo é tipicamente o domínio do repositório de código-fonte do módulo
+e o caminho para o código do módulo dentro do repositório. O comando `go`
+depende desta forma ao baixar versões de módulo para resolver dependências
+em nome do usuário do módulo.
 
-Even if you're not at first intending to make your module available for use
-from other code, using its repository path is a best practice that will help
-you avoid having to rename the module if you publish it later.
+Mesmo se você não estiver inicialmente pretendendo disponibilizar seu módulo para uso
+de outro código, usar o caminho do repositório é uma melhor prática que ajudará
+você a evitar ter que renomear o módulo se você publicá-lo mais tarde.
 
-If at first you don't know the module's eventual repository location, consider
-temporarily using a safe substitute, such as the name of a domain you own or
-a name you control (such as your company name), along with a path following
-from the module's name or source directory. For more, see
+Se no início você não souber o local eventual do repositório do módulo, considere
+usar temporariamente um substituto seguro, como o nome de um domínio que você possui ou
+um nome que você controle (como o nome da sua empresa), junto com um caminho seguindo
+do nome do módulo ou diretório de código-fonte. Para mais, consulte
 [Managing dependencies](/doc/modules/managing-dependencies#naming_module).
 
-For example, if you're developing in a `stringtools` directory, your temporary
-module path might be `<company-name>/stringtools`, as in the following example,
-where _company-name_ is your company's name:
+Por exemplo, se você está desenvolvendo em um diretório `stringtools`, seu caminho de
+módulo temporário pode ser `<company-name>/stringtools`, como no exemplo a seguir,
+onde _company-name_ é o nome da sua empresa:
 
 ```
 go mod init <company-name>/stringtools
@@ -134,148 +133,148 @@ go mod init <company-name>/stringtools
 
 ## go {#go}
 
-Indicates that the module was written assuming the semantics of the Go version
-specified by the directive.
+Indica que o módulo foi escrito assumindo a semântica da versão do Go
+especificada pela diretiva.
 
-For more, see [`go` directive](/ref/mod#go-mod-file-go) in the
-Go Modules Reference.
+Para mais, consulte [diretiva `go`](/ref/mod#go-mod-file-go) na
+Referência de Módulos Go.
 
-### Syntax {#go-syntax}
+### Sintaxe {#go-syntax}
 
 <pre>go <var>minimum-go-version</var></pre>
 
 <dl>
     <dt>minimum-go-version</dt>
-    <dd>The minimum version of Go required to compile packages in this module.</dd>
+    <dd>A versão mínima do Go exigida para compilar packages neste módulo.</dd>
 </dl>
 
-### Examples {#go-examples}
+### Exemplos {#go-examples}
 
-* Module must run on Go version 1.14 or later:
+* Módulo deve executar no Go versão 1.14 ou posterior:
   ```
   go 1.14
   ```
 
-### Notes {#go-notes}
+### Notas {#go-notes}
 
-The `go` directive sets the minimum version of Go required to use this module.
-Before Go 1.21, the directive was advisory only; now it is a mandatory requirement:
-Go toolchains refuse to use modules declaring newer Go versions.
+A diretiva `go` define a versão mínima do Go exigida para usar este módulo.
+Antes do Go 1.21, a diretiva era apenas consultiva; agora é um requisito obrigatório:
+toolchains Go recusam usar módulos declarando versões Go mais recentes.
 
-The `go` directive is an input into selecting which Go toolchain to run.
-See “[Go toolchains](/doc/toolchain)” for details.
+A diretiva `go` é uma entrada para selecionar qual toolchain Go executar.
+Consulte "[Go toolchains](/doc/toolchain)" para detalhes.
 
-The `go` directive affects use of new language features:
+A diretiva `go` afeta o uso de novos recursos de linguagem:
 
-* For packages within the module, the compiler rejects use of language features
-  introduced after the version specified by the `go` directive. For example, if
-  a module has the directive `go 1.12`, its packages may not use numeric
-  literals like `1_000_000`, which were introduced in Go 1.13.
-* If an older Go version builds one of the module's packages and encounters a
-  compile error, the error notes that the module was written for a newer Go
-  version. For example, suppose a module has `go 1.13` and a package uses the
-  numeric literal `1_000_000`. If that package is built with Go 1.12, the
-  compiler notes that the code is written for Go 1.13.
+* Para packages dentro do módulo, o compilador rejeita uso de recursos de linguagem
+  introduzidos após a versão especificada pela diretiva `go`. Por exemplo, se
+  um módulo tem a diretiva `go 1.12`, seus packages não podem usar literais
+  numéricos como `1_000_000`, que foram introduzidos no Go 1.13.
+* Se uma versão mais antiga do Go compila um dos packages do módulo e encontra um
+  erro de compilação, o erro nota que o módulo foi escrito para uma versão Go mais recente.
+  Por exemplo, suponha que um módulo tenha `go 1.13` e um package use o
+  literal numérico `1_000_000`. Se aquele package for compilado com Go 1.12, o
+  compilador nota que o código foi escrito para Go 1.13.
 
-The `go` directive also affects the behavior of the `go` command:
+A diretiva `go` também afeta o comportamento do comando `go`:
 
-* At `go 1.14` or higher, automatic [vendoring](/ref/mod#vendoring) may be
-  enabled.  If the file `vendor/modules.txt` is present and consistent with
-  `go.mod`, there is no need to explicitly use the `-mod=vendor` flag.
-* At `go 1.16` or higher, the `all` package pattern matches only packages
-  transitively imported by packages and tests in the [main
-  module](/ref/mod#glos-main-module). This is the same set of packages retained
-  by [`go mod vendor`](/ref/mod#go-mod-vendor) since modules were introduced. In
-  lower versions, `all` also includes tests of packages imported by packages in
-  the main module, tests of those packages, and so on.
-* At `go 1.17` or higher:
-   * The `go.mod` file includes an explicit [`require`
-     directive](/ref/mod#go-mod-file-require) for each module that provides any
-     package transitively imported by a package or test in the main module. (At
-     `go 1.16` and lower, an indirect dependency is included only if [minimal
-     version selection](/ref/mod#minimal-version-selection) would otherwise
-     select a different version.) This extra information enables [module graph
-     pruning](/ref/mod#graph-pruning) and [lazy module
-     loading](/ref/mod#lazy-loading).
-   * Because there may be many more `// indirect` dependencies than in previous
-     `go` versions, indirect dependencies are recorded in a separate block
-     within the `go.mod` file.
-   * `go mod vendor` omits `go.mod` and `go.sum` files for vendored
-     dependencies. (That allows invocations of the `go` command within
-     subdirectories of `vendor` to identify the correct main module.)
-   * `go mod vendor` records the `go` version from each dependency's `go.mod`
-     file in `vendor/modules.txt`.
-* At `go 1.21` or higher:
-   * The `go` line declares a required minimum version of Go to use with this module.
-   * The `go` line must be greater than or equal to the `go` line of all dependencies.
-   * The `go` command no longer attempts to maintain compatibility with the previous older version of Go.
-   * The `go` command is more careful about keeping checksums of `go.mod` files in the `go.sum` file.
-<!-- If you update this list, also update /ref/mod#go-mod-file-go. -->
+* Em `go 1.14` ou superior, [vendoring](/ref/mod#vendoring) automático pode ser
+  habilitado. Se o arquivo `vendor/modules.txt` estiver presente e consistente com
+  `go.mod`, não há necessidade de usar explicitamente a flag `-mod=vendor`.
+* Em `go 1.16` ou superior, o padrão de package `all` corresponde apenas packages
+  importados transitivamente por packages e testes no [módulo
+  main](/ref/mod#glos-main-module). Este é o mesmo conjunto de packages mantidos
+  por [`go mod vendor`](/ref/mod#go-mod-vendor) desde que módulos foram introduzidos. Em
+  versões inferiores, `all` também inclui testes de packages importados por packages no
+  módulo main, testes desses packages, e assim por diante.
+* Em `go 1.17` ou superior:
+   * O arquivo `go.mod` inclui uma diretiva [`require`
+     ](/ref/mod#go-mod-file-require) explícita para cada módulo que fornece qualquer
+     package importado transitivamente por um package ou teste no módulo main. (Em
+     `go 1.16` e inferior, uma dependência indireta é incluída apenas se [seleção de
+     versão mínima](/ref/mod#minimal-version-selection) de outra forma
+     selecionaria uma versão diferente.) Esta informação extra habilita [poda de
+     grafo de módulos](/ref/mod#graph-pruning) e [carregamento lazy de
+     módulos](/ref/mod#lazy-loading).
+   * Como pode haver muitas mais dependências `// indirect` do que em versões
+     `go` anteriores, dependências indiretas são registradas em um bloco separado
+     dentro do arquivo `go.mod`.
+   * `go mod vendor` omite arquivos `go.mod` e `go.sum` para dependências
+     vendored. (Isso permite invocações do comando `go` dentro de
+     subdiretórios de `vendor` para identificar o módulo main correto.)
+   * `go mod vendor` registra a versão `go` do arquivo `go.mod` de cada dependência
+     em `vendor/modules.txt`.
+* Em `go 1.21` ou superior:
+   * A linha `go` declara uma versão mínima exigida do Go para usar com este módulo.
+   * A linha `go` deve ser maior ou igual à linha `go` de todas as dependências.
+   * O comando `go` não tenta mais manter compatibilidade com a versão anterior mais antiga do Go.
+   * O comando `go` é mais cuidadoso sobre manter checksums de arquivos `go.mod` no arquivo `go.sum`.
+<!-- Se você atualizar esta lista, também atualize /ref/mod#go-mod-file-go. -->
 
-A `go.mod` file may contain at most one `go` directive. Most commands will add a
-`go` directive with the current Go version if one is not present.
+Um arquivo `go.mod` pode conter no máximo uma diretiva `go`. A maioria dos comandos adicionará uma
+diretiva `go` com a versão Go atual se uma não estiver presente.
 
 ## toolchain {#toolchain}
 
-Declares a suggested Go toolchain to use with this module.
-Only takes effect when the module is the main module
-and the default toolchain is older than the suggested toolchain.
+Declara um toolchain Go sugerido para usar com este módulo.
+Só tem efeito quando o módulo é o módulo main
+e o toolchain padrão é mais antigo que o toolchain sugerido.
 
-For more see “[Go toolchains](/doc/toolchain)” and
-[`toolchain` directive](/ref/mod/#go-mod-file-toolchain) in the
-Go Modules Reference.
+Para mais consulte "[Go toolchains](/doc/toolchain)" e
+[diretiva `toolchain`](/ref/mod/#go-mod-file-toolchain) na
+Referência de Módulos Go.
 
-### Syntax {#toolchain-syntax}
+### Sintaxe {#toolchain-syntax}
 
 <pre>toolchain <var>toolchain-name</var></pre>
 
 <dl>
     <dt>toolchain-name</dt>
-    <dd>The suggested Go toolchain's name. Standard toolchain names take the form
-      <code>go<i>V</i></code> for a Go version <i>V</i>, as in
-      <code>go1.21.0</code> and <code>go1.18rc1</code>.
-      The special value <code>default</code> disables automatic toolchain switching.</dd>
+    <dd>O nome do toolchain Go sugerido. Nomes de toolchain padrão tomam a forma
+      <code>go<i>V</i></code> para uma versão Go <i>V</i>, como em
+      <code>go1.21.0</code> e <code>go1.18rc1</code>.
+      O valor especial <code>default</code> desabilita a troca automática de toolchain.</dd>
 </dl>
 
-### Examples {#toolchain-examples}
+### Exemplos {#toolchain-examples}
 
-* Suggest using Go 1.21.0 or newer:
+* Sugerir usar Go 1.21.0 ou mais recente:
     ```
     toolchain go1.21.0
     ```
 
-### Notes {#toolchain-notes}
+### Notas {#toolchain-notes}
 
-See “[Go toolchains](/doc/toolchain)” for details about how the `toolchain` line
-affects Go toolchain selection.
+Consulte "[Go toolchains](/doc/toolchain)" para detalhes sobre como a linha `toolchain`
+afeta a seleção de toolchain Go.
 
 ## godebug {#godebug}
 
-Indicates the default [GODEBUG](/doc/godebug) settings to be applied to the main packages of this module.
-These override any toolchain defaults, and are overridden by explicit `//go:debug` lines in main packages.
+Indica as configurações [GODEBUG](/doc/godebug) padrão a serem aplicadas aos packages main deste módulo.
+Estas substituem quaisquer padrões do toolchain, e são substituídas por linhas `//go:debug` explícitas em packages main.
 
-### Syntax {#godebug-syntax}
+### Sintaxe {#godebug-syntax}
 
 <pre>godebug <var>debug-key</var>=<var>debug-value</var></pre>
 
 <dl>
     <dt>debug-key</dt>
-    <dd>The name of the setting to be applied.
-      A list of settings and the versions they were introduced in can be found at
-      <a href="/doc/godebug#history">GODEBUG History</a>.
+    <dd>O nome da configuração a ser aplicada.
+      Uma lista de configurações e as versões em que foram introduzidas pode ser encontrada em
+      <a href="/doc/godebug#history">Histórico GODEBUG</a>.
     </dd>
     <dt>debug-value</dt>
-    <dd>The value provided to the setting.
-      If not otherwise specified, <code>0</code> to disable and <code>1</code> to enable the named behavior.</dd>
+    <dd>O valor fornecido à configuração.
+      Se não especificado de outra forma, <code>0</code> para desabilitar e <code>1</code> para habilitar o comportamento nomeado.</dd>
 </dl>
 
-### Examples {#godebug-examples}
+### Exemplos {#godebug-examples}
 
-* Use the new 1.23 `asynctimerchan=0` behavior:
+* Usar o novo comportamento `asynctimerchan=0` do 1.23:
   ```
   godebug asynctimerchan=0
   ```
-* Use the default GODEBUGs from Go 1.21, but the old `panicnil=1` behavior:
+* Usar os GODEBUGs padrão do Go 1.21, mas o antigo comportamento `panicnil=1`:
   ```
   godebug (
       default=go1.21
@@ -283,61 +282,61 @@ These override any toolchain defaults, and are overridden by explicit `//go:debu
   )
   ```
 
-### Notes {#godebug-notes}
+### Notas {#godebug-notes}
 
-GODEBUG settings only apply for builds of main packages and test binaries in the current module.
-They have no effect when a module is used as a dependency.
+Configurações GODEBUG só se aplicam para builds de packages main e binários de teste no módulo atual.
+Elas não têm efeito quando um módulo é usado como uma dependência.
 
-See “[Go, Backwards Compatibility, and GODEBUG](/doc/godebug)” for details on backwards compatibility.
+Consulte "[Go, Backwards Compatibility, and GODEBUG](/doc/godebug)" para detalhes sobre compatibilidade retroativa.
 
 ## require {#require}
 
-Declares a module as a dependency of the current module, specifying the
-minimum version of the module required.
+Declara um módulo como uma dependência do módulo atual, especificando a
+versão mínima do módulo exigida.
 
-For more, see [`require` directive](/ref/mod#go-mod-file-require) in the
-Go Modules Reference.
+Para mais, consulte [diretiva `require`](/ref/mod#go-mod-file-require) na
+Referência de Módulos Go.
 
-### Syntax {#require-syntax}
+### Sintaxe {#require-syntax}
 
 <pre>require <var>module-path</var> <var>module-version</var></pre>
 
 <dl>
     <dt>module-path</dt>
-    <dd>The module's module path, usually a concatenation of the module source's
-      repository domain and the module name. For module versions v2 and later,
-      this value must end with the major version number, such as <code>/v2</code>.</dd>
+    <dd>O caminho do módulo do módulo, geralmente uma concatenação do domínio do
+      repositório de código-fonte do módulo e o nome do módulo. Para versões de módulo v2 e posteriores,
+      este valor deve terminar com o número de versão major, como <code>/v2</code>.</dd>
     <dt>module-version</dt>
-    <dd>The module's version. This can be either a release version number, such
-      as v1.2.3, or a Go-generated pseudo-version number, such as
+    <dd>A versão do módulo. Pode ser tanto um número de versão de release, como
+      v1.2.3, ou um número de pseudo-versão gerado pelo Go, como
       v0.0.0-20200921210052-fa0125251cc4.</dd>
 </dl>
 
-### Examples {#require-examples}
+### Exemplos {#require-examples}
 
-* Requiring a released version v1.2.3:
+* Exigindo uma versão de release v1.2.3:
     ```
     require example.com/othermodule v1.2.3
     ```
-* Requiring a version not yet tagged in its repository by using a pseudo-version
-  number generated by Go tools:
+* Exigindo uma versão ainda não tagueada em seu repositório usando um número de pseudo-versão
+  gerado pelas ferramentas Go:
     ```
     require example.com/othermodule v0.0.0-20200921210052-fa0125251cc4
     ```
 
-### Notes {#require-notes}
+### Notas {#require-notes}
 
-When you run a `go` command such as `go get`, Go inserts `require` directives
-for each module containing imported packages. When a module isn't yet tagged in
-its repository, Go assigns a pseudo-version number it generates when you run the
-command.
+Quando você executa um comando `go` como `go get`, Go insere diretivas `require`
+para cada módulo contendo packages importados. Quando um módulo ainda não está tagueado no
+seu repositório, Go atribui um número de pseudo-versão que gera quando você executa o
+comando.
 
-You can have Go require a module from a location other than its repository by
-using the [`replace` directive](#replace).
+Você pode fazer Go exigir um módulo de um local diferente do seu repositório usando
+a [diretiva `replace`](#replace).
 
-For more about version numbers, see [Module version numbering](/doc/modules/version-numbers).
+Para mais sobre números de versão, consulte [Module version numbering](/doc/modules/version-numbers).
 
-For more about managing dependencies, see the following:
+Para mais sobre gerenciamento de dependências, consulte o seguinte:
 
 * [Adding a dependency](/doc/modules/managing-dependencies#adding_dependency)
 * [Getting a specific dependency version](/doc/modules/managing-dependencies#getting_version)
@@ -347,28 +346,28 @@ For more about managing dependencies, see the following:
 
 ## tool {#tool}
 
-Adds a package as a dependency of the current module, and makes it available to run with `go tool` when the current working directory is within this module.
+Adiciona um package como uma dependência do módulo atual, e o disponibiliza para executar com `go tool` quando o diretório de trabalho atual está dentro deste módulo.
 
-### Syntax {#tool-syntax}
+### Sintaxe {#tool-syntax}
 
 <pre>tool <var>package-path</var></pre>
 
 <dl>
     <dt>package-path</dt>
-    <dd>The tool's package path, a concatenation of the module containing
-        the tool and the (possibly empty) path to the package implementing
-        the tool within the module.</dd>
+    <dd>O caminho do package da ferramenta, uma concatenação do módulo contendo
+        a ferramenta e o caminho (possivelmente vazio) para o package implementando
+        a ferramenta dentro do módulo.</dd>
 </dl>
 
-### Examples {#tool-examples}
+### Exemplos {#tool-examples}
 
-* Declaring a tool implemented in the current module:
+* Declarando uma ferramenta implementada no módulo atual:
     ```
     module example.com/mymodule
 
     tool example.com/mymodule/cmd/mytool
     ```
-* Declaring a tool implemented in a separate module:
+* Declarando uma ferramenta implementada em um módulo separado:
     ```
     module example.com/mymodule
 
@@ -377,58 +376,58 @@ Adds a package as a dependency of the current module, and makes it available to 
     require example.com/atool v1.2.3
     ```
 
-### Notes {#tool-notes}
+### Notas {#tool-notes}
 
-You can use `go tool` to run tools declared in your module by fully qualified package path
-or, if there is no ambiguity, by the last path segment. In the first example
-above you could run `go tool mytool` or `go tool example.com/mymodule/cmd/mytool`.
+Você pode usar `go tool` para executar ferramentas declaradas no seu módulo pelo caminho completo do package
+ou, se não houver ambiguidade, pelo último segmento do caminho. No primeiro exemplo
+acima você poderia executar `go tool mytool` ou `go tool example.com/mymodule/cmd/mytool`.
 
-In workspace mode, you can use `go tool` to run a tool declared in any workspace module.
+No modo workspace, você pode usar `go tool` para executar uma ferramenta declarada em qualquer módulo do workspace.
 
-Tools are built using the same module graph as the module itself. A [`require`
-directive](#require) is needed to select the version of the module that
-implements the tool. Any [`replace` directives](#replace), or [`exclude`
-directives](#exclude) also apply to the tool and its dependencies.
+Ferramentas são compiladas usando o mesmo grafo de módulos que o próprio módulo. Uma diretiva [`require`
+](#require) é necessária para selecionar a versão do módulo que
+implementa a ferramenta. Quaisquer [diretivas `replace`](#replace), ou [diretivas `exclude`
+](#exclude) também se aplicam à ferramenta e suas dependências.
 
-For more information see [Tool dependencies](/doc/modules/managing-dependencies#tools).
+Para mais informação consulte [Tool dependencies](/doc/modules/managing-dependencies#tools).
 
 ## replace {#replace}
 
-Replaces the content of a module at a specific version (or all versions) with
-another module version or with a local directory. Go tools will use the
-replacement path when resolving the dependency.
+Substitui o conteúdo de um módulo em uma versão específica (ou todas as versões) com
+outra versão de módulo ou com um diretório local. Ferramentas Go usarão o
+caminho de substituição ao resolver a dependência.
 
-For more, see [`replace` directive](/ref/mod#go-mod-file-replace) in the
-Go Modules Reference.
+Para mais, consulte [diretiva `replace`](/ref/mod#go-mod-file-replace) na
+Referência de Módulos Go.
 
-### Syntax {#replace-syntax}
+### Sintaxe {#replace-syntax}
 
 <pre>replace <var>module-path</var> <var>[module-version]</var> => <var>replacement-path</var> <var>[replacement-version]</var></pre>
 
 <dl>
     <dt>module-path</dt>
-    <dd>The module path of the module to replace.</dd>
+    <dd>O caminho do módulo do módulo a substituir.</dd>
     <dt>module-version</dt>
-    <dd>Optional. A specific version to replace. If this version number is
-      omitted, all versions of the module are replaced with the content on the
-      right side of the arrow.</dd>
+    <dd>Opcional. Uma versão específica para substituir. Se este número de versão for
+      omitido, todas as versões do módulo são substituídas com o conteúdo no
+      lado direito da seta.</dd>
     <dt>replacement-path</dt>
-    <dd>The path at which Go should look for the required module. This can be a
-      module path or a path to a directory on the file system local to the
-      replacement module. If this is a module path, you must specify a
-      <em>replacement-version</em> value. If this is a local path, you may not use a
-      <em>replacement-version</em> value.</dd>
+    <dd>O caminho onde Go deve procurar o módulo exigido. Pode ser um
+      caminho de módulo ou um caminho para um diretório no sistema de arquivos local para o
+      módulo de substituição. Se for um caminho de módulo, você deve especificar um
+      valor de <em>replacement-version</em>. Se for um caminho local, você não pode usar um
+      valor de <em>replacement-version</em>.</dd>
     <dt>replacement-version</dt>
-    <dd>The version of the replacement module. The replacement version may only
-      be specified if <em>replacement-path</em> is a module path (not a local directory).</dd>
+    <dd>A versão do módulo de substituição. A versão de substituição só pode
+      ser especificada se <em>replacement-path</em> for um caminho de módulo (não um diretório local).</dd>
 </dl>
 
-### Examples {#replace-examples}
+### Exemplos {#replace-examples}
 
-* Replacing with a fork of the module repository
+* Substituindo com um fork do repositório do módulo
 
-  In the following example, any version of example.com/othermodule is replaced
-  with the specified fork of its code.
+  No exemplo a seguir, qualquer versão de example.com/othermodule é substituída
+  com o fork especificado do seu código.
 
   ```
   require example.com/othermodule v1.2.3
@@ -436,16 +435,16 @@ Go Modules Reference.
   replace example.com/othermodule => example.com/myfork/othermodule v1.2.3-fixed
   ```
 
-  When you replace one module path with another, do not change import statements
-  for packages in the module you're replacing.
+  Quando você substitui um caminho de módulo com outro, não mude statements import
+  para packages no módulo que você está substituindo.
 
-  For more on using a forked copy of module code, see [Requiring external module
+  Para mais sobre usar uma cópia de fork do código de módulo, consulte [Requiring external module
   code from your own repository fork](/doc/modules/managing-dependencies#external_fork).
 
-* Replacing with a different version number
+* Substituindo com um número de versão diferente
 
-  The following example specifies that version v1.2.3 should be used instead of
-  any other version of the module.
+  O exemplo a seguir especifica que a versão v1.2.3 deve ser usada em vez de
+  qualquer outra versão do módulo.
 
   ```
   require example.com/othermodule v1.2.2
@@ -453,17 +452,17 @@ Go Modules Reference.
   replace example.com/othermodule => example.com/othermodule v1.2.3
   ```
 
-  The following example replaces module version v1.2.5 with version v1.2.3 of
-  the same module.
+  O exemplo a seguir substitui a versão v1.2.5 do módulo com a versão v1.2.3 do
+  mesmo módulo.
 
   ```
   replace example.com/othermodule v1.2.5 => example.com/othermodule v1.2.3
   ```
 
-* Replacing with local code
+* Substituindo com código local
 
-  The following example specifies that a local directory should be used as a
-  replacement for all versions of the module.
+  O exemplo a seguir especifica que um diretório local deve ser usado como
+  substituição para todas as versões do módulo.
 
   ```
   require example.com/othermodule v1.2.3
@@ -471,8 +470,8 @@ Go Modules Reference.
   replace example.com/othermodule => ../othermodule
   ```
 
-  The following example specifies that a local directory should be used as a
-  replacement for v1.2.5 only.
+  O exemplo a seguir especifica que um diretório local deve ser usado como
+  substituição apenas para v1.2.5.
 
   ```
   require example.com/othermodule v1.2.5
@@ -480,35 +479,35 @@ Go Modules Reference.
   replace example.com/othermodule v1.2.5 => ../othermodule
   ```
 
-  For more on using a local copy of module code, see [Requiring module code in a
+  Para mais sobre usar uma cópia local do código de módulo, consulte [Requiring module code in a
   local directory](/doc/modules/managing-dependencies#local_directory).
 
-### Notes {#replace-notes}
+### Notas {#replace-notes}
 
-Use the `replace` directive to temporarily substitute a module path value with
-another value when you want Go to use the other path to find the module's
-source. This has the effect of redirecting Go's search for the module to the
-replacement's location. You needn't change package import paths to use the
-replacement path.
+Use a diretiva `replace` para substituir temporariamente um valor de caminho de módulo com
+outro valor quando você quer que Go use o outro caminho para encontrar o
+código-fonte do módulo. Isso tem o efeito de redirecionar a busca do Go pelo módulo para o
+local da substituição. Você não precisa mudar caminhos de import de packages para usar o
+caminho de substituição.
 
-Use the `exclude` and `replace` directives to control build-time dependency
-resolution when building the current module. These directives are ignored in
-modules that depend on the current module.
+Use as diretivas `exclude` e `replace` para controlar a resolução de dependências em tempo de compilação
+ao compilar o módulo atual. Essas diretivas são ignoradas em
+módulos que dependem do módulo atual.
 
-The `replace` directive can be useful in situations such as the following:
+A diretiva `replace` pode ser útil em situações como as seguintes:
 
-* You're developing a new module whose code is not yet in the repository. You
-  want to test with clients using a local version.
-* You've identified an issue with a dependency, have cloned the dependency's
-  repository, and you're testing a fix with the local repository.
+* Você está desenvolvendo um novo módulo cujo código ainda não está no repositório. Você
+  quer testar com clientes usando uma versão local.
+* Você identificou um problema com uma dependência, clonou o repositório da
+  dependência, e está testando uma correção com o repositório local.
 
-Note that a `replace` directive alone does not add a module to the
-[module graph](/ref/mod#glos-module-graph). A [`require` directive](#require)
-that refers to a replaced module version is also needed, either in the main
-module's `go.mod` file or a dependency's `go.mod` file. If you don't have a
-specific version to replace, you can use a fake version, as in the example
-below. Note that this will break modules that depend on your module, since
-`replace` directives are only applied in the main module.
+Observe que uma diretiva `replace` sozinha não adiciona um módulo ao
+[grafo de módulos](/ref/mod#glos-module-graph). Uma [diretiva `require`](#require)
+que refere-se a uma versão de módulo substituída também é necessária, seja no arquivo `go.mod` do módulo main
+ou no arquivo `go.mod` de uma dependência. Se você não tem uma
+versão específica para substituir, pode usar uma versão falsa, como no exemplo
+abaixo. Observe que isso quebrará módulos que dependem do seu módulo, já que
+diretivas `replace` são aplicadas apenas no módulo main.
 
 ```
 require example.com/mod v0.0.0-replace
@@ -516,75 +515,75 @@ require example.com/mod v0.0.0-replace
 replace example.com/mod v0.0.0-replace => ./mod
 ```
 
-For more on replacing a required module, including using Go tools to make the
-change, see:
+Para mais sobre substituir um módulo exigido, incluindo usar ferramentas Go para fazer a
+mudança, consulte:
 
 * [Requiring external module code from your own repository
 fork](/doc/modules/managing-dependencies#external_fork)
 * [Requiring module code in a local
 directory](/doc/modules/managing-dependencies#local_directory)
 
-For more about version numbers, see [Module version
+Para mais sobre números de versão, consulte [Module version
 numbering](/doc/modules/version-numbers).
 
 ## exclude {#exclude}
 
-Specifies a module or module version to exclude from the current module's
-dependency graph.
+Especifica um módulo ou versão de módulo para excluir do grafo de
+dependências do módulo atual.
 
-For more, see [`exclude` directive](/ref/mod#go-mod-file-exclude) in the
-Go Modules Reference.
+Para mais, consulte [diretiva `exclude`](/ref/mod#go-mod-file-exclude) na
+Referência de Módulos Go.
 
-### Syntax {#exclude-syntax}
+### Sintaxe {#exclude-syntax}
 
 <pre>exclude <var>module-path</var> <var>module-version</var></pre>
 
 <dl>
     <dt>module-path</dt>
-    <dd>The module path of the module to exclude.</dd>
+    <dd>O caminho do módulo do módulo a excluir.</dd>
     <dt>module-version</dt>
-    <dd>The specific version to exclude.</dd>
+    <dd>A versão específica a excluir.</dd>
 </dl>
 
-### Example {#exclude-example}
+### Exemplo {#exclude-example}
 
-* Exclude example.com/theirmodule version v1.3.0
+* Excluir example.com/theirmodule versão v1.3.0
 
   ```
   exclude example.com/theirmodule v1.3.0
   ```
 
-### Notes {#exclude-notes}
+### Notas {#exclude-notes}
 
-Use the `exclude` directive to exclude a specific version of a module that is
-indirectly required but can't be loaded for some reason. For example, you might
-use it to exclude a version of a module that has an invalid checksum.
+Use a diretiva `exclude` para excluir uma versão específica de um módulo que é
+indiretamente exigido mas não pode ser carregado por alguma razão. Por exemplo, você pode
+usá-la para excluir uma versão de um módulo que tem um checksum inválido.
 
-Use the `exclude` and `replace` directives to control build-time dependency
-resolution when building the current module (the main module you're building).
-These directives are ignored in modules that depend on the current module.
+Use as diretivas `exclude` e `replace` para controlar a resolução de dependências em tempo de compilação
+ao compilar o módulo atual (o módulo main que você está compilando).
+Essas diretivas são ignoradas em módulos que dependem do módulo atual.
 
-You can use the [`go mod edit`](/ref/mod#go-mod-edit) command
-to exclude a module, as in the following example.
+Você pode usar o [comando `go mod edit`](/ref/mod#go-mod-edit)
+para excluir um módulo, como no exemplo a seguir.
 
 ```
 go mod edit -exclude=example.com/theirmodule@v1.3.0
 ```
 
-For more about version numbers, see
+Para mais sobre números de versão, consulte
 [Module version numbering](/doc/modules/version-numbers).
 
 ## retract {#retract}
 
-Indicates that a version or range of versions of the module defined by `go.mod`
-should not be depended upon. A `retract` directive is useful when a version was
-published prematurely or a severe problem was discovered after the version was
-published.
+Indica que uma versão ou intervalo de versões do módulo definido por `go.mod`
+não deveria ter dependências. Uma diretiva `retract` é útil quando uma versão foi
+publicada prematuramente ou um problema grave foi descoberto após a versão ter sido
+publicada.
 
-For more, see [`retract` directive](/ref/mod#go-mod-file-retract) in the
-Go Modules Reference.
+Para mais, consulte [diretiva `retract`](/ref/mod#go-mod-file-retract) na
+Referência de Módulos Go.
 
-### Syntax {#retract-syntax}
+### Sintaxe {#retract-syntax}
 
 <pre>
 retract <var>version</var> // <var>rationale</var>
@@ -593,76 +592,76 @@ retract [<var>version-low</var>,<var>version-high</var>] // <var>rationale</var>
 
 <dl>
   <dt>version</dt>
-  <dd>A single version to retract.</dd>
+  <dd>Uma única versão para retratar.</dd>
   <dt>version-low</dt>
-  <dd>Lower bound of a range of versions to retract.</dd>
+  <dd>Limite inferior de um intervalo de versões para retratar.</dd>
   <dt>version-high</dt>
   <dd>
-    Upper bound of a range of versions to retract. Both <var>version-low</var>
-    and <var>version-high</var> are included in the range.
+    Limite superior de um intervalo de versões para retratar. Tanto <var>version-low</var>
+    quanto <var>version-high</var> são incluídos no intervalo.
   </dd>
   <dt>rationale</dt>
   <dd>
-    Optional comment explaining the retraction. May be shown in messages to
-    the user.
+    Comentário opcional explicando a retratação. Pode ser mostrado em mensagens ao
+    usuário.
   </dd>
 </dl>
 
-### Example {#retract-example}
+### Exemplo {#retract-example}
 
-* Retracting a single version
+* Retratando uma única versão
 
   ```
   retract v1.1.0 // Published accidentally.
   ```
 
-* Retracting a range of versions
+* Retratando um intervalo de versões
 
   ```
   retract [v1.0.0,v1.0.5] // Build broken on some platforms.
   ```
 
-### Notes {#retract-notes}
+### Notas {#retract-notes}
 
-Use the `retract` directive to indicate that a previous version of your module
-should not be used. Users will not automatically upgrade to a retracted version
-with `go get`, `go mod tidy`, or other commands. Users will not see a retracted
-version as an available update with `go list -m -u`.
+Use a diretiva `retract` para indicar que uma versão anterior do seu módulo
+não deveria ser usada. Usuários não atualizarão automaticamente para uma versão retratada
+com `go get`, `go mod tidy`, ou outros comandos. Usuários não verão uma versão retratada
+como uma atualização disponível com `go list -m -u`.
 
-Retracted versions should remain available so users that already depend on them
-are able to build their packages. Even if a retracted version is deleted from
-the source repository, it may remain available on mirrors such as
-[proxy.golang.org](https://proxy.golang.org). Users that depend on retracted
-versions may be notified when they run `go get` or `go list -m -u` on
-related modules.
+Versões retratadas devem permanecer disponíveis para que usuários que já dependem delas
+sejam capazes de compilar seus packages. Mesmo se uma versão retratada for excluída do
+repositório de código-fonte, ela pode permanecer disponível em mirrors como
+[proxy.golang.org](https://proxy.golang.org). Usuários que dependem de versões retratadas
+podem ser notificados quando executam `go get` ou `go list -m -u` em
+módulos relacionados.
 
-The `go` command discovers retracted versions by reading `retract` directives
-in the `go.mod` file in the latest version of a module. The latest version is,
-in order of precedence:
+O comando `go` descobre versões retratadas lendo diretivas `retract`
+no arquivo `go.mod` na versão mais recente de um módulo. A versão mais recente é, em
+ordem de precedência:
 
-1. Its highest release version, if any
-2. Its highest pre-release version, if any
-3. A pseudo-version for the tip of the repository's default branch.
+1. Sua versão de release mais alta, se houver alguma
+2. Sua versão de pre-release mais alta, se houver alguma
+3. Uma pseudo-versão para o tip do branch padrão do repositório.
 
-When you add a retraction, you almost always need to tag a new, higher version
-so the command will see it in the latest version of the module.
+Quando você adiciona uma retratação, você quase sempre precisa taguear uma nova versão mais alta
+para que o comando a veja na versão mais recente do módulo.
 
-You can publish a version whose sole purpose is to signal retractions. In this
-case, the new version may also retract itself.
+Você pode publicar uma versão cujo único propósito é sinalizar retratações. Neste
+caso, a nova versão também pode retratar a si mesma.
 
-For example, if you accidentally tag `v1.0.0`, you can tag `v1.0.1` with the
-following directives:
+Por exemplo, se você acidentalmente taguear `v1.0.0`, você pode taguear `v1.0.1` com as
+seguintes diretivas:
 
 ```
 retract v1.0.0 // Published accidentally.
 retract v1.0.1 // Contains retraction only.
 ```
 
-Unfortunately, once a version is published, it cannot be changed. If you later
-tag `v1.0.0` at a different commit, the `go` command may detect a
-mismatched sum in `go.sum` or in the [checksum
-database](/ref/mod#checksum-database).
+Infelizmente, uma vez que uma versão é publicada, ela não pode ser alterada. Se você depois
+taguear `v1.0.0` em um commit diferente, o comando `go` pode detectar uma
+soma incompatível em `go.sum` ou no [banco de dados de
+checksums](/ref/mod#checksum-database).
 
-Retracted versions of a module do not normally appear in the output of
-`go list -m -versions`, but you can use the `-retracted` to show them.
-For more, see [`go list -m`](/ref/mod#go-list-m) in the Go Modules Reference.
+Versões retratadas de um módulo normalmente não aparecem na saída de
+`go list -m -versions`, mas você pode usar a flag `-retracted` para mostrá-las.
+Para mais, consulte [`go list -m`](/ref/mod#go-list-m) na Referência de Módulos Go.
