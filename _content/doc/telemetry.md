@@ -1,4 +1,5 @@
 ---
+ia-translated: true
 title: "Go Telemetry"
 layout: article
 breadcrumb: true
@@ -21,87 +22,87 @@ date: 2024-02-07:00:00Z
 }
 </style>
 
-Table of Contents:
+Índice:
 
- [Background](#background)\
- [Overview](#overview)\
- [Configuration](#config)\
+ [Contexto](#background)\
+ [Visão Geral](#overview)\
+ [Configuração](#config)\
  [Counters](#counters)\
- [Reporting and Uploading](#reports)\
+ [Reporting e Uploading](#reports)\
  [Charts](#charts) \
  [Telemetry Proposals](#proposals)\
  [IDE Prompting](#ide) \
- [Frequently Asked Questions](#faq)
+ [Perguntas Frequentes](#faq)
 
-## Background {#background}
+## Contexto {#background}
 
-Go telemetry is a way for Go toolchain programs to collect data about their
-performance and usage. Here "Go toolchain" means developer tools maintained
-by the Go team, including the `go` command and supplemental tools such as the
-Go language server [`gopls`] or Go security tool [`govulncheck`]. Go telemetry is
-only intended for use in programs maintained by the Go team and their selected
-dependencies like [Delve].
+Go telemetry é uma forma de programas da toolchain Go coletarem dados sobre seu
+desempenho e uso. Aqui "Go toolchain" significa ferramentas de desenvolvedor mantidas
+pelo time Go, incluindo o comando `go` e ferramentas suplementares como o
+servidor de linguagem Go [`gopls`] ou ferramenta de segurança Go [`govulncheck`]. Go telemetry é
+destinado apenas para uso em programas mantidos pelo time Go e suas dependências selecionadas
+como [Delve].
 
-By default, telemetry data is kept only on the local computer, but users may
-opt in to uploading an approved subset of telemetry data to [telemetry.go.dev].
-Uploaded data helps the Go team improve the Go language and its tools,
-by helping us understand usage and breakages.
+Por padrão, dados de telemetria são mantidos apenas no computador local, mas usuários podem
+optar por fazer upload de um subconjunto aprovado de dados de telemetria para [telemetry.go.dev].
+Dados enviados ajudam o time Go a melhorar a linguagem Go e suas ferramentas,
+ajudando-nos a entender uso e problemas.
 
-The word "telemetry" has acquired negative connotations in the world of open
-source software, in many cases deservedly so. Yet measuring the user experience
-is an important element of modern software engineering, and data sources such
-as GitHub issues or annual surveys are coarse and lagging indicators,
-insufficient for the types of questions the Go team needs to be able to answer.
-Go telemetry is designed to help programs in the toolchain collect useful data
-about their reliability, performance, and usage, while maintaining the
-transparency and privacy that users expect from the Go project. To learn more
-about the design process and motivation for telemetry, please see the
-[telemetry blog posts](https://research.swtch.com/telemetry).
-To learn more about telemetry and privacy, please see the
-[telemetry privacy policy](https://telemetry.go.dev/privacy).
+A palavra "telemetria" adquiriu conotações negativas no mundo de software
+open source, em muitos casos merecidamente. No entanto, medir a experiência do usuário
+é um elemento importante da engenharia de software moderna, e fontes de dados como
+issues do GitHub ou pesquisas anuais são indicadores grosseiros e atrasados,
+insuficientes para os tipos de perguntas que o time Go precisa ser capaz de responder.
+Go telemetry é projetada para ajudar programas na toolchain a coletar dados úteis
+sobre sua confiabilidade, desempenho e uso, mantendo a
+transparência e privacidade que usuários esperam do projeto Go. Para saber mais
+sobre o processo de design e motivação para telemetria, por favor veja os
+[posts de blog sobre telemetria](https://research.swtch.com/telemetry).
+Para saber mais sobre telemetria e privacidade, por favor veja a
+[política de privacidade de telemetria](https://telemetry.go.dev/privacy).
 
-This page explains how Go telemetry works, in some detail. For quick answers to
-frequently asked questions, see the [FAQ](#faq).
+Esta página explica como Go telemetry funciona, em alguns detalhes. Para respostas rápidas a
+perguntas frequentes, veja o [FAQ](#faq).
 
 <div class="DocInfo">
-Using Go 1.23 or later, to <strong>opt in</strong> to uploading telemetry data
-to the Go team, run:
+Usando Go 1.23 ou posterior, para <strong>optar por</strong> fazer upload de dados de telemetria
+para o time Go, execute:
 <pre>
 go telemetry on
 </pre>
-To completely disable telemetry, including local collection, run:
+Para desabilitar completamente a telemetria, incluindo coleta local, execute:
 <pre>
 go telemetry off
 </pre>
-To revert to the default mode of local-only telemetry, run:
+Para reverter para o modo padrão de telemetria apenas local, execute:
 <pre>
 go telemetry local
 </pre>
-Prior to Go 1.23, this can also be done with the
-<code>golang.org/x/telemetry/cmd/gotelemetry</code> command. See <a
-href="#config">Configuration</a> for more details.
+Antes do Go 1.23, isso também pode ser feito com o comando
+<code>golang.org/x/telemetry/cmd/gotelemetry</code>. Veja <a
+href="#config">Configuração</a> para mais detalhes.
 </div>
 
-## Overview {#overview}
+## Visão Geral {#overview}
 
-Go telemetry uses three core data types:
+Go telemetry usa três tipos de dados principais:
 
-- [_Counters_](#counters) are lightweight counts of named events, instrumented
-  in the toolchain program. If collection is enabled (the [mode](#config)
-  is **local** or **on**), counters are written to a memory-mapped file in the
-  local file system.
-- [_Reports_](#reports) are aggregated summaries of counters for a given week.
-  If uploading is enabled (the [mode](#config) is **on**), reports for
-  [approved counters](#proposals) are uploaded to [telemetry.go.dev], where
-  they are publicly accessible.
-- [_Charts_](#charts) summarize uploaded reports for all users.
-  Charts can be viewed at [telemetry.go.dev].
+- [_Counters_](#counters) são contagens leves de eventos nomeados, instrumentados
+  no programa da toolchain. Se a coleta estiver habilitada (o [mode](#config)
+  é **local** ou **on**), counters são escritos em um arquivo mapeado em memória no
+  sistema de arquivos local.
+- [_Reports_](#reports) são resumos agregados de counters para uma dada semana.
+  Se o upload estiver habilitado (o [mode](#config) é **on**), reports para
+  [counters aprovados](#proposals) são enviados para [telemetry.go.dev], onde
+  eles são publicamente acessíveis.
+- [_Charts_](#charts) resumem reports enviados para todos os usuários.
+  Charts podem ser visualizados em [telemetry.go.dev].
 
-All local Go telemetry data and configuration is stored in the directory
-<code>[os.UserConfigDir()](/pkg/os#UserConfigDir)/go/telemetry</code>
-directory. Below, we'll refer to this directory as `<gotelemetry>`.
+Todos os dados e configuração de Go telemetry local são armazenados no diretório
+<code>[os.UserConfigDir()](/pkg/os#UserConfigDir)/go/telemetry</code>.
+Abaixo, nos referiremos a este diretório como `<gotelemetry>`.
 
-The diagram below illustrates this data flow.
+O diagrama abaixo ilustra este fluxo de dados.
 
 <div class="image">
   <center>
@@ -109,73 +110,73 @@ The diagram below illustrates this data flow.
   </center>
 </div>
 
-In the rest of this document, we'll explore the components of this diagram. But
-first, let's learn more about the configuration that controls it.
+No resto deste documento, exploraremos os componentes deste diagrama. Mas
+primeiro, vamos aprender mais sobre a configuração que o controla.
 
-## Configuration {#config}
+## Configuração {#config}
 
-The behavior of Go telemetry is controlled by a single value: the telemetry
-_mode_. The possible values for `mode` are `local` (the default), `on`, or
+O comportamento de Go telemetry é controlado por um único valor: o
+_mode_ de telemetria. Os valores possíveis para `mode` são `local` (o padrão), `on`, ou
 `off`:
 
-- When `mode` is `local`, telemetry data is collected and stored on the local
-  computer, but never uploaded to remote servers.
-- When `mode` is `on`, data is collected, and may be uploaded depending on
+- Quando `mode` é `local`, dados de telemetria são coletados e armazenados no computador local,
+  mas nunca enviados para servidores remotos.
+- Quando `mode` é `on`, dados são coletados, e podem ser enviados dependendo de
   [sampling](#uploads).
-- When `mode` is `off`, data is neither collected nor uploaded.
+- Quando `mode` é `off`, dados não são nem coletados nem enviados.
 
-With Go 1.23 or later, the following commands interact with the telemetry mode:
+Com Go 1.23 ou posterior, os seguintes comandos interagem com o mode de telemetria:
 
-- `go telemetry`: see the current mode.
-- `go telemetry on`: set the mode to `on`.
-- `go telemetry off`: set the mode to `off`.
-- `go telemetry local`: set the mode to `local`.
+- `go telemetry`: veja o mode atual.
+- `go telemetry on`: defina o mode para `on`.
+- `go telemetry off`: defina o mode para `off`.
+- `go telemetry local`: defina o mode para `local`.
 
-Information about telemetry configuration is also available via read-only Go
-environment variables:
+Informações sobre configuração de telemetria também estão disponíveis via variáveis de
+ambiente Go somente leitura:
 
-- `go env GOTELEMETRY` reports the telemetry mode.
-- `go env GOTELEMETRYDIR` reports the directory holding telemetry configuration
-  and data.
+- `go env GOTELEMETRY` reporta o mode de telemetria.
+- `go env GOTELEMETRYDIR` reporta o diretório contendo configuração
+  e dados de telemetria.
 
-The [`gotelemetry`](/pkg/golang.org/x/telemetry/cmd/gotelemetry) command can
-also be used to configure the telemetry mode, as well as to inspect local
-telemetry data. Use this command to install it:
+O comando [`gotelemetry`](/pkg/golang.org/x/telemetry/cmd/gotelemetry) também
+pode ser usado para configurar o mode de telemetria, bem como para inspecionar
+dados de telemetria local. Use este comando para instalá-lo:
 
 ```
 go install golang.org/x/telemetry/cmd/gotelemetry@latest
 ```
 
-For the complete usage information of the `gotelemetry` command line tool,
-see its [package documentation](/pkg/golang.org/x/telemetry/cmd/gotelemetry).
+Para informações de uso completas da ferramenta de linha de comando `gotelemetry`,
+veja sua [documentação do package](/pkg/golang.org/x/telemetry/cmd/gotelemetry).
 
 ## Counters {#counters}
 
-As mentioned above, Go telemetry is instrumented via _counters_. Counters come
-in two variants: basic counters and stack counters.
+Como mencionado acima, Go telemetry é instrumentada via _counters_. Counters vêm
+em duas variantes: basic counters e stack counters.
 
 ### Basic counters
 
-A _basic counter_ is an incrementable value with a name that describes the
-event that it counts. For example, the `gopls/client:vscode` counter records
-the number of times a `gopls` session is initiated by VS Code. Alongside this
-counter we may have `gopls/client:neovim`, `gopls/client:eglot`, and so on, to
-record sessions with different editors or language clients. If you used
-multiple editors throughout the week, you might record the following counter
-data:
+Um _basic counter_ é um valor incrementável com um nome que descreve o
+evento que ele conta. Por exemplo, o counter `gopls/client:vscode` registra
+o número de vezes que uma sessão `gopls` é iniciada pelo VS Code. Ao lado deste
+counter podemos ter `gopls/client:neovim`, `gopls/client:eglot`, e assim por diante, para
+registrar sessões com diferentes editores ou language clients. Se você usou
+múltiplos editores durante a semana, você pode registrar os seguintes dados de
+counter:
 
     gopls/client:vscode 8
     gopls/client:neovim 5
     gopls/client:eglot  2
 
-When counters are related in this way, we sometimes refer to the part before
-the `:` the _chart name_ (`gopls/client` in this case), and the part after `:`
-as the _bucket name_ (`vscode`). We'll see why this matters when we discuss
+Quando counters são relacionados desta forma, às vezes nos referimos à parte antes
+do `:` como _chart name_ (`gopls/client` neste caso), e a parte depois de `:`
+como _bucket name_ (`vscode`). Veremos por que isso importa quando discutirmos
 [charts](#charts).
 
-Basic counters can also represent a _histogram_. For example, the {{raw
-`<code>gopls/completion/latency:&lt;50ms</code>`}} counter records the number
-of times an autocompletion takes less than 50ms.
+Basic counters também podem representar um _histogram_. Por exemplo, o counter {{raw
+`<code>gopls/completion/latency:&lt;50ms</code>`}} registra o número
+de vezes que um autocompletion leva menos de 50ms.
 
 {{raw `
 <pre>
@@ -186,16 +187,16 @@ gopls/completion/latency:&lt;100ms
 </pre>
 `}}
 
-This pattern for recording histogram data is a convention: there's nothing
-special about the {{raw `<code>&lt;50ms</code>`}} bucket name. These types of
-counters are commonly used to measure performance.
+Este padrão para registrar dados de histograma é uma convenção: não há nada
+especial sobre o bucket name {{raw `<code>&lt;50ms</code>`}}. Esses tipos de
+counters são comumente usados para medir desempenho.
 
 ### Stack counters
 
-A _stack counter_ is a counter that also records the current call stack of the
-Go toolchain program when the count is incremented. For example, the
-`crash/crash` stack counter records the call stack when a toolchain program
-crashes:
+Um _stack counter_ é um counter que também registra a call stack atual do
+programa da toolchain Go quando a contagem é incrementada. Por exemplo, o
+stack counter `crash/crash` registra a call stack quando um programa da toolchain
+trava:
 
     crash/crash
     golang.org/x/tools/gopls/internal/golang.hoverBuiltin:+22
@@ -203,55 +204,55 @@ crashes:
     golang.org/x/tools/gopls/internal/server.Hover:+42
     ...
 
-Stack counters typically measure events where program invariants are violated.
-The most common example of this is a crash, but another example is the
-`gopls/bug` stack counter, which counts unusual situations identified in
-advance by the programmer, such as a recovered panic or an error that "can't
-happen". Stack counters include only the names and line numbers of functions
-within Go toolchain programs. They don't include any information about user
-inputs, such as the names or contents of a user's source code.
+Stack counters tipicamente medem eventos onde invariantes do programa são violados.
+O exemplo mais comum disso é um crash, mas outro exemplo é o
+stack counter `gopls/bug`, que conta situações incomuns identificadas
+antecipadamente pelo programador, como um panic recuperado ou um erro que "não pode
+acontecer". Stack counters incluem apenas os nomes e números de linha de funções
+dentro de programas da toolchain Go. Eles não incluem nenhuma informação sobre
+entradas do usuário, como os nomes ou conteúdos do código fonte de um usuário.
 
-Stack counters can help track down rare or tricky bugs that don't get reported
-by other means. Since introducing the `gopls/bug` counter, we've found
-[dozens of instances](https://github.com/golang/go/issues?q=label%3Agopls%2Ftelemetry-wins)
-of "unreachable" code that was reached in practice, and tracking down these
-exceptions has led to the discovery (and fix) of many user-visible bugs that
-were either not obvious to the user or too difficult to report. Especially with
-prerelease testing, stack counters can help us improve the product more
-efficiently than we could without automation.
+Stack counters podem ajudar a rastrear bugs raros ou complicados que não são reportados
+por outros meios. Desde a introdução do counter `gopls/bug`, encontramos
+[dezenas de instâncias](https://github.com/golang/go/issues?q=label%3Agopls%2Ftelemetry-wins)
+de código "inalcançável" que foi alcançado na prática, e rastrear essas
+exceções levou à descoberta (e correção) de muitos bugs visíveis ao usuário que
+eram ou não óbvios para o usuário ou muito difíceis de reportar. Especialmente com
+testes de pré-lançamento, stack counters podem nos ajudar a melhorar o produto mais
+eficientemente do que poderíamos sem automação.
 
-### Counter files
+### Arquivos de counter
 
-All counter data is written to the `<gotelemetry>/local` directory, in
-files named according to the following schema:
+Todos os dados de counter são escritos no diretório `<gotelemetry>/local`, em
+arquivos nomeados de acordo com o seguinte esquema:
 
 ```
 [program name]@[program version]-[go version]-[GOOS]-[GOARCH]-[date].v1.count
 ```
 
-- The **program name** is the basename of the program's package path, as reported
-  by [debug.BuildInfo].
-- The **program version** and **go version** are also reported by [debug.BuildInfo].
-- The **GOOS** and **GOARCH** values are reported by
-  [`runtime.GOOS`](/pkg/runtime#GOOS) and
+- O **program name** é o basename do caminho do package do programa, conforme reportado
+  por [debug.BuildInfo].
+- A **program version** e **go version** também são reportadas por [debug.BuildInfo].
+- Os valores **GOOS** e **GOARCH** são reportados por
+  [`runtime.GOOS`](/pkg/runtime#GOOS) e
   [`runtime.GOARCH`](/pkg/runtime#GOARCH).
-- The **date** is the date the counter file was created, in `YYYY-MM-DD` format.
+- A **date** é a data em que o arquivo de counter foi criado, no formato `YYYY-MM-DD`.
 
-These files are memory mapped into each running instance of the instrumented
-programs. The use of a memory-mapped file means that even if the program
-immediately crashes, or several copies of instrumented tools are running
-simultaneously, the counters are recorded safely.
+Esses arquivos são mapeados em memória em cada instância em execução dos programas
+instrumentados. O uso de um arquivo mapeado em memória significa que mesmo se o programa
+travar imediatamente, ou várias cópias de ferramentas instrumentadas estiverem rodando
+simultaneamente, os counters são registrados com segurança.
 
-## Reporting and uploading {#reports}
+## Reporting e uploading {#reports}
 
-Approximately once a week, counter data gets aggregated into reports named
-`<date>.json` in the `<gotelemetry>/local` directory. These reports sum all of
-counts for the previous week, grouped by the same program identifiers used for
-the counter file (program name, program version, go version, GOOS, and GOARCH).
+Aproximadamente uma vez por semana, dados de counter são agregados em reports nomeados
+`<date>.json` no diretório `<gotelemetry>/local`. Esses reports somam todas as
+contagens da semana anterior, agrupadas pelos mesmos identificadores de programa usados para
+o arquivo de counter (program name, program version, go version, GOOS, e GOARCH).
 
-Local reports can be viewed as charts with the
-[`gotelemetry view`](/pkg/golang.org/x/telemetry/cmd/gotelemetry) command.
-Here's an example summary of the `gopls/completion/latency` counter:
+Reports locais podem ser visualizados como charts com o comando
+[`gotelemetry view`](/pkg/golang.org/x/telemetry/cmd/gotelemetry).
+Aqui está um exemplo de resumo do counter `gopls/completion/latency`:
 
 <div class="image">
   <center>
@@ -261,32 +262,32 @@ Here's an example summary of the `gopls/completion/latency` counter:
 
 ### Uploading {#uploads}
 
-If telemetry uploading is enabled, the weekly reporting process will also
-generate reports containing the subset of counters present in the
-[upload config](https://telemetry.go.dev/config). These counters must be
-approved by the public review process described in the next section. After it
-has been successfully uploaded, a copy of the uploaded reports are stored in
-the `<gotelemetry>/upload` directory.
+Se o upload de telemetria estiver habilitado, o processo de reporting semanal também
+gerará reports contendo o subconjunto de counters presente na
+[upload config](https://telemetry.go.dev/config). Esses counters devem ser
+aprovados pelo processo de revisão pública descrito na próxima seção. Após ser
+enviado com sucesso, uma cópia dos reports enviados é armazenada no
+diretório `<gotelemetry>/upload`.
 
-Once enough users opt in to uploading telemetry data, the upload process will
-randomly skip uploading for a fraction of reports, to reduce collection amounts
-and increase privacy while maintaining statistical significance.
+Assim que usuários suficientes optarem por fazer upload de dados de telemetria, o processo de upload
+aleatoriamente pulará o upload para uma fração de reports, para reduzir quantidades de coleta
+e aumentar privacidade mantendo significância estatística.
 
 ## Charts {#charts}
 
-In addition to accepting uploads, the [telemetry.go.dev] website makes uploaded
-data publicly available. Each day, uploaded reports are processed into two
-outputs, which are available on the [telemetry.go.dev] homepage.
+Além de aceitar uploads, o site [telemetry.go.dev] disponibiliza publicamente
+dados enviados. Cada dia, reports enviados são processados em duas
+saídas, que estão disponíveis na homepage [telemetry.go.dev].
 
-- _merged_ reports merged counters from all uploads received on the given day.
-- _charts_ plot uploaded data as specified in the [chart config], which was
-  produced as part of the proposal process. Recall from the discussion of
-  [counters](#counters) that counter names such as `foo:bar` are decomposed
-  into the chart name `foo` and bucket name `bar`. Each chart aggregates
-  counters with the same chart name into the corresponding buckets.
+- Reports _merged_ mesclam counters de todos os uploads recebidos no dia dado.
+- _Charts_ plotam dados enviados conforme especificado na [chart config], que foi
+  produzida como parte do processo de proposal. Lembre-se da discussão de
+  [counters](#counters) que nomes de counter como `foo:bar` são decompostos
+  no chart name `foo` e bucket name `bar`. Cada chart agrega
+  counters com o mesmo chart name nos buckets correspondentes.
 
-Charts are specified in the format of the [chartconfig] package. For example,
-here's the chart config for the `gopls/client` chart.
+Charts são especificados no formato do package [chartconfig]. Por exemplo,
+aqui está a chart config para o chart `gopls/client`.
 
     title: Editor Distribution
     counter: gopls/client:{vscode,vscodium,vscode-insiders,code-server,eglot,govim,neovim,coc.nvim,sublimetext,other}
@@ -297,11 +298,11 @@ here's the chart config for the `gopls/client` chart.
     program: golang.org/x/tools/gopls
     version: v0.13.0 # temporarily back-version to demonstrate config generation.
 
-This configuration describes the chart to be produced, enumerates the set of
-counters to be aggregated, and specifies the program versions to which the
-chart applies. Additionally, the [proposal process](#proposals) requires that
-an accepted proposal be associated with the chart. Here's the chart resulting
-from that config:
+Esta configuração descreve o chart a ser produzido, enumera o conjunto de
+counters a serem agregados, e especifica as versões de programa às quais o
+chart se aplica. Adicionalmente, o [processo de proposal](#proposals) requer que
+um proposal aceito seja associado ao chart. Aqui está o chart resultante
+desta configuração:
 
 <div class="image">
   <center>
@@ -309,60 +310,60 @@ from that config:
   </center>
 </div>
 
-## The telemetry proposal process {#proposals}
+## O processo de telemetry proposal {#proposals}
 
-Changes to the upload configuration or set of charts on [telemetry.go.dev] must
-go through the _telemetry proposal process_, which is intended to ensure
-transparency around changes to the telemetry configuration.
+Mudanças na configuração de upload ou conjunto de charts em [telemetry.go.dev] devem
+passar pelo _telemetry proposal process_, que visa garantir
+transparência em torno de mudanças na configuração de telemetria.
 
-Notably, there is actually no distinction between upload configuration and
-chart configuration in this process. Upload configuration is itself expressed
-in terms of the aggregations that we want to render on telemetry.go.dev, based
-on the principle that we should only collect data that we want to _see_.
+Notavelmente, não há de fato distinção entre configuração de upload e
+configuração de chart neste processo. A configuração de upload é ela mesma expressa
+em termos das agregações que queremos renderizar em telemetry.go.dev, baseada
+no princípio de que devemos apenas coletar dados que queremos _ver_.
 
-The proposal process is as follows:
+O processo de proposal é o seguinte:
 
-1. The proposer creates a CL modifying [config.txt] of the [chartconfig]
-   package to contain the desired new counter aggregations.
-2. The proposer files a [proposal] to merge this CL.
-3. Once discussion on the issue resolves, the proposal is approved or declined
-   by a member of the Go team.
-4. An automatic process regenerates the upload config to allow uploading of the
-   counters required for the new chart. This process will also regularly add
-   new versions of the relevant programs to the upload config as they are
-   released.
+1. O proponente cria uma CL modificando [config.txt] do package [chartconfig]
+   para conter as novas agregações de counter desejadas.
+2. O proponente registra um [proposal] para mesclar esta CL.
+3. Uma vez que a discussão sobre o issue seja resolvida, o proposal é aprovado ou recusado
+   por um membro do time Go.
+4. Um processo automático regenera a upload config para permitir o upload dos
+   counters necessários para o novo chart. Este processo também adicionará regularmente
+   novas versões dos programas relevantes à upload config à medida que forem
+   lançadas.
 
-In order to be approved, new charts can't carry sensitive user information,
-and additionally must be both useful and feasible. In order to be useful,
-charts must serve a specific purpose, with actionable outcomes. In order to be
-feasible, it must be possible to reliably collect the requisite data, and the
-resulting measurements must be statistically significant. To demonstrate
-feasibility, the proposer may be asked to instrument the target program with
-counters and collect them locally first.
+Para serem aprovados, novos charts não podem carregar informações sensíveis do usuário,
+e adicionalmente devem ser tanto úteis quanto viáveis. Para serem úteis,
+charts devem servir a um propósito específico, com resultados acionáveis. Para serem
+viáveis, deve ser possível coletar confiabilmente os dados requisitados, e as
+medições resultantes devem ser estatisticamente significativas. Para demonstrar
+viabilidade, o proponente pode ser solicitado a instrumentar o programa alvo com
+counters e coletá-los localmente primeiro.
 
-The full set of such proposals is available at the
-[proposal project](https://github.com/orgs/golang/projects/29) on GitHub.
+O conjunto completo de tais proposals está disponível no
+[projeto de proposal](https://github.com/orgs/golang/projects/29) no GitHub.
 
 ## IDE Prompting {#ide}
 
-For telemetry to answer the types of questions we want to ask of it, the set of
-users opting in to uploading need not be large--approximately 16,000
-participants would allow for statistically significant measurements at the
-desired level of granularity. However, there is still a cost to assembling this
-healthy sample: we need to ask a large number of Go developers if they want to
-opt in.
+Para que a telemetria responda aos tipos de perguntas que queremos fazer dela, o conjunto de
+usuários optando por fazer upload não precisa ser grande--aproximadamente 16.000
+participantes permitiriam medições estatisticamente significativas no
+nível desejado de granularidade. No entanto, ainda há um custo para reunir esta
+amostra saudável: precisamos perguntar a um grande número de desenvolvedores Go se eles querem
+optar.
 
-Furthermore, even if a large number of users choose to opt in _now_ (perhaps
-after reading a Go blog post), those users may be skewed toward experienced Go
-developers, and over time that initial sample will grow even more skewed.
-Also, as people replace their computers, they must actively choose to opt in
-again. In the telemetry blog post series, this is referred to as the
-["campaign cost"](https://research.swtch.com/telemetry-opt-in#campaign) of
-the opt-in model.
+Além disso, mesmo se um grande número de usuários escolher optar _agora_ (talvez
+após ler um post de blog do Go), esses usuários podem estar enviesados para desenvolvedores Go
+experientes, e ao longo do tempo essa amostra inicial crescerá ainda mais enviesada.
+Também, à medida que pessoas trocam seus computadores, elas devem ativamente escolher optar
+novamente. Na série de posts de blog sobre telemetria, isso é referido como o
+["campaign cost"](https://research.swtch.com/telemetry-opt-in#campaign) do
+modelo opt-in.
 
-To help keep the sample of participating users fresh, the Go language server
-[`gopls`] supports a prompt that asks users to opt in to Go telemetry.
-Here's what that looks like from VS Code:
+Para ajudar a manter a amostra de usuários participantes fresca, o servidor de linguagem Go
+[`gopls`] suporta um prompt que pede aos usuários para optar pela Go telemetry.
+Veja como isso aparece no VS Code:
 
 <div class="image">
   <center>
@@ -370,47 +371,47 @@ Here's what that looks like from VS Code:
   </center>
 </div>
 
-If users choose "Yes", their telemetry [mode](#config) will be set to `on`,
-just as if they had run
-[`gotelemetry on`](/pkg/golang.org/x/telemetry/cmd/gotelemetry). In this way,
-opting in is as easy as possible, and we can continually reach a large and
-stratified sample of Go developers.
+Se os usuários escolherem "Yes", seu [mode](#config) de telemetria será definido para `on`,
+assim como se tivessem executado
+[`gotelemetry on`](/pkg/golang.org/x/telemetry/cmd/gotelemetry). Desta forma,
+optar é tão fácil quanto possível, e podemos continuamente alcançar uma amostra grande e
+estratificada de desenvolvedores Go.
 
-## Frequently Asked Question {#faq}
+## Perguntas Frequentes {#faq}
 
-**Q: How do I enable or disable Go telemetry?**
+**Q: Como habilito ou desabilito Go telemetry?**
 
-A: Use the `gotelemetry` command, which can be installed with `go install
-golang.org/x/telemetry/cmd/gotelemetry@latest`. Run `gotelemetry off` to
-disable everything, even local collection. Run `gotelemetry on` to enable
-everything, including uploading approved counters to [telemetry.go.dev]. See
-the [Configuration](#config) section for more info.
+A: Use o comando `gotelemetry`, que pode ser instalado com `go install
+golang.org/x/telemetry/cmd/gotelemetry@latest`. Execute `gotelemetry off` para
+desabilitar tudo, até mesmo coleta local. Execute `gotelemetry on` para habilitar
+tudo, incluindo upload de counters aprovados para [telemetry.go.dev]. Veja
+a seção [Configuração](#config) para mais informações.
 
-**Q: Where does local data get stored?**
+**Q: Onde os dados locais são armazenados?**
 
-A: In the <code>[os.UserConfigDir()](/pkg/os#UserConfigDir)/go/telemetry</code> directory.
+A: No diretório <code>[os.UserConfigDir()](/pkg/os#UserConfigDir)/go/telemetry</code>.
 
-**Q: How often does data get uploaded, if I opt in?**
+**Q: Com que frequência os dados são enviados, se eu optar?**
 
-A: Approximately once a week.
+A: Aproximadamente uma vez por semana.
 
-**Q: What data gets uploaded, if I opt in?**
+**Q: Quais dados são enviados, se eu optar?**
 
-A: Only counters that are listed in the
-[upload config](https://telemetry.go.dev/config) may be uploaded. 
-This is generated from the [chart config], which may be more readable.
+A: Apenas counters que estão listados na
+[upload config](https://telemetry.go.dev/config) podem ser enviados.
+Isso é gerado a partir da [chart config], que pode ser mais legível.
 
-**Q: How do counters get added to the upload config?**
+**Q: Como counters são adicionados à upload config?**
 
-A: Through the [public proposal process](#proposals).
+A: Através do [processo de proposal pública](#proposals).
 
-**Q: Where can I see telemetry data that has been uploaded?**
+**Q: Onde posso ver dados de telemetria que foram enviados?**
 
-A: Uploaded data is available as charts or merged summaries at [telemetry.go.dev].
+A: Dados enviados estão disponíveis como charts ou resumos mesclados em [telemetry.go.dev].
 
-**Q: Where is the source code for Go telemetry?**
+**Q: Onde está o código fonte para Go telemetry?**
 
-A: At [golang.org/x/telemetry](/pkg/golang.org/x/telemetry).
+A: Em [golang.org/x/telemetry](/pkg/golang.org/x/telemetry).
 
 [`gopls`]: /pkg/golang.org/x/tools/gopls
 [`govulncheck`]: /pkg/golang.org/x/vuln/cmd/govulncheck
@@ -420,3 +421,4 @@ A: At [golang.org/x/telemetry](/pkg/golang.org/x/telemetry).
 [telemetry.go.dev]: https://telemetry.go.dev
 [chartconfig]: /pkg/golang.org/x/telemetry/internal/chartconfig
 [config.txt]: https://go.googlesource.com/telemetry/+/refs/heads/master/internal/chartconfig/config.txt
+[chart config]: https://go.googlesource.com/telemetry/+/refs/heads/master/internal/chartconfig/config.txt

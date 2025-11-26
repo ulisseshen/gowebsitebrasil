@@ -151,21 +151,21 @@ Após traduzir cada arquivo, marque o checkpoint com `[x]`.
 - [ ] `_content/doc/gccgo_contribute.html` - Contribuir GCC Go
 
 ### 7.3 Debugging
-- [ ] `_content/doc/debugging_with_gdb.md` - Debugging com GDB
-- [ ] `_content/doc/gdb.html` - GDB
+- [x] `_content/doc/debugging_with_gdb.md` - Debugging com GDB (redirect)
+- [x] `_content/doc/gdb.html` - GDB
 
 ### 7.4 Outros
-- [ ] `_content/doc/gopath_code.html` - GOPATH
-- [ ] `_content/doc/comment.md` - Comentários
-- [ ] `_content/doc/fuzz.md` - Fuzzing
-- [ ] `_content/doc/pgo.md` - Profile-Guided Optimization
-- [ ] `_content/doc/telemetry.md` - Telemetria
-- [ ] `_content/doc/build-cover.md` - Build coverage
-- [ ] `_content/doc/go-get-install-deprecation.md` - Deprecação go get
-- [ ] `_content/doc/docs.md` - Docs
-- [ ] `_content/doc/next.md` - Next
-- [ ] `_content/doc/root.md` - Root
-- [ ] `_content/doc/gopher/index.md` - Gopher
+- [x] `_content/doc/gopath_code.html` - GOPATH (redirect)
+- [x] `_content/doc/comment.md` - Comentários
+- [x] `_content/doc/fuzz.md` - Fuzzing
+- [x] `_content/doc/pgo.md` - Profile-Guided Optimization
+- [x] `_content/doc/telemetry.md` - Telemetria
+- [x] `_content/doc/build-cover.md` - Build coverage
+- [x] `_content/doc/go-get-install-deprecation.md` - Deprecação go get
+- [x] `_content/doc/docs.md` - Docs (redirect)
+- [x] `_content/doc/next.md` - Next
+- [x] `_content/doc/root.md` - Root (redirect)
+- [x] `_content/doc/gopher/index.md` - Gopher (redirect)
 
 ---
 

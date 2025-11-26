@@ -1,40 +1,41 @@
 ---
-title: Coverage profiling support for integration tests
+ia-translated: true
+title: Suporte de profiling de coverage para integration tests
 layout: article
 ---
 
-Table of Contents:
+Índice:
 
- [Overview](#overview)\
- [Building a binary for coverage profiling](#building)\
- [Running a coverage-instrumented binary](#running)\
- [Working with coverage data files](#working)\
- [Frequently Asked Questions](#FAQ)\
- [Resources](#resources)\
- [Glossary](#glossary)
+ [Visão Geral](#overview)\
+ [Construindo um binário para profiling de coverage](#building)\
+ [Executando um binário instrumentado para coverage](#running)\
+ [Trabalhando com arquivos de dados de coverage](#working)\
+ [Perguntas Frequentes](#FAQ)\
+ [Recursos](#resources)\
+ [Glossário](#glossary)
 
 
-Beginning in Go 1.20, Go supports collection of coverage profiles from applications and from integration tests, larger and more complex tests for Go programs.
+Começando no Go 1.20, Go suporta coleta de profiles de coverage de aplicações e de integration tests, testes maiores e mais complexos para programas Go.
 
-# Overview {#overview}
+# Visão Geral {#overview}
 
-Go provides easy-to-use support for collecting coverage profiles at the level of package unit tests via the "`go test -coverprofile=... <pkg_target>`" command.
-Starting with Go 1.20, users can now collect coverage profiles for larger [integration tests](#glos-integration-test): more heavy-weight, complex tests that perform multiple runs of a given application binary.
+Go fornece suporte fácil de usar para coletar profiles de coverage no nível de unit tests de package via o comando "`go test -coverprofile=... <pkg_target>`".
+Começando com Go 1.20, usuários agora podem coletar profiles de coverage para [integration tests](#glos-integration-test) maiores: testes mais pesados e complexos que executam múltiplas runs de um dado binário de aplicação.
 
-For unit tests, collecting a coverage profile and generating a report requires two steps: a `go test -coverprofile=...` run, followed by an invocation of `go tool cover {-func,-html}` to generate a report.
+Para unit tests, coletar um profile de coverage e gerar um relatório requer dois passos: uma run de `go test -coverprofile=...`, seguida por uma invocação de `go tool cover {-func,-html}` para gerar um relatório.
 
-For integration tests, three steps are needed: a [build](#building) step, a [run](#running) step (which may involve multiple invocations of the binary from the build step), and finally a [reporting](#reporting) step, as described below.
+Para integration tests, três passos são necessários: um passo de [build](#building), um passo de [run](#running) (que pode envolver múltiplas invocações do binário do passo de build), e finalmente um passo de [reporting](#reporting), conforme descrito abaixo.
 
-# Building a binary for coverage profiling {#building}
+# Construindo um binário para profiling de coverage {#building}
 
-To build an application for collecting coverage profiles, pass the `-cover` flag when invoking `go build` on your application binary target. See the section [below](#packageselection) for a sample `go build -cover` invocation.
-The resulting binary can then be run using an environment variable setting to capture coverage profiles (see the next section on [running](#running)).
+Para construir uma aplicação para coletar profiles de coverage, passe a flag `-cover` ao invocar `go build` no seu binário alvo de aplicação. Veja a seção [abaixo](#packageselection) para uma invocação de exemplo de `go build -cover`.
+O binário resultante pode então ser executado usando uma configuração de variável de ambiente para capturar profiles de coverage (veja a próxima seção sobre [running](#running)).
 
-## How packages are selected for instrumentation {#packageselection}
+## Como packages são selecionados para instrumentação {#packageselection}
 
-During a given "`go build -cover`" invocation, the Go command will select packages in the main module for coverage profiling; other packages that feed into the build (dependencies listed in go.mod, or packages that are part of the Go standard library) will not be included by default.
+Durante uma dada invocação de "`go build -cover`", o comando Go selecionará packages no módulo principal para profiling de coverage; outros packages que alimentam a build (dependências listadas em go.mod, ou packages que são parte da biblioteca padrão Go) não serão incluídos por padrão.
 
-For example, here is a toy program containing a main package, a local main-module package `greetings` and a set of packages imported from outside the module, including (among others) `rsc.io/quote` and `fmt` ([link to full program](/play/p/VSQJN8xkkf-?v=gotip)).
+Por exemplo, aqui está um programa toy contendo um package main, um package local de módulo principal `greetings` e um conjunto de packages importados de fora do módulo, incluindo (entre outros) `rsc.io/quote` e `fmt` ([link para programa completo](/play/p/VSQJN8xkkf-?v=gotip)).
 
 ```
 $ cat go.mod
@@ -71,20 +72,20 @@ $ go build -cover -o myprogram.exe .
 $
 ```
 
-If you build this program with the "`-cover`" command line flag and run it, exactly two packages will be included in the profile: `main` and `mydomain.com/greetings`; the other dependent packages will be excluded.
+Se você construir este programa com a flag de linha de comando "`-cover`" e executá-lo, exatamente dois packages serão incluídos no profile: `main` e `mydomain.com/greetings`; os outros packages dependentes serão excluídos.
 
-Users who want to have more control over which packages are included for coverage can build with the "`-coverpkg`" flag. Example:
+Usuários que querem ter mais controle sobre quais packages são incluídos para coverage podem construir com a flag "`-coverpkg`". Exemplo:
 
 ```
 $ go build -cover -o myprogramMorePkgs.exe -coverpkg=io,mydomain.com,rsc.io/quote .
 $
 ```
 
-In the build above, the main package from `mydomain.com` as well as the `rsc.io/quote` and `io` packages are selected for profiling; since  `mydomain.com/greetings` isn't specifically listed, it will be excluded from the profile, even though it resides in the main module.
+Na build acima, o package main de `mydomain.com` assim como os packages `rsc.io/quote` e `io` são selecionados para profiling; já que `mydomain.com/greetings` não está especificamente listado, ele será excluído do profile, mesmo que resida no módulo principal.
 
-# Running a coverage-instrumented binary {#running}
+# Executando um binário instrumentado para coverage {#running}
 
-Binaries built with "`-cover`" write out profile data files at the end of their execution to a directory specified via the environment variable `GOCOVERDIR`. Example:
+Binários construídos com "`-cover`" escrevem arquivos de dados de profile no final de sua execução em um diretório especificado via a variável de ambiente `GOCOVERDIR`. Exemplo:
 
 ```
 $ go build -cover -o myprogram.exe myprogram.go
@@ -97,10 +98,10 @@ covmeta.c6de772f99010ef5925877a7b05db4cc
 $
 ```
 
-Note the two files that were written to the directory `somedata`: these (binary) files contain the coverage results.  See the following section on [reporting](#reporting) for more on how to produce human-readable results from these data files.
+Note os dois arquivos que foram escritos no diretório `somedata`: esses arquivos (binários) contêm os resultados de coverage. Veja a seção seguinte sobre [reporting](#reporting) para mais sobre como produzir resultados legíveis por humanos desses arquivos de dados.
 
-If the `GOCOVERDIR` environment variable is not set, a coverage-instrumented binary will still execute correctly, but will issue a warning.
-Example:
+Se a variável de ambiente `GOCOVERDIR` não estiver definida, um binário instrumentado para coverage ainda executará corretamente, mas emitirá um aviso.
+Exemplo:
 
 ```
 $ ./myprogram.exe
@@ -109,9 +110,9 @@ I say "Hello, world." and "see ya"
 $
 ```
 
-## Tests involving multiple runs
+## Tests envolvendo múltiplas runs
 
-Integration tests can in many cases involve multiple program runs; when the program is built with "`-cover`", each run will produce a new data file. Example
+Integration tests podem em muitos casos envolver múltiplas runs de programa; quando o programa é construído com "`-cover`", cada run produzirá um novo arquivo de dados. Exemplo
 
 ```
 $ mkdir somedata2
@@ -126,30 +127,30 @@ covmeta.890814fca98ac3a4d41b9bd2a7ec9f7f
 $
 ```
 
-Coverage data output files come in two flavors: meta-data files (containing the items that are invariant from run to run, such as source file names and function names), and counter data files (which record the parts of the program that executed).
+Arquivos de saída de dados de coverage vêm em dois sabores: arquivos de meta-data (contendo os itens que são invariantes de run para run, como nomes de arquivos fonte e nomes de funções), e arquivos de dados de counter (que registram as partes do programa que executaram).
 
-In the example above, the first run produced two files (counter and meta), whereas the second run generated only a counter data file: since meta-data doesn't change from run to run, it only needs to be written once.
+No exemplo acima, a primeira run produziu dois arquivos (counter e meta), enquanto a segunda run gerou apenas um arquivo de dados de counter: já que meta-data não muda de run para run, ela só precisa ser escrita uma vez.
 
-# Working with coverage data files {#working}
+# Trabalhando com arquivos de dados de coverage {#working}
 
-Go 1.20 introduces a new tool, '`covdata`', that can be used to read and manipulate coverage data files from a `GOCOVERDIR` directory.
+Go 1.20 introduz uma nova ferramenta, '`covdata`', que pode ser usada para ler e manipular arquivos de dados de coverage de um diretório `GOCOVERDIR`.
 
-Go's `covdata` tool runs in a variety of modes. The general form of a `covdata` tool invocation takes the form
+A ferramenta `covdata` do Go roda em uma variedade de modes. A forma geral de uma invocação da ferramenta `covdata` assume a forma
 
 ```
 $ go tool covdata <mode> -i=<dir1,dir2,...> ...flags...
 ```
 
-where the "`-i`" flag provides a list of directories to read, where each directories is derived from an execution of a coverage-instrumented binary (via `GOCOVERDIR`).
+onde a flag "`-i`" fornece uma lista de diretórios para ler, onde cada diretório é derivado de uma execução de um binário instrumentado para coverage (via `GOCOVERDIR`).
 
-## Creating coverage profile reports {#reporting}
+## Criando relatórios de profile de coverage {#reporting}
 
-This section discusses how to use "`go tool covdata`" to produce human-readable reports from coverage data files.
+Esta seção discute como usar "`go tool covdata`" para produzir relatórios legíveis por humanos de arquivos de dados de coverage.
 
-### Reporting percent statements covered
+### Reportando porcentagem de statements cobertos
 
-To report a "percent statements covered" metric for each instrumented package, use the command "`go tool covdata percent -i=<directory>`".
-Using the example from the [running](#running) section above:
+Para reportar uma métrica de "porcentagem de statements cobertos" para cada package instrumentado, use o comando "`go tool covdata percent -i=<directory>`".
+Usando o exemplo da seção [running](#running) acima:
 
 ```
 $ ls somedata
@@ -161,11 +162,11 @@ $ go tool covdata percent -i=somedata
 $
 ```
 
-The "statements covered" percentages here correspond directly to those reported by `go test -cover`.
+As porcentagens de "statements covered" aqui correspondem diretamente àquelas reportadas por `go test -cover`.
 
-## Converting to legacy text format
+## Convertendo para formato textual legado
 
-You can convert binary coverage data files into the legacy textual format generated by "`go test -coverprofile=<outfile>`" using the covdata `textfmt` selector. The resulting text file can then be used with "`go tool cover -func`" or "`go tool cover -html`" to create additional reports. Example:
+Você pode converter arquivos de dados de coverage binários para o formato textual legado gerado por "`go test -coverprofile=<outfile>`" usando o seletor `textfmt` de covdata. O arquivo de texto resultante pode então ser usado com "`go tool cover -func`" ou "`go tool cover -html`" para criar relatórios adicionais. Exemplo:
 
 ```
 $ ls somedata
@@ -185,13 +186,13 @@ $
 
 ## Merging
 
-The `merge` subcommand of "`go tool covdata`" can be used to merge together profiles from multiple data directories.
+O subcomando `merge` de "`go tool covdata`" pode ser usado para mesclar profiles de múltiplos diretórios de dados.
 
-For example, consider a program that runs on both macOS and on Windows.
-The author of this program might want to combine coverage profiles from separate
-runs on each operating system into a single profile corpus, so as to produce a
-cross-platform coverage summary.
-For example:
+Por exemplo, considere um programa que roda tanto no macOS quanto no Windows.
+O autor deste programa pode querer combinar profiles de coverage de
+runs separadas em cada sistema operacional em um único corpus de profile, para produzir um
+resumo de coverage cross-platform.
+Por exemplo:
 
 ```
 $ ls windows_datadir
@@ -208,12 +209,12 @@ $ go tool covdata merge -i=windows_datadir,macos_datadir -o merged
 $
 ```
 
-The merge operation above will combine the data from the specified input directories and write a new set of merged data files to the directory "merged".
+A operação de merge acima combinará os dados dos diretórios de entrada especificados e escreverá um novo conjunto de arquivos de dados mesclados no diretório "merged".
 
-## Package selection
+## Seleção de package
 
-Most "`go tool covdata`" commands support a "`-pkg`" flag to perform package selection as part of the operation; the argument to "`-pkg`" takes the same form as that used by the Go command's "`-coverpkg`" flag.
-Example:
+A maioria dos comandos "`go tool covdata`" suporta uma flag "`-pkg`" para realizar seleção de package como parte da operação; o argumento para "`-pkg`" assume a mesma forma que aquele usado pela flag "`-coverpkg`" do comando Go.
+Exemplo:
 
 ```
 
@@ -226,27 +227,27 @@ $ go tool covdata percent -i=somedata -pkg=nonexistentpackage
 $
 ```
 
-The "`-pkg`" flag can be used to select the specific subset of packages of interest for a given report.
+A flag "`-pkg`" pode ser usada para selecionar o subconjunto específico de packages de interesse para um dado relatório.
 
 #
 
-## Frequently Asked Questions {#FAQ}
+## Perguntas Frequentes {#FAQ}
 
-1. [How can I request coverage instrumentation for all imported packages mentioned in my `go.mod` file](#gomodselect)
-2. [Can I use `go build -cover` in GOPATH/GO111MODULE=off mode?](#gopathmode)
-3. [If my program panics, will coverage data be written?](#panicprof)
-4. [Will `-coverpkg=main` select my main package for profiling?](#mainpkg)
+1. [Como posso solicitar instrumentação de coverage para todos os packages importados mencionados no meu arquivo `go.mod`](#gomodselect)
+2. [Posso usar `go build -cover` no modo GOPATH/GO111MODULE=off?](#gopathmode)
+3. [Se meu programa entrar em panic, dados de coverage serão escritos?](#panicprof)
+4. [Vai `-coverpkg=main` selecionar meu package main para profiling?](#mainpkg)
 
 
-#### How can I request coverage instrumentation for all imported packages mentioned in my `go.mod` file {#gomodselect}
+#### Como posso solicitar instrumentação de coverage para todos os packages importados mencionados no meu arquivo `go.mod` {#gomodselect}
 
-By default, `go build -cover` will instrument all main module packages
-for coverage, but will not instrument imports outside the main module
-(e.g. standard library packages or imports listed in `go.mod`).
-One way to request instrumentation for all non-stdlib dependencies
-is to feed the output of `go list` into `-coverpkg`.
-Here is an example, again using
-the [example program](/play/p/VSQJN8xkkf-?v=gotip) cited above:
+Por padrão, `go build -cover` instrumentará todos os packages do módulo principal
+para coverage, mas não instrumentará imports fora do módulo principal
+(por exemplo, packages da biblioteca padrão ou imports listados em `go.mod`).
+Uma forma de solicitar instrumentação para todas as dependências não-stdlib
+é alimentar a saída de `go list` em `-coverpkg`.
+Aqui está um exemplo, novamente usando
+o [programa de exemplo](/play/p/VSQJN8xkkf-?v=gotip) citado acima:
 
 ```
 $ go list -f '{{"{{if not .Standard}}{{.ImportPath}}{{end}}"}}' -deps . | paste -sd "," > pkgs.txt
@@ -263,23 +264,23 @@ $ go tool covdata percent -i=somedata
 $
 ```
 
-#### Can I use `go build -cover` in GO111MODULE=off mode? {#gopathmode}
+#### Posso usar `go build -cover` no modo GO111MODULE=off? {#gopathmode}
 
-Yes, `go build -cover` does work with `GO111MODULE=off`.
-When building a program in GO111MODULE=off mode, only the package specifically named as the target on the command line will be instrumented for profiling. Use the `-coverpkg` flag to include additional packages in the profile.
+Sim, `go build -cover` funciona com `GO111MODULE=off`.
+Ao construir um programa no modo GO111MODULE=off, apenas o package especificamente nomeado como alvo na linha de comando será instrumentado para profiling. Use a flag `-coverpkg` para incluir packages adicionais no profile.
 
-#### If my program panics, will coverage data be written? {#panicprof}
+#### Se meu programa entrar em panic, dados de coverage serão escritos? {#panicprof}
 
-Programs built with `go build -cover` will only write out complete profile
-data at the end of execution if the program invokes `os.Exit()` or returns
-normally from `main.main`.
-If a program terminates in an unrecovered panic, or if the program hits a
-fatal exception (such as a segmentation violation, divide by zero, etc),
-profile data from statements executed during the run will be lost.
+Programas construídos com `go build -cover` só escreverão dados de profile
+completos no final da execução se o programa invocar `os.Exit()` ou retornar
+normalmente de `main.main`.
+Se um programa terminar em um panic não recuperado, ou se o programa atingir uma
+exceção fatal (como uma violação de segmentação, divisão por zero, etc),
+dados de profile de statements executados durante a run serão perdidos.
 
-#### Will `-coverpkg=main` select my main package for profiling? {#mainpkg}
+#### Vai `-coverpkg=main` selecionar meu package main para profiling? {#mainpkg}
 
-The `-coverpkg` flag accepts a list of import paths, not a list of package names. If you want to select your `main` package for coverage instrumention, please identify it by import path, not by name. Example (using [this example program](/play/p/VSQJN8xkkf-?v=gotip)):
+A flag `-coverpkg` aceita uma lista de import paths, não uma lista de nomes de package. Se você quer selecionar seu package `main` para instrumentação de coverage, por favor identifique-o por import path, não por nome. Exemplo (usando [este programa de exemplo](/play/p/VSQJN8xkkf-?v=gotip)):
 
 ```
 $ go list -m
@@ -295,23 +296,22 @@ $ go tool covdata percent -i=somedata
 $
 ```
 
-## Resources {#resources}
+## Recursos {#resources}
 
-- **Blog post introducing unit test coverage in Go 1.2**:
-  - Coverage profiling for unit tests was introduced as part of the
-    Go 1.2 release; see [this blog post](/blog/cover) for details.
-- **Documentation**:
-  - The [`cmd/go`](https://pkg.go.dev/cmd/go) package docs describe the
-    build and test flags associated with coverage.
-- **Technical details**:
-  - [Design draft](/design/51430-revamp-code-coverage)
+- **Post de blog introduzindo coverage de unit test no Go 1.2**:
+  - Profiling de coverage para unit tests foi introduzido como parte do
+    lançamento do Go 1.2; veja [este post de blog](/blog/cover) para detalhes.
+- **Documentação**:
+  - Os docs do package [`cmd/go`](https://pkg.go.dev/cmd/go) descrevem as
+    flags de build e test associadas a coverage.
+- **Detalhes técnicos**:
+  - [Rascunho de design](/design/51430-revamp-code-coverage)
   - [Proposal](/issue/51430)
 
-## Glossary {#glossary}
+## Glossário {#glossary}
 
 <a id="glos-unit-test"></a>
-**unit test:** Tests within a `*_test.go` file associated with a specific Go package, utilizing Go's `testing` package.
+**unit test:** Tests dentro de um arquivo `*_test.go` associado a um package Go específico, utilizando o package `testing` do Go.
 
 <a id="glos-integration-test"></a>
-**integration test:** A more comprehensive, heavier weight test for a given application or binary. Integration tests typically involve building a program or set of programs, then performing a series of runs of the programs using multiple inputs and scenarios, under control of a test harness that may or may not be based on Go's `testing` package.
-
+**integration test:** Um teste mais abrangente e de peso maior para uma dada aplicação ou binário. Integration tests tipicamente envolvem construir um programa ou conjunto de programas, depois executar uma série de runs dos programas usando múltiplas entradas e cenários, sob controle de um test harness que pode ou não ser baseado no package `testing` do Go.
