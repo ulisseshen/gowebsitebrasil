@@ -37,7 +37,7 @@ Após traduzir cada arquivo, marque o checkpoint com `[x]`.
 
 ### 1.3 Contribuição e Comunidade
 - [x] `_content/doc/conduct.md` - Código de conduta
-- [ ] `_content/doc/contribute.html` - Como contribuir
+- [x] `_content/doc/contribute.html` - Como contribuir
 - [x] `_content/doc/contrib.md` - Contribuição adicional
 - [x] `_content/doc/copyright.md` - Copyright
 - [x] `_content/doc/tos.html` - Termos de serviço
