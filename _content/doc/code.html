@@ -1,71 +1,72 @@
+<!-- ia-translated: true -->
 <!--{
-	"Title": "How to Write Go Code",
+	"Title": "Como Escrever Código Go",
 	"Template": true,
 	"Breadcrumb": true
 }-->
 
-<h2 id="Introduction">Introduction</h2>
+<h2 id="Introduction">Introdução</h2>
 
 <p>
-This document demonstrates the development of a simple Go package inside a
-module and introduces the <a href="/cmd/go/">go tool</a>, the standard way to
-fetch, build, and install Go modules, packages, and commands.
+Este documento demonstra o desenvolvimento de um pacote Go simples dentro de um
+módulo e introduz a <a href="/cmd/go/">ferramenta go</a>, a maneira padrão de
+buscar, compilar e instalar módulos, pacotes e comandos Go.
 </p>
 
-<h2 id="Organization">Code organization</h2>
+<h2 id="Organization">Organização de código</h2>
 
 <p>
-Go programs are organized into packages. A <dfn>package</dfn> is a collection
-of source files in the same directory that are compiled together. Functions,
-types, variables, and constants defined in one source file are visible to all
-other source files within the same package.
-</p>
-
-<p>
-A repository contains one or more modules. A <dfn>module</dfn> is a collection
-of related Go packages that are released together. A Go repository typically
-contains only one module, located at the root of the repository. A file named
-<code>go.mod</code> there declares the <dfn>module path</dfn>: the import path
-prefix for all packages within the module. The module contains the packages in
-the directory containing its <code>go.mod</code> file as well as subdirectories
-of that directory, up to the next subdirectory containing another
-<code>go.mod</code> file (if any).
+Programas Go são organizados em pacotes. Um <dfn>pacote</dfn> é uma coleção
+de arquivos-fonte no mesmo diretório que são compilados juntos. Funções,
+tipos, variáveis e constantes definidos em um arquivo-fonte são visíveis para todos
+os outros arquivos-fonte dentro do mesmo pacote.
 </p>
 
 <p>
-Note that you don't need to publish your code to a remote repository before you
-can build it. A module can be defined locally without belonging to a repository.
-However, it's a good habit to organize your code as if you will publish it
-someday.
+Um repositório contém um ou mais módulos. Um <dfn>módulo</dfn> é uma coleção
+de pacotes Go relacionados que são lançados juntos. Um repositório Go tipicamente
+contém apenas um módulo, localizado na raiz do repositório. Um arquivo chamado
+<code>go.mod</code> lá declara o <dfn>caminho do módulo</dfn>: o prefixo do caminho de importação
+para todos os pacotes dentro do módulo. O módulo contém os pacotes no
+diretório que contém seu arquivo <code>go.mod</code>, bem como subdiretórios
+desse diretório, até o próximo subdiretório contendo outro
+arquivo <code>go.mod</code> (se houver).
 </p>
 
 <p>
-Each module's path not only serves as an import path prefix for its packages,
-but also indicates where the <code>go</code> command should look to download it.
-For example, in order to download the module <code>golang.org/x/tools</code>,
-the <code>go</code> command would consult the repository indicated by
-<code>https://golang.org/x/tools</code> (described more <a href="/cmd/go/#hdr-Remote_import_paths">here</a>).
+Note que você não precisa publicar seu código em um repositório remoto antes de poder
+compilá-lo. Um módulo pode ser definido localmente sem pertencer a um repositório.
+No entanto, é um bom hábito organizar seu código como se você fosse publicá-lo
+algum dia.
 </p>
 
 <p>
-An <dfn>import path</dfn> is a string used to import a package. A package's
-import path is its module path joined with its subdirectory within the module.
-For example, the module <code>github.com/google/go-cmp</code> contains a package
-in the directory <code>cmp/</code>. That package's import path is
-<code>github.com/google/go-cmp/cmp</code>. Packages in the standard library do
-not have a module path prefix.
+O caminho de cada módulo não só serve como um prefixo de caminho de importação para seus pacotes,
+mas também indica onde o comando <code>go</code> deve procurar para baixá-lo.
+Por exemplo, para baixar o módulo <code>golang.org/x/tools</code>,
+o comando <code>go</code> consultaria o repositório indicado por
+<code>https://golang.org/x/tools</code> (descrito com mais detalhes <a href="/cmd/go/#hdr-Remote_import_paths">aqui</a>).
 </p>
 
-<h2 id="Command">Your first program</h2>
+<p>
+Um <dfn>caminho de importação</dfn> é uma string usada para importar um pacote. O caminho de
+importação de um pacote é seu caminho de módulo unido com seu subdiretório dentro do módulo.
+Por exemplo, o módulo <code>github.com/google/go-cmp</code> contém um pacote
+no diretório <code>cmp/</code>. O caminho de importação desse pacote é
+<code>github.com/google/go-cmp/cmp</code>. Pacotes na biblioteca padrão não
+têm um prefixo de caminho de módulo.
+</p>
+
+<h2 id="Command">Seu primeiro programa</h2>
 
 <p>
-To compile and run a simple program, first choose a module path (we'll use
-<code>example/user/hello</code>) and create a <code>go.mod</code> file that
-declares it:
+Para compilar e executar um programa simples, primeiro escolha um caminho de módulo (usaremos
+<code>example/user/hello</code>) e crie um arquivo <code>go.mod</code> que
+o declare:
 </p>
 
 <pre>
-$ mkdir hello # Alternatively, clone it if it already exists in version control.
+$ mkdir hello # Alternativamente, clone-o se já existir em controle de versão.
 $ cd hello
 $ <b>go mod init example/user/hello</b>
 go: creating new go.mod: module example/user/hello
@@ -77,14 +78,14 @@ $
 </pre>
 
 <p>
-The first statement in a Go source file must be
-<code>package <dfn>name</dfn></code>. Executable commands must always use
+A primeira declaração em um arquivo-fonte Go deve ser
+<code>package <dfn>nome</dfn></code>. Comandos executáveis devem sempre usar
 <code>package main</code>.
 </p>
 
 <p>
-Next, create a file named <code>hello.go</code> inside that directory containing
-the following Go code:
+Em seguida, crie um arquivo chamado <code>hello.go</code> dentro desse diretório contendo
+o seguinte código Go:
 </p>
 
 <pre>
@@ -98,7 +99,7 @@ func main() {
 </pre>
 
 <p>
-Now you can build and install that program with the <code>go</code> tool:
+Agora você pode compilar e instalar esse programa com a ferramenta <code>go</code>:
 </p>
 
 <pre>
@@ -107,25 +108,24 @@ $
 </pre>
 
 <p>
-This command builds the <code>hello</code> command, producing an executable
-binary. It then installs that binary as <code>$HOME/go/bin/hello</code> (or,
-under Windows, <code>%USERPROFILE%\go\bin\hello.exe</code>).
+Este comando compila o comando <code>hello</code>, produzindo um
+binário executável. Ele então instala esse binário como <code>$HOME/go/bin/hello</code> (ou,
+no Windows, <code>%USERPROFILE%\go\bin\hello.exe</code>).
 </p>
 
 <p>
-The install directory is controlled by the <code>GOPATH</code>
-and <code>GOBIN</code> <a href="/cmd/go/#hdr-Environment_variables">environment
-variables</a>. If <code>GOBIN</code> is set, binaries are installed to that
-directory. If <code>GOPATH</code> is set, binaries are installed to
-the <code>bin</code> subdirectory of the first directory in
-the <code>GOPATH</code> list. Otherwise, binaries are installed to
-the <code>bin</code> subdirectory of the default <code>GOPATH</code>
-(<code>$HOME/go</code> or <code>%USERPROFILE%\go</code>).
+O diretório de instalação é controlado pelas <a href="/cmd/go/#hdr-Environment_variables">variáveis
+de ambiente</a> <code>GOPATH</code> e <code>GOBIN</code>. Se <code>GOBIN</code> estiver definido, binários são instalados nesse
+diretório. Se <code>GOPATH</code> estiver definido, binários são instalados no
+subdiretório <code>bin</code> do primeiro diretório na
+lista <code>GOPATH</code>. Caso contrário, binários são instalados no
+subdiretório <code>bin</code> do <code>GOPATH</code> padrão
+(<code>$HOME/go</code> ou <code>%USERPROFILE%\go</code>).
 </p>
 
 <p>
-You can use the <code>go env</code> command to portably set the default value
-for an environment variable for future <code>go</code> commands:
+Você pode usar o comando <code>go env</code> para definir portavelmente o valor padrão
+para uma variável de ambiente para futuros comandos <code>go</code>:
 </p>
 
 <pre>
@@ -134,7 +134,7 @@ $
 </pre>
 
 <p>
-To unset a variable previously set by <code>go env -w</code>, use <code>go env -u</code>:
+Para desfazer a definição de uma variável previamente definida por <code>go env -w</code>, use <code>go env -u</code>:
 </p>
 
 <pre>
@@ -143,16 +143,16 @@ $
 </pre>
 
 <p>
-Commands like <code>go install</code> apply within the context of the module
-containing the current working directory. If the working directory is not within
-the <code>example/user/hello</code> module, <code>go install</code> may fail.
+Comandos como <code>go install</code> se aplicam dentro do contexto do módulo
+que contém o diretório de trabalho atual. Se o diretório de trabalho não estiver dentro
+do módulo <code>example/user/hello</code>, <code>go install</code> pode falhar.
 </p>
 
 <p>
-For convenience, <code>go</code> commands accept paths relative
-to the working directory, and default to the package in the
-current working directory if no other path is given.
-So in our working directory, the following commands are all equivalent:
+Por conveniência, comandos <code>go</code> aceitam caminhos relativos
+ao diretório de trabalho e usam o pacote no
+diretório de trabalho atual como padrão se nenhum outro caminho for fornecido.
+Então, em nosso diretório de trabalho, os seguintes comandos são todos equivalentes:
 </p>
 
 <pre>
@@ -168,15 +168,14 @@ $ go install
 </pre>
 
 <p>
-Next, let's run the program to ensure it works. For added convenience, we'll
-add the install directory to our <code>PATH</code> to make running binaries
-easy:
+Em seguida, vamos executar o programa para garantir que funcione. Para maior conveniência,
+adicionaremos o diretório de instalação ao nosso <code>PATH</code> para facilitar a execução de binários:
 </p>
 
 <!-- Note: we can't use $(go env GOBIN) here until https://golang.org/issue/23439 is addressed. -->
 <pre>
-# Windows users should consult /wiki/SettingGOPATH
-# for setting %PATH%.
+# Usuários Windows devem consultar /wiki/SettingGOPATH
+# para definir %PATH%.
 $ <b>export PATH=$PATH:$(dirname $(go list -f '{{"{{.Target}}"}}' .))</b>
 $ <b>hello</b>
 Hello, world.
@@ -184,9 +183,9 @@ $
 </pre>
 
 <p>
-If you're using a source control system, now would be a good time to initialize
-a repository, add the files, and commit your first change. Again, this step is
-optional: you do not need to use source control to write Go code.
+Se você estiver usando um sistema de controle de versão, agora seria um bom momento para inicializar
+um repositório, adicionar os arquivos e fazer commit da sua primeira alteração. Novamente, este passo é
+opcional: você não precisa usar controle de versão para escrever código Go.
 </p>
 
 <pre>
@@ -201,20 +200,20 @@ $
 </pre>
 
 <p>
-The <code>go</code> command locates the repository containing a given module path by requesting a corresponding HTTPS URL and reading metadata embedded in the HTML response (see
+O comando <code>go</code> localiza o repositório que contém um determinado caminho de módulo solicitando uma URL HTTPS correspondente e lendo metadados incorporados na resposta HTML (veja
 <code><a href="/cmd/go/#hdr-Remote_import_paths">go help importpath</a></code>).
-Many hosting services already provide that metadata for repositories containing
-Go code, so the easiest way to make your module available for others to use is
-usually to make its module path match the URL for the repository.
+Muitos serviços de hospedagem já fornecem esses metadados para repositórios contendo
+código Go, então a maneira mais fácil de tornar seu módulo disponível para outros usarem é
+geralmente fazer com que seu caminho de módulo corresponda à URL do repositório.
 </p>
 
-<h3 id="ImportingLocal">Importing packages from your module</h3>
+<h3 id="ImportingLocal">Importando pacotes do seu módulo</h3>
 
 <p>
-Let's write a <code>morestrings</code> package and use it from the <code>hello</code> program.
-First, create a directory for the package named
-<code>$HOME/hello/morestrings</code>, and then a file named
-<code>reverse.go</code> in that directory with the following contents:
+Vamos escrever um pacote <code>morestrings</code> e usá-lo do programa <code>hello</code>.
+Primeiro, crie um diretório para o pacote chamado
+<code>$HOME/hello/morestrings</code> e, em seguida, um arquivo chamado
+<code>reverse.go</code> nesse diretório com o seguinte conteúdo:
 </p>
 
 <pre>
@@ -233,14 +232,13 @@ func ReverseRunes(s string) string {
 </pre>
 
 <p>
-Because our <code>ReverseRunes</code> function begins with an upper-case
-letter, it is <a href="/ref/spec#Exported_identifiers"><dfn>exported</dfn></a>,
-and can be used in other packages that import our <code>morestrings</code>
-package.
+Como nossa função <code>ReverseRunes</code> começa com uma letra
+maiúscula, ela é <a href="/ref/spec#Exported_identifiers"><dfn>exportada</dfn></a>,
+e pode ser usada em outros pacotes que importam nosso pacote <code>morestrings</code>.
 </p>
 
 <p>
-Let's test that the package compiles with <code>go build</code>:
+Vamos testar se o pacote compila com <code>go build</code>:
 </p>
 
 <pre>
@@ -250,14 +248,14 @@ $
 </pre>
 
 <p>
-This won't produce an output file. Instead it saves the compiled package in the
-local build cache.
+Isso não produzirá um arquivo de saída. Em vez disso, salva o pacote compilado no
+cache de build local.
 </p>
 
 <p>
-After confirming that the <code>morestrings</code> package builds, let's use it
-from the <code>hello</code> program. To do so, modify your original
-<code>$HOME/hello/hello.go</code> to use the morestrings package:
+Depois de confirmar que o pacote <code>morestrings</code> compila, vamos usá-lo
+do programa <code>hello</code>. Para fazer isso, modifique seu
+<code>$HOME/hello/hello.go</code> original para usar o pacote morestrings:
 </p>
 
 <pre>
@@ -275,7 +273,7 @@ func main() {
 </pre>
 
 <p>
-Install the <code>hello</code> program:
+Instale o programa <code>hello</code>:
 </p>
 
 <pre>
@@ -283,7 +281,7 @@ $ <b>go install example/user/hello</b>
 </pre>
 
 <p>
-Running the new version of the program, you should see a new, reversed message:
+Executando a nova versão do programa, você deve ver uma nova mensagem invertida:
 </p>
 
 <pre>
@@ -291,13 +289,13 @@ $ <b>hello</b>
 Hello, Go!
 </pre>
 
-<h3 id="ImportingRemote">Importing packages from remote modules</h3>
+<h3 id="ImportingRemote">Importando pacotes de módulos remotos</h3>
 
 <p>
-An import path can describe how to obtain the package source code using a
-revision control system such as Git or Mercurial. The <code>go</code> tool uses
-this property to automatically fetch packages from remote repositories.
-For instance, to use <code>github.com/google/go-cmp/cmp</code> in your program:
+Um caminho de importação pode descrever como obter o código-fonte do pacote usando um
+sistema de controle de revisão como Git ou Mercurial. A ferramenta <code>go</code> usa
+essa propriedade para buscar automaticamente pacotes de repositórios remotos.
+Por exemplo, para usar <code>github.com/google/go-cmp/cmp</code> em seu programa:
 </p>
 
 <pre>
@@ -317,10 +315,10 @@ func main() {
 </pre>
 
 <p>
-Now that you have a dependency on an external module, you need to download that
-module and record its version in your <code>go.mod</code> file. The <code>go
-mod tidy</code> command adds missing module requirements for imported packages
-and removes requirements on modules that aren't used anymore.
+Agora que você tem uma dependência em um módulo externo, precisa baixar esse
+módulo e registrar sua versão em seu arquivo <code>go.mod</code>. O comando <code>go
+mod tidy</code> adiciona requisitos de módulo ausentes para pacotes importados
+e remove requisitos em módulos que não são mais usados.
 </p>
 
 <pre>
@@ -344,13 +342,12 @@ $
 </pre>
 
 <p>
-Module dependencies are automatically downloaded to the <code>pkg/mod</code>
-subdirectory of the directory indicated by the <code>GOPATH</code> environment
-variable. The downloaded contents for a given version of a module are shared
-among all other modules that <code>require</code> that version, so
-the <code>go</code> command marks those files and directories as read-only. To
-remove all downloaded modules, you can pass the <code>-modcache</code> flag
-to <code>go clean</code>:
+Dependências de módulo são automaticamente baixadas para o subdiretório <code>pkg/mod</code>
+do diretório indicado pela variável de ambiente <code>GOPATH</code>. O conteúdo baixado para uma versão específica de um módulo é compartilhado
+entre todos os outros módulos que fazem <code>require</code> dessa versão, então
+o comando <code>go</code> marca esses arquivos e diretórios como somente leitura. Para
+remover todos os módulos baixados, você pode passar o sinalizador <code>-modcache</code>
+para <code>go clean</code>:
 </p>
 
 <pre>
@@ -358,26 +355,26 @@ $ go clean -modcache
 $
 </pre>
 
-<h2 id="Testing">Testing</h2>
+<h2 id="Testing">Testando</h2>
 
 <p>
-Go has a lightweight test framework composed of the <code>go test</code>
-command and the <code>testing</code> package.
+Go tem um framework de teste leve composto pelo comando <code>go test</code>
+e o pacote <code>testing</code>.
 </p>
 
 <p>
-You write a test by creating a file with a name ending in <code>_test.go</code>
-that contains functions named <code>TestXXX</code> with signature
+Você escreve um teste criando um arquivo com um nome terminando em <code>_test.go</code>
+que contém funções chamadas <code>TestXXX</code> com assinatura
 <code>func (t *testing.T)</code>.
-The test framework runs each such function;
-if the function calls a failure function such as <code>t.Error</code> or
-<code>t.Fail</code>, the test is considered to have failed.
+O framework de teste executa cada uma dessas funções;
+se a função chama uma função de falha como <code>t.Error</code> ou
+<code>t.Fail</code>, o teste é considerado como tendo falhado.
 </p>
 
 <p>
-Add a test to the <code>morestrings</code> package by creating the file
-<code>$HOME/hello/morestrings/reverse_test.go</code> containing
-the following Go code.
+Adicione um teste ao pacote <code>morestrings</code> criando o arquivo
+<code>$HOME/hello/morestrings/reverse_test.go</code> contendo
+o seguinte código Go.
 </p>
 
 <pre>
@@ -403,7 +400,7 @@ func TestReverseRunes(t *testing.T) {
 </pre>
 
 <p>
-Then run the test with <code>go test</code>:
+Em seguida, execute o teste com <code>go test</code>:
 </p>
 
 <pre>
@@ -415,48 +412,48 @@ $
 </pre>
 
 <p>
-Run <code><a href="/cmd/go/#hdr-Test_packages">go help test</a></code> and see the
-<a href="/pkg/testing/">testing package documentation</a> for more detail.
+Execute <code><a href="/cmd/go/#hdr-Test_packages">go help test</a></code> e veja a
+<a href="/pkg/testing/">documentação do pacote testing</a> para mais detalhes.
 </p>
 
-<h2 id="next">What's next</h2>
+<h2 id="next">O que vem a seguir</h2>
 
 <p>
-Subscribe to the
+Inscreva-se na lista de discussão
 <a href="https://groups.google.com/group/golang-announce">golang-announce</a>
-mailing list to be notified when a new stable version of Go is released.
+para ser notificado quando uma nova versão estável do Go for lançada.
 </p>
 
 <p>
-See <a href="/doc/effective_go.html">Effective Go</a> for tips on writing
-clear, idiomatic Go code.
+Veja <a href="/doc/effective_go.html">Effective Go</a> para dicas sobre como escrever
+código Go claro e idiomático.
 </p>
 
 <p>
-Take
-<a href="/tour/">A Tour of Go</a>
-to learn the language proper.
+Faça
+<a href="/tour/">Um Tour por Go</a>
+para aprender a linguagem propriamente.
 </p>
 
 <p>
-Visit the <a href="/doc/#articles">documentation page</a> for a set of in-depth
-articles about the Go language and its libraries and tools.
+Visite a <a href="/doc/#articles">página de documentação</a> para um conjunto de artigos
+aprofundados sobre a linguagem Go e suas bibliotecas e ferramentas.
 </p>
 
-<h2 id="help">Getting help</h2>
+<h2 id="help">Obtendo ajuda</h2>
 
 <p>
-For real-time help, ask the helpful gophers in the community-run
-<a href="https://gophers.slack.com/messages/general/">gophers Slack server</a>
-(grab an invite <a href="https://invite.slack.golangbridge.org/">here</a>).
+Para ajuda em tempo real, pergunte aos gophers prestativos no
+<a href="https://gophers.slack.com/messages/general/">servidor Slack gophers</a> mantido pela comunidade
+(pegue um convite <a href="https://invite.slack.golangbridge.org/">aqui</a>).
 </p>
 
 <p>
-The official mailing list for discussion of the Go language is
+A lista de discussão oficial para discussão da linguagem Go é
 <a href="https://groups.google.com/group/golang-nuts">Go Nuts</a>.
 </p>
 
 <p>
-Report bugs using the
-<a href="/issue">Go issue tracker</a>.
+Reporte bugs usando o
+<a href="/issue">rastreador de issues do Go</a>.
 </p>
