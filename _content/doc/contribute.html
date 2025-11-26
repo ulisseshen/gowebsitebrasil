@@ -1,3 +1,4 @@
+<!-- ia-translated: true -->
 <!--{
 	"Title": "Contribution Guide",
 	"Template": true,
@@ -5,25 +6,25 @@
 }-->
 
 <p>
-The Go project welcomes all contributors.
+O projeto Go recebe contribuições de todos.
 </p>
 
 <p>
-This document is a guide to help you through the process
-of contributing to the Go project, which is a little different
-from that used by other open source projects.
-We assume you have a basic understanding of Git and Go.
+Este documento é um guia para ajudá-lo no processo
+de contribuição para o projeto Go, que é um pouco diferente
+daquele usado por outros projetos open source.
+Assumimos que você tenha um conhecimento básico de Git e Go.
 </p>
 
 <p>
-In addition to the information here, the Go community maintains a
-<a href="/wiki/CodeReview">CodeReview</a> wiki page.
-Feel free to contribute to the wiki as you learn the review process.
+Além das informações aqui, a comunidade Go mantém uma
+página wiki <a href="/wiki/CodeReview">CodeReview</a>.
+Sinta-se à vontade para contribuir com a wiki conforme aprende o processo de revisão.
 </p>
 
 <p>
-Note that the <code>gccgo</code> front end lives elsewhere;
-see <a href="gccgo_contribute.html">Contributing to gccgo</a>.
+Note que o front end <code>gccgo</code> fica em outro lugar;
+veja <a href="gccgo_contribute.html">Contributing to gccgo</a>.
 </p>
 
 <h2 id="contributor">Becoming a contributor</h2>
@@ -31,40 +32,40 @@ see <a href="gccgo_contribute.html">Contributing to gccgo</a>.
 <h3 id="contrib_overview">Overview</h3>
 
 <p>
-The first step is registering as a Go contributor and configuring your environment.
-Here is a checklist of the required steps to follow:
+O primeiro passo é registrar-se como um contribuidor Go e configurar seu ambiente.
+Aqui está um checklist dos passos necessários a seguir:
 </p>
 
 <ul>
 <li>
-<b>Step 0</b>: Decide on a single Google Account you will be using to contribute to Go.
-Use that account for all the following steps and make sure that <code>git</code>
-is configured to create commits with that account's e-mail address.
+<b>Step 0</b>: Decida qual conta Google você usará para contribuir com Go.
+Use essa conta para todos os passos seguintes e certifique-se de que <code>git</code>
+esteja configurado para criar commits com o endereço de e-mail dessa conta.
 </li>
 <li>
-<b>Step 1</b>: <a href="https://cla.developers.google.com/clas">Sign and submit</a> a
+<b>Step 1</b>: <a href="https://cla.developers.google.com/clas">Assine e envie</a> um
 CLA (Contributor License Agreement).
 </li>
 <li>
-<b>Step 2</b>: Configure authentication credentials for the Go Git repository.
-Visit <a href="https://go.googlesource.com">go.googlesource.com</a>, click
-"Generate Password" in the page's top right menu bar, and follow the
-instructions.
+<b>Step 2</b>: Configure credenciais de autenticação para o repositório Git do Go.
+Visite <a href="https://go.googlesource.com">go.googlesource.com</a>, clique
+em "Generate Password" no menu superior direito da página e siga as
+instruções.
 </li>
 <li>
-<b>Step 3</b>: Register for Gerrit, the code review tool used by the Go team,
-by <a href="https://go-review.googlesource.com/login/">visiting this page</a>.
-The CLA and the registration need to be done only once for your account.
+<b>Step 3</b>: Registre-se no Gerrit, a ferramenta de revisão de código usada pela equipe Go,
+<a href="https://go-review.googlesource.com/login/">visitando esta página</a>.
+O CLA e o registro precisam ser feitos apenas uma vez para sua conta.
 </li>
 <li>
-<b>Step 4</b>: Install <code>git-codereview</code> by running
+<b>Step 4</b>: Instale <code>git-codereview</code> executando
 <code>go install golang.org/x/review/git-codereview@latest</code>
 </li>
 </ul>
 
 <p>
-If you prefer, there is an automated tool that walks through these steps.
-Just run:
+Se preferir, há uma ferramenta automatizada que percorre esses passos.
+Basta executar:
 </p>
 
 <pre>
@@ -74,42 +75,42 @@ $ go-contrib-init
 </pre>
 
 <p>
-The rest of this chapter elaborates on these instructions.
-If you have completed the steps above (either manually or through the tool), jump to
+O restante deste capítulo elabora essas instruções.
+Se você completou os passos acima (manualmente ou através da ferramenta), pule para
 <a href="#before_contributing">Before contributing code</a>.
 </p>
 
 <h3 id="google_account">Step 0: Select a Google Account</h3>
 
 <p>
-A contribution to Go is made through a Google account with a specific
-e-mail address.
-Make sure to use the same account throughout the process and
-for all your subsequent contributions.
-You may need to decide whether to use a personal address or a corporate address.
-The choice will depend on who
-will own the copyright for the code that you will be writing
-and submitting.
-You might want to discuss this topic with your employer before deciding which
-account to use.
+Uma contribuição para Go é feita através de uma conta Google com um
+endereço de e-mail específico.
+Certifique-se de usar a mesma conta durante todo o processo e
+para todas as suas contribuições subsequentes.
+Você pode precisar decidir se usará um endereço pessoal ou corporativo.
+A escolha dependerá de quem
+será o proprietário dos direitos autorais do código que você escreverá
+e enviará.
+Você pode querer discutir este tópico com seu empregador antes de decidir qual
+conta usar.
 </p>
 
 <p>
-Google accounts can either be Gmail e-mail accounts, G Suite organization accounts, or
-accounts associated with an external e-mail address.
-For instance, if you need to use
-an existing corporate e-mail that is not managed through G Suite, you can create
-an account associated
-<a href="https://accounts.google.com/SignUpWithoutGmail">with your existing
-e-mail address</a>.
+Contas Google podem ser contas de e-mail Gmail, contas de organização G Suite ou
+contas associadas a um endereço de e-mail externo.
+Por exemplo, se você precisa usar
+um e-mail corporativo existente que não é gerenciado através do G Suite, você pode criar
+uma conta associada
+<a href="https://accounts.google.com/SignUpWithoutGmail">com seu endereço
+de e-mail existente</a>.
 </p>
 
 <p>
-You also need to make sure that your Git tool is configured to create commits
-using your chosen e-mail address.
-You can either configure Git globally
-(as a default for all projects), or locally (for a single specific project).
-You can check the current configuration with this command:
+Você também precisa garantir que sua ferramenta Git esteja configurada para criar commits
+usando seu endereço de e-mail escolhido.
+Você pode configurar o Git globalmente
+(como padrão para todos os projetos), ou localmente (para um único projeto específico).
+Você pode verificar a configuração atual com este comando:
 </p>
 
 <pre>
@@ -118,7 +119,7 @@ $ git config user.email           # check current local config
 </pre>
 
 <p>
-To change the configured address:
+Para mudar o endereço configurado:
 </p>
 
 <pre>
@@ -130,99 +131,99 @@ $ git config user.email name@example.com            # change local config
 <h3 id="cla">Step 1: Contributor License Agreement</h3>
 
 <p>
-Before sending your first change to the Go project
-you must have completed one of the following two CLAs.
-Which CLA you should sign depends on who owns the copyright to your work.
+Antes de enviar sua primeira mudança para o projeto Go
+você deve ter completado um dos dois CLAs a seguir.
+Qual CLA você deve assinar depende de quem possui os direitos autorais do seu trabalho.
 </p>
 
 <ul>
 <li>
-If you are the copyright holder, you will need to agree to the
+Se você é o detentor dos direitos autorais, precisará concordar com o
 <a href="https://developers.google.com/open-source/cla/individual">individual
-contributor license agreement</a>, which can be completed online.
+contributor license agreement</a>, que pode ser completado online.
 </li>
 <li>
-If your organization is the copyright holder, the organization
-will need to agree to the
+Se sua organização é a detentora dos direitos autorais, a organização
+precisará concordar com o
 <a href="https://developers.google.com/open-source/cla/corporate">corporate
 contributor license agreement</a>.<br>
 </li>
 </ul>
 
 <p>
-You can check your currently signed agreements and sign new ones at
-the <a href="https://cla.developers.google.com/clas?pli=1&amp;authuser=1">Google Developers
-Contributor License Agreements</a> website.
-If the copyright holder for your contribution has already completed the
-agreement in connection with another Google open source project,
-it does not need to be completed again.
+Você pode verificar seus acordos assinados atualmente e assinar novos no
+site <a href="https://cla.developers.google.com/clas?pli=1&amp;authuser=1">Google Developers
+Contributor License Agreements</a>.
+Se o detentor dos direitos autorais para sua contribuição já completou o
+acordo em conexão com outro projeto open source do Google,
+ele não precisa ser completado novamente.
 </p>
 
 <p>
-If the copyright holder for the code you are submitting changes&mdash;for example,
-if you start contributing code on behalf of a new company&mdash;please send mail
-to the <a href="mailto:golang-dev@googlegroups.com"><code>golang-dev</code>
+Se o detentor dos direitos autorais para o código que você está enviando mudar&mdash;por exemplo,
+se você começar a contribuir código em nome de uma nova empresa&mdash;envie um e-mail
+para a <a href="mailto:golang-dev@googlegroups.com"><code>golang-dev</code>
 mailing list</a>.
-This will let us know the situation so we can make sure an appropriate agreement is
-completed.
+Isso nos permitirá saber a situação para que possamos garantir que um acordo apropriado seja
+completado.
 </p>
 
 
 <h3 id="config_git_auth">Step 2: Configure git authentication</h3>
 
 <p>
-The main Go repository is located at
+O repositório principal do Go está localizado em
 <a href="https://go.googlesource.com">go.googlesource.com</a>,
-a Git server hosted by Google.
-Authentication on the web server is made through your Google account, but
-you also need to configure <code>git</code> on your computer to access it.
-Follow these steps:
+um servidor Git hospedado pelo Google.
+A autenticação no servidor web é feita através de sua conta Google, mas
+você também precisa configurar <code>git</code> no seu computador para acessá-lo.
+Siga estes passos:
 </p>
 
 <ol>
 <li>
-Visit <a href="https://go.googlesource.com">go.googlesource.com</a>
-and click on "Generate Password" in the page's top right menu bar.
-You will be redirected to accounts.google.com to sign in.
+Visite <a href="https://go.googlesource.com">go.googlesource.com</a>
+e clique em "Generate Password" no menu superior direito da página.
+Você será redirecionado para accounts.google.com para fazer login.
 </li>
 <li>
-After signing in, you will be taken to a page with the heading "Configure Git".
-This page contains a personalized script that when run locally will configure Git
-to hold your unique authentication key.
-This key is paired with one that is generated and stored on the server,
-analogous to how SSH keys work.
+Após fazer login, você será levado a uma página com o título "Configure Git".
+Esta página contém um script personalizado que quando executado localmente configurará o Git
+para armazenar sua chave de autenticação única.
+Esta chave é pareada com uma que é gerada e armazenada no servidor,
+análoga a como as chaves SSH funcionam.
 </li>
 <li>
-Copy and run this script locally in your terminal to store your secret
-authentication token in a <code>.gitcookies</code> file.
-If you are using a Windows computer and running <code>cmd</code>,
-you should instead follow the instructions in the yellow box to run the command;
-otherwise run the regular script.
+Copie e execute este script localmente em seu terminal para armazenar seu
+token de autenticação secreto em um arquivo <code>.gitcookies</code>.
+Se você estiver usando um computador Windows e executando <code>cmd</code>,
+você deve seguir as instruções na caixa amarela para executar o comando;
+caso contrário, execute o script regular.
 </li>
 </ol>
 
 <h3 id="auth">Step 3: Create a Gerrit account </h3>
 
 <p>
-Gerrit is an open-source tool used by Go maintainers to discuss and review
-code submissions.
+Gerrit é uma ferramenta open-source usada pelos mantenedores do Go para discutir e revisar
+envios de código.
 </p>
 
 <p>
-To register your account, visit <a href="https://go-review.googlesource.com/login/">
-go-review.googlesource.com/login/</a> and sign in once using the same Google Account you used above.
+Para registrar sua conta, visite <a href="https://go-review.googlesource.com/login/">
+go-review.googlesource.com/login/</a> e faça login uma vez usando a mesma conta Google que você usou acima.
 </p>
 
 <h3 id="git-codereview_install">Step 4: Install the git-codereview command</h3>
 
 <p>
-Changes to Go must be reviewed before they are accepted, no matter who makes the change.
-A custom <code>git</code> command called <code>git-codereview</code>
-simplifies sending changes to Gerrit.
+Mudanças no Go devem ser revisadas antes de serem aceitas, não importa quem faça a mudança.
+Um comando <code>git</code> personalizado chamado <code>git-codereview</code>
+simplifica o envio de mudanças para o Gerrit.
 </p>
 
 <p>
-Install the <code>git-codereview</code> command by running,
+Instale o comando <code>git-codereview</code> executando,
 </p>
 
 <pre>
@@ -230,9 +231,9 @@ $ go install golang.org/x/review/git-codereview@latest
 </pre>
 
 <p>
-Make sure <code>git-codereview</code> is installed in your shell path, so that the
-<code>git</code> command can find it.
-Check that
+Certifique-se de que <code>git-codereview</code> esteja instalado no path do seu shell, para que o
+comando <code>git</code> possa encontrá-lo.
+Verifique que
 </p>
 
 <pre>
@@ -240,231 +241,230 @@ $ git codereview help
 </pre>
 
 <p>
-prints help text, not an error. If it prints an error, make sure that
-<code>$GOPATH/bin</code> is in your <code>$PATH</code>.
+imprime texto de ajuda, não um erro. Se imprimir um erro, certifique-se de que
+<code>$GOPATH/bin</code> esteja no seu <code>$PATH</code>.
 </p>
 
 <p>
-On Windows, when using git-bash you must make sure that
-<code>git-codereview.exe</code> is in your <code>git</code> exec-path.
-Run <code>git --exec-path</code> to discover the right location then create a
-symbolic link or just copy the executable from <code>$GOPATH/bin</code> to this
-directory.
+No Windows, ao usar git-bash você deve garantir que
+<code>git-codereview.exe</code> esteja no seu <code>git</code> exec-path.
+Execute <code>git --exec-path</code> para descobrir a localização correta e então crie um
+link simbólico ou apenas copie o executável de <code>$GOPATH/bin</code> para este
+diretório.
 </p>
 
 
 <h2 id="before_contributing">Before contributing code</h2>
 
 <p>
-The project welcomes code patches, but to make sure things are well
-coordinated you should discuss any significant change before starting
-the work.
-It's recommended that you signal your intention to contribute in the
-issue tracker, either by <a href="/issue/new">filing
-a new issue</a> or by claiming
-an <a href="/issues">existing one</a>.
+O projeto recebe patches de código, mas para garantir que as coisas sejam bem
+coordenadas você deve discutir qualquer mudança significativa antes de iniciar
+o trabalho.
+É recomendado que você sinalize sua intenção de contribuir no
+issue tracker, seja <a href="/issue/new">criando
+uma nova issue</a> ou reivindicando
+uma <a href="/issues">existente</a>.
 </p>
 
 <h3 id="where">Where to contribute</h3>
 
 <p>
-The Go project consists of the main
-<a href="https://go.googlesource.com/go">go</a> repository, which contains the
-source code for the Go language, as well as many golang.org/x/... repositories.
-These contain the various tools and infrastructure that support Go. For
-example, <a href="https://go.googlesource.com/pkgsite">golang.org/x/pkgsite</a>
-is for <a href="https://pkg.go.dev">pkg.go.dev</a>,
+O projeto Go consiste no
+<a href="https://go.googlesource.com/go">repositório principal go</a>, que contém o
+código fonte para a linguagem Go, bem como muitos repositórios golang.org/x/....
+Estes contêm as várias ferramentas e infraestrutura que suportam Go. Por
+exemplo, <a href="https://go.googlesource.com/pkgsite">golang.org/x/pkgsite</a>
+é para <a href="https://pkg.go.dev">pkg.go.dev</a>,
 <a href="https://go.googlesource.com/playground">golang.org/x/playground</a>
-is for the Go playground, and
-<a href="https://go.googlesource.com/tools">golang.org/x/tools</a> contains
-a variety of Go tools, including the Go language server,
-<a href="/s/gopls">gopls</a>. You can see a
-list of all the golang.org/x/... repositories on
+é para o Go playground, e
+<a href="https://go.googlesource.com/tools">golang.org/x/tools</a> contém
+uma variedade de ferramentas Go, incluindo o servidor de linguagem Go,
+<a href="/s/gopls">gopls</a>. Você pode ver uma
+lista de todos os repositórios golang.org/x/... em
 <a href="https://go.googlesource.com">go.googlesource.com</a>.
 </p>
 
 <h3 id="check_tracker">Check the issue tracker</h3>
 
 <p>
-Whether you already know what contribution to make, or you are searching for
-an idea, the <a href="https://github.com/golang/go/issues">issue tracker</a> is
-always the first place to go.
-Issues are triaged to categorize them and manage the workflow.
+Se você já sabe qual contribuição fazer, ou está procurando por
+uma ideia, o <a href="https://github.com/golang/go/issues">issue tracker</a> é
+sempre o primeiro lugar a ir.
+Issues são triadas para categorizá-las e gerenciar o fluxo de trabalho.
 </p>
 
 <p>
-The majority of the golang.org/x/... repos also use the main Go
-issue tracker. However, a few of these repositories manage their issues
-separately, so please be sure to check the right tracker for the repository to
-which you would like to contribute.
+A maioria dos repositórios golang.org/x/... também usa o
+issue tracker principal do Go. No entanto, alguns desses repositórios gerenciam suas issues
+separadamente, então certifique-se de verificar o tracker correto para o repositório
+ao qual você gostaria de contribuir.
 </p>
 
 <p>
-Most issues will be marked with one of the following workflow labels:
+A maioria das issues será marcada com um dos seguintes rótulos de fluxo de trabalho:
 </p>
 
 <ul>
 	<li>
-	<b>NeedsInvestigation</b>: The issue is not fully understood
-	and requires analysis to understand the root cause.
+	<b>NeedsInvestigation</b>: A issue não está totalmente compreendida
+	e requer análise para entender a causa raiz.
 	</li>
 	<li>
-	<b>NeedsDecision</b>: the issue is relatively well understood, but the
-	Go team hasn't yet decided the best way to address it.
-	It would be better to wait for a decision before writing code.
-	If you are interested in working on an issue in this state,
-	feel free to "ping" maintainers in the issue's comments
-	if some time has passed without a decision.
+	<b>NeedsDecision</b>: a issue é relativamente bem compreendida, mas a
+	equipe Go ainda não decidiu a melhor maneira de abordá-la.
+	Seria melhor esperar por uma decisão antes de escrever código.
+	Se você está interessado em trabalhar em uma issue neste estado,
+	sinta-se à vontade para "pingar" os mantenedores nos comentários da issue
+	se algum tempo passou sem uma decisão.
 	</li>
 	<li>
-	<b>NeedsFix</b>: the issue is fully understood and code can be written
-	to fix it.
+	<b>NeedsFix</b>: a issue é totalmente compreendida e o código pode ser escrito
+	para corrigi-la.
 	</li>
 </ul>
 
 <p>
-You can use GitHub's search functionality to find issues to help out with. Examples:
+Você pode usar a funcionalidade de busca do GitHub para encontrar issues para ajudar. Exemplos:
 </p>
 
 <ul>
 	<li>
-	Issues that need investigation: <a href="https://github.com/golang/go/issues?q=is%3Aissue+is%3Aopen+label%3ANeedsInvestigation"><code>is:issue is:open label:NeedsInvestigation</code></a>
+	Issues que precisam de investigação: <a href="https://github.com/golang/go/issues?q=is%3Aissue+is%3Aopen+label%3ANeedsInvestigation"><code>is:issue is:open label:NeedsInvestigation</code></a>
 	</li>
 	<li>
-	Issues that need a fix: <a href="https://github.com/golang/go/issues?q=is%3Aissue+is%3Aopen+label%3ANeedsFix"><code>is:issue is:open label:NeedsFix</code></a>
+	Issues que precisam de correção: <a href="https://github.com/golang/go/issues?q=is%3Aissue+is%3Aopen+label%3ANeedsFix"><code>is:issue is:open label:NeedsFix</code></a>
 	</li>
 	<li>
-	Issues that need a fix and have a suggested change: <a href="https://github.com/golang/go/issues?q=is%3Aissue+is%3Aopen+label%3ANeedsFix+%28%22golang.org%2Fcl%22+OR+%22go.dev%2Fcl%22%29"><code>is:issue is:open label:NeedsFix ("golang.org/cl" OR "go.dev/cl")</code></a>
+	Issues que precisam de correção e têm uma mudança sugerida: <a href="https://github.com/golang/go/issues?q=is%3Aissue+is%3Aopen+label%3ANeedsFix+%28%22golang.org%2Fcl%22+OR+%22go.dev%2Fcl%22%29"><code>is:issue is:open label:NeedsFix ("golang.org/cl" OR "go.dev/cl")</code></a>
 	</li>
 	<li>
-	Issues that need a fix and do not have a suggested change: <a href="https://github.com/golang/go/issues?q=is%3Aissue+is%3Aopen+label%3ANeedsFix+NOT+%22golang.org%2Fcl%22+NOT+%22go.dev%2Fcl%22"><code>is:issue is:open label:NeedsFix NOT "golang.org/cl" NOT "go.dev/cl"</code></a>
+	Issues que precisam de correção e não têm uma mudança sugerida: <a href="https://github.com/golang/go/issues?q=is%3Aissue+is%3Aopen+label%3ANeedsFix+NOT+%22golang.org%2Fcl%22+NOT+%22go.dev%2Fcl%22"><code>is:issue is:open label:NeedsFix NOT "golang.org/cl" NOT "go.dev/cl"</code></a>
 	</li>
 </ul>
 
 <h3 id="design">Open an issue for any new problem</h3>
 
 <p>
-Excluding very trivial changes, all contributions should be connected
-to an existing issue.
-Feel free to open one and discuss your plans.
-This process gives everyone a chance to validate the design,
-helps prevent duplication of effort,
-and ensures that the idea fits inside the goals for the language and tools.
-It also checks that the design is sound before code is written;
-the code review tool is not the place for high-level discussions.
+Excluindo mudanças muito triviais, todas as contribuições devem estar conectadas
+a uma issue existente.
+Sinta-se à vontade para abrir uma e discutir seus planos.
+Este processo dá a todos a chance de validar o design,
+ajuda a prevenir duplicação de esforço,
+e garante que a ideia se encaixa nos objetivos para a linguagem e ferramentas.
+Também verifica se o design é sólido antes do código ser escrito;
+a ferramenta de revisão de código não é o lugar para discussões de alto nível.
 </p>
 
 <p>
-When planning work, please note that the Go project follows a <a
-href="/wiki/Go-Release-Cycle">six-month development cycle</a>
-for the main Go repository. The latter half of each cycle is a three-month
-feature freeze during which only bug fixes and documentation updates are
-accepted. New contributions can be sent during a feature freeze, but they will
-not be merged until the freeze is over. The freeze applies to the entire main
-repository as well as to the code in golang.org/x/... repositories that is
-needed to build the binaries included in the release. See the lists of packages
-vendored into
-<a href="https://github.com/golang/go/blob/master/src/vendor/modules.txt">the standard library</a>
-and the <a href="https://github.com/golang/go/blob/master/src/cmd/vendor/modules.txt"><code>go</code> command</a>.
+Ao planejar o trabalho, note que o projeto Go segue um <a
+href="/wiki/Go-Release-Cycle">ciclo de desenvolvimento de seis meses</a>
+para o repositório principal do Go. A segunda metade de cada ciclo é um
+congelamento de features de três meses durante o qual apenas correções de bugs e atualizações de documentação são
+aceitas. Novas contribuições podem ser enviadas durante um congelamento de features, mas elas
+não serão mescladas até que o congelamento termine. O congelamento se aplica a todo o repositório principal
+bem como ao código nos repositórios golang.org/x/... que é
+necessário para construir os binários incluídos no release. Veja as listas de pacotes
+vendored na
+<a href="https://github.com/golang/go/blob/master/src/vendor/modules.txt">biblioteca padrão</a>
+e no <a href="https://github.com/golang/go/blob/master/src/cmd/vendor/modules.txt">comando <code>go</code></a>.
 </p>
 
 <p>
-Significant changes to the language, libraries, or tools
-(which includes API changes in the main repo and all golang.org/x repos,
-as well as command-line changes to the <code>go</code> command)
-must go
-through the
-<a href="/s/proposal-process">change proposal process</a>
-before they can be accepted.
+Mudanças significativas na linguagem, bibliotecas ou ferramentas
+(que incluem mudanças de API no repositório principal e todos os repositórios golang.org/x,
+bem como mudanças de linha de comando no comando <code>go</code>)
+devem passar
+pelo
+<a href="/s/proposal-process">processo de proposta de mudança</a>
+antes de poderem ser aceitas.
 </p>
 
 <p>
-Sensitive security-related issues (only!) should be reported to <a href="mailto:security@golang.org">security@golang.org</a>.
+Issues sensíveis relacionadas à segurança (apenas!) devem ser relatadas para <a href="mailto:security@golang.org">security@golang.org</a>.
 </p>
 
 <h2 id="sending_a_change_github">Sending a change via GitHub</h2>
 
 <p>
-First-time contributors that are already familiar with the
-<a href="https://guides.github.com/introduction/flow/">GitHub flow</a>
-are encouraged to use the same process for Go contributions.
-Even though Go
-maintainers use Gerrit for code review, a bot called Gopherbot has been created to sync
-GitHub pull requests to Gerrit.
+Contribuidores iniciantes que já estão familiarizados com o
+<a href="https://guides.github.com/introduction/flow/">fluxo do GitHub</a>
+são encorajados a usar o mesmo processo para contribuições Go.
+Embora os mantenedores do Go
+usem Gerrit para revisão de código, um bot chamado Gopherbot foi criado para sincronizar
+pull requests do GitHub com o Gerrit.
 </p>
 
 <p>
-Open a GitHub pull request as you normally would.
-Gopherbot will create a corresponding Gerrit change list (a "CL") and post a link to
-it on your GitHub pull request; updates to the pull request will also
-get reflected in the Gerrit CL.
-When somebody comments on the CL, their comment will be also
-posted in your pull request, so you will get a notification.
+Abra um pull request do GitHub como você normalmente faria.
+Gopherbot criará uma change list (uma "CL") correspondente no Gerrit e postará um link para
+ela no seu pull request do GitHub; atualizações no pull request também serão
+refletidas na CL do Gerrit.
+Quando alguém comentar na CL, o comentário também será
+postado no seu pull request, então você receberá uma notificação.
 </p>
 
 <p>
-Some things to keep in mind:
+Algumas coisas para ter em mente:
 </p>
 
 <ul>
 <li>
-You will need a <a href="https://go-review.googlesource.com/login/">Gerrit account</a>
-to respond to your reviewers, including to <a href="#reviews">mark feedback as 'Done'</a>
-if implemented as suggested.
-It is a good idea to familiarize yourself with Gerrit, such as by
-<a href="https://go-review.googlesource.com/q/status:open+-is:wip">skimming the open CLs</a>,
-subscribing to updates on interesting CLs (via the star icon),
-or <a href="/wiki/Gardening#pending-cls">reviewing or giving a +1</a> to other people's CLs.
+Você precisará de uma <a href="https://go-review.googlesource.com/login/">conta Gerrit</a>
+para responder aos seus revisores, incluindo para <a href="#reviews">marcar feedback como 'Done'</a>
+se implementado conforme sugerido.
+É uma boa ideia familiarizar-se com o Gerrit, como
+<a href="https://go-review.googlesource.com/q/status:open+-is:wip">navegar pelas CLs abertas</a>,
+inscrever-se para atualizações em CLs interessantes (via o ícone de estrela),
+ou <a href="/wiki/Gardening#pending-cls">revisar ou dar um +1</a> para CLs de outras pessoas.
 </li>
 <li>
-To update the pull request with new code, just push it to the branch; you can either
-add more commits, or rebase and force-push (both styles are accepted).
+Para atualizar o pull request com novo código, apenas faça push para o branch; você pode
+adicionar mais commits, ou fazer rebase e force-push (ambos os estilos são aceitos).
 </li>
 <li>
-If the request is accepted, all commits will be squashed, and the final
-commit description will be composed by concatenating the pull request's
-title and description.
-The individual commits' descriptions will be discarded.
-See <a href="#commit_messages">Writing good commit messages</a> for some
-suggestions.
+Se a solicitação for aceita, todos os commits serão squashed, e a
+descrição final do commit será composta concatenando o título e descrição do pull request.
+As descrições dos commits individuais serão descartadas.
+Veja <a href="#commit_messages">Writing good commit messages</a> para algumas
+sugestões.
 </li>
 <li>
-See the <a href="/wiki/GerritBot#frequently-asked-questions">FAQ</a> for more details.
+Veja o <a href="/wiki/GerritBot#frequently-asked-questions">FAQ</a> para mais detalhes.
 </li>
 </ul>
 
 <h2 id="sending_a_change_gerrit">Sending a change via Gerrit</h2>
 
 <p>
-It is not possible to fully sync Gerrit and GitHub, at least at the moment,
-so we recommend learning Gerrit.
-It's different but powerful and familiarity with it will help you understand
-the flow.
+Não é possível sincronizar completamente Gerrit e GitHub, pelo menos no momento,
+então recomendamos aprender Gerrit.
+É diferente, mas poderoso, e familiaridade com ele ajudará você a entender
+o fluxo.
 </p>
 
 <p>
-The following sections give a brief walkthrough of submitting a change via Gerrit.
-For more details on interacting with Gerrit, refer to
-<a href="https://gerrit-review.googlesource.com/Documentation/index.html">Gerrit's documentation</a>.
-In particular, we recommend reading the
+As seções a seguir dão um breve passo a passo de enviar uma mudança via Gerrit.
+Para mais detalhes sobre interagir com Gerrit, consulte
+<a href="https://gerrit-review.googlesource.com/Documentation/index.html">documentação do Gerrit</a>.
+Em particular, recomendamos ler a
 <a href="https://gerrit-review.googlesource.com/Documentation/user-review-ui.html">Review UI Overview</a>
-and <a href="https://gerrit-review.googlesource.com/Documentation/intro-gerrit-walkthrough-github.html">
-Basic Gerrit Walkthrough — For GitHub Users</a> pages.
+e <a href="https://gerrit-review.googlesource.com/Documentation/intro-gerrit-walkthrough-github.html">
+Basic Gerrit Walkthrough — For GitHub Users</a>.
 </p>
 
 <h3 id="gerrit_overview">Overview</h3>
 
 <p>
-This is an overview of the overall process:
+Esta é uma visão geral do processo geral:
 </p>
 
 <ul>
 <li>
-<b>Step 1:</b> Clone the source code from <code>go.googlesource.com</code> and
-make sure it's stable by compiling and testing it once.
+<b>Step 1:</b> Clone o código fonte de <code>go.googlesource.com</code> e
+certifique-se de que está estável compilando e testando uma vez.
 
-<p>If you're making a change to the
-<a href="https://go.googlesource.com/go">main Go repository</a>:</p>
+<p>Se você está fazendo uma mudança no
+<a href="https://go.googlesource.com/go">repositório principal do Go</a>:</p>
 
 <pre>
 $ git clone https://go.googlesource.com/go
@@ -473,9 +473,9 @@ $ ./all.bash                                # compile and test
 </pre>
 
 <p>
-If you're making a change to one of the golang.org/x/... repositories
+Se você está fazendo uma mudança em um dos repositórios golang.org/x/...
 (<a href="https://go.googlesource.com/tools">golang.org/x/tools</a>,
-in this example):
+neste exemplo):
 </p>
 
 <pre>
@@ -486,9 +486,9 @@ $ go test ./...                             # compile and test
 </li>
 
 <li>
-<b>Step 2:</b> Prepare changes in a new branch, created from the master branch.
-To commit the changes, use <code>git</code> <code>codereview</code> <code>change</code>; that
-will create or amend a single commit in the branch.
+<b>Step 2:</b> Prepare mudanças em um novo branch, criado a partir do branch master.
+Para fazer commit das mudanças, use <code>git</code> <code>codereview</code> <code>change</code>; isso
+criará ou modificará um único commit no branch.
 <pre>
 $ git checkout -b mybranch
 $ [edit files...]
@@ -502,31 +502,31 @@ $ [etc.]
 </li>
 
 <li>
-<b>Step 3:</b> Test your changes, either by running the tests in the package
-you edited or by re-running <code>all.bash</code>.
+<b>Step 3:</b> Teste suas mudanças, executando os testes no pacote
+que você editou ou re-executando <code>all.bash</code>.
 
-<p>In the main Go repository:</p>
+<p>No repositório principal do Go:</p>
 <pre>
 $ ./all.bash    # recompile and test
 </pre>
 
-<p>In a golang.org/x/... repository:</p>
+<p>Em um repositório golang.org/x/...:</p>
 <pre>
 $ go test ./... # recompile and test
 </pre>
 </li>
 
 <li>
-<b>Step 4:</b> Send the changes for review to Gerrit using <code>git</code>
-<code>codereview</code> <code>mail</code> (which doesn't use e-mail, despite the name).
+<b>Step 4:</b> Envie as mudanças para revisão no Gerrit usando <code>git</code>
+<code>codereview</code> <code>mail</code> (que não usa e-mail, apesar do nome).
 <pre>
 $ git codereview mail     # send changes to Gerrit
 </pre>
 </li>
 
 <li>
-<b>Step 5:</b> After a review, apply changes to the same single commit
-and mail them to Gerrit again:
+<b>Step 5:</b> Após uma revisão, aplique mudanças ao mesmo único commit
+e envie-as para o Gerrit novamente:
 <pre>
 $ [edit files...]
 $ git add [files...]
@@ -537,29 +537,29 @@ $ git codereview mail     # send to Gerrit again
 </ul>
 
 <p>
-The rest of this section describes these steps in more detail.
+O restante desta seção descreve esses passos em mais detalhes.
 </p>
 
 
 <h3 id="checkout_go">Step 1: Clone the source code</h3>
 
 <p>
-In addition to a recent Go installation, you need to have a local copy of the source
-checked out from the correct repository.
-You can check out the Go source repo onto your local file system anywhere
-you want as long as it's outside your <code>GOPATH</code>
-(defaults to the directory <code>go</code> in your home directory).
-Clone from <code>go.googlesource.com</code> (not GitHub):
+Além de uma instalação recente do Go, você precisa ter uma cópia local do código fonte
+clonada do repositório correto.
+Você pode clonar o repositório de código fonte do Go no seu sistema de arquivos local em qualquer lugar
+que quiser, desde que esteja fora do seu <code>GOPATH</code>
+(padrão é o diretório <code>go</code> no seu diretório home).
+Clone de <code>go.googlesource.com</code> (não do GitHub):
 </p>
 
-<p>Main Go repository:</p>
+<p>Repositório principal do Go:</p>
 <pre>
 $ git clone https://go.googlesource.com/go
 $ cd go
 </pre>
 
-<p>golang.org/x/... repository</p>
-(<a href="https://go.googlesource.com/tools">golang.org/x/tools</a> in this example):
+<p>repositório golang.org/x/...</p>
+(<a href="https://go.googlesource.com/tools">golang.org/x/tools</a> neste exemplo):
 <pre>
 $ git clone https://go.googlesource.com/tools
 $ cd tools
@@ -568,10 +568,10 @@ $ cd tools
 <h3 id="make_branch">Step 2: Prepare changes in a new branch</h3>
 
 <p>
-Each Go change must be made in a separate branch, created from the master branch.
-You can use
-the normal <code>git</code> commands to create a branch and add changes to the
-staging area:
+Cada mudança no Go deve ser feita em um branch separado, criado a partir do branch master.
+Você pode usar
+os comandos normais do <code>git</code> para criar um branch e adicionar mudanças à
+área de staging:
 </p>
 
 <pre>
@@ -581,7 +581,7 @@ $ git add [files...]
 </pre>
 
 <p>
-To commit changes, instead of <code>git commit</code>, use <code>git codereview change</code>.
+Para fazer commit das mudanças, em vez de <code>git commit</code>, use <code>git codereview change</code>.
 </p>
 
 <pre>
@@ -590,12 +590,12 @@ $ git codereview change
 </pre>
 
 <p>
-You can edit the commit description in your favorite editor as usual.
-The  <code>git</code> <code>codereview</code> <code>change</code> command
-will automatically add a unique Change-Id line near the bottom.
-That line is used by Gerrit to match successive uploads of the same change.
-Do not edit or delete it.
-A Change-Id looks like this:
+Você pode editar a descrição do commit no seu editor favorito como de costume.
+O comando <code>git</code> <code>codereview</code> <code>change</code>
+adicionará automaticamente uma linha Change-Id única perto do final.
+Essa linha é usada pelo Gerrit para corresponder uploads sucessivos da mesma mudança.
+Não edite ou delete ela.
+Um Change-Id se parece com isto:
 </p>
 
 <pre>
@@ -603,38 +603,38 @@ Change-Id: I2fbdbffb3aab626c4b6f56348861b7909e3e8990
 </pre>
 
 <p>
-The tool also checks that you've
-run <code>go</code> <code>fmt</code> over the source code, and that
-the commit message follows the <a href="#commit_messages">suggested format</a>.
+A ferramenta também verifica se você
+executou <code>go</code> <code>fmt</code> sobre o código fonte, e se
+a mensagem do commit segue o <a href="#commit_messages">formato sugerido</a>.
 </p>
 
 <p>
-If you need to edit the files again, you can stage the new changes and
-re-run <code>git</code> <code>codereview</code> <code>change</code>: each subsequent
-run will amend the existing commit while preserving the Change-Id.
+Se você precisar editar os arquivos novamente, pode fazer stage das novas mudanças e
+re-executar <code>git</code> <code>codereview</code> <code>change</code>: cada execução subsequente
+modificará o commit existente enquanto preserva o Change-Id.
 </p>
 
 <p>
-Make sure that you always keep a single commit in each branch.
-If you add more
-commits by mistake, you can use <code>git</code> <code>rebase</code> to
+Certifique-se de sempre manter um único commit em cada branch.
+Se você adicionar mais
+commits por engano, pode usar <code>git</code> <code>rebase</code> para
 <a href="https://stackoverflow.com/questions/31668794/squash-all-your-commits-in-one-before-a-pull-request-in-github">squash them together</a>
-into a single one.
+em um único.
 </p>
 
 
 <h3 id="testing">Step 3: Test your changes</h3>
 
 <p>
-You've <a href="code.html">written and tested your code</a>, but
-before sending code out for review, run <i>all the tests for the whole
-tree</i> to make sure the changes don't break other packages or programs.
+Você <a href="code.html">escreveu e testou seu código</a>, mas
+antes de enviar código para revisão, execute <i>todos os testes para toda a
+árvore</i> para garantir que as mudanças não quebrem outros pacotes ou programas.
 </p>
 
 <h4 id="test-gorepo">In the main Go repository</h4>
 
 <p>
-For standard library packages, all tests within the package must pass:
+Para pacotes da biblioteca padrão, todos os testes dentro do pacote devem passar:
 </p>
 
 <pre>
@@ -642,8 +642,8 @@ $ go test
 </pre>
 
 <p>
-The short test suite for the entire tree can be run with <code>all.bash</code>
-(To build under Windows use <code>all.bat</code>):
+A suíte de testes curta para toda a árvore pode ser executada com <code>all.bash</code>
+(Para construir no Windows use <code>all.bat</code>):
 </p>
 
 <pre>
@@ -652,8 +652,8 @@ $ ./all.bash
 </pre>
 
 <p>
-After running for a while and printing a lot of testing output, the command should finish
-by printing,
+Após executar por um tempo e imprimir muita saída de testes, o comando deve terminar
+imprimindo,
 </p>
 
 <pre>
@@ -661,21 +661,21 @@ ALL TESTS PASSED
 </pre>
 
 <p>
-You can use <code>make.bash</code> instead of <code>all.bash</code>
-to just build the compiler and the standard library without running the test suite.
-Once the <code>go</code> tool is built, it will be installed as <code>bin/go</code>
-under the directory in which you cloned the Go repository, and you can
-run it directly from there.
-See also
-the section on how to <a href="#quick_test">test your changes quickly</a>.
+Você pode usar <code>make.bash</code> em vez de <code>all.bash</code>
+para apenas construir o compilador e a biblioteca padrão sem executar a suíte de testes.
+Uma vez que a ferramenta <code>go</code> seja construída, ela será instalada como <code>bin/go</code>
+sob o diretório no qual você clonou o repositório Go, e você pode
+executá-la diretamente de lá.
+Veja também
+a seção sobre como <a href="#quick_test">testar suas mudanças rapidamente</a>.
 </p>
 
 <h4 id="test-xrepo">In the golang.org/x/... repositories</h4>
 
 <p>
-Run the tests for the entire repository
+Execute os testes para todo o repositório
 (<a href="https://go.googlesource.com/tools">golang.org/x/tools</a>,
-in this example):
+neste exemplo):
 </p>
 
 <pre>
@@ -684,25 +684,25 @@ $ go test ./...
 </pre>
 
 <p>
-If you're concerned about the build status,
-you can check the <a href="https://build.golang.org">Build Dashboard</a>.
-Test failures may also be caught by the TryBots in code review.
+Se você está preocupado com o status da build,
+pode verificar o <a href="https://build.golang.org">Build Dashboard</a>.
+Falhas de teste também podem ser detectadas pelos TryBots na revisão de código.
 </p>
 
 <p>
-Some repositories, like
-<a href="https://go.googlesource.com/vscode-go">golang.org/x/vscode-go</a> will
-have different testing infrastructures, so always check the documentation
-for the repository in which you are working. The README file in the root of the
-repository will usually have this information.
+Alguns repositórios, como
+<a href="https://go.googlesource.com/vscode-go">golang.org/x/vscode-go</a> terão
+infraestruturas de teste diferentes, então sempre verifique a documentação
+para o repositório no qual você está trabalhando. O arquivo README na raiz do
+repositório geralmente terá essas informações.
 </p>
 
 <h3 id="mail">Step 4: Send changes for review</h3>
 
 <p>
-Once the change is ready and tested over the whole tree, send it for review.
-This is done with the <code>mail</code> sub-command which, despite its name, doesn't
-directly mail anything; it just sends the change to Gerrit:
+Uma vez que a mudança esteja pronta e testada em toda a árvore, envie-a para revisão.
+Isso é feito com o sub-comando <code>mail</code> que, apesar do nome, não
+envia e-mail diretamente; apenas envia a mudança para o Gerrit:
 </p>
 
 <pre>
@@ -710,7 +710,7 @@ $ git codereview mail
 </pre>
 
 <p>
-Gerrit assigns your change a number and URL, which <code>git</code> <code>codereview</code> <code>mail</code> will print, something like:
+O Gerrit atribui um número e URL à sua mudança, que <code>git</code> <code>codereview</code> <code>mail</code> imprimirá, algo como:
 </p>
 
 <pre>
@@ -719,31 +719,31 @@ remote:   https://go-review.googlesource.com/99999 math: improved Sin, Cos and T
 </pre>
 
 <p>
-If you get an error instead, check the
-<a href="#troubleshooting_mail">Troubleshooting mail errors</a> section.
+Se você receber um erro, verifique a
+seção <a href="#troubleshooting_mail">Troubleshooting mail errors</a>.
 </p>
 
 <p>
-If your change relates to an open GitHub issue and you have followed the <a href="#commit_messages">
-suggested commit message format</a>, the issue will be updated in a few minutes by a bot,
-linking your Gerrit change to it in the comments.
+Se sua mudança se relaciona a uma issue aberta do GitHub e você seguiu o <a href="#commit_messages">
+formato de mensagem de commit sugerido</a>, a issue será atualizada em alguns minutos por um bot,
+linkando sua mudança do Gerrit a ela nos comentários.
 </p>
 
 
 <h3 id="revise">Step 5: Revise changes after a review</h3>
 
 <p>
-Go maintainers will review your code on Gerrit, and you will get notifications via e-mail.
-You can see the review on Gerrit and comment on them there.
-You can also reply
-<a href="https://gerrit-review.googlesource.com/Documentation/intro-user.html#reply-by-email">using e-mail</a>
-if you prefer.
+Mantenedores do Go revisarão seu código no Gerrit, e você receberá notificações via e-mail.
+Você pode ver a revisão no Gerrit e comentar nelas lá.
+Você também pode responder
+<a href="https://gerrit-review.googlesource.com/Documentation/intro-user.html#reply-by-email">usando e-mail</a>
+se preferir.
 </p>
 
 <p>
-If you need to revise your change after the review, edit the files in
-the same branch you previously created, add them to the Git staging
-area, and then amend the commit with
+Se você precisar revisar sua mudança após a revisão, edite os arquivos no
+mesmo branch que você criou anteriormente, adicione-os à área de staging
+do Git, e então modifique o commit com
 <code>git</code> <code>codereview</code> <code>change</code>:
 </p>
 
@@ -754,27 +754,27 @@ $ git codereview mail       # send new changes to Gerrit
 </pre>
 
 <p>
-If you don't need to change the commit description, just save and exit from the editor.
-Remember not to touch the special Change-Id line.
+Se você não precisar mudar a descrição do commit, apenas salve e saia do editor.
+Lembre-se de não tocar na linha especial Change-Id.
 </p>
 
 <p>
-Again, make sure that you always keep a single commit in each branch.
-If you add more
-commits by mistake, you can use <code>git rebase</code> to
+Novamente, certifique-se de sempre manter um único commit em cada branch.
+Se você adicionar mais
+commits por engano, pode usar <code>git rebase</code> para
 <a href="https://stackoverflow.com/questions/31668794/squash-all-your-commits-in-one-before-a-pull-request-in-github">squash them together</a>
-into a single one.
+em um único.
 </p>
 
 <h2 id="commit_messages">Good commit messages</h2>
 
 <p>
-Commit messages in Go follow a specific set of conventions,
-which we discuss in this section.
+Mensagens de commit no Go seguem um conjunto específico de convenções,
+que discutimos nesta seção.
 </p>
 
 <p>
-Here is an example of a good one:
+Aqui está um exemplo de uma boa mensagem:
 </p>
 
 <pre>
@@ -792,244 +792,244 @@ Fixes #159
 <h3 id="first_line">First line</h3>
 
 <p>
-The first line of the change description is conventionally a short one-line
-summary of the change, prefixed by the primary affected package.
+A primeira linha da descrição da mudança é convencionalmente um resumo curto de uma linha
+da mudança, prefixado pelo pacote primário afetado.
 </p>
 
 <p>
-A rule of thumb is that it should be written so to complete the sentence
+Uma regra prática é que deve ser escrita para completar a frase
 "This change modifies Go to _____."
-That means it does not start with a capital letter, is not a complete sentence,
-and actually summarizes the result of the change.
+Isso significa que não começa com letra maiúscula, não é uma frase completa,
+e realmente resume o resultado da mudança.
 </p>
 
 <p>
-Follow the first line by a blank line.
+Siga a primeira linha por uma linha em branco.
 </p>
 
 <h3 id="main_content">Main content</h3>
 
 <p>
-The rest of the description elaborates and should provide context for the
-change and explain what it does.
-Write in complete sentences with correct punctuation, just like
-for your comments in Go.
-Don't use HTML, Markdown, or any other markup language.
+O resto da descrição elabora e deve fornecer contexto para a
+mudança e explicar o que ela faz.
+Escreva em frases completas com pontuação correta, assim como
+para seus comentários em Go.
+Não use HTML, Markdown ou qualquer outra linguagem de marcação.
 </p>
 
 <p>
-Add any relevant information, such as benchmark data if the change
-affects performance.
-The <a href="https://godoc.org/golang.org/x/perf/cmd/benchstat">benchstat</a>
-tool is conventionally used to format
-benchmark data for change descriptions.
+Adicione qualquer informação relevante, como dados de benchmark se a mudança
+afetar performance.
+A ferramenta <a href="https://godoc.org/golang.org/x/perf/cmd/benchstat">benchstat</a>
+é convencionalmente usada para formatar
+dados de benchmark para descrições de mudanças.
 </p>
 
 <h3 id="ref_issues">Referencing issues</h3>
 
 <p>
-The special notation "Fixes #12345" associates the change with issue 12345 in the
-<a href="/issue/12345">Go issue tracker</a>.
-When this change is eventually applied, the issue
-tracker will automatically mark the issue as fixed.
+A notação especial "Fixes #12345" associa a mudança com a issue 12345 no
+<a href="/issue/12345">issue tracker do Go</a>.
+Quando esta mudança for eventualmente aplicada, o issue
+tracker marcará automaticamente a issue como corrigida.
 </p>
 
 <p>
-If the change is a partial step towards the resolution of the issue,
-write "Updates #12345" instead.
-This will leave a comment in the issue linking back to the change in
-Gerrit, but it will not close the issue when the change is applied.
+Se a mudança é um passo parcial em direção à resolução da issue,
+escreva "Updates #12345" em vez disso.
+Isso deixará um comentário na issue linkando de volta à mudança no
+Gerrit, mas não fechará a issue quando a mudança for aplicada.
 </p>
 
 <p>
-If you are sending a change against a golang.org/x/... repository, you must use
-the fully-qualified syntax supported by GitHub to make sure the change is
-linked to the issue in the main repository, not the x/ repository.
-Most issues are tracked in the main repository's issue tracker.
-The correct form is "Fixes golang/go#159".
+Se você está enviando uma mudança contra um repositório golang.org/x/..., você deve usar
+a sintaxe totalmente qualificada suportada pelo GitHub para garantir que a mudança seja
+linkada à issue no repositório principal, não no repositório x/.
+A maioria das issues é rastreada no issue tracker do repositório principal.
+A forma correta é "Fixes golang/go#159".
 </p>
 
 
 <h2 id="review">The review process</h2>
 
 <p>
-This section explains the review process in detail and how to approach
-reviews after a change has been mailed.
+Esta seção explica o processo de revisão em detalhes e como abordar
+revisões após uma mudança ter sido enviada.
 </p>
 
 
 <h3 id="mistakes">Common beginner mistakes</h3>
 
 <p>
-When a change is sent to Gerrit, it is usually triaged within a few days.
-A maintainer will have a look and provide some initial review that for first-time
-contributors usually focuses on basic cosmetics and common mistakes.
-These include things like:
+Quando uma mudança é enviada para o Gerrit, geralmente é triada dentro de alguns dias.
+Um mantenedor dará uma olhada e fornecerá alguma revisão inicial que para contribuidores iniciantes
+geralmente se concentra em cosmética básica e erros comuns.
+Isso inclui coisas como:
 </p>
 
 <ul>
 <li>
-Commit message not following the <a href="#commit_messages">suggested
-format</a>.
+Mensagem de commit não seguindo o <a href="#commit_messages">formato
+sugerido</a>.
 </li>
 
 <li>
-The lack of a linked GitHub issue.
-The vast majority of changes
-require a linked issue that describes the bug or the feature that the change
-fixes or implements, and consensus should have been reached on the tracker
-before proceeding with it.
-Gerrit reviews do not discuss the merit of the change,
-just its implementation.
+A falta de uma issue do GitHub linkada.
+A grande maioria das mudanças
+requer uma issue linkada que descreve o bug ou a feature que a mudança
+corrige ou implementa, e um consenso deve ter sido alcançado no tracker
+antes de prosseguir com ela.
+Revisões do Gerrit não discutem o mérito da mudança,
+apenas sua implementação.
 <br>
-Only trivial or cosmetic changes will be accepted without an associated issue.
+Apenas mudanças triviais ou cosméticas serão aceitas sem uma issue associada.
 </li>
 
 <li>
-Change sent during the freeze phase of the development cycle, when the tree
-is closed for general changes.
-In this case,
-a maintainer might review the code with a line such as <code>R=go1.12</code>,
-which means that it will be reviewed later when the tree opens for a new
-development window.
-You can add <code>R=go1.XX</code> as a comment yourself
-if you know that it's not the correct time frame for the change.
+Mudança enviada durante a fase de congelamento do ciclo de desenvolvimento, quando a árvore
+está fechada para mudanças gerais.
+Neste caso,
+um mantenedor pode revisar o código com uma linha como <code>R=go1.12</code>,
+o que significa que será revisado mais tarde quando a árvore abrir para uma nova
+janela de desenvolvimento.
+Você pode adicionar <code>R=go1.XX</code> como um comentário você mesmo
+se souber que não é o período de tempo correto para a mudança.
 </li>
 </ul>
 
 <h3 id="trybots">Trybots</h3>
 
 <p>
-After an initial reading of your change, maintainers will trigger trybots,
-a cluster of servers that will run the full test suite on several different
-architectures.
-Most trybots complete in a few minutes, at which point a link will
-be posted in Gerrit where you can see the results.
+Após uma leitura inicial da sua mudança, mantenedores acionarão trybots,
+um cluster de servidores que executará a suíte de testes completa em várias
+arquiteturas diferentes.
+A maioria dos trybots completa em alguns minutos, momento em que um link será
+postado no Gerrit onde você pode ver os resultados.
 </p>
 
 <p>
-If the trybot run fails, follow the link and check the full logs of the
-platforms on which the tests failed.
-Try to understand what broke, update your patch to fix it, and upload again.
-Maintainers will trigger a new trybot run to see
-if the problem was fixed.
+Se a execução do trybot falhar, siga o link e verifique os logs completos das
+plataformas nas quais os testes falharam.
+Tente entender o que quebrou, atualize seu patch para corrigir, e faça upload novamente.
+Mantenedores acionarão uma nova execução do trybot para ver
+se o problema foi corrigido.
 </p>
 
 <p>
-Sometimes, the tree can be broken on some platforms for a few hours; if
-the failure reported by the trybot doesn't seem related to your patch, go to the
-<a href="https://build.golang.org">Build Dashboard</a> and check if the same
-failure appears in other recent commits on the same platform.
-In this case,
-feel free to write a comment in Gerrit to mention that the failure is
-unrelated to your change, to help maintainers understand the situation.
-You can also search GitHub issues for the failing error message
-or browse <a href="https://github.com/golang/go/issues?q=is%3Aissue%20watchflakes%20sort%3Aupdated-desc">recently updated <code>watchflakes</code> issues</a>.
-If your change is based on an older commit
-or it looks like someone else might have already fixed the problem,
-try rebasing to the latest master commit via <code>git rebase</code>.
+Às vezes, a árvore pode estar quebrada em algumas plataformas por algumas horas; se
+a falha relatada pelo trybot não parecer relacionada ao seu patch, vá ao
+<a href="https://build.golang.org">Build Dashboard</a> e verifique se a mesma
+falha aparece em outros commits recentes na mesma plataforma.
+Neste caso,
+sinta-se à vontade para escrever um comentário no Gerrit para mencionar que a falha não está
+relacionada à sua mudança, para ajudar os mantenedores a entender a situação.
+Você também pode pesquisar issues do GitHub pela mensagem de erro falhando
+ou navegar <a href="https://github.com/golang/go/issues?q=is%3Aissue%20watchflakes%20sort%3Aupdated-desc">issues <code>watchflakes</code> atualizadas recentemente</a>.
+Se sua mudança é baseada em um commit mais antigo
+ou parece que alguém mais já corrigiu o problema,
+tente fazer rebase para o último commit master via <code>git rebase</code>.
 </p>
 
 <h3 id="reviews">Reviews</h3>
 
 <p>
-The Go community values very thorough reviews.
-Think of each review comment like a ticket: you are expected to somehow "close" it
-by acting on it, either by implementing the suggestion or convincing the
-reviewer otherwise.
+A comunidade Go valoriza revisões muito minuciosas.
+Pense em cada comentário de revisão como um ticket: espera-se que você de alguma forma o "feche"
+agindo sobre ele, seja implementando a sugestão ou convencendo o
+revisor do contrário.
 </p>
 
 <p>
-After you update the change, go through the review comments and make sure
-to reply to every one.
-You can click the "Done" button to reply
-indicating that you've implemented the reviewer's suggestion; otherwise,
-click on "Reply" and explain why you have not, or what you have done instead.
+Após você atualizar a mudança, percorra os comentários de revisão e certifique-se
+de responder a todos.
+Você pode clicar no botão "Done" para responder
+indicando que você implementou a sugestão do revisor; caso contrário,
+clique em "Reply" e explique por que você não o fez, ou o que você fez em vez disso.
 </p>
 
 <p>
-It is perfectly normal for changes to go through several round of reviews,
-with one or more reviewers making new comments every time
-and then waiting for an updated change before reviewing again.
-This cycle happens even for experienced contributors, so
-don't be discouraged by it.
+É perfeitamente normal que mudanças passem por várias rodadas de revisões,
+com um ou mais revisores fazendo novos comentários toda vez
+e então esperando por uma mudança atualizada antes de revisar novamente.
+Este ciclo acontece até mesmo para contribuidores experientes, então
+não se desencoraje com isso.
 </p>
 
 <h3 id="votes">Voting conventions</h3>
 
 <p>
-As they near a decision, reviewers will apply a Code-Review “vote” to your change.
-There are two possible votes:
+Conforme se aproximam de uma decisão, revisores aplicarão um voto de Code-Review à sua mudança.
+Há dois votos possíveis:
 </p>
 
 <ul>
 	<li>
-	<b>+2</b> The change is approved for being merged.
-	Only Go maintainers (also referred to as “approvers”) can cast a +2 vote.
+	<b>+2</b> A mudança é aprovada para ser mesclada.
+	Apenas mantenedores do Go (também chamados de "approvers") podem dar um voto +2.
 	</li>
 	<li>
-	<b>+1</b> The change looks good, but either the reviewer is requesting
-	minor changes before approving it, or they are not a maintainer and cannot
-	approve it, but would like to encourage an approval.
+	<b>+1</b> A mudança parece boa, mas ou o revisor está solicitando
+	mudanças menores antes de aprová-la, ou eles não são um mantenedor e não podem
+	aprovar, mas gostariam de encorajar uma aprovação.
 	</li>
 </ul>
 
 <p>
-To be submitted, a change must have a Code-Review +2 from a maintainer.
+Para ser submetida, uma mudança deve ter um Code-Review +2 de um mantenedor.
 </p>
 
 <p>
-Maintainers can also apply a Hold +1 vote to the change,
-to mark a change that should not be submitted now
-(for example, because the <a href="/s/proposal-process">proposal review</a>
-for new API in the change has not completed).
+Mantenedores também podem aplicar um voto Hold +1 à mudança,
+para marcar uma mudança que não deve ser submetida agora
+(por exemplo, porque a <a href="/s/proposal-process">revisão de proposta</a>
+para nova API na mudança não foi completada).
 </p>
 
 <p>
-To be submitted, a change must not have any Hold +1 votes from a maintainer.
+Para ser submetida, uma mudança não deve ter nenhum voto Hold +1 de um mantenedor.
 </p>
 
 <p>
-Finally, to be submitted, a change must have the involvement of two Google employees,
-either as the uploader of the change or as a reviewer voting at least Code-Review +1.
-This requirement is for compliance and supply chain security reasons.
+Finalmente, para ser submetida, uma mudança deve ter o envolvimento de dois funcionários do Google,
+seja como o uploader da mudança ou como um revisor votando pelo menos Code-Review +1.
+Este requisito é por razões de compliance e segurança da cadeia de suprimentos.
 </p>
 
 <h3 id="submit">Submitting an approved change</h3>
 
 <p>
-When a change is ready, a maintainer will submit the change,
-which adds it as a commit to the Gerrit repository.
+Quando uma mudança estiver pronta, um mantenedor submeterá a mudança,
+o que a adiciona como um commit ao repositório Gerrit.
 </p>
 
 <p>
-The two steps (approving and submitting) are separate because in some cases maintainers
-may want to approve it but not to submit it right away (for instance,
-the tree could be temporarily frozen).
+Os dois passos (aprovar e submeter) são separados porque em alguns casos mantenedores
+podem querer aprovar mas não submeter imediatamente (por exemplo,
+a árvore poderia estar temporariamente congelada).
 </p>
 
 <p>
-Submitting a change checks it into the repository.
-The change description will include a link to the code review,
-which will be updated with a link to the change
-in the repository.
-Since the method used to integrate the changes is Git's "Cherry Pick",
-the commit hashes in the repository will be changed by
-the submit operation.
+Submeter uma mudança a adiciona ao repositório.
+A descrição da mudança incluirá um link para a revisão de código,
+que será atualizada com um link para a mudança
+no repositório.
+Como o método usado para integrar as mudanças é o "Cherry Pick" do Git,
+os hashes de commit no repositório serão alterados pela
+operação de submit.
 </p>
 
 <p>
-If your change has been approved for a few days without being
-submitted, feel free to write a comment in Gerrit requesting
-submission.
+Se sua mudança foi aprovada há alguns dias sem ser
+submetida, sinta-se à vontade para escrever um comentário no Gerrit solicitando
+submissão.
 </p>
 
 <h3 id="more_information">More information</h3>
 
 <p>
-In addition to the information here, the Go community maintains a <a
-href="/wiki/CodeReview">CodeReview</a> wiki page.
-Feel free to contribute to this page as you learn more about the review process.
+Além das informações aqui, a comunidade Go mantém uma página
+wiki <a href="/wiki/CodeReview">CodeReview</a>.
+Sinta-se à vontade para contribuir com esta página conforme aprende mais sobre o processo de revisão.
 </p>
 
 
@@ -1037,34 +1037,34 @@ Feel free to contribute to this page as you learn more about the review process.
 <h2 id="advanced_topics">Miscellaneous topics</h2>
 
 <p>
-This section collects a number of other comments that are
-outside the issue/edit/code review/submit process itself.
+Esta seção coleta vários outros comentários que estão
+fora do processo issue/edit/code review/submit em si.
 </p>
 
 <h3 id="gopls">Gopls</h3>
 
 <p>
-When working on the main Go repository and using <code>gopls</code> with your editor,
-the <code>go</code> command invoked by <code>gopls</code>
-must correspond to the version of the source code you are working on.
-The <code>go</code> command can be built with <code>make.bash</code>
-and the <code>bin</code> directory should be added to your <code>PATH</code>.
-See <a href="/gopls/advanced">Gopls: Advanced topics</a> for additional details.
+Ao trabalhar no repositório principal do Go e usar <code>gopls</code> com seu editor,
+o comando <code>go</code> invocado pelo <code>gopls</code>
+deve corresponder à versão do código fonte em que você está trabalhando.
+O comando <code>go</code> pode ser construído com <code>make.bash</code>
+e o diretório <code>bin</code> deve ser adicionado ao seu <code>PATH</code>.
+Veja <a href="/gopls/advanced">Gopls: Advanced topics</a> para detalhes adicionais.
 </p>
 
-<p>Complete documentation for Gopls can be found at https://go.dev/gopls.</p>
+<p>Documentação completa para Gopls pode ser encontrada em https://go.dev/gopls.</p>
 
 <h3 id="copyright">Copyright headers</h3>
 
 <p>
-Files in the Go repository don't list author names, both to avoid clutter
-and to avoid having to keep the lists up to date.
-Instead, your name will appear in the
+Arquivos no repositório Go não listam nomes de autores, tanto para evitar desordem
+quanto para evitar ter que manter as listas atualizadas.
+Em vez disso, seu nome aparecerá no
 <a href="/change">change log</a>.
 </p>
 
 <p>
-New files that you contribute should use the standard copyright header:
+Novos arquivos que você contribuir devem usar o cabeçalho de copyright padrão:
 </p>
 
 <pre>
@@ -1074,8 +1074,8 @@ New files that you contribute should use the standard copyright header:
 </pre>
 
 <p>
-Files in the repository are copyrighted the year they are added.
-Do not update the copyright year on files that you change.
+Arquivos no repositório têm copyright do ano em que são adicionados.
+Não atualize o ano de copyright em arquivos que você mudar.
 </p>
 
 
@@ -1084,12 +1084,12 @@ Do not update the copyright year on files that you change.
 <h3 id="troubleshooting_mail">Troubleshooting mail errors</h3>
 
 <p>
-The most common way that the <code>git</code> <code>codereview</code> <code>mail</code>
-command fails is because the e-mail address in the commit does not match the one
-that you used during <a href="#google_account">the registration process</a>.
+A maneira mais comum pela qual o comando <code>git</code> <code>codereview</code> <code>mail</code>
+falha é porque o endereço de e-mail no commit não corresponde ao que
+você usou durante <a href="#google_account">o processo de registro</a>.
 
 <br>
-If you see something like...
+Se você ver algo como...
 </p>
 
 <pre>
@@ -1101,9 +1101,9 @@ remote: ERROR:  does not match your user account.
 </pre>
 
 <p>
-you need to configure Git for this repository to use the
-e-mail address that you registered with.
-To change the e-mail address to ensure this doesn't happen again, run:
+você precisa configurar o Git para este repositório usar o
+endereço de e-mail com o qual você se registrou.
+Para mudar o endereço de e-mail para garantir que isso não aconteça novamente, execute:
 </p>
 
 <pre>
@@ -1111,7 +1111,7 @@ $ git config user.email email@address.com
 </pre>
 
 <p>
-Then change the commit to use this alternative e-mail address with this command:
+Então mude o commit para usar este endereço de e-mail alternativo com este comando:
 </p>
 
 <pre>
@@ -1119,7 +1119,7 @@ $ git commit --amend --author="Author Name &lt;email@address.com&gt;"
 </pre>
 
 <p>
-Then retry by running:
+Então tente novamente executando:
 </p>
 
 <pre>
@@ -1130,33 +1130,33 @@ $ git codereview mail
 <h3 id="quick_test">Quickly testing your changes</h3>
 
 <p>
-Running <code>all.bash</code> for every single change to the code tree
-is burdensome.
-Even though it is strongly suggested to run it before
-sending a change, during the normal development cycle you may want
-to compile and test only the package you are developing.
+Executar <code>all.bash</code> para cada mudança individual na árvore de código
+é oneroso.
+Embora seja fortemente sugerido executá-lo antes
+de enviar uma mudança, durante o ciclo de desenvolvimento normal você pode querer
+compilar e testar apenas o pacote que está desenvolvendo.
 </p>
 
 <ul>
 <li>
-In general, you can run <code>make.bash</code> instead of <code>all.bash</code>
-to only rebuild the Go tool chain without running the whole test suite.
-Or you
-can run <code>run.bash</code> to only run the whole test suite without rebuilding
-the tool chain.
-You can think of <code>all.bash</code> as <code>make.bash</code>
-followed by <code>run.bash</code>.
+Em geral, você pode executar <code>make.bash</code> em vez de <code>all.bash</code>
+para apenas reconstruir a toolchain do Go sem executar toda a suíte de testes.
+Ou você
+pode executar <code>run.bash</code> para apenas executar toda a suíte de testes sem reconstruir
+a toolchain.
+Você pode pensar em <code>all.bash</code> como <code>make.bash</code>
+seguido por <code>run.bash</code>.
 </li>
 
 <li>
-In this section, we'll call the directory into which you cloned the Go repository <code>$GOROOT</code>.
-The <code>go</code> tool built by <code>$GOROOT/src/make.bash</code> will be installed
-in <code>$GOROOT/bin/go</code> and you
-can invoke it to test your code.
-For instance, if you
-have modified the compiler and you want to test how it affects the
-test suite of your own project, just run <code>go</code> <code>test</code>
-using it:
+Nesta seção, chamaremos o diretório no qual você clonou o repositório Go de <code>$GOROOT</code>.
+A ferramenta <code>go</code> construída por <code>$GOROOT/src/make.bash</code> será instalada
+em <code>$GOROOT/bin/go</code> e você
+pode invocá-la para testar seu código.
+Por exemplo, se você
+modificou o compilador e quer testar como isso afeta a
+suíte de testes do seu próprio projeto, apenas execute <code>go</code> <code>test</code>
+usando-o:
 
 <pre>
 $ cd &lt;MYPROJECTDIR&gt;
@@ -1165,12 +1165,12 @@ $ $GOROOT/bin/go test
 </li>
 
 <li>
-If you're changing the standard library, you probably don't need to rebuild
-the compiler: you can just run the tests for the package you've changed.
-You can do that either with the Go version you normally use, or
-with the Go compiler built from your clone (which is
-sometimes required because the standard library code you're modifying
-might require a newer version than the stable one you have installed).
+Se você está mudando a biblioteca padrão, provavelmente não precisa reconstruir
+o compilador: você pode apenas executar os testes para o pacote que mudou.
+Você pode fazer isso com a versão Go que você normalmente usa, ou
+com o compilador Go construído a partir do seu clone (o que é
+às vezes necessário porque o código da biblioteca padrão que você está modificando
+pode requerer uma versão mais nova do que a estável que você tem instalada).
 
 <pre>
 $ cd $GOROOT/src/crypto/sha1
@@ -1180,10 +1180,10 @@ $ $GOROOT/bin/go test .
 </li>
 
 <li>
-If you're modifying the compiler itself, you can just recompile
-the <code>compile</code> tool (which is the internal binary invoked
-by <code>go</code> <code>build</code> to compile each single package).
-After that, you will want to test it by compiling or running something.
+Se você está modificando o compilador em si, pode apenas recompilar
+a ferramenta <code>compile</code> (que é o binário interno invocado
+por <code>go</code> <code>build</code> para compilar cada pacote individual).
+Depois disso, você vai querer testá-lo compilando ou executando algo.
 
 <pre>
 $ cd $GOROOT/src
@@ -1194,19 +1194,19 @@ $ $GOROOT/bin/go run [something...]     # test the new compiler
 $ $GOROOT/bin/go test [something...]    # test the new compiler
 </pre>
 
-The same applies to other internal tools of the Go tool chain,
-such as <code>asm</code>, <code>cover</code>, <code>link</code>, and so on.
-Just recompile and install the tool using <code>go</code>
-<code>install</code> <code>cmd/&lt;TOOL&gt;</code> and then use
-the built Go binary to test it.
+O mesmo se aplica a outras ferramentas internas da toolchain do Go,
+como <code>asm</code>, <code>cover</code>, <code>link</code>, e assim por diante.
+Apenas recompile e instale a ferramenta usando <code>go</code>
+<code>install</code> <code>cmd/&lt;TOOL&gt;</code> e então use
+o binário Go construído para testá-la.
 </li>
 
 <li>
-In addition to the standard per-package tests, there is a top-level
-test suite in <code>$GOROOT/test</code> that contains
-several black-box and regression tests.
-The test suite is run
-by <code>all.bash</code> but you can also run it manually:
+Além dos testes padrão por pacote, há uma suíte de testes de nível superior
+em <code>$GOROOT/test</code> que contém
+vários testes black-box e de regressão.
+A suíte de testes é executada
+por <code>all.bash</code> mas você também pode executá-la manualmente:
 
 <pre>
 $ $GOROOT/bin/go test cmd/internal/testdir
@@ -1217,19 +1217,18 @@ $ $GOROOT/bin/go test cmd/internal/testdir
 <h3 id="cc">Specifying a reviewer / CCing others</h3>
 
 <p>
-Unless explicitly told otherwise, such as in the discussion leading
-up to sending in the change, it's better not to specify a reviewer.
-All changes are automatically CC'ed to the
-<a href="https://groups.google.com/group/golang-codereviews">golang-codereviews@googlegroups.com</a>
-mailing list.
-If this is your first ever change, there may be a moderation
-delay before it appears on the mailing list, to prevent spam.
+A menos que explicitamente dito o contrário, como na discussão que levou
+ao envio da mudança, é melhor não especificar um revisor.
+Todas as mudanças são automaticamente colocadas em CC na
+lista de e-mail <a href="https://groups.google.com/group/golang-codereviews">golang-codereviews@googlegroups.com</a>.
+Se esta é sua primeira mudança, pode haver um atraso de moderação
+antes de aparecer na lista de e-mail, para prevenir spam.
 </p>
 
 <p>
-You can specify a reviewer or CC interested parties
-using the <code>-r</code> or <code>-cc</code> options.
-Both accept a comma-separated list of e-mail addresses:
+Você pode especificar um revisor ou colocar partes interessadas em CC
+usando as opções <code>-r</code> ou <code>-cc</code>.
+Ambas aceitam uma lista de endereços de e-mail separados por vírgulas:
 </p>
 
 <pre>
@@ -1240,8 +1239,8 @@ $ git codereview mail -r joe@golang.org -cc mabel@example.com,math-nuts@swtch.co
 <h3 id="sync">Synchronize your client</h3>
 
 <p>
-While you were working, others might have submitted changes to the repository.
-To update your local branch, run
+Enquanto você estava trabalhando, outros podem ter submetido mudanças para o repositório.
+Para atualizar seu branch local, execute
 </p>
 
 <pre>
@@ -1249,7 +1248,7 @@ $ git codereview sync
 </pre>
 
 <p>
-(Under the covers this runs
+(Por baixo dos panos isso executa
 <code>git</code> <code>pull</code> <code>-r</code>.)
 </p>
 
@@ -1257,14 +1256,14 @@ $ git codereview sync
 <h3 id="download">Reviewing code by others</h3>
 
 <p>
-As part of the review process reviewers can propose changes directly (in the
-GitHub workflow this would be someone else attaching commits to a pull request).
+Como parte do processo de revisão, revisores podem propor mudanças diretamente (no
+fluxo do GitHub isso seria alguém mais anexando commits a um pull request).
 
-Gerrit provides access to commands that will help you import changes proposed
-by another developer so you can review/test them locally. From the Gerrit page
-for the CL you want to import, open the "⋮" menu, click the "Download patch" link.
-Depending on your preferred git workflow, choose the appropriate command. The options
-will look something like this:
+Gerrit fornece acesso a comandos que ajudarão você a importar mudanças propostas
+por outro desenvolvedor para que você possa revisar/testá-las localmente. Da página Gerrit
+para a CL que você quer importar, abra o menu "⋮", clique no link "Download patch".
+Dependendo do seu fluxo de trabalho git preferido, escolha o comando apropriado. As opções
+ficarão algo assim:
 </p>
 
 <pre>
@@ -1272,15 +1271,15 @@ $ git fetch https://go.googlesource.com/review refs/changes/21/13245/1 &amp;&amp
 </pre>
 
 <p>
-To revert, change back to the branch you were working in.
+Para reverter, mude de volta para o branch em que você estava trabalhando.
 </p>
 
 
 <h3 id="git-config">Set up git aliases</h3>
 
 <p>
-The <code>git-codereview</code> command can be run directly from the shell
-by typing, for instance,
+O comando <code>git-codereview</code> pode ser executado diretamente do shell
+digitando, por exemplo,
 </p>
 
 <pre>
@@ -1288,8 +1287,8 @@ $ git codereview sync
 </pre>
 
 <p>
-but it is more convenient to set up aliases for <code>git-codereview</code>'s own
-subcommands, so that the above becomes,
+mas é mais conveniente configurar aliases para os próprios
+subcomandos do <code>git-codereview</code>, para que o acima se torne,
 </p>
 
 <pre>
@@ -1297,10 +1296,10 @@ $ git sync
 </pre>
 
 <p>
-The <code>git-codereview</code> subcommands have been chosen to be distinct from
-Git's own, so it's safe to define these aliases.
-To install them, copy this text into your
-Git configuration file (usually <code>.gitconfig</code> in your home directory):
+Os subcomandos do <code>git-codereview</code> foram escolhidos para serem distintos dos
+próprios do Git, então é seguro definir esses aliases.
+Para instalá-los, copie este texto no seu
+arquivo de configuração do Git (geralmente <code>.gitconfig</code> no seu diretório home):
 </p>
 
 <pre>
@@ -1317,15 +1316,15 @@ Git configuration file (usually <code>.gitconfig</code> in your home directory):
 <h3 id="multiple_changes">Sending multiple dependent changes</h3>
 
 <p>
-Advanced users may want to stack up related commits in a single branch.
-Gerrit allows for changes to be dependent on each other, forming such a dependency chain.
-Each change will need to be approved and submitted separately but the dependency
-will be visible to reviewers.
+Usuários avançados podem querer empilhar commits relacionados em um único branch.
+Gerrit permite que mudanças dependam umas das outras, formando tal cadeia de dependência.
+Cada mudança precisará ser aprovada e submetida separadamente, mas a dependência
+será visível para os revisores.
 </p>
 
 <p>
-To send out a group of dependent changes, keep each change as a different commit under
-the same branch, and then run:
+Para enviar um grupo de mudanças dependentes, mantenha cada mudança como um commit diferente sob
+o mesmo branch, e então execute:
 </p>
 
 <pre>
@@ -1333,12 +1332,12 @@ $ git codereview mail HEAD
 </pre>
 
 <p>
-Make sure to explicitly specify <code>HEAD</code>, which is usually not required when sending
-single changes. More details can be found in the <a href="https://pkg.go.dev/golang.org/x/review/git-codereview?tab=doc#hdr-Multiple_Commit_Work_Branches">git-codereview documentation</a>.
+Certifique-se de especificar explicitamente <code>HEAD</code>, que geralmente não é necessário ao enviar
+mudanças únicas. Mais detalhes podem ser encontrados na <a href="https://pkg.go.dev/golang.org/x/review/git-codereview?tab=doc#hdr-Multiple_Commit_Work_Branches">documentação do git-codereview</a>.
 </p>
 
 <h3 id="minor_releases">Minor Releases</h3>
 
 <p>
-If you want to make a change to a release branch for backporting, see <a href="/wiki/MinorReleases">Minor Releases</a>.
+Se você quer fazer uma mudança em um branch de release para backporting, veja <a href="/wiki/MinorReleases">Minor Releases</a>.
 </p>
