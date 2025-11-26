@@ -1,108 +1,109 @@
 ---
 title: Security Best Practices for Go Developers
 layout: article
+ia-translated: true
 ---
 
-[Back to Go Security](/security)
+[Voltar para Segurança do Go](/security)
 
-This page provides Go developers with best practices for prioritizing the
-security of their projects. From automating testing with fuzzing to easily
-checking for race conditions, these tips can help make your codebase more
-secure and reliable.
+Esta página fornece aos desenvolvedores Go melhores práticas para priorizar a
+segurança de seus projetos. De automatizar testes com fuzzing a facilmente
+verificar condições de corrida, essas dicas podem ajudar a tornar sua codebase mais
+segura e confiável.
 
-## Scan source code and binaries for vulnerabilities
+## Escanear código-fonte e binários para vulnerabilidades
 
-Regularly scanning your code and binaries for vulnerabilities helps identify
-potential security risks early.
-You can use [govulncheck](https://pkg.go.dev/golang.org/x/vuln/cmd/govulncheck),
-backed by the [Go vulnerability database](https://pkg.go.dev),
-to scan your code for vulnerabilities and analyze which ones actually affect you.
-Get started with [the govulncheck tutorial](/doc/tutorial/govulncheck).
+Escanear regularmente seu código e binários para vulnerabilidades ajuda a identificar
+riscos de segurança potenciais precocemente.
+Você pode usar [govulncheck](https://pkg.go.dev/golang.org/x/vuln/cmd/govulncheck),
+apoiado pelo [banco de dados de vulnerabilidades do Go](https://pkg.go.dev),
+para escanear seu código para vulnerabilidades e analisar quais realmente afetam você.
+Comece com [o tutorial do govulncheck](/doc/tutorial/govulncheck).
 
-Govulncheck can also be integrated into CI/CD flows.
-The Go team provides a
-[GitHub Action for govulncheck](https://github.com/marketplace/actions/golang-govulncheck-action)
-on the GitHub Marketplace.
-Govulncheck also supports a `-json` flag to help developers integrate vulnerability
-scanning with other CI/CD systems.
+Govulncheck também pode ser integrado em fluxos de CI/CD.
+A equipe Go fornece uma
+[GitHub Action para govulncheck](https://github.com/marketplace/actions/golang-govulncheck-action)
+no GitHub Marketplace.
+Govulncheck também suporta uma flag `-json` para ajudar desenvolvedores a integrar escaneamento de vulnerabilidades
+com outros sistemas de CI/CD.
 
-You can also scan for vulnerabilities directly in your code editor by using
-the [Go extension for Visual Studio Code](/security/vuln/editor).
-Get started with [this tutorial](/doc/tutorial/govulncheck-ide).
+Você também pode escanear vulnerabilidades diretamente no seu editor de código usando
+a [extensão Go para Visual Studio Code](/security/vuln/editor).
+Comece com [este tutorial](/doc/tutorial/govulncheck-ide).
 
-## Keep your Go version and dependencies up to date
+## Manter sua versão do Go e dependências atualizadas
 
-Keeping your [Go version up-to-date](/doc/install) offers
-access to the latest language features,
-performance improvements and patches for known security vulnerabilities.
-An updated Go version also ensures compatibility with newer versions of dependencies,
-helping to avoid potential integration issues.
-Review the [Go release history](/doc/devel/release) to see
-what changes have been made to Go between releases.
-The Go team issues point releases throughout the release cycle to address security bugs.
-Be sure to update to the latest minor Go version to ensure you have the
-latest security fixes.
+Manter sua [versão do Go atualizada](/doc/install) oferece
+acesso aos recursos de linguagem mais recentes,
+melhorias de desempenho e patches para vulnerabilidades de segurança conhecidas.
+Uma versão atualizada do Go também garante compatibilidade com versões mais recentes de dependências,
+ajudando a evitar possíveis problemas de integração.
+Revise o [histórico de releases do Go](/doc/devel/release) para ver
+quais mudanças foram feitas no Go entre releases.
+A equipe Go emite releases pontuais durante o ciclo de release para tratar bugs de segurança.
+Certifique-se de atualizar para a versão minor mais recente do Go para garantir que você tenha as
+correções de segurança mais recentes.
 
-Maintaining up-to-date third-party dependencies is also crucial for software security,
-performance, and compliance with the latest standards in the Go ecosystem.
-However, updating to the latest versions without thorough review
-[can also be risky](https://research.swtch.com/npm-colors),
-potentially introducing new bugs, incompatible changes,
-or even malicious code.
-Therefore, while it's essential to update dependencies for the latest security
-patches and improvements,
-each update should be carefully reviewed and tested.
+Manter dependências de terceiros atualizadas também é crucial para segurança de software,
+desempenho, e conformidade com os padrões mais recentes no ecossistema Go.
+No entanto, atualizar para as versões mais recentes sem revisão completa
+[também pode ser arriscado](https://research.swtch.com/npm-colors),
+potencialmente introduzindo novos bugs, mudanças incompatíveis,
+ou até código malicioso.
+Portanto, embora seja essencial atualizar dependências para os patches de segurança
+e melhorias mais recentes,
+cada atualização deve ser cuidadosamente revisada e testada.
 
-## Test with fuzzing to uncover edge-case exploits
+## Testar com fuzzing para descobrir explorações de casos extremos
 
-[Fuzzing](/security/fuzz) is a type of automated testing that
-uses coverage guidance to manipulate random inputs and walk through code
-to find and report potential vulnerabilities like SQL injections,
-buffer overflows, denial or service and cross-site scripting attacks.
-Fuzzing can often reach edge cases that programmers miss,
-or deem too improbable to test.
-Get started with [this tutorial](/doc/tutorial/fuzz).
+[Fuzzing](/security/fuzz) é um tipo de teste automatizado que
+usa orientação de cobertura para manipular entradas aleatórias e percorrer código
+para encontrar e reportar vulnerabilidades potenciais como injeções SQL,
+estouros de buffer, negação de serviço e ataques de cross-site scripting.
+Fuzzing pode frequentemente alcançar casos extremos que programadores perdem,
+ou consideram muito improváveis para testar.
+Comece com [este tutorial](/doc/tutorial/fuzz).
 
-## Check for race conditions with Go’s race detector
+## Verificar condições de corrida com o race detector do Go
 
-Race conditions occur when two or more [goroutines](/tour/concurrency/1)
-access the same resource concurrently,
-and at least one of those accesses is a write.
-This can lead to unpredictable, difficult-to-diagnose issues in your software.
-Identify potential race conditions in your Go code using the built-in
-[race detector](/doc/articles/race_detector),
-which can help you ensure the safety and reliability of your concurrent programs.
-The race detector finds races that occur at runtime,
-however, so it will not find races in code paths that are not executed.
+Condições de corrida ocorrem quando duas ou mais [goroutines](/tour/concurrency/1)
+acessam o mesmo recurso concorrentemente,
+e pelo menos um desses acessos é uma escrita.
+Isso pode levar a problemas imprevisíveis e difíceis de diagnosticar no seu software.
+Identifique condições de corrida potenciais no seu código Go usando o
+[race detector](/doc/articles/race_detector) integrado,
+que pode ajudá-lo a garantir a segurança e confiabilidade dos seus programas concorrentes.
+O race detector encontra corridas que ocorrem em tempo de execução,
+no entanto, então ele não encontrará corridas em caminhos de código que não são executados.
 
-To use the race detector, add the `-race` flag when running your tests or
-building your application,
-for example, `go test -race`.
-This will compile your code with the race detector enabled and report any
-race conditions it detects at runtime.
-When the race detector finds a data race in the program, it will
-[print a report](/doc/articles/race_detector#report-format)
-containing stack traces for conflicting accesses,
-and stacks where the involved goroutines were created.
+Para usar o race detector, adicione a flag `-race` ao executar seus testes ou
+construir sua aplicação,
+por exemplo, `go test -race`.
+Isso compilará seu código com o race detector habilitado e reportará quaisquer
+condições de corrida que detectar em tempo de execução.
+Quando o race detector encontra uma corrida de dados no programa, ele
+[imprimirá um relatório](/doc/articles/race_detector#report-format)
+contendo stack traces para acessos conflitantes,
+e stacks onde as goroutines envolvidas foram criadas.
 
-## Use Vet to examine suspicious constructs
+## Usar Vet para examinar construções suspeitas
 
-Go’s [vet command](https://pkg.go.dev/cmd/vet) is designed to analyze
-your source code and flag potential issues that might not necessarily be syntax errors,
-but could lead to problems during runtime.
-These include suspicious constructs, such as unreachable code,
-unused variables, and common mistakes around goroutines.
-By catching these issues early in the development process,
-go vet helps maintain code quality, reduces debugging time,
-and enhances overall software reliability.
-To run go vet for a specified project, run:
+O [comando vet](https://pkg.go.dev/cmd/vet) do Go é projetado para analisar
+seu código-fonte e sinalizar problemas potenciais que podem não necessariamente ser erros de sintaxe,
+mas poderiam levar a problemas durante o tempo de execução.
+Estes incluem construções suspeitas, como código inalcançável,
+variáveis não usadas, e erros comuns em torno de goroutines.
+Ao detectar esses problemas precocemente no processo de desenvolvimento,
+go vet ajuda a manter a qualidade do código, reduz o tempo de depuração,
+e melhora a confiabilidade geral do software.
+Para executar go vet para um projeto especificado, execute:
 
 ```
 go vet ./...
 ```
 
-## Subscribe to golang-announce for notification of security releases
+## Inscrever-se em golang-announce para notificação de releases de segurança
 
-Go releases containing security fixes are pre-announced to the low-volume
-mailing list [golang-announce@googlegroups.com](https://groups.google.com/group/golang-announce).
-If you want to know when security fixes to Go itself are on the way, subscribe.
+Releases do Go contendo correções de segurança são pré-anunciados para a lista de
+e-mails de baixo volume [golang-announce@googlegroups.com](https://groups.google.com/group/golang-announce).
+Se você quer saber quando correções de segurança para o próprio Go estão a caminho, inscreva-se.

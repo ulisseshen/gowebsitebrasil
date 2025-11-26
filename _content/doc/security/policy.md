@@ -2,74 +2,75 @@
 title: Go Security Policy
 layout: article
 breadcrumb: true
+ia-translated: true
 ---
 
-## Overview
+## Visão Geral
 
-This document explains the Go Security team's process for handling issues
-reported and what to expect in return.
+Este documento explica o processo da equipe de Segurança do Go para lidar com problemas
+reportados e o que esperar em retorno.
 
-## Reporting a Security Bug
+## Reportando um Bug de Segurança
 
-All security bugs in the Go distribution should be reported by email to
-[security@golang.org](mailto:security@golang.org). This mail is delivered to
-the Go Security team.
+Todos os bugs de segurança na distribuição Go devem ser reportados por email para
+[security@golang.org](mailto:security@golang.org). Este email é entregue para
+a equipe de Segurança do Go.
 
-To ensure your report is not marked as spam, **please include the word
-"vulnerability"** anywhere in your email. Please use a descriptive subject line
-for your report email.
+Para garantir que seu relatório não seja marcado como spam, **por favor inclua a palavra
+"vulnerability"** em qualquer lugar no seu email. Por favor use uma linha de assunto descritiva
+para seu email de relatório.
 
-Your email will be acknowledged within 7 days, and you'll be kept up to date
-with the progress until resolution. Your issue will be fixed or made public
-within 90 days.
+Seu email será reconhecido dentro de 7 dias, e você será mantido atualizado
+com o progresso até a resolução. Seu problema será corrigido ou tornado público
+dentro de 90 dias.
 
-If you have not received a reply to your email within 7 days, please follow up
-with the Go Security team again at
-[security@golang.org](mailto:security@golang.org). Please make sure the word
-**vulnerability** is in your email.
+Se você não recebeu uma resposta ao seu email dentro de 7 dias, por favor acompanhe
+com a equipe de Segurança do Go novamente em
+[security@golang.org](mailto:security@golang.org). Por favor certifique-se de que a palavra
+**vulnerability** está no seu email.
 
-If after 3 more days you have still not received an acknowledgement of your
-report, it is possible that your email might have been marked as spam. In that
-case, please [file an issue here](https://g.co/vulnz). Select _"I want to
+Se após mais 3 dias você ainda não recebeu um reconhecimento do seu
+relatório, é possível que seu email tenha sido marcado como spam. Nesse
+caso, por favor [abra um issue aqui](https://g.co/vulnz). Selecione _"I want to
 report a technical security or an abuse risk related bug in a Google product
-(SQLi, XSS, etc.)"_, and list _"Go"_ as the affected product.
+(SQLi, XSS, etc.)"_, e liste _"Go"_ como o produto afetado.
 
-## Tracks
+## Categorias
 
-Depending on the nature of your issue, it will be categorized by the Go
-Security team as an issue in the PUBLIC, PRIVATE, or URGENT track. All security
-issues will be issued CVE numbers.
+Dependendo da natureza do seu problema, ele será categorizado pela equipe de
+Segurança do Go como um problema na categoria PUBLIC, PRIVATE, ou URGENT. Todos os problemas de segurança
+receberão números CVE.
 
-The Go Security team does not assign traditional fine-grained severity labels
-(e.g CRITICAL, HIGH, MEDIUM, LOW) to security issues because severity depends
-highly on how a user is using the affected API or functionality.
+A equipe de Segurança do Go não atribui rótulos de severidade tradicionais de granularidade fina
+(ex. CRITICAL, HIGH, MEDIUM, LOW) para problemas de segurança porque a severidade depende
+altamente de como um usuário está usando a API ou funcionalidade afetada.
 
-For example, the impact of a resource exhaustion issue in the `encoding/json`
-parser depends on what is being parsed. If the user is parsing trusted JSON
-files from their local filesystem, the impact is likely to be low. If the user
-is parsing untrusted arbitrary JSON from an HTTP request body, the impact may be
-much higher.
+Por exemplo, o impacto de um problema de exaustão de recursos no parser `encoding/json`
+depende do que está sendo analisado. Se o usuário está analisando arquivos JSON confiáveis
+do seu sistema de arquivos local, o impacto provavelmente será baixo. Se o usuário
+está analisando JSON arbitrário não confiável de um corpo de requisição HTTP, o impacto pode ser
+muito maior.
 
-That said, the following issue tracks do signal how severe and/or wide-reaching
-the Security team believes an issue to be. For example, an issue with medium to
-significant impact for many users is a PRIVATE track issue in this policy, and
-an issue with negligible to minor impact, or which affects only a small subset
-of users, is a PUBLIC track issue.
+Dito isso, as seguintes categorias de problemas sinalizam quão severo e/ou de amplo alcance
+a equipe de Segurança acredita que um problema é. Por exemplo, um problema com impacto médio a
+significativo para muitos usuários é um problema de categoria PRIVATE nesta política, e
+um problema com impacto negligenciável a menor, ou que afeta apenas um pequeno subconjunto
+de usuários, é um problema de categoria PUBLIC.
 
 ### PUBLIC
 
-Issues in the PUBLIC track affect niche configurations, have very limited
-impact, or are already widely known.
+Problemas na categoria PUBLIC afetam configurações de nicho, têm impacto muito limitado,
+ou já são amplamente conhecidos.
 
-PUBLIC track issues are labeled with
+Problemas de categoria PUBLIC são rotulados com
 [`Proposal-Security`](https://github.com/golang/go/labels/Proposal-Security),
-discussed through the
-[Go proposal review process](https://go.googlesource.com/proposal/+/master/README.md#proposal-review)
-**fixed in public**, and get backported to the next scheduled [minor
-releases](/wiki/MinorReleases) (which occur ~monthly). The release announcement
-includes details of these issues, but there is no pre-announcement.
+discutidos através do
+[processo de revisão de propostas do Go](https://go.googlesource.com/proposal/+/master/README.md#proposal-review)
+**corrigidos em público**, e portados para os próximos [releases
+minor](/wiki/MinorReleases) agendados (que ocorrem ~mensalmente). O anúncio de release
+inclui detalhes desses problemas, mas não há pré-anúncio.
 
-Examples of past PUBLIC issues include:
+Exemplos de problemas PUBLIC passados incluem:
 
 - [#44916](/issue/44916): archive/zip: can panic when calling Reader.Open
 - [#44913](/issue/44913): encoding/xml: infinite loop when using xml.NewTokenDecoder with a custom TokenReader
@@ -80,21 +81,21 @@ Examples of past PUBLIC issues include:
 
 ### PRIVATE
 
-Issues in the PRIVATE track are violations of committed security properties.
+Problemas na categoria PRIVATE são violações de propriedades de segurança comprometidas.
 
-PRIVATE track issues are **fixed in the next scheduled [minor
-releases](/wiki/MinorReleases)**, and are kept private until then.
+Problemas de categoria PRIVATE são **corrigidos nos próximos [releases
+minor](/wiki/MinorReleases) agendados**, e são mantidos privados até então.
 
-Three to seven days before the release, a pre-announcement is sent to
-golang-announce, announcing the presence of one or more security fixes in the
-upcoming releases, and whether the issues affect the standard library, the
-toolchain, or both, as well as reserved CVE IDs for each of the fixes.
+Três a sete dias antes do release, um pré-anúncio é enviado para
+golang-announce, anunciando a presença de uma ou mais correções de segurança nos
+releases futuros, e se os problemas afetam a biblioteca padrão, a
+toolchain, ou ambos, bem como IDs CVE reservados para cada uma das correções.
 
-For issues that are present in a [major version release candidate](/s/release),
-we follow the same process, including fixes in the next scheduled release
-candidate.
+Para problemas que estão presentes em um [release candidate de versão major](/s/release),
+seguimos o mesmo processo, incluindo correções no próximo release
+candidate agendado.
 
-Some examples of past PRIVATE issues include:
+Alguns exemplos de problemas PRIVATE passados incluem:
 
 - [#53416](/issue/53416): path/filepath: stack exhaustion in Glob
 - [#53616](/issue/53616): go/parser: stack exhaustion in all Parse* functions
@@ -103,63 +104,63 @@ Some examples of past PRIVATE issues include:
 
 ### URGENT
 
-URGENT track issues are a threat to the Go ecosystem’s integrity, or are being
-actively exploited in the wild leading to severe damage. There are no recent
-examples, but they would include remote code execution in net/http, or
-practical key recovery in crypto/tls.
+Problemas de categoria URGENT são uma ameaça à integridade do ecossistema Go, ou estão sendo
+ativamente explorados em campo levando a danos graves. Não há exemplos
+recentes, mas eles incluiriam execução remota de código em net/http, ou
+recuperação prática de chave em crypto/tls.
 
-URGENT track issues are fixed in private, and **trigger an immediate dedicated
-security release**, possibly with no pre-announcement.
+Problemas de categoria URGENT são corrigidos em privado, e **disparam um
+release de segurança dedicado imediato**, possivelmente sem pré-anúncio.
 
-## Flagging Existing Issues as Security-related
+## Sinalizando Issues Existentes como Relacionados a Segurança
 
-If you believe that an [existing issue](/issue) is security-related, we ask
-that you send an email to [security@golang.org](mailto:security@golang.org).
-The email should include the issue ID and a short description of why it should
-be handled according to this security policy.
+Se você acredita que um [issue existente](/issue) está relacionado a segurança, pedimos
+que você envie um email para [security@golang.org](mailto:security@golang.org).
+O email deve incluir o ID do issue e uma breve descrição de por que ele deve
+ser tratado de acordo com esta política de segurança.
 
-## Disclosure Process
+## Processo de Divulgação
 
-The Go project uses the following disclosure process:
+O projeto Go usa o seguinte processo de divulgação:
 
-1. Once the security report is received it is assigned a primary handler. This
-person coordinates the fix and release process.
+1. Uma vez que o relatório de segurança é recebido, ele é atribuído a um manipulador primário. Esta
+pessoa coordena o processo de correção e release.
 
-2. The issue is confirmed and a list of affected software is determined.
+2. O problema é confirmado e uma lista de software afetado é determinada.
 
-3. Code is audited to find any potential similar problems.
+3. O código é auditado para encontrar quaisquer problemas similares potenciais.
 
-4. If it is determined, in consultation with the submitter, that a CVE number
-is required, the primary handler will obtain one.
+4. Se for determinado, em consulta com o submissor, que um número CVE
+é necessário, o manipulador primário obterá um.
 
-5. Fixes are prepared for the two most recent major releases and the
-head/master revision. Fixes are prepared for the two most recent major releases
-and merged to head/master.
+5. Correções são preparadas para as duas versões major mais recentes e a
+revisão head/master. Correções são preparadas para as duas versões major mais recentes
+e mescladas para head/master.
 
-6. On the date that the fixes are applied, announcements are sent to
+6. Na data em que as correções são aplicadas, anúncios são enviados para
 [golang-announce](https://groups.google.com/group/golang-announce),
-[golang-dev](https://groups.google.com/group/golang-dev), and
+[golang-dev](https://groups.google.com/group/golang-dev), e
 [golang-nuts](https://groups.google.com/group/golang-nuts).
 
-This process can take some time, especially when coordination is required with
-maintainers of other projects. Every effort will be made to handle the bug in
-as timely a manner as possible, however it's important that we follow the
-process described above to ensure that disclosures are handled consistently.
+Este processo pode levar algum tempo, especialmente quando coordenação é necessária com
+mantenedores de outros projetos. Todo esforço será feito para lidar com o bug de
+maneira tão oportuna quanto possível, no entanto é importante que sigamos o
+processo descrito acima para garantir que divulgações sejam tratadas consistentemente.
 
-For security issues that include the assignment of a CVE number, the issue is
-listed publicly under the
-["Golang" product on the CVEDetails website](https://www.cvedetails.com/vulnerability-list/vendor_id-14185/Golang.html)
-as well as the
-[National Vulnerability Disclosure site](https://web.nvd.nist.gov/view/vuln/search).
+Para problemas de segurança que incluem a atribuição de um número CVE, o problema é
+listado publicamente sob o
+["produto Golang" no site CVEDetails](https://www.cvedetails.com/vulnerability-list/vendor_id-14185/Golang.html)
+bem como no
+[site National Vulnerability Disclosure](https://web.nvd.nist.gov/view/vuln/search).
 
-## Receiving Security Updates
+## Recebendo Atualizações de Segurança
 
-The best way to receive security announcements is to subscribe to the
-[golang-announce](https://groups.google.com/forum/#!forum/golang-announce)
-mailing list. Any messages pertaining to a security issue will be prefixed with
+A melhor maneira de receber anúncios de segurança é inscrever-se na
+lista de email [golang-announce](https://groups.google.com/forum/#!forum/golang-announce).
+Quaisquer mensagens pertinentes a um problema de segurança serão prefixadas com
 `[security]`.
 
-## Comments on This Policy
+## Comentários sobre Esta Política
 
-If you have any suggestions to improve this policy, please
-[file an issue](/issue/new) for discussion.
+Se você tiver sugestões para melhorar esta política, por favor
+[abra um issue](/issue/new) para discussão.
