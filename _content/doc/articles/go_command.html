@@ -1,152 +1,152 @@
 <!--{
-	"title": "About the go command"
+	"title": "About the go command",
+	"ia-translated": true
 }-->
 
-<p>The Go distribution includes a command, named
-"<code><a href="/cmd/go/">go</a></code>", that
-automates the downloading, building, installation, and testing of Go packages
-and commands.  This document talks about why we wrote a new command, what it
-is, what it's not, and how to use it.</p>
+<p>A distribuição Go inclui um comando, chamado
+"<code><a href="/cmd/go/">go</a></code>", que
+automatiza o download, compilação, instalação e teste de packages e
+comandos Go. Este documento fala sobre por que escrevemos um novo comando, o que ele
+é, o que ele não é, e como usá-lo.</p>
 
-<h2>Motivation</h2>
+<h2>Motivação</h2>
 
-<p>You might have seen early Go talks in which Rob Pike jokes that the idea
-for Go arose while waiting for a large Google server to compile.  That
-really was the motivation for Go: to build a language that worked well
-for building the large software that Google writes and runs. It was
-clear from the start that such a language must provide a way to
-express dependencies between code libraries clearly, hence the package
-grouping and the explicit import blocks.  It was also clear from the
-start that you might want arbitrary syntax for describing the code
-being imported; this is why import paths are string literals.</p>
+<p>Você pode ter visto palestras iniciais de Go nas quais Rob Pike brinca que a ideia
+para Go surgiu enquanto esperava um grande servidor do Google compilar. Aquela
+realmente foi a motivação para Go: construir uma linguagem que funcionasse bem
+para construir o grande software que o Google escreve e executa. Ficou
+claro desde o início que tal linguagem deveria fornecer uma maneira de
+expressar dependências entre bibliotecas de código claramente, daí o agrupamento de
+packages e os blocos de import explícitos. Também ficou claro desde o
+início que você pode querer sintaxe arbitrária para descrever o código
+sendo importado; é por isso que caminhos de import são literais de string.</p>
 
-<p>An explicit goal for Go from the beginning was to be able to build Go
-code using only the information found in the source itself, not
-needing to write a makefile or one of the many modern replacements for
-makefiles.  If Go needed a configuration file to explain how to build
-your program, then Go would have failed.</p>
+<p>Um objetivo explícito para Go desde o início era ser capaz de compilar código
+Go usando apenas as informações encontradas no próprio source, não
+precisando escrever um makefile ou um dos muitos substitutos modernos para
+makefiles. Se Go precisasse de um arquivo de configuração para explicar como compilar
+seu programa, então Go teria falhado.</p>
 
-<p>At first, there was no Go compiler, and the initial development
-focused on building one and then building libraries for it. For
-expedience, we postponed the automation of building Go code by using
-make and writing makefiles.  When compiling a single package involved
-multiple invocations of the Go compiler, we even used a program to
-write the makefiles for us.  You can find it if you dig through the
-repository history.</p>
+<p>No início, não havia compilador Go, e o desenvolvimento inicial
+focou em construir um e então construir bibliotecas para ele. Por
+conveniência, adiamos a automação de compilar código Go usando
+make e escrevendo makefiles. Quando compilar um único package envolvia
+múltiplas invocações do compilador Go, até usamos um programa para
+escrever os makefiles para nós. Você pode encontrá-lo se cavar através do
+histórico do repositório.</p>
 
-<p>The purpose of the new go command is our return to this ideal, that Go
-programs should compile without configuration or additional effort on
-the part of the developer beyond writing the necessary import
-statements.</p>
+<p>O propósito do novo comando go é nosso retorno a este ideal, que programas
+Go devem compilar sem configuração ou esforço adicional
+por parte do desenvolvedor além de escrever as declarações de import
+necessárias.</p>
 
-<h2>Configuration versus convention</h2>
+<h2>Configuração versus convenção</h2>
 
-<p>The way to achieve the simplicity of a configuration-free system is to
-establish conventions. The system works only to the extent that those conventions
-are followed. When we first launched Go, many people published packages that
-had to be installed in certain places, under certain names, using certain build
-tools, in order to be used. That's understandable: that's the way it works in
-most other languages. Over the last few years we consistently reminded people
-about the <code>goinstall</code> command
-(now replaced by <a href="/cmd/go/#hdr-Download_and_install_packages_and_dependencies"><code>go get</code></a>)
-and its conventions: first, that the import path is derived in a known way from
-the URL of the source code; second, that the place to store the sources in
-the local file system is derived in a known way from the import path; third,
-that each directory in a source tree corresponds to a single package; and
-fourth, that the package is built using only information in the source code.
-Today, the vast majority of packages follow these conventions.
-The Go ecosystem is simpler and more powerful as a result.</p>
+<p>A maneira de alcançar a simplicidade de um sistema livre de configuração é
+estabelecer convenções. O sistema funciona apenas na medida em que essas convenções
+são seguidas. Quando lançamos Go pela primeira vez, muitas pessoas publicaram packages que
+tinham que ser instalados em certos lugares, sob certos nomes, usando certas ferramentas
+de build, para serem usados. Isso é compreensível: é assim que funciona na
+maioria das outras linguagens. Nos últimos anos, lembramos consistentemente as pessoas
+sobre o comando <code>goinstall</code>
+(agora substituído por <a href="/cmd/go/#hdr-Download_and_install_packages_and_dependencies"><code>go get</code></a>)
+e suas convenções: primeiro, que o caminho de import é derivado de uma maneira conhecida da
+URL do código fonte; segundo, que o lugar para armazenar os sources no
+sistema de arquivos local é derivado de uma maneira conhecida do caminho de import; terceiro,
+que cada diretório em uma árvore source corresponde a um único package; e
+quarto, que o package é compilado usando apenas informações no código fonte.
+Hoje, a vasta maioria dos packages segue essas convenções.
+O ecossistema Go é mais simples e mais poderoso como resultado.</p>
 
-<p>We received many requests to allow a makefile in a package directory to
-provide just a little extra configuration beyond what's in the source code.
-But that would have introduced new rules. Because we did not accede to such
-requests, we were able to write the go command and eliminate our use of make
-or any other build system.</p>
+<p>Recebemos muitas solicitações para permitir um makefile em um diretório de package para
+fornecer apenas um pouco de configuração extra além do que está no código fonte.
+Mas isso teria introduzido novas regras. Como não acedemos a tais
+solicitações, fomos capazes de escrever o comando go e eliminar nosso uso de make
+ou qualquer outro sistema de build.</p>
 
-<p>It is important to understand that the go command is not a general
-build tool. It cannot be configured and it does not attempt to build
-anything but Go packages.  These are important simplifying
-assumptions: they simplify not only the implementation but also, more
-important, the use of the tool itself.</p>
+<p>É importante entender que o comando go não é uma ferramenta de
+build geral. Ele não pode ser configurado e não tenta compilar
+nada além de packages Go. Essas são suposições simplificadoras
+importantes: elas simplificam não apenas a implementação mas também, mais
+importante, o uso da própria ferramenta.</p>
 
-<h2>Go's conventions</h2>
+<h2>Convenções do Go</h2>
 
-<p>The <code>go</code> command requires that code adheres to a few key,
-well-established conventions.</p>
+<p>O comando <code>go</code> requer que o código adira a algumas convenções
+chave, bem estabelecidas.</p>
 
-<p>First, the import path is derived in a known way from the URL of the
-source code.  For Bitbucket, GitHub, Google Code, and Launchpad, the
-root directory of the repository is identified by the repository's
-main URL, without the <code>https://</code> prefix.  Subdirectories are named by
-adding to that path.
-For example, the source code of the Google logging package <code>glog</code>
-is obtained by running</p>
+<p>Primeiro, o caminho de import é derivado de uma maneira conhecida da URL do
+código fonte. Para Bitbucket, GitHub, Google Code e Launchpad, o
+diretório raiz do repositório é identificado pela URL
+principal do repositório, sem o prefixo <code>https://</code>. Subdiretórios são nomeados
+adicionando a esse caminho.
+Por exemplo, o código fonte do package de logging do Google <code>glog</code>
+é obtido executando</p>
 
 <pre>
 git clone https://github.com/golang/glog
 </pre>
 
-and thus the import path of the
-<a href="https://pkg.go.dev/github.com/golang/glog">glog</a>
-package is "<code>github.com/golang/glog</code>".</p>
+e assim o caminho de import do
+package <a href="https://pkg.go.dev/github.com/golang/glog">glog</a>
+é "<code>github.com/golang/glog</code>".</p>
 
-<p>These paths are on the long side, but in exchange we get an
-automatically managed name space for import paths and the ability for
-a tool like the go command to look at an unfamiliar import path and
-deduce where to obtain the source code.</p>
+<p>Esses caminhos são meio longos, mas em troca obtemos um
+namespace automaticamente gerenciado para caminhos de import e a habilidade para
+uma ferramenta como o comando go olhar para um caminho de import desconhecido e
+deduzir de onde obter o código fonte.</p>
 
-<p>Second, the place to store sources in the local file system is derived
-in a known way from the import path, specifically
+<p>Segundo, o lugar para armazenar sources no sistema de arquivos local é derivado
+de uma maneira conhecida do caminho de import, especificamente
 <code>$GOPATH/src/&lt;import-path&gt;</code>.
-If unset, <code>$GOPATH</code> defaults to a subdirectory
-named <code>go</code> in the user's home directory.
-If <code>$GOPATH</code> is set to a list of paths, the go command tries
-<code>&lt;dir&gt;/src/&lt;import-path&gt;</code> for each of the directories in
-that list.
+Se não definido, <code>$GOPATH</code> padroniza para um subdiretório
+chamado <code>go</code> no diretório home do usuário.
+Se <code>$GOPATH</code> está definido para uma lista de caminhos, o comando go tenta
+<code>&lt;dir&gt;/src/&lt;import-path&gt;</code> para cada um dos diretórios naquela
+lista.
 </p>
 
-<p>Each of those trees contains, by convention, a top-level directory named
-"<code>bin</code>", for holding compiled executables, and a top-level directory
-named "<code>pkg</code>", for holding compiled packages that can be imported,
-and the "<code>src</code>" directory, for holding package source files.
-Imposing this structure lets us keep each of these directory trees
-self-contained: the compiled form and the sources are always near each
-other.</p>
+<p>Cada uma dessas árvores contém, por convenção, um diretório de nível superior chamado
+"<code>bin</code>", para conter executáveis compilados, e um diretório de nível superior
+chamado "<code>pkg</code>", para conter packages compilados que podem ser importados,
+e o diretório "<code>src</code>", para conter arquivos fonte de package.
+Impor esta estrutura nos permite manter cada uma dessas árvores de diretório
+autocontidas: a forma compilada e os sources estão sempre próximos um do
+outro.</p>
 
-<p>These naming conventions also let us work in the reverse direction,
-from a directory name to its import path. This mapping is important
-for many of the go command's subcommands, as we'll see below.</p>
+<p>Essas convenções de nomeação também nos permitem trabalhar na direção reversa,
+de um nome de diretório para seu caminho de import. Este mapeamento é importante
+para muitos dos subcomandos do comando go, como veremos abaixo.</p>
 
-<p>Third, each directory in a source tree corresponds to a single
-package. By restricting a directory to a single package, we don't have
-to create hybrid import paths that specify first the directory and
-then the package within that directory.  Also, most file management
-tools and UIs work on  directories as fundamental units.  Tying the
-fundamental Go unit&mdash;the package&mdash;to file system structure means
-that file system tools become Go package tools.  Copying, moving, or
-deleting a package corresponds to copying, moving, or deleting a
-directory.</p>
+<p>Terceiro, cada diretório em uma árvore source corresponde a um único
+package. Ao restringir um diretório a um único package, não temos que
+criar caminhos de import híbridos que especificam primeiro o diretório e
+então o package dentro daquele diretório. Além disso, a maioria das ferramentas de gerenciamento de
+arquivos e UIs trabalham em diretórios como unidades fundamentais. Amarrar a
+unidade fundamental do Go&mdash;o package&mdash;à estrutura do sistema de arquivos significa
+que ferramentas do sistema de arquivos se tornam ferramentas de package Go. Copiar, mover ou
+excluir um package corresponde a copiar, mover ou excluir um
+diretório.</p>
 
-<p>Fourth, each package is built using only the information present in
-the source files.  This makes it much more likely that the tool will
-be able to adapt to changing build environments and conditions. For
-example, if we allowed extra configuration such as compiler flags or
-command line recipes, then that configuration would need to be updated
-each time the build tools changed; it would also be inherently tied
-to the use of a specific toolchain.</p>
+<p>Quarto, cada package é compilado usando apenas as informações presentes nos
+arquivos fonte. Isso torna muito mais provável que a ferramenta seja
+capaz de se adaptar a ambientes e condições de build em mudança. Por
+exemplo, se permitíssemos configuração extra como flags de compilador ou
+receitas de linha de comando, então aquela configuração precisaria ser atualizada
+cada vez que as ferramentas de build mudassem; também seria inerentemente amarrada
+ao uso de uma toolchain específica.</p>
 
-<h2>Getting started with the go command</h2>
+<h2>Começando com o comando go</h2>
 
-<p>Finally, a quick tour of how to use the go command.
-As mentioned above, the default <code>$GOPATH</code> on Unix is <code>$HOME/go</code>.
-We'll store our programs there.
-To use a different location, you can set <code>$GOPATH</code>;
-see <a href="/doc/code.html">How to Write Go Code</a> for details.
+<p>Finalmente, um tour rápido de como usar o comando go.
+Como mencionado acima, o <code>$GOPATH</code> padrão no Unix é <code>$HOME/go</code>.
+Vamos armazenar nossos programas lá.
+Para usar um local diferente, você pode definir <code>$GOPATH</code>;
+veja <a href="/doc/code.html">How to Write Go Code</a> para detalhes.
 
-<p>We first add some source code.  Suppose we want to use
-the indexing library from the codesearch project along with a left-leaning
-red-black tree.  We can install both with the "<code>go get</code>"
-subcommand:</p>
+<p>Primeiro adicionamos algum código fonte. Suponha que queremos usar
+a biblioteca de indexação do projeto codesearch junto com uma árvore
+vermelho-preta inclinada à esquerda. Podemos instalar ambas com o subcomando "<code>go get</code>":</p>
 
 <pre>
 $ go get github.com/google/codesearch/index
@@ -154,18 +154,18 @@ $ go get github.com/petar/GoLLRB/llrb
 $
 </pre>
 
-<p>Both of these projects are now downloaded and installed into <code>$HOME/go</code>,
-which contains the two directories
-<code>src/github.com/google/codesearch/index/</code> and
-<code>src/github.com/petar/GoLLRB/llrb/</code>, along with the compiled
-packages (in <code>pkg/</code>) for those libraries and their dependencies.</p>
+<p>Ambos esses projetos estão agora baixados e instalados em <code>$HOME/go</code>,
+que contém os dois diretórios
+<code>src/github.com/google/codesearch/index/</code> e
+<code>src/github.com/petar/GoLLRB/llrb/</code>, junto com os
+packages compilados (em <code>pkg/</code>) para essas bibliotecas e suas dependências.</p>
 
-<p>Because we used version control systems (Mercurial and Git) to check
-out the sources, the source tree also contains the other files in the
-corresponding repositories, such as related packages. The "<code>go list</code>"
-subcommand lists the import paths corresponding to its arguments, and
-the pattern "<code>./...</code>" means start in the current directory
-("<code>./</code>") and find all packages below that directory
+<p>Como usamos sistemas de controle de versão (Mercurial e Git) para fazer
+checkout dos sources, a árvore source também contém os outros arquivos nos
+repositórios correspondentes, como packages relacionados. O subcomando "<code>go list</code>"
+lista os caminhos de import correspondentes a seus argumentos, e
+o padrão "<code>./...</code>" significa começar no diretório atual
+("<code>./</code>") e encontrar todos os packages abaixo daquele diretório
 ("<code>...</code>"):</p>
 
 <pre>
@@ -182,7 +182,7 @@ github.com/petar/GoLLRB/llrb
 $
 </pre>
 
-<p>We can also test those packages:</p>
+<p>Também podemos testar esses packages:</p>
 
 <pre>
 $ go test ./...
@@ -197,8 +197,8 @@ ok      github.com/petar/GoLLRB/llrb             0.231s
 $
 </pre>
 
-<p>If a go subcommand is invoked with no paths listed, it operates on the
-current directory:</p>
+<p>Se um subcomando go é invocado sem caminhos listados, ele opera no
+diretório atual:</p>
 
 <pre>
 $ cd github.com/google/codesearch/regexp
@@ -217,37 +217,37 @@ $ go install
 $
 </pre>
 
-<p>That "<code>go install</code>" subcommand installs the latest copy of the
-package into the pkg directory. Because the go command can analyze the
-dependency graph, "<code>go install</code>" also installs any packages that
-this package imports but that are out of date, recursively.</p>
+<p>Aquele subcomando "<code>go install</code>" instala a cópia mais recente do
+package no diretório pkg. Como o comando go pode analisar o
+grafo de dependências, "<code>go install</code>" também instala quaisquer packages que
+este package importa mas que estão desatualizados, recursivamente.</p>
 
-<p>Notice that "<code>go install</code>" was able to determine the name of the
-import path for the package in the current directory, because of the convention
-for directory naming.  It would be a little more convenient if we could pick
-the name of the directory where we kept source code, and we probably wouldn't
-pick such a long name, but that ability would require additional configuration
-and complexity in the tool. Typing an extra directory name or two is a small
-price to pay for the increased simplicity and power.</p>
+<p>Note que "<code>go install</code>" foi capaz de determinar o nome do
+caminho de import para o package no diretório atual, por causa da convenção
+para nomeação de diretório. Seria um pouco mais conveniente se pudéssemos escolher
+o nome do diretório onde mantemos código fonte, e provavelmente não
+escolheríamos um nome tão longo, mas essa habilidade requereria configuração
+e complexidade adicional na ferramenta. Digitar um diretório extra ou dois é um pequeno
+preço a pagar pela simplicidade e poder aumentados.</p>
 
-<h2>Limitations</h2>
+<h2>Limitações</h2>
 
-<p>As mentioned above, the go command is not a general-purpose build
-tool.
-In particular, it does not have any facility for generating Go
-source files <em>during</em> a build, although it does provide
+<p>Como mencionado acima, o comando go não é uma ferramenta de build
+de propósito geral.
+Em particular, ele não tem nenhuma facilidade para gerar arquivos
+fonte Go <em>durante</em> um build, embora forneça
 <a href="/cmd/go/#hdr-Generate_Go_files_by_processing_source"><code>go</code>
 <code>generate</code></a>,
-which can automate the creation of Go files <em>before</em> the build.
-For more advanced build setups, you may need to write a
-makefile (or a configuration file for the build tool of your choice)
-to run whatever tool creates the Go files and then check those generated source files
-into your repository. This is more work for you, the package author,
-but it is significantly less work for your users, who can use
-"<code>go get</code>" without needing to obtain and build
-any additional tools.</p>
+que pode automatizar a criação de arquivos Go <em>antes</em> do build.
+Para setups de build mais avançados, você pode precisar escrever um
+makefile (ou um arquivo de configuração para a ferramenta de build de sua escolha)
+para executar qualquer ferramenta que crie os arquivos Go e então fazer check-in desses arquivos fonte gerados
+em seu repositório. Isso é mais trabalho para você, o autor do package,
+mas é significativamente menos trabalho para seus usuários, que podem usar
+"<code>go get</code>" sem precisar obter e compilar
+quaisquer ferramentas adicionais.</p>
 
-<h2>More information</h2>
+<h2>Mais informações</h2>
 
-<p>For more information, read <a href="/doc/code.html">How to Write Go Code</a>
-and see the <a href="/cmd/go/">go command documentation</a>.</p>
+<p>Para mais informações, leia <a href="/doc/code.html">How to Write Go Code</a>
+e veja a <a href="/cmd/go/">documentação do comando go</a>.</p>
