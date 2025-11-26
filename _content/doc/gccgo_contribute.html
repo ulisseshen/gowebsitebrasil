@@ -1,113 +1,114 @@
 <!--{
-	"Title": "Contributing to the gccgo frontend",
+	"Title": "Contribuindo para o frontend gccgo",
+	"ia-translated": true,
 	"Breadcrumb": true
 }-->
 
-<h2>Introduction</h2>
+<h2>Introdução</h2>
 
 <p>
-These are some notes on contributing to the gccgo frontend for GCC.
-For information on contributing to parts of Go other than gccgo,
-see <a href="/doc/contribute.html">Contributing to the Go project</a>.  For
-information on building gccgo for yourself,
-see <a href="/doc/install/gccgo">Setting up and using gccgo</a>.
-For more of the gritty details on the process of doing development
-with the gccgo frontend,
-see <a href="https://go.googlesource.com/gofrontend/+/master/HACKING">the
-file HACKING</a> in the gofrontend repository.
+Estas são algumas notas sobre contribuir para o frontend gccgo para GCC.
+Para informações sobre contribuir para partes do Go que não sejam gccgo,
+veja <a href="/doc/contribute.html">Contribuindo para o projeto Go</a>. Para
+informações sobre construir gccgo para você mesmo,
+veja <a href="/doc/install/gccgo">Configurando e usando gccgo</a>.
+Para mais detalhes técnicos sobre o processo de fazer desenvolvimento
+com o frontend gccgo,
+veja <a href="https://go.googlesource.com/gofrontend/+/master/HACKING">o
+arquivo HACKING</a> no repositório gofrontend.
 </p>
 
-<h2>Legal Prerequisites</h2>
+<h2>Pré-requisitos Legais</h2>
 
 <p>
-You must follow the <a href="/doc/contribute.html#copyright">Go copyright
-rules</a> for all changes to the gccgo frontend and the associated
-libgo library.  Code that is part of GCC rather than gccgo must follow
-the general <a href="https://gcc.gnu.org/contribute.html">GCC
-contribution rules</a>.
+Você deve seguir as <a href="/doc/contribute.html#copyright">regras de copyright
+do Go</a> para todas as mudanças no frontend gccgo e na
+biblioteca libgo associada. Código que faz parte do GCC em vez de gccgo deve seguir
+as <a href="https://gcc.gnu.org/contribute.html">regras gerais de
+contribuição do GCC</a>.
 </p>
 
-<h2>Code</h2>
+<h2>Código</h2>
 
 <p>
-The master sources for the gccgo frontend may be found at
+As fontes mestras para o frontend gccgo podem ser encontradas em
 <a href="https://go.googlesource.com/gofrontend">https://go.googlesource.com/gofrontend</a>.
-They are mirrored
-at <a href="https://github.com/golang/gofrontend">https://github.com/golang/gofrontend</a>.
-The master sources are not buildable by themselves, but only in
-conjunction with GCC (in the future, other compilers may be
-supported).  Changes made to the gccgo frontend are also applied to
-the GCC source code repository hosted at <code>gcc.gnu.org</code>.  In
-the <code>gofrontend</code> repository, the <code>go</code> directory
-is mirrored to the <code>gcc/go/gofrontend</code> directory in the GCC
-repository, and the <code>gofrontend</code> <code>libgo</code>
-directory is mirrored to the GCC <code>libgo</code> directory.  In
-addition, the <code>test</code> directory
-from <a href="https://go.googlesource.com/go">the main Go repository</a>
-is mirrored to the <code>gcc/testsuite/go.test/test</code> directory
-in the GCC repository.
+Elas são espelhadas
+em <a href="https://github.com/golang/gofrontend">https://github.com/golang/gofrontend</a>.
+As fontes mestras não são compiláveis por si mesmas, mas apenas em
+conjunto com o GCC (no futuro, outros compiladores podem ser
+suportados). Mudanças feitas no frontend gccgo também são aplicadas ao
+repositório de código fonte do GCC hospedado em <code>gcc.gnu.org</code>. No
+repositório <code>gofrontend</code>, o diretório <code>go</code>
+é espelhado para o diretório <code>gcc/go/gofrontend</code> no repositório GCC,
+e o diretório <code>libgo</code> do <code>gofrontend</code>
+é espelhado para o diretório <code>libgo</code> do GCC. Além
+disso, o diretório <code>test</code>
+do <a href="https://go.googlesource.com/go">repositório principal do Go</a>
+é espelhado para o diretório <code>gcc/testsuite/go.test/test</code>
+no repositório GCC.
 </p>
 
 <p>
-Changes to these directories always flow from the master sources to
-the GCC repository.  The files should never be changed in the GCC
-repository except by changing them in the master sources and mirroring
-them.
+Mudanças nesses diretórios sempre fluem das fontes mestras para
+o repositório GCC. Os arquivos nunca devem ser alterados no repositório
+GCC exceto alterando-os nas fontes mestras e
+espelhando-os.
 </p>
 
 <p>
-The gccgo frontend is written in C++.
-It follows the GNU and GCC coding standards for C++.
-In writing code for the frontend, follow the formatting of the
-surrounding code.
-Almost all GCC-specific code is not in the frontend proper and is
-instead in the GCC sources in the <code>gcc/go</code> directory.
+O frontend gccgo é escrito em C++.
+Ele segue os padrões de codificação GNU e GCC para C++.
+Ao escrever código para o frontend, siga a formatação do
+código circundante.
+Quase todo o código específico do GCC não está no frontend propriamente dito e está
+em vez disso nas fontes do GCC no diretório <code>gcc/go</code>.
 </p>
 
 <p>
-The run-time library for gccgo is mostly the same as the library
-in <a href="https://go.googlesource.com/go">the main Go repository</a>.
-The library code in the Go repository is periodically merged into
-the <code>libgo/go</code> directory of the <code>gofrontend</code> and
-then the GCC repositories, using the shell
-script <code>libgo/merge.sh</code>.  Accordingly, most library changes
-should be made in the main Go repository.  The files outside
-of <code>libgo/go</code> are gccgo-specific; that said, some of the
-files in <code>libgo/runtime</code> are based on files
-in <code>src/runtime</code> in the main Go repository.
+A biblioteca de runtime para gccgo é principalmente a mesma da biblioteca
+no <a href="https://go.googlesource.com/go">repositório principal do Go</a>.
+O código da biblioteca no repositório Go é periodicamente mesclado no
+diretório <code>libgo/go</code> do <code>gofrontend</code> e
+então nos repositórios GCC, usando o
+script shell <code>libgo/merge.sh</code>. Consequentemente, a maioria das mudanças na biblioteca
+devem ser feitas no repositório principal do Go. Os arquivos fora
+de <code>libgo/go</code> são específicos do gccgo; dito isso, alguns dos
+arquivos em <code>libgo/runtime</code> são baseados em arquivos
+em <code>src/runtime</code> no repositório principal do Go.
 </p>
 
-<h2>Testing</h2>
+<h2>Testes</h2>
 
 <p>
-All patches must be tested.  A patch that introduces new failures is
-not acceptable.
-</p>
-
-<p>
-To run the gccgo test suite, run <code>make check-go</code> in your
-build directory.  This will run various tests
-under <code>gcc/testsuite/go.*</code> and will also run
-the <code>libgo</code> testsuite.  This copy of the tests from the
-main Go repository is run using the DejaGNU script found
-in <code>gcc/testsuite/go.test/go-test.exp</code>.
+Todos os patches devem ser testados. Um patch que introduz novas falhas não é
+aceitável.
 </p>
 
 <p>
-Most new tests should be submitted to the main Go repository for later
-mirroring into the GCC repository.  If there is a need for specific
-tests for gccgo, they should go in
-the <code>gcc/testsuite/go.go-torture</code>
-or <code>gcc/testsuite/go.dg</code> directories in the GCC repository.
+Para executar a suite de testes gccgo, execute <code>make check-go</code> em seu
+diretório de build. Isso executará vários testes
+sob <code>gcc/testsuite/go.*</code> e também executará
+a testsuite <code>libgo</code>. Esta cópia dos testes do
+repositório principal do Go é executada usando o script DejaGNU encontrado
+em <code>gcc/testsuite/go.test/go-test.exp</code>.
 </p>
 
-<h2>Submitting Changes</h2>
+<p>
+A maioria dos novos testes deve ser submetida ao repositório principal do Go para posterior
+espelhamento no repositório GCC. Se houver necessidade de testes específicos
+para gccgo, eles devem ir nos
+diretórios <code>gcc/testsuite/go.go-torture</code>
+ou <code>gcc/testsuite/go.dg</code> no repositório GCC.
+</p>
+
+<h2>Submetendo Mudanças</h2>
 
 <p>
-Changes to the Go frontend should follow the same process as for the
-main Go repository, only for the <code>gofrontend</code> project and
-the <code>gofrontend-dev@googlegroups.com</code> mailing list
-rather than the <code>go</code> project and the
-<code>golang-dev@googlegroups.com</code> mailing list.  Those changes
-will then be merged into the GCC sources.
+Mudanças no frontend Go devem seguir o mesmo processo que para o
+repositório principal do Go, apenas para o projeto <code>gofrontend</code> e
+a lista de email <code>gofrontend-dev@googlegroups.com</code>
+em vez do projeto <code>go</code> e a
+lista de email <code>golang-dev@googlegroups.com</code>. Essas mudanças
+serão então mescladas nas fontes do GCC.
 </p>
