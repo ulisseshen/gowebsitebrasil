@@ -24,6 +24,24 @@ Translate technical documentation from English to PT-BR with:
 
 **Add translation tracking metadata as the FIRST LINE possible in every translated file.**
 
+> **EXCEÇÕES DESTE SITE (golang/website) — têm precedência sobre os exemplos abaixo.**
+> Nos dois formatos a seguir, a primeira linha tem significado para o servidor, e colocar o
+> marcador nela quebra a página (já aconteceu: o Tour parou de iniciar e páginas perderam o título).
+>
+> - **Arquivo que começa com `<!--{` (cabeçalho JSON):** o arquivo PRECISA continuar começando
+>   com `<!--{`. Coloque o marcador como um campo do JSON, nunca como comentário antes dele:
+>   ```
+>   <!--{
+>     "ia-translated": true,
+>     "Title": "Título em Português"
+>   }-->
+>   ```
+> - **Arquivos `.article` do Tour (formato present):** as primeiras linhas são título e
+>   subtítulo, seguidas do bloco de autor. Coloque `# ia-translated: true` DEPOIS do bloco
+>   de autor (depois de `https://golang.org` e da linha em branco), nunca na linha 1.
+> - **Frontmatter YAML (`---`):** mantenha todos os campos do original, inclusive `template: true`.
+> - Não traduza o conteúdo de blocos de código, nem comentários dentro deles.
+
 The metadata format depends on the file type. Use the appropriate comment syntax for each:
 
 #### Markdown Files (.md, .markdown, .mdx)
@@ -499,6 +517,9 @@ After passing link validation:
 - Technical terms in English
 - Natural PT-BR prose
 - File structure preserved
+- **Rode `.claude/harness/verificar.sh --rapido`** e corrija tudo que ele apontar antes de
+  entregar. Ele compara o arquivo com a versão do upstream: código, âncoras, IDs, cabeçalho
+  e flag de template devem bater. Quem orquestra a tradução roda o harness completo (sem `--rapido`).
 
 ### Step 6: Output Complete Translation
 
