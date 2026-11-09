@@ -6,6 +6,7 @@ by:
 - Chuck Bigelow
 - Rob Pike
 summary: Announcing the Go font family, by Bigelow & Holmes.
+template: true
 ---
 
 <link rel="stylesheet" href="/css/fonts.css">
@@ -50,7 +51,9 @@ and copy them from the subsequent `image/font/gofont/ttfs` directory.
 If you want to use Go (the fonts) with Go (the software), each font is provided by a separate package.
 To use the Go Regular font in a program, import `golang.org/x/image/font/gofont/goregular`, and write:
 
-	font, err := truetype.Parse(goregular.TTF)
+```go
+font, err := truetype.Parse(goregular.TTF)
+```
 
 The [`github.com/golang/freetype/truetype`](https://godoc.org/github.com/golang/freetype/truetype)
 package provides the [`truetype.Parse`](https://godoc.org/github.com/golang/freetype/truetype#Parse) function today.

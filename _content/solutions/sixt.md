@@ -1,6 +1,7 @@
 ---
-linkTitle: Find out more about Golang at SIXT
-description: “We have been doing Golang at SIXT since 2015. Back then there was not that many people here in our area which were doing Golang in production mode, mostly side projects. So it was really a bold move from our side but it proved to be quite successful. Fast forward to 2019 we have over 15 teams doing Golang. Many of the applications they have built are basically foundation for most of our mobility product offer including Rent, Ride and Share.”
+ia-translated: true
+linkTitle: Saiba mais sobre Golang na SIXT
+description: "Estamos fazendo Golang na SIXT desde 2015. Naquela época não havia muitas pessoas aqui na nossa área fazendo Golang em modo de produção, eram principalmente projetos paralelos. Então foi realmente uma decisão audaciosa da nossa parte, mas provou ser bastante bem-sucedida. Avançando para 2019, temos mais de 15 equipes fazendo Golang. Muitas das aplicações que eles construíram são basicamente a fundação para a maioria da nossa oferta de produtos de mobilidade, incluindo Rent, Ride e Share."
 company: SIXT
 logoSrc: sixt_light.svg
 logoSrcDark: sixt_dark.svg

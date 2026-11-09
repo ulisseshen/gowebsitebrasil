@@ -1,15 +1,16 @@
 ---
+ia-translated: true
 title: Comments
 ---
 
 <!--
-This is just a placeholder page for enabling a test.
-In the deployed site it is overwritten with the content of go.googlesource.com/wiki.
+Isto é apenas uma página de marcação de posição para habilitar um teste.
+No site implantado, ela é sobrescrita com o conteúdo de go.googlesource.com/wiki.
 -->
 
-Every package should have a package comment. It should immediately precede the ` package ` statement in one of the files in the package. (It only needs to appear in one file.) It should begin with a single sentence that begins "Package _packagename_" and give a concise summary of the package functionality. This introductory sentence will be used in godoc's list of all packages.
+Todo package deve ter um package comment. Ele deve preceder imediatamente a declaração ` package ` em um dos arquivos do package. (Ele só precisa aparecer em um arquivo.) Deve começar com uma única frase que inicie com "Package _packagename_" e fornecer um resumo conciso da funcionalidade do package. Esta frase introdutória será usada na lista de todos os packages do godoc.
 
-Subsequent sentences and/or paragraphs can give more details. Sentences should be properly punctuated.
+Frases e/ou parágrafos subsequentes podem fornecer mais detalhes. As frases devem ser pontuadas adequadamente.
 
 ```go
 // Package superman implements methods for saving the world.
@@ -19,7 +20,7 @@ Subsequent sentences and/or paragraphs can give more details. Sentences should b
 package superman
 ```
 
-Nearly every top-level type, const, var and func should have a comment. A comment for bar should be in the form "_bar_ floats on high o'er vales and hills.". The first letter of _bar_ should not be capitalized unless it's capitalized in the code.
+Quase todo type, const, var e func de nível superior deve ter um comment. Um comment para bar deve estar na forma "_bar_ floats on high o'er vales and hills.". A primeira letra de _bar_ não deve ser maiúscula, a menos que esteja em maiúscula no código.
 
 ```go
 // enterOrbit causes Superman to fly into low Earth orbit, a position
@@ -29,7 +30,7 @@ func enterOrbit() os.Error {
 }
 ```
 
-All text that you indent inside a comment, godoc will render as a pre-formatted block. This facilitates code samples.
+Todo texto que você indentar dentro de um comment, o godoc renderizará como um bloco pré-formatado. Isso facilita exemplos de código.
 
 ```go
 // fight can be used on any enemy and returns whether Superman won.

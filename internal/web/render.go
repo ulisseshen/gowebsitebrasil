@@ -19,7 +19,9 @@ import (
 	"github.com/yuin/goldmark"
 	"github.com/yuin/goldmark/ast"
 	"github.com/yuin/goldmark/extension"
+	extast "github.com/yuin/goldmark/extension/ast"
 	"github.com/yuin/goldmark/parser"
+	"github.com/yuin/goldmark/renderer"
 	"github.com/yuin/goldmark/renderer/html"
 	"github.com/yuin/goldmark/text"
 	"github.com/yuin/goldmark/util"
@@ -84,6 +86,7 @@ func (site *Site) renderHTML(p Page, tmpl string, r *http.Request) ([]byte, erro
 		"raw":          raw,
 		"yaml":         yamlFn,
 		"presentStyle": presentStyle,
+		"mapContains":  mapContains,
 	})
 	t.Funcs(site.funcs)
 
@@ -124,17 +127,13 @@ func (site *Site) renderHTML(p Page, tmpl string, r *http.Request) ([]byte, erro
 
 	var buf bytes.Buffer
 	if _, ok := p["Content"]; !ok && data != "" {
-		// Either the page explicitly requested templating, or it is markdown,
-		// which is treated as a template by default.
-		isTemplate, explicit := p["template"].(bool)
-
-		// Neither gopls nor the wiki are templated by default.
-		if !explicit && (strings.HasPrefix(file, "wiki/") || strings.HasPrefix(file, "gopls/")) {
-			isTemplate, explicit = false, true
-		}
+		// The page must explicitly request templating with "template: true"
+		// in its metadata. Markdown files are no longer treated as
+		// templates by default.
+		isTemplate, _ := p["template"].(bool)
 
 		tdata := data
-		if !explicit || isTemplate {
+		if isTemplate {
 			// Load content as a template.
 			tf := t.New(file)
 			if err := tmplfunc.Parse(tf, data); err != nil {
@@ -181,7 +180,7 @@ func (site *Site) findLayout(dir, name string) (string, bool) {
 
 // markdownToHTML converts Markdown to HTML.
 // The Markdown source may contain raw HTML,
-// but Go templates have already been processed.
+// and may contain Go template syntax if templating was not enabled.
 func markdownToHTML(markdown string) (template.HTML, error) {
 	// parser.WithHeadingAttribute allows custom ids on headings.
 	// html.WithUnsafe allows use of raw HTML, which we need for tables.
@@ -200,6 +199,7 @@ func markdownToHTML(markdown string) (template.HTML, error) {
 			),
 			extension.DefinitionList,
 			extension.NewTable(),
+			tableWrapper{},
 		),
 	)
 	var buf bytes.Buffer
@@ -281,4 +281,33 @@ func replaceTabs(text []byte) []byte {
 		}
 	}
 	return buf.Bytes()
+}
+
+// This is a goldmark extension for wrapping tables written in markdown.
+// Tables overflow on narrow screens, so it's necessary to wrap them in a div
+// with overflow-x: auto to trigger scroll bars.
+type tableWrapper struct{}
+
+func (t tableWrapper) Extend(m goldmark.Markdown) {
+	m.Renderer().AddOptions(
+		renderer.WithNodeRenderers(
+			util.Prioritized(t, 0),
+		),
+	)
+}
+
+func (t tableWrapper) RegisterFuncs(reg renderer.NodeRendererFuncRegisterer) {
+	reg.Register(extast.KindTable, t.renderTable)
+}
+func (tableWrapper) renderTable(w util.BufWriter, source []byte, n ast.Node, entering bool) (ast.WalkStatus, error) {
+	if entering {
+		_, _ = w.WriteString(`<div style="overflow-x:auto"><table`)
+		if n.Attributes() != nil {
+			html.RenderAttributes(w, n, extension.TableAttributeFilter)
+		}
+		_, _ = w.WriteString(">\n")
+	} else {
+		_, _ = w.WriteString("</table></div>\n")
+	}
+	return ast.WalkContinue, nil
 }

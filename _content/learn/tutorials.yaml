@@ -1,20 +1,21 @@
-- title: Getting started
-  content: In this tutorial, you'll get a brief introduction to Go programming. Along the way, you will install Go, write some simple "Hello, world" code, use the go command to run your code, use the Go package discovery tool, and call functions of an external module.
+# ia-translated: true
+- title: Começando
+  content: Neste tutorial, você terá uma breve introdução à programação Go. Ao longo do caminho, você instalará Go, escreverá algum código simples "Hello, world", usará o comando go para executar seu código, usará a ferramenta de descoberta de pacotes Go e chamará funções de um módulo externo.
   url: /doc/tutorial/getting-started
   thumbnail:
   cta: Tutorial
-- title: Create a module
-  content: This is the first part of a tutorial that introduces a few fundamental features of the Go language. In this tutorial you'll create two modules. The first is a library which is intended to be imported by other libraries or applications. The second is a caller application which will use the first.
+- title: Criar um módulo
+  content: Esta é a primeira parte de um tutorial que introduz alguns recursos fundamentais da linguagem Go. Neste tutorial, você criará dois módulos. O primeiro é uma biblioteca que se destina a ser importada por outras bibliotecas ou aplicações. O segundo é uma aplicação chamadora que usará o primeiro.
   url: /doc/tutorial/create-module
   thumbnail:
   cta: Tutorial
-- title: Developing a web service
-  content: This tutorial introduces the basics of writing a RESTful web service API with Go and the Gin Web Framework. In this tutorial, you will build a RESTful API server with two endpoints.
+- title: Desenvolvendo um web service
+  content: Este tutorial introduz os conceitos básicos de escrever uma API de web service RESTful com Go e o Gin Web Framework. Neste tutorial, você construirá um servidor API RESTful com dois endpoints.
   url: https://shell.cloud.google.com/?walkthrough_tutorial_url=https%3A%2F%2Fraw.githubusercontent.com%2Fgolang%2Ftour%2Fmaster%2Ftutorial%2Fweb-service-gin.md&pli=1&show=ide&environment_deployment=ide
   thumbnail:
-  cta: Interactive Tutorial
-- title: Accessing a relational database
-  content: This tutorial introduces the basics of accessing a relational database with Go and the database/sql package in its standard library. In this tutorial, you’ll create a database, then write code to access the database.
+  cta: Tutorial Interativo
+- title: Acessando um banco de dados relacional
+  content: Este tutorial introduz os conceitos básicos de acessar um banco de dados relacional com Go e o pacote database/sql em sua biblioteca padrão. Neste tutorial, você criará um banco de dados e, em seguida, escreverá código para acessar o banco de dados.
   url: /doc/tutorial/database-access
   thumbnail:
   cta: Tutorial

@@ -1,245 +1,246 @@
 ---
-title: "Brand and Trademark Usage Guidelines"
+ia-translated: true
+title: "Diretrizes de Uso de Marca e Trademark"
 layout: article
 ---
 
-The Go trademark and the Go Logo (<img src="/images/go-logo-blue.svg" height="12"></img>) – collectively, the “Go Trademarks” –
-are trademarks of Google and are treated separately from the copyright license
-grants contained in the BSD-licensed Go repositories,
-as described below.
+A trademark Go e o Go Logo (<img src="/images/go-logo-blue.svg" height="12"></img>) – coletivamente, as "Go Trademarks" –
+são trademarks do Google e são tratadas separadamente das concessões de licença de copyright
+contidas nos repositórios Go licenciados sob BSD,
+conforme descrito abaixo.
 
-The Go Gopher mascot was created by Renee French and is licensed
-under the
-[Creative Commons 4.0 Attribution License](https://creativecommons.org/licenses/by/4.0/).
+O mascote Go Gopher foi criado por Renee French e é licenciado
+sob a
+[Licença Creative Commons 4.0 Attribution](https://creativecommons.org/licenses/by/4.0/).
 
-## Trademark Guidelines {#guidelines}
+## Diretrizes de Trademark {#guidelines}
 
-Any use of the Go Trademarks other than those permitted in these guidelines
-must be approved in advance.
+Qualquer uso das Go Trademarks além daqueles permitidos nestas diretrizes
+deve ser aprovado antecipadamente.
 
-In general, we want the word mark “Go” and the Go Logo to be used freely to refer to the Go programming language.
+Em geral, queremos que a marca nominal "Go" e o Go Logo sejam usados livremente para se referir à linguagem de programação Go.
 
-We do not want these trademarks to be used:
+Não queremos que essas trademarks sejam usadas:
 
- - to refer to any other programming language.
- - in a way that is misleading or may imply association of unrelated projects,
-   companies, software, documentation, or other resources with
-   the Go programming language project.
- - in ways that confuse the community as to whether the Go programming language
-   is open source and free to use.
+ - para se referir a qualquer outra linguagem de programação.
+ - de uma forma que seja enganosa ou possa implicar associação de projetos não relacionados,
+   empresas, software, documentação ou outros recursos com
+   o projeto da linguagem de programação Go.
+ - de maneiras que confundam a comunidade sobre se a linguagem de programação Go
+   é de código aberto e livre para uso.
 
-These guidelines exist to ensure that the Go programming language
-can continue to share its releases under open source licenses
-while making sure that the Go Trademarks are protected as
-meaningful source identifiers in a way that’s consistent with trademark law.
+Essas diretrizes existem para garantir que a linguagem de programação Go
+possa continuar a compartilhar seus lançamentos sob licenças de código aberto
+ao mesmo tempo em que garante que as Go Trademarks sejam protegidas como
+identificadores de origem significativos de uma forma consistente com a lei de trademark.
 
-## Use of the Go Trademarks {#use}
+## Uso das Go Trademarks {#use}
 
-### No Authorization Needed
+### Não é Necessária Autorização
 
-#### Nominative Fair Use
+#### Uso Justo Nominativo
 
-In order to accurately identify the Go programming language
-or any compatible applications,
-it may be necessary to refer to the language by name (“nominative fair use”).
-These are the basic rules for nominative fair use of the Go Trademarks:
+Para identificar com precisão a linguagem de programação Go
+ou quaisquer aplicações compatíveis,
+pode ser necessário referir-se à linguagem pelo nome ("uso justo nominativo").
+Essas são as regras básicas para uso justo nominativo das Go Trademarks:
 
-- Only use the Go trademark in word mark form, i.e., plain text.
-  Do not use the Go Logo or Go as a stylized form without permission.
-- Only use the Go trademark as much as is necessary.
-  Use should be limited to matter-of-fact statements.
-- Do not use the Go trademark in any way that suggests or implies
-  affiliation with or endorsement from the community or from Google.
+- Use apenas a trademark Go na forma de marca nominal, ou seja, texto simples.
+  Não use o Go Logo ou Go como uma forma estilizada sem permissão.
+- Use apenas a trademark Go o quanto necessário.
+  O uso deve ser limitado a declarações factuais.
+- Não use a trademark Go de qualquer forma que sugira ou implique
+  afiliação com ou endosso da comunidade ou do Google.
 
-Nominative or descriptive uses in fair use may arise in an educational context
-or in books or blogs about the Go programming language and any derivative works.
+Usos nominativos ou descritivos em uso justo podem surgir em um contexto educacional
+ou em livros ou blogs sobre a linguagem de programação Go e quaisquer trabalhos derivados.
 
-### Authorized Software Uses of the Go Trademarks
+### Usos Autorizados de Software das Go Trademarks
 
-#### Unmodified forks
+#### Forks não modificados
 
-The Go Trademarks can generally be retained in unaltered versions
-of the Go open source programming language (that is, an unmodified fork).
-This use must follow the
-[“Naming Conventions for Authorized Uses”](#naming)
-and may not inaccurately suggest affiliation or endorsement
-or mislead as to the source.
+As Go Trademarks geralmente podem ser mantidas em versões inalteradas
+da linguagem de programação Go de código aberto (isto é, um fork não modificado).
+Este uso deve seguir as
+["Convenções de Nomenclatura para Usos Autorizados"](#naming)
+e não pode sugerir indevidamente afiliação ou endosso
+ou enganar quanto à origem.
 
-#### Substantially unmodified distributions
+#### Distribuições substancialmente não modificadas
 
-Substantially unmodified distributions may use the Go Trademarks
-if the derivative work complies with the terms of the Go programming language’s
-open source license and is made in a good faith attempt to replicate the quality
-and substance of the original project.
+Distribuições substancialmente não modificadas podem usar as Go Trademarks
+se o trabalho derivado estiver em conformidade com os termos da licença de código aberto da linguagem de programação Go
+e for feito em uma tentativa de boa fé de replicar a qualidade
+e substância do projeto original.
 
-Examples of modifications that would be considered substantially unmodified include
-language translation and localization, bug and security patches,
-and necessary interoperability/compatibility modifications.
+Exemplos de modificações que seriam consideradas substancialmente não modificadas incluem
+tradução e localização de idioma, correções de bugs e segurança,
+e modificações necessárias de interoperabilidade/compatibilidade.
 
-The Go Trademarks may be used in connection with such substantially unmodified
-distributions following the
-[“Naming Conventions for Authorized Uses”](#naming).
+As Go Trademarks podem ser usadas em conexão com tais distribuições substancialmente não modificadas
+seguindo as
+["Convenções de Nomenclatura para Usos Autorizados"](#naming).
 
-### Software Uses Requiring Review and Approval for Authorization
+### Usos de Software Que Requerem Revisão e Aprovação para Autorização
 
-#### Substantially modified distributions
+#### Distribuições substancialmente modificadas
 
-Substantially modified distributions require review and approval from
-_trademark@golang.org_ before the Go Trademarks can be used.
+Distribuições substancialmente modificadas requerem revisão e aprovação de
+_trademark@golang.org_ antes que as Go Trademarks possam ser usadas.
 
-Substantially modified distributions may include explicit changes
-to functionality, interfaces, or features.
+Distribuições substancialmente modificadas podem incluir mudanças explícitas
+na funcionalidade, interfaces ou recursos.
 
-If the substantially modified distribution is approved,
-the Go Trademarks may be used in connection with such
-substantially unmodified distributions following the
-[“Naming Conventions for Authorized Uses”](#naming).
+Se a distribuição substancialmente modificada for aprovada,
+as Go Trademarks podem ser usadas em conexão com tais
+distribuições substancialmente não modificadas seguindo as
+["Convenções de Nomenclatura para Usos Autorizados"](#naming).
 
-### Unauthorized Software Uses of the Go Trademarks
+### Usos Não Autorizados de Software das Go Trademarks
 
-#### Disparaging modifications
+#### Modificações depreciativas
 
-Modifications that disparage the Go programming language
-or its reputation without qualifying as fair use,
-such as the introduction of malicious code,
-are not compatible with use of the Go Trademarks.
+Modificações que depreciam a linguagem de programação Go
+ou sua reputação sem se qualificar como uso justo,
+como a introdução de código malicioso,
+não são compatíveis com o uso das Go Trademarks.
 
-### Authorized Non-software Uses of the Go Trademarks
+### Usos Autorizados Não-Software das Go Trademarks
 
-#### Use for events and community groups
+#### Uso para eventos e grupos comunitários
 
-The Go word mark may be used referentially in events, community groups,
-or other gatherings related to the programming language,
-but it may not be used in a manner that implies official status or endorsement.
+A marca nominal Go pode ser usada referencialmente em eventos, grupos comunitários,
+ou outras reuniões relacionadas à linguagem de programação,
+mas não pode ser usada de maneira que implique status oficial ou endosso.
 
-The Go Logo may not be used with events, community groups,
-or other gatherings related to the programming language without permission.
+O Go Logo não pode ser usado com eventos, grupos comunitários,
+ou outras reuniões relacionadas à linguagem de programação sem permissão.
 
-Events and community groups must follow the
-[“Naming Conventions for Authorized Uses”](#naming).
+Eventos e grupos comunitários devem seguir as
+["Convenções de Nomenclatura para Usos Autorizados"](#naming).
 
-Events and community groups may be subject to the
-Go programming language’s Code of Conduct,
-and violations of the Code of Conduct may be deemed incompatible
-with use of the Go Trademarks.
+Eventos e grupos comunitários podem estar sujeitos ao
+Código de Conduta da linguagem de programação Go,
+e violações do Código de Conduta podem ser consideradas incompatíveis
+com o uso das Go Trademarks.
 
 #### Swag
 
-The Go Trademarks may be used to produce swag
-such as t-shirts, pens, stickers, or hats for both
-commercial and non-commercial purposes
-in accordance with the
-[“Naming Conventions for Authorized Uses”](#naming)
-and [“Use of the Go Logo”](#logo).
+As Go Trademarks podem ser usadas para produzir swag
+como camisetas, canetas, adesivos ou bonés tanto para
+fins comerciais quanto não comerciais
+de acordo com as
+["Convenções de Nomenclatura para Usos Autorizados"](#naming)
+e ["Uso do Go Logo"](#logo).
 
-Swag should never be advertised as “official” swag or
-swag endorsed for use or purchase by the Go programming language project.
+Swag nunca deve ser anunciado como swag "oficial" ou
+swag endossado para uso ou compra pelo projeto da linguagem de programação Go.
 
-There are no other restrictions on generating revenue through swag
-that use the Go Trademarks.
-However, we encourage sellers to consider the ethos of the
-open source movement in this decision.
-Sellers must truthfully advertise to consumers how much of the selling price,
-if any, will be donated to open source or community efforts.
+Não há outras restrições sobre gerar receita através de swag
+que usa as Go Trademarks.
+No entanto, encorajamos os vendedores a considerar o ethos do
+movimento de código aberto nesta decisão.
+Os vendedores devem anunciar verazmente aos consumidores quanto do preço de venda,
+se houver, será doado para esforços de código aberto ou comunitários.
 
-### Unauthorized Non-software Uses of the Go Trademarks
+### Usos Não Autorizados Não-Software das Go Trademarks
 
-#### Use in domain names and social media accounts
+#### Uso em nomes de domínio e contas de mídia social
 
-The Go Trademarks should not be used, in whole or part,
-as or within any domain names and social media account names or handles
-in a manner that implies official status or endorsement.
+As Go Trademarks não devem ser usadas, no todo ou em parte,
+como ou dentro de quaisquer nomes de domínio e nomes de conta de mídia social ou handles
+de uma maneira que implique status oficial ou endosso.
 
-#### Use in a Company Name, Trade Name, Product Name or Feature Name
+#### Uso em Nome de Empresa, Nome Comercial, Nome de Produto ou Nome de Recurso
 
-The Go Trademarks may not be used as or combined with
-all or part of a company name, trade name, product name,
-or feature name in a manner that implies official status or endorsement.
+As Go Trademarks não podem ser usadas como ou combinadas com
+todo ou parte de um nome de empresa, nome comercial, nome de produto,
+ou nome de recurso de uma maneira que implique status oficial ou endosso.
 
-## Naming Conventions for Authorized Uses {#naming}
+## Convenções de Nomenclatura para Usos Autorizados {#naming}
 
-Once a particular use falls within an Authorized Use category as outlined in
-[“Use of the Go Trademarks”](#use),
-the Go Trademarks can be used subject to the following Naming Conventions.
-These Naming Conventions seek to avoid implying sponsorship, approval,
-or endorsement, which may result in confusion as to the source of the
-underlying goods or services.
+Uma vez que um uso particular se enquadre em uma categoria de Uso Autorizado conforme descrito em
+["Uso das Go Trademarks"](#use),
+as Go Trademarks podem ser usadas sujeitas às seguintes Convenções de Nomenclatura.
+Essas Convenções de Nomenclatura buscam evitar implicar patrocínio, aprovação,
+ou endosso, o que pode resultar em confusão quanto à origem dos
+bens ou serviços subjacentes.
 
-### Authorized Naming Conventions {#auth}
+### Convenções de Nomenclatura Autorizadas {#auth}
 
-- [New Name/Company] managed Go
-- [New Name], a fork of Go
-- [New Name and/or description of interaction] for Go
+- [Novo Nome/Empresa] managed Go
+- [Novo Nome], a fork of Go
+- [Novo Nome e/ou descrição de interação] for Go
 
-### Unauthorized Naming Conventions {#unauth}
+### Convenções de Nomenclatura Não Autorizadas {#unauth}
 
-Naming Conventions that disparage the Go programming language,
-if not permitted as fair use, are unauthorized.
-For example, the following are unauthorized Naming Conventions:
+Convenções de Nomenclatura que depreciam a linguagem de programação Go,
+se não permitidas como uso justo, não são autorizadas.
+Por exemplo, as seguintes são Convenções de Nomenclatura não autorizadas:
 
 - Improved Go
 - The Better Go
-- Any Naming Convention violating the Go programming language’s Code of Conduct,
-  such as use of non-inclusive language.
-- Any Naming Convention modifying or altering the Go Trademarks
-  in a misleading manner.
+- Qualquer Convenção de Nomenclatura violando o Código de Conduta da linguagem de programação Go,
+  como uso de linguagem não inclusiva.
+- Qualquer Convenção de Nomenclatura modificando ou alterando as Go Trademarks
+  de maneira enganosa.
 
-### Naming Conventions Requiring Review and Approval for Authorization {#approval}
+### Convenções de Nomenclatura Que Requerem Revisão e Aprovação para Autorização {#approval}
 
-Any Naming Convention not following the
-[“Authorized Naming Conventions”](#auth)
-or
-[“Unauthorized Naming Conventions”](#unauth)
-require review for approval from _trademark@golang.org_.
+Qualquer Convenção de Nomenclatura que não siga as
+["Convenções de Nomenclatura Autorizadas"](#auth)
+ou
+["Convenções de Nomenclatura Não Autorizadas"](#unauth)
+requer revisão para aprovação de _trademark@golang.org_.
 
-## Use of the Go Logo {#logo}
+## Uso do Go Logo {#logo}
 
-In addition to the applicable rules outlined above applying to the Go word mark,
-the following rules apply to the use of the Go Logo (<img src="/images/go-logo-blue.svg" height="12"></img>).
+Além das regras aplicáveis descritas acima aplicando-se à marca nominal Go,
+as seguintes regras se aplicam ao uso do Go Logo (<img src="/images/go-logo-blue.svg" height="12"></img>).
 
-The Go Logo may never be used in a way:
- - to disparage the Go programming language or its reputation; or
- - that violates the Go programming language’s code of conduct.
+O Go Logo nunca pode ser usado de uma forma:
+ - que deprecie a linguagem de programação Go ou sua reputação; ou
+ - que viole o código de conduta da linguagem de programação Go.
 
-The Go Logo may not be used in the following manners without review and approval:
- - used as or incorporated in the logo for a commercial product;
- - modified in any form; or
- - used in close proximity to, within, or encompassing another logo,
-   badge, or stylized trademark.
+O Go Logo não pode ser usado das seguintes maneiras sem revisão e aprovação:
+ - usado como ou incorporado no logo de um produto comercial;
+ - modificado de qualquer forma; ou
+ - usado em proximidade próxima a, dentro de, ou englobando outro logo,
+   badge, ou trademark estilizada.
 
-Please use the provided brand assets and further guidance for the
-Go Logo and the Gopher mascot as outlined in “[Go's New Brand](/blog/go-brand)”.
+Por favor, use os ativos de marca fornecidos e orientações adicionais para o
+Go Logo e o mascote Gopher conforme descrito em "[Nova Marca do Go](/blog/go-brand)".
 
-## Authorization Non-Transferrable {#non}
+## Autorização Não Transferível {#non}
 
-Authorization to use the Go Trademarks cannot be inherited
-through project dependencies; every use of the Go Trademarks
-must comply with the applicable guidelines or have explicit prior written permission.
+A autorização para usar as Go Trademarks não pode ser herdada
+através de dependências de projeto; todo uso das Go Trademarks
+deve estar em conformidade com as diretrizes aplicáveis ou ter permissão prévia por escrito explícita.
 
-Authorized Users under these Guidelines may not authorize any third-party use
-and may not transfer or sublicense any of the user’s authorizations or
-permissions to use the Go Trademarks.
+Usuários Autorizados sob estas Diretrizes não podem autorizar qualquer uso de terceiros
+e não podem transferir ou sublicenciar quaisquer das autorizações ou
+permissões do usuário para usar as Go Trademarks.
 
-## Go Trademarks Enforcement {#enforce}
+## Aplicação das Go Trademarks {#enforce}
 
-Authorized users under these Guidelines may not enforce the Go Trademarks
-but should notify _trademark@golang.org_ of any suspected, alleged,
-or actual misuse, misappropriation, infringement,
-or other violation of the Go Trademarks.
+Usuários autorizados sob estas Diretrizes não podem fazer cumprir as Go Trademarks
+mas devem notificar _trademark@golang.org_ de qualquer suspeita, alegada,
+ou uso indevido real, apropriação indevida, infração,
+ou outra violação das Go Trademarks.
 
-## Guideline Version {#version}
+## Versão das Diretrizes {#version}
 
-These Trademark Guidelines are version 1.0 and may be followed by
-subsequent versions.
-These Guidelines may be edited for clarity; the major version will be increased
-when changes introduce new requirements, define new criteria, or otherwise
-present a backwards incompatible change.
+Estas Diretrizes de Trademark são versão 1.0 e podem ser seguidas por
+versões subsequentes.
+Estas Diretrizes podem ser editadas para clareza; a versão principal será aumentada
+quando mudanças introduzirem novos requisitos, definirem novos critérios, ou de outra forma
+apresentem uma mudança incompatível com versões anteriores.
 
-## Contact Us {#contact}
+## Entre em Contato {#contact}
 
-Please do not hesitate to contact us at _trademark@golang.org_
-if you are unsure whether your intended use of the Go Trademarks
-is in compliance with these guidelines,
-or to ask for permission to use the Go Trademarks,
-clearly describing the intended usage and duration.
-Thank you.
+Por favor, não hesite em nos contatar em _trademark@golang.org_
+se você não tiver certeza se o uso pretendido das Go Trademarks
+está em conformidade com estas diretrizes,
+ou para pedir permissão para usar as Go Trademarks,
+descrevendo claramente o uso pretendido e a duração.
+Obrigado.

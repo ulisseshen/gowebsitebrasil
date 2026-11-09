@@ -1,10 +1,7 @@
 ---
-linkTitle: How Wildlife Studios builds backend systems in Go
-description: Wildlife is a Brazilian native global company focused on mobile
-  gaming. We aim to develop games that will make billions of people happy. We
-  have almost 40 million daily active users, and we rely on Go as the main
-  language for our core platform, given its features to scale our backend
-  services.
+ia-translated: true
+linkTitle: Como a Wildlife Studios Constrói Sistemas Backend em Go
+description: A Wildlife é uma empresa global nativa do Brasil focada em jogos mobile. Nosso objetivo é desenvolver jogos que tornarão bilhões de pessoas felizes. Temos quase 40 milhões de usuários ativos diários e dependemos do Go como a linguagem principal para nossa plataforma central, dadas suas características para escalar nossos serviços de backend.
 logoSrc: wildlife_light.svg
 logoSrcDark: wildlife_dark.svg
 company: Wildlife Studios

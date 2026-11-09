@@ -1,13 +1,15 @@
 ---
-title: Use Cases
+ia-translated: true
+title: Casos de Uso
 layout: none
+template: true
 ---
 
 {{$solutions := pages "/solutions/*"}}
 <section class="Solutions-header">
   <div class="Container">
     {{breadcrumbs .}}
-    <h1 class="Solutions-useCase__title">Use Cases</h1>
+    <h1 class="Solutions-useCase__title">Casos de Uso</h1>
   </div>
 </section>
 <section class="Solutions-useCases">
@@ -45,7 +47,7 @@ layout: none
             </div>
             <div class="MarketingCard-section__bottom" aria-describedby="usecase-description">
               <p class="MarketingCard-action">
-                Learn More
+                Saiba Mais
               </p>
             </div>
           </a>
@@ -55,6 +57,6 @@ layout: none
     </ul>
   </div>
   <div class="screen-reader-only" id="usecase-description" hidden>
-          Opens in new window.
+          Abre em nova janela.
     </div>
 </section>

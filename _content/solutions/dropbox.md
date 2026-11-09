@@ -1,6 +1,7 @@
 ---
-title: "Dropbox - Open sourcing our Go libraries"
-description: "About a year ago, we decided to migrate our performance-critical backends from Python to Go to leverage better concurrency support and faster execution speed. ... At this point, we have successfully moved major parts of our infrastructure to Go."
+ia-translated: true
+title: "Dropbox - Tornando open source nossas bibliotecas Go"
+description: "Cerca de um ano atrás, decidimos migrar nossos backends críticos de desempenho de Python para Go para aproveitar o melhor suporte de concorrência e velocidade de execução mais rápida. ... Neste ponto, movemos com sucesso partes importantes de nossa infraestrutura para Go."
 company: Dropbox
 logoSrc: dropbox.png
 logoSrcDark: dropbox.png

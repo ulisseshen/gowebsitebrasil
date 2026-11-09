@@ -1,16 +1,17 @@
-  - title: Documentation
-    content: Everything there is to know about Go. Get started on a new project
-      or brush up for your existing Go code.
-    cta: View documentation
-    url: /doc/
-  - title: Tour of Go
-    content: An interactive introduction to Go in four sections. Each section
-      concludes with a few exercises so you can practice what you've learned.
-    cta: Take a tour
-    url: /tour/
-  - title: Go by example
-    content: <i>Go by Example</i> is a hands-on introduction to Go using annotated
-      example programs. It’s a great starting point to use when tackling any Go
-      project.
-    url: https://gobyexample.com/
-    cta: View examples
+# ia-translated: true
+- title: Documentação
+  content: Tudo o que há para saber sobre Go. Comece um novo projeto
+    ou revise seu código Go existente.
+  cta: Ver documentação
+  url: /doc/
+- title: Tour of Go
+  content: Uma introdução interativa ao Go em quatro seções. Cada seção
+    conclui com alguns exercícios para você praticar o que aprendeu.
+  cta: Faça um tour
+  url: /tour/
+- title: Go by example
+  content: <i>Go by Example</i> é uma introdução prática ao Go usando programas
+    de exemplo anotados. É um ótimo ponto de partida para usar ao enfrentar qualquer
+    projeto Go.
+  url: https://gobyexample.com/
+  cta: Ver exemplos

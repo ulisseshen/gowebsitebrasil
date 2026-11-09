@@ -1,6 +1,5 @@
 ---
 title: Go 1.25 Release Notes
-template: false
 ---
 
 <style>
@@ -657,8 +656,6 @@ The new panicking behavior helps catch such bugs.
 [`MapFS`](/pkg/testing/fstest#MapFS) implements the new [`io/fs.ReadLinkFS`](/pkg/io/fs#ReadLinkFS) interface.
 [`TestFS`](/pkg/testing/fstest#TestFS) will verify the functionality of the [`io/fs.ReadLinkFS`](/pkg/io/fs#ReadLinkFS) interface if implemented.
 [`TestFS`](/pkg/testing/fstest#TestFS) will no longer follow symlinks to avoid unbounded recursion.
-
-<!-- #### [`testing/synctest`](/pkg/testing/synctest/) mentioned above -->
 
 #### [`unicode`](/pkg/unicode/)
 

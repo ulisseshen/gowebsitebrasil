@@ -1,8 +1,9 @@
 ---
-linkTitle: How Microsoft Embraces Go
-description: 
-  Learn about how Microsoft has helped support Go and how it uses Go to power
-  pieces of its cloud infrastructure.
+ia-translated: true
+linkTitle: Como a Microsoft Abraça Go
+description:
+  Aprenda sobre como a Microsoft tem ajudado a apoiar Go e como ela usa Go para alimentar
+  partes de sua infraestrutura de nuvem.
 company: Microsoft
 series: Case Studies
 logoSrc: microsoft_light.svg

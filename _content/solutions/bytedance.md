@@ -1,9 +1,10 @@
 ---
-linkTitle: Massive practice in Go at ByteDance
+ia-translated: true
+linkTitle: Prática massiva em Go na ByteDance
 description:
-  Go was introduced to ByteDance in 2014, and since then engineering teams across ByteDance have adopted Go to build products and services on a massive scale. 
-  As we went deeper, relatively mature microservice best practices under Go were developed and summarized, which then were open-sourced and named CloudWeGo since 2021. 
-  Now 70% of microservices within ByteDance are written by Go.
+  Go foi introduzido na ByteDance em 2014, e desde então equipes de engenharia em toda a ByteDance adotaram Go para construir produtos e serviços em escala massiva.
+  À medida que nos aprofundamos, práticas relativamente maduras de microsserviços em Go foram desenvolvidas e resumidas, que então foram abertas como código aberto e nomeadas CloudWeGo desde 2021.
+  Agora 70% dos microsserviços dentro da ByteDance são escritos em Go.
 company: ByteDance
 series: Case Studies
 logoSrc: bytedance_light.svg

@@ -1,6 +1,7 @@
 ---
-linkTitle: Trivago – Why We Chose Go
-description: “Go’s simplicity and its sophisticated tooling let us scale not only our service but more importantly, the process of software engineering itself. Reducing the friction of onboarding and training someone has a significant impact on the company’s productivity, even more so in a constantly moving environment like trivago.”
+ia-translated: true
+linkTitle: Trivago – Por Que Escolhemos Go
+description: "A simplicidade do Go e suas ferramentas sofisticadas nos permitem escalar não apenas nosso serviço, mas mais importante ainda, o próprio processo de engenharia de software. Reduzir o atrito de integração e treinamento de alguém tem um impacto significativo na produtividade da empresa, ainda mais em um ambiente em constante movimento como a trivago."
 company: Trivago
 logoSrc: trivago_light.svg
 logoSrcDark: trivago_dark.svg

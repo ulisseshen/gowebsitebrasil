@@ -8,6 +8,7 @@ tags:
 - coverage
 - testing
 summary: Introducing Go 1.12's code coverage tool.
+template: true
 ---
 
 ## Introduction
@@ -283,7 +284,9 @@ brace looks like it belongs to the block it closes, while the
 opening brace looks like it belongs outside the block.
 A more interesting consequence is that in an expression like
 
-	f() && g()
+```go
+f() && g()
+```
 
 there is no attempt to separately instrument the calls to `f` and `g`, Regardless of
 the facts it will always look like they both ran the same

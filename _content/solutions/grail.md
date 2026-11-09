@@ -1,10 +1,11 @@
 ---
-linkTitle: Bigslice - A cluster computing system in Go
-description: At GRAIL, we use the Go programming language for most of our bioinformatics,
-  data processing, and machine learning tasks. Go’s simplicity makes it easy for
-  newcomers to learn; its transparent runtime semantics makes it easy to reason
-  about performance; and its ability to control data layout and allocation makes
-  it possible to write highly performant data processing code.
+ia-translated: true
+linkTitle: Bigslice - Um sistema de computação em cluster em Go
+description: Na GRAIL, usamos a linguagem de programação Go para a maioria de nossas tarefas de
+  bioinformática, processamento de dados e machine learning. A simplicidade do Go facilita
+  o aprendizado para iniciantes; sua semântica de runtime transparente facilita
+  o raciocínio sobre desempenho; e sua capacidade de controlar layout de dados e alocação torna
+  possível escrever código de processamento de dados altamente performático.
 company: GRAIL
 logoSrc: grail_light.png
 logoSrcDark: grail_dark.png

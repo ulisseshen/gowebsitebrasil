@@ -1,6 +1,8 @@
 ---
-title: Case Studies
+ia-translated: true
+title: Estudos de Caso
 layout: none
+template: true
 ---
 
 {{$solutions := pages "/solutions/*"}}
@@ -23,14 +25,14 @@ layout: none
                   />
                 </div>
                 <div class="Solutions-headlineText">
-                  <p class="Solutions-headlineNotification">RECENTLY UPDATED</p>
+                  <p class="Solutions-headlineNotification">ATUALIZADO RECENTEMENTE</p>
                   <h2>
                     {{(or .linkTitle .title)}}
                   </h2>
                   <p class="Solutions-headlineBody">
                     {{with .quote}}{{.}}{{end}}
                     <a href="{{.URL}}" aria-describedby="casestudy-description"
-                      >Learn more
+                      >Saiba mais
                       <i class="material-icons Solutions-forwardArrowIcon" aria-hidden="true"
                         >arrow_forward</i
                       >
@@ -44,7 +46,7 @@ layout: none
         </ul>
       </div>
       <div class="screen-reader-only" id="casestudy-description" hidden>
-          Opens in new window.
+          Abre em nova janela.
     </div>
       <button
         class="js-solutionsHeroCarouselPrev GoCarousel-controlPrev GoCarousel-controlPrev-solutionsHero"
@@ -103,7 +105,7 @@ layout: none
                 </p>
               </div>
               <div class="MarketingCard-section__bottom" aria-describedby="casestudy-description">
-                <p class="MarketingCard-action">View Case Study</p>
+                <p class="MarketingCard-action">Ver Estudo de Caso</p>
               </div>
             </a>
           </li>

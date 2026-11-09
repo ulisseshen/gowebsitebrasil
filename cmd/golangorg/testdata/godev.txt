@@ -1,18 +1,18 @@
 GET https://go.dev/
-body contains An open-source programming language supported by Google
-body contains <h2 class="WhoUses-headerH2">Companies using Go</h2>
+body contains Uma linguagem de programação de código aberto com suporte do Google
+body contains <h2 class="WhoUses-headerH2">Empresas que usam Go</h2>
 
 GET https://go.dev/about
 redirect == https://pkg.go.dev/about
 
 GET https://go.dev/solutions/case-studies
-body contains Using Go at Google
+body contains Usando Go no Google
 
 GET https://go.dev/solutions/dropbox
 body contains About Dropbox
 
 GET https://go.dev/solutions/google/
-body ~ it\s+has\s+powered\s+many\s+projects\s+at\s+Google.
+body ~ impulsionou\s+muitos\s+projetos\s+no\s+Google.
 
 GET https://go.dev/solutions/chrome
 redirect == /solutions/google/chrome
@@ -139,10 +139,10 @@ body contains <i>This content is part of the <a href="/wiki/">Go Wiki</a>.</i>
 # body contains Gopls: Settings
 
 GET https://tip.golang.org/gopls/
-body contains Gopls: The language server for Go
+body contains Gopls: O servidor de linguagem para Go
 
 GET https://tip.golang.org/gopls/settings
-body contains Gopls: Settings
+body contains Gopls: Configurações
 
 GET https://go.dev/pkg/cmd/go/?m=old
 redirect == /cmd/go/?m=old

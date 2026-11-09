@@ -15,6 +15,7 @@ import (
 	"os"
 	"os/exec"
 	"runtime"
+	"strconv"
 	"strings"
 	"time"
 
@@ -93,9 +94,48 @@ func rootHandler(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/tour/", http.StatusFound)
 		return
 	}
+	if !validTourPath(r.URL.Path) {
+		// Serve the tour UI showing its not found page at this URL,
+		// and report the status so that crawlers do not treat
+		// nonexistent lessons as valid pages.
+		w.WriteHeader(http.StatusNotFound)
+		if err := renderNotFoundUI(w); err != nil {
+			log.Println(err)
+		}
+		return
+	}
 	if err := renderUI(w); err != nil {
 		log.Println(err)
 	}
+}
+
+// validTourPath reports whether path names a tour page:
+// the tour itself, the lesson index, or a page of an existing lesson.
+func validTourPath(path string) bool {
+	switch path {
+	case "/tour", "/tour/", "/tour/list", "/tour/list/":
+		return true
+	}
+	rest, ok := strings.CutPrefix(path, "/tour/")
+	if !ok {
+		return false
+	}
+	name, page, _ := strings.Cut(rest, "/")
+	numPages, ok := lessonPages[name]
+	if !ok {
+		return false
+	}
+	// The page number is optional, but if present it must be a number.
+	page = strings.TrimSuffix(page, "/")
+	if page == "" {
+		return true
+	}
+	pageNum, err := strconv.Atoi(page)
+	if err != nil || pageNum < 1 || pageNum > numPages || strconv.Itoa(pageNum) != page {
+		// It must be a positive number in the range of the lesson's pages.
+		return false
+	}
+	return true
 }
 
 // lessonHandler handler the HTTP requests for lessons.

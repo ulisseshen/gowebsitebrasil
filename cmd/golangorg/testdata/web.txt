@@ -11,8 +11,8 @@ GET http://localhost:6060/
 redirect == /go.dev/
 
 GET http://localhost:6060/go.dev/
-body contains Go is an open source programming language
-body contains Download packages for
+body contains Go é uma linguagem de programação de código aberto
+body contains Baixe os pacotes para
 body contains href="/go.dev/doc
 body !contains href="/doc
 
@@ -41,7 +41,7 @@ GET https://golang.org/conduct
 redirect == https://go.dev/conduct
 
 GET https://go.dev/conduct
-body contains Project Stewards
+body contains Administradores do Projeto
 
 GET https://golang.org/doc/
 redirect == https://go.dev/doc/
@@ -392,6 +392,11 @@ body !contains []byte(&amp;#34;orders&amp;#34;)
 body contains <span class="comment">
 body !contains &lt;span class=&#34;comment&#34;&gt;
 
+# Issue 75552.
+GET https://go.dev/src/cmd/compile/internal/ssa/README
+body contains Addr &lt;*int&gt;
+body !contains Addr &amp;lt;*int&gt;
+
 GET https://m.golang.org/
 redirect == https://mail.google.com/a/golang.org/
 
@@ -425,7 +430,7 @@ GET https://golang.org/ref/mod
 redirect == https://go.dev/ref/mod
 
 GET https://go.dev/ref/mod
-body contains Controls the set of version control tools
+body contains Controla o conjunto de ferramentas de controle de versão
 
 GET https://golang.org/asdf
 redirect == https://go.dev/asdf
@@ -488,3 +493,28 @@ body contains <h1>Next Release Notes Draft</h1>
 
 GET https://tip.golang.org/doc/next
 body contains <h1>Next Release Notes Draft</h1>
+
+GET https://go2goplay.golang.org/
+code == 301
+redirect == https://go.dev/play/
+
+GET https://go2goplay.golang.org/p/abc
+code == 301
+redirect == https://go.dev/play/p/abc
+
+GET https://goprevplay.golang.org/
+code == 301
+redirect == https://go.dev/play/?v=goprev
+
+GET https://goprevplay.golang.org/p/abc
+code == 301
+redirect == https://go.dev/play/p/abc?v=goprev
+
+GET https://gotipplay.golang.org/
+code == 301
+redirect == https://go.dev/play/?v=gotip
+
+GET https://gotipplay.golang.org/p/abc
+code == 301
+redirect == https://go.dev/play/p/abc?v=gotip
+

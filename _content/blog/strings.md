@@ -9,6 +9,7 @@ tags:
 - runes
 - characters
 summary: How strings work in Go, and how to use them.
+template: true
 ---
 
 ## Introduction
@@ -188,7 +189,9 @@ The simple fact is: it was created when the source code was written.
 Source code in Go is _defined_ to be UTF-8 text; no other representation is
 allowed. That implies that when, in the source code, we write the text
 
-	`⌘`
+```go
+`⌘`
+```
 
 the text editor used to create the program places the UTF-8 encoding
 of the symbol ⌘ into the source text.
@@ -257,7 +260,9 @@ Moreover, what you might think of as a character constant is called a
 _rune constant_ in Go.
 The type and value of the expression
 
-	'⌘'
+```go
+'⌘'
+```
 
 is `rune` with integer value `0x2318`.
 
