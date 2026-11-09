@@ -5,6 +5,7 @@ linkTitle: "Web Development"
 description: "Com desempenho de memória aprimorado e suporte para várias IDEs, Go alimenta aplicações web rápidas e escaláveis."
 date: 2019-10-04T15:26:31-04:00
 series: Use Cases
+template: true
 books:
 icon:
   file: webdev-green.svg

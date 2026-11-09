@@ -1,9 +1,10 @@
-# ia-translated: true
 Mais tipos: structs, slices e maps.
 Aprenda a definir tipos baseados em tipos existentes: esta lição aborda structs, arrays, slices e maps.
 
 The Go Authors
 https://golang.org
+
+# ia-translated: true
 
 * Pointers
 
@@ -139,7 +140,7 @@ então constrói um slice que o referencia:
 
 Ao fazer slicing, você pode omitir os limites superior ou inferior para usar seus valores padrão.
 
-O padrão é zero para o limite inferior e o comprimento do slice para o limite superior.
+O padrão é zero para o limite inferior e o comprimento do slice ou array subjacente para o limite superior.
 
 Para o array
 

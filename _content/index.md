@@ -2,6 +2,7 @@
 ia-translated: true
 title: A Linguagem de Programação Go
 summary: Go é uma linguagem de programação de código aberto que torna simples construir sistemas seguros e escaláveis.
+template: true
 ---
 
 {{$canShare := not googleCN}}

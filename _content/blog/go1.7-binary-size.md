@@ -4,6 +4,7 @@ date: 2016-08-18
 by:
 - David Crawshaw
 summary: Go 1.7 includes some binary size reductions important for small devices.
+template: true
 ---
 
 ## Introduction
@@ -72,13 +73,15 @@ are about 30% smaller when built with Go 1.7.
 
 The canonical hello world program goes from 2.3MB to 1.6MB:
 
-	package main
+```go
+package main
 
-	import "fmt"
+import "fmt"
 
-	func main() {
-		fmt.Println("Hello, World!")
-	}
+func main() {
+	fmt.Println("Hello, World!")
+}
+```
 
 When compiled without debugging information the statically
 linked binary is now under a megabyte.

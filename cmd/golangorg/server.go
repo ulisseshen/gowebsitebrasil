@@ -25,6 +25,7 @@ import (
 	"path/filepath"
 	"runtime"
 	"runtime/debug"
+	"strconv"
 	"strings"
 	"sync"
 	"sync/atomic"
@@ -57,13 +58,16 @@ var (
 	goroot     = flag.String("goroot", runtime.GOROOT(), "Go root directory")
 	contentDir = flag.String("content", "", "path to _content directory")
 
-	runningOnAppEngine = os.Getenv("PORT") != ""
+	runningOnAppEngine        = os.Getenv("PORT") != ""
+	forceGorootZip, _         = strconv.ParseBool(os.Getenv("GOLANGORG_FORCE_GOROOT_ZIP"))
+	disableTemporaryBanner, _ = strconv.ParseBool(os.Getenv("GOLANGORG_DISABLE_TEMPORARY_BANNER"))
 
 	tipFlag   = flag.Bool("tip", runningOnAppEngine, "load git content for tip.golang.org")
 	wikiFlag  = flag.Bool("wiki", runningOnAppEngine, "load git content for go.dev/wiki")
 	goplsFlag = flag.Bool("gopls", runningOnAppEngine, "load git content for go.dev/gopls")
 
 	googleAnalytics string
+	currentSurvey   surveyConfig
 )
 
 func usage() {
@@ -73,6 +77,9 @@ func usage() {
 }
 
 func main() {
+	flag.Usage = usage
+	flag.Parse()
+
 	// Running locally, find the local _content directory when it's available nearby,
 	// so that updates to those files appear on the local dev instance without restarting.
 	// On App Engine, leave contentDir empty, so we use the embedded copy,
@@ -87,9 +94,12 @@ func main() {
 		}
 	}
 
+	if forceGorootZip {
+		*goroot = "_goroot.zip"
+	}
+
 	if runningOnAppEngine {
 		log.Print("golang.org server starting")
-		*goroot = "_goroot.zip"
 		log.SetFlags(log.Lshortfile | log.LstdFlags)
 		port := "8080"
 		if p := os.Getenv("PORT"); p != "" {
@@ -97,9 +107,6 @@ func main() {
 		}
 		*httpAddr = ":" + port
 	}
-
-	flag.Usage = usage
-	flag.Parse()
 
 	// Check usage.
 	if flag.NArg() > 0 {
@@ -109,6 +116,17 @@ func main() {
 	if *httpAddr == "" {
 		fmt.Fprintln(os.Stderr, "-http must be set")
 		usage()
+	}
+
+	if len(bytes.TrimSpace(surveyJSON)) == 0 {
+		disableTemporaryBanner = true
+	} else if !disableTemporaryBanner {
+		if err := json.Unmarshal(surveyJSON, &currentSurvey); err != nil {
+			log.Fatalf("parsing survey.json: %v", err)
+		}
+		if time.Now().After(currentSurvey.End) {
+			disableTemporaryBanner = true
+		}
 	}
 
 	handler := NewHandler(*contentDir, *goroot)
@@ -223,6 +241,9 @@ func NewHandler(contentDir, goroot string) http.Handler {
 	mux.Handle("play.go.dev/", redirectPrefix("https://go.dev/play/"))
 	mux.Handle("talks.go.dev/", redirectPrefix("https://go.dev/talks/"))
 	mux.Handle("tour.go.dev/", redirectPrefix("https://go.dev/tour/"))
+	mux.Handle("go2goplay.golang.org/", redirectPrefix("https://go.dev/play/"))
+	mux.Handle("goprevplay.golang.org/", redirectPrefixQuery("https://go.dev/play/", "v=goprev"))
+	mux.Handle("gotipplay.golang.org/", redirectPrefixQuery("https://go.dev/play/", "v=gotip"))
 
 	// m.golang.org is an old shortcut for golang.org mail.
 	// Gmail itself can serve this redirect, but only on HTTP (not HTTPS).
@@ -344,6 +365,7 @@ func newSite(mux *http.ServeMux, host string, content, goroot fs.FS) (*web.Site,
 		"releases":        func() []*history.Major { return history.Majors },
 		"rfc3339":         parseRFC3339,
 		"section":         section,
+		"surveyBanner":    surveyBanner,
 		"version":         func() string { return runtime.Version() },
 		"docNext":         releaseNotePreview{goroot}.MergedFragments,
 	})
@@ -414,7 +436,7 @@ func watchGit1(afs *atomicFS, repo, ref string) {
 	var r *gitfs.Repo
 	for {
 		var err error
-		r, err = gitfs.NewRepo(repo)
+		r, err = gitfs.NewRepo(nil, repo)
 		if err != nil {
 			log.Printf("watchGit %s: %v", repo, err)
 			time.Sleep(1 * time.Minute)
@@ -493,14 +515,17 @@ type fmtResponse struct {
 }
 
 var validHosts = map[string]bool{
-	"golang.org":       true,
-	"golang.google.cn": true,
-	"beta.golang.org":  true,
-	"blog.golang.org":  true,
-	"m.golang.org":     true,
-	"talks.golang.org": true,
-	"tip.golang.org":   true,
-	"tour.golang.org":  true,
+	"golang.org":            true,
+	"golang.google.cn":      true,
+	"beta.golang.org":       true,
+	"blog.golang.org":       true,
+	"m.golang.org":          true,
+	"talks.golang.org":      true,
+	"tip.golang.org":        true,
+	"tour.golang.org":       true,
+	"go2goplay.golang.org":  true,
+	"goprevplay.golang.org": true,
+	"gotipplay.golang.org":  true,
 
 	"go.dev":       true,
 	"blog.go.dev":  true,
@@ -685,6 +710,7 @@ func xHandler(w http.ResponseWriter, r *http.Request) {
 
 var xTemplate = template.Must(template.New("x").Parse(`<!DOCTYPE html>
 <html lang="en">
+<head>
 <title>The Go Programming Language</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 <meta name="go-import" content="golang.org/x/{{.Proj}} git https://go.googlesource.com/{{.Proj}}">

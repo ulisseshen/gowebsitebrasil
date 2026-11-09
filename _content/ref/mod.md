@@ -1,5 +1,6 @@
 <!--{
   "ia-translated": true,
+  "Template": true,
   "Title": "Referência de Go Modules"
 }-->
 <!-- TODO(golang.org/issue/33637): Write focused "guide" articles on specific
@@ -414,7 +415,7 @@ require (
 
 ### Diretiva `tool` {#go-mod-file-tool}
 
-Uma diretiva `tool` adiciona um pacote como dependência do módulo atual. Ela também
+Desde o Go 1.24, uma diretiva `tool` adiciona um pacote como dependência do módulo atual. Ela também
 o torna disponível para execução com `go tool` quando o diretório de trabalho atual estiver
 dentro deste módulo, ou dentro de um workspace que contenha este módulo.
 
@@ -1219,7 +1220,7 @@ módulo](#zip-files) (mas veja os bugs conhecidos [#31562](/issue/31562) e
 Uso:
 
 ```
-go get [-d] [-t] [-u] [build flags] [packages]
+go get [-d] [-t] [-u] [-tool] [build flags] [packages]
 ```
 
 Exemplos:
@@ -1348,6 +1349,8 @@ variável de ambiente `GOBIN`, que assume como padrão `$GOPATH/bin` ou
   módulos usando esquemas inseguros, como HTTP. A [variável de
   ambiente](#environment-variables) `GOINSECURE` oferece controle mais granular e
   deve ser usada no lugar dela.
+* A flag `-tool` instrui o go a adicionar uma linha tool correspondente ao `go.mod` para cada
+  pacote listado. Se `-tool` for usada com `@none`, a linha será removida.
 
 A partir do Go 1.16, [`go install`](#go-install) é o comando recomendado para
 compilar e instalar programas. Quando usado com um sufixo de versão (como `@latest`
@@ -1356,7 +1359,7 @@ ignorando o arquivo `go.mod` do diretório atual ou de qualquer diretório pai, 
 exista.
 
 `go get` tem foco maior em gerenciar as exigências no `go.mod`. A flag `-d` está
-descontinuada e, no Go 1.18, estará sempre habilitada.
+descontinuada e, desde o Go 1.18, está sempre habilitada.
 
 ### `go install` {#go-install}
 
@@ -1397,12 +1400,14 @@ ignorando o arquivo `go.mod` do diretório atual ou de qualquer diretório pai, 
 houver um. Isso é útil para instalar executáveis sem afetar as dependências do
 módulo principal.
 
-Para eliminar ambiguidades sobre quais versões de módulo são usadas na compilação,
-os argumentos devem satisfazer as seguintes restrições:
+Para eliminar ambiguidades sobre quais versões de módulo são usadas na compilação, se algum
+dos argumentos tiver sufixo de versão, os argumentos devem satisfazer as seguintes
+restrições:
 
 * Os argumentos devem ser caminhos de pacote ou padrões de pacote (com curingas
   "`...`"). Eles não podem ser pacotes padrão (como `fmt`), meta-padrões (`std`,
-  `cmd`, `all`, `work`, `tool`) nem caminhos de arquivo relativos ou absolutos.
+  `cmd`, `all`, `work`, `tool`) nem caminhos de arquivo relativos ou absolutos. Observe que `go install tool`
+  pode ser usado sem sufixo de versão: veja abaixo.
 * Todos os argumentos devem ter o mesmo sufixo de versão. Consultas diferentes não
   são permitidas, mesmo que se refiram à mesma versão.
 * Todos os argumentos devem se referir a pacotes do mesmo módulo, na mesma versão.
@@ -1427,7 +1432,30 @@ modo com reconhecimento de módulo ou no modo `GOPATH`, dependendo da variável 
 ambiente `GO111MODULE` e da presença de um arquivo `go.mod`. Veja [Comandos com
 reconhecimento de módulo](#mod-commands) para detalhes. Se o modo com reconhecimento
 de módulo estiver habilitado, `go install` é executado no contexto do módulo
-principal, que pode ser diferente do módulo que contém o pacote sendo instalado.
+principal, que pode ser diferente do módulo que contém o pacote sendo instalado. No modo com
+reconhecimento de módulo, `go install tool` pode ser usado dentro de um módulo para instalar todas as ferramentas do módulo.
+
+### `go tool` {#go-tool}
+
+Uso:
+
+```
+go tool [-n] command [args...]
+```
+
+Exemplo:
+
+```
+$ go tool golang.org/x/tools/cmd/stringer
+$ go tool stringer
+```
+
+No modo de módulo, o comando `go tool` pode ser usado para compilar e executar ferramentas
+declaradas em arquivos `go.mod` por meio de uma [diretiva `tool`](#go-mod-file-tool).
+O comando pode ser especificado usando o caminho completo do pacote de uma ferramenta declarada
+com uma diretiva tool. O nome padrão do binário da ferramenta, que é o último componente do
+caminho do pacote, excluindo o sufixo de versão major, também pode ser usado se for único
+entre as ferramentas instaladas.
 
 ### `go list -m` {#go-list-m}
 
@@ -2477,11 +2505,8 @@ o módulo da URL informada usando o [protocolo
 `GOPROXY`](#goproxy-protocol). Veja [Servindo módulos diretamente de um
 proxy](#serving-from-proxy) para detalhes.
 
-`repo-url` é a URL do repositório. Se a URL não incluir um esquema (seja porque o
-caminho do módulo tem um qualificador de VCS, seja porque a tag `<meta>` não tem
-esquema), o comando `go` tentará cada protocolo suportado pelo
-sistema de controle de versão. Por exemplo, com Git, o comando `go` tentará `https://` e depois
-`git+ssh://`. Protocolos inseguros (como `http://` e `git://`) só podem ser usados
+`repo-url` é a URL do repositório, contendo um esquema e sem conter
+um qualificador .vcs. Protocolos inseguros (como `http://` e `git://`) só podem ser usados
 se o caminho do módulo for correspondido pela variável de ambiente `GOINSECURE`.
 
 `subdirectory`, se presente, é o subdiretório do repositório, separado por barras, ao qual o
@@ -2839,7 +2864,7 @@ Os desenvolvedores precisarão de acesso de leitura aos repositórios que contê
 
 ### Passando credenciais para proxies privados {#private-module-proxy-auth}
 
-O comando `go` oferece suporte à [autenticação básica HTTP](https://en.wikipedia.org/wiki/Basic_access_authentication) ao se comunicar com servidores proxy.
+O comando `go` pode se autenticar em servidores proxy usando [autenticação básica HTTP](https://en.wikipedia.org/wiki/Basic_access_authentication) ou cabeçalhos de requisição fornecidos por `GOAUTH`.
 
 As credenciais podem ser especificadas em um [arquivo `.netrc`](https://www.gnu.org/software/inetutils/manual/html_node/The-_002enetrc-file.html).
 Por exemplo, um arquivo `.netrc` contendo as linhas abaixo configuraria o comando `go`
@@ -2860,6 +2885,16 @@ Os campos em `.netrc` são separados por espaços, tabulações e quebras de lin
 esses caracteres não podem ser usados em nomes de usuário ou senhas. Observe também que o
 nome da máquina não pode ser uma URL completa, portanto não é possível especificar
 nomes de usuário e senhas diferentes para caminhos distintos na mesma máquina.
+
+No Go 1.24 e posteriores, `GOAUTH` pode usar `.netrc`, executar `git credential fill` em
+um diretório de trabalho especificado ou invocar um comando personalizado. Um comando personalizado
+pode fornecer cabeçalhos de requisição HTTP arbitrários, como um token Bearer, para um
+ou mais prefixos de URL HTTPS. Isso permite restringir credenciais a um caminho em
+um host de proxy, o que o `.netrc` não consegue fazer. Veja `go help goauth` para o protocolo do
+comando e as opções de configuração.
+
+O comando `go` só aplica credenciais obtidas por meio de `GOAUTH`, incluindo
+seu método padrão `netrc`, a requisições HTTPS.
 
 Alternativamente, as credenciais podem ser especificadas diretamente nas URLs de `GOPROXY`. Por
 exemplo:
@@ -3216,7 +3251,7 @@ Partes do caminho entre colchetes, como `[.p/$W]`, indicam valores opcionais.
     <tr>
       <td><code>$base/tile/$H/$L/$K[.p/$W]</code></td>
       <td>
-        Retorna um [tile de log](https://research.swtch.com/tlog#serving_tiles),
+        Retorna um <a href="https://research.swtch.com/tlog#serving_tiles">tile de log</a>,
         que é um conjunto de hashes que compõem uma seção do log. Cada tile
         é definido em uma coordenada bidimensional no nível de tile
         <code>$L</code>, na posição <code>$K</code> a partir da esquerda, com
@@ -3526,14 +3561,14 @@ GOSUMDB="sum.golang.org+&lt;publickey&gt; https://sum.golang.org"
       <td><code>GOWORK</code></td>
       <td>
        <p>
-        A variável de ambiente `GOWORK` instrui o comando `go` a entrar no modo
-        workspace usando o [arquivo `go.work`](#go-work-file) fornecido para definir
-        o workspace. Se `GOWORK` for definida como `off`, o modo workspace é
-        desabilitado. Isso pode ser usado para rodar o comando `go` no modo de
-        módulo único: por exemplo, `GOWORK=off go build .` compila o pacote `.`
-        no modo de módulo único. Se `GOWORK` estiver vazia, o comando `go` vai
-        procurar um arquivo `go.work`, conforme descrito na seção
-        [Workspaces](#workspaces).
+        A variável de ambiente <code>GOWORK</code> instrui o comando <code>go</code> a entrar no modo
+        workspace usando o <a href="#go-work-file">arquivo <code>go.work</code></a> fornecido para definir
+        o workspace. Se <code>GOWORK</code> for definida como <code>off</code>, o modo workspace é
+        desabilitado. Isso pode ser usado para rodar o comando <code>go</code> no modo de
+        módulo único: por exemplo, <code>GOWORK=off go build .</code> compila o pacote <code>.</code>
+        no modo de módulo único. Se <code>GOWORK</code> estiver vazia, o comando <code>go</code> vai
+        procurar um arquivo <code>go.work</code>, conforme descrito na seção
+        <a href="#workspaces">Workspaces</a>.
        </p>
       </td>
     </tr>

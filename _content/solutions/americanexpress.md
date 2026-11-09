@@ -8,6 +8,7 @@ heroImgSrc: go_amex_case_study_logo.png
 carouselImgSrc: go_amex_case_study.png
 date: 2019-12-19
 series: Case Studies
+template: true
 quote: Go fornece à American Express a velocidade e escalabilidade que ela precisa tanto para suas redes de pagamento quanto de recompensas.
 ---
 

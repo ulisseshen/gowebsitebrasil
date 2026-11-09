@@ -1,9 +1,10 @@
-# ia-translated: true
 Declarações de controle de fluxo: for, if, else, switch e defer
 Aprenda como controlar o fluxo do seu código com condicionais, loops, switches e defers.
 
 The Go Authors
 https://golang.org
+
+# ia-translated: true
 
 * For
 
@@ -15,7 +16,7 @@ O loop básico `for` tem três componentes separados por ponto e vírgula:
 - a expressão de condição: avaliada antes de cada iteração
 - a declaração post: executada ao final de cada iteração
 
-A declaração init geralmente será uma declaração curta de variável, e as
+A declaração init geralmente será uma declaração de variável, e as
 variáveis declaradas ali são visíveis apenas no escopo da declaração
 `for`.
 

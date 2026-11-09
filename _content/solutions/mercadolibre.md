@@ -9,6 +9,7 @@ carouselImgSrc: go_mercadolibre_case_study.png
 date: 2019-11-10T16:26:31-04:00
 series: Case Studies
 quote: Go fornece código limpo e eficiente que escala prontamente conforme o comércio online da MercadoLibre cresce, e aumenta a produtividade dos desenvolvedores ao permitir que seus engenheiros sirvam seu público cada vez maior enquanto escrevem menos código.
+template: true
 ---
 
 {{pullquote `

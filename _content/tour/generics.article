@@ -1,9 +1,10 @@
-ia-translated: true
 Generics
 Go suporta programação generic usando type parameters. Esta lição mostra alguns exemplos de como usar generics no seu código.
 
 The Go Authors
 https://golang.org
+
+# ia-translated: true
 
 * Type parameters
 

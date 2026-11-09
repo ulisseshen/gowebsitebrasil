@@ -12,6 +12,7 @@ quote: |
   Eles compartilharam sua experiência construindo sistemas centrais de gerenciamento de produção com Go, vindo de experiência com Python e C++.
 authors:
   - Pierre Palatin, Site Reliability Engineer
+template: true
 ---
 
 O Google executa um pequeno número de serviços muito grandes. Esses serviços são alimentados

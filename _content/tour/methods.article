@@ -1,9 +1,10 @@
-ia-translated: true
 Methods e interfaces
 Esta lição cobre methods e interfaces, as construções que definem objetos e seu comportamento.
 
 The Go Authors
 https://golang.org
+
+# ia-translated: true
 
 * Methods
 
@@ -208,8 +209,11 @@ O tipo de interface que especifica zero methods é conhecido como _interface_vaz
 Uma interface vazia pode conter valores de qualquer tipo.
 (Todo tipo implementa pelo menos zero methods.)
 
+`any` é um alias para `interface{}`, e os dois são completamente
+equivalentes.
+
 Interfaces vazias são usadas por código que manipula valores de tipo desconhecido.
-Por exemplo, `fmt.Print` recebe qualquer número de argumentos do tipo `interface{}`.
+Por exemplo, `fmt.Print` recebe qualquer número de argumentos do tipo `any`.
 
 .play methods/empty-interface.go
 

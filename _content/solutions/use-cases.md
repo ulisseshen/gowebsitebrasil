@@ -2,6 +2,7 @@
 ia-translated: true
 title: Casos de Uso
 layout: none
+template: true
 ---
 
 {{$solutions := pages "/solutions/*"}}

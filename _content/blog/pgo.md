@@ -4,6 +4,7 @@ date: 2023-09-05
 by:
 - Michael Pratt
 summary: Introduction to profile-guided optimization, generally available in Go 1.21.
+template: true
 ---
 
 Earlier in 2023, Go 1.20 [shipped a preview of profile-guided optimization (PGO)](/blog/pgo-preview) for users to test.
@@ -46,7 +47,7 @@ $ go get gitlab.com/golang-commonmark/markdown@bf3e522c626a
 
 In `main.go`:
 
-```
+```go
 package main
 
 import (
@@ -515,7 +516,7 @@ In addition to inling, which we saw in the example above, PGO can also drive con
 Before getting to PGO-driven devirtualization, let’s step back and define "devirtualization" in general.
 Suppose you have code that looks like something like this:
 
-```
+```go
 f, _ := os.Open("foo.txt")
 var r io.Reader = f
 r.Read(b)
@@ -537,7 +538,7 @@ Once the function is inlined, now the `io.Reader` becomes concrete.)
 PGO-driven devirtualization extends this concept to situations where the concrete type is not statically known, but profiling can show that, for example, an `io.Reader.Read` call targets `os.(*File).Read` most of the time.
 In this case, PGO can replace `r.Read(b)` with something like:
 
-```
+```go
 if f, ok := r.(*os.File); ok {
     f.Read(b)
 } else {

@@ -5,6 +5,7 @@ linkTitle: "Cloud & Network Services"
 description: "Com um forte ecossistema de ferramentas e APIs nos principais provedores de cloud, é mais fácil do que nunca construir serviços com Go."
 date: 2019-10-04T15:26:31-04:00
 series: Use Cases
+template: true
 icon:
   file: cloud-green.svg
   alt: cloud icon

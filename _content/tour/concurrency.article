@@ -1,9 +1,10 @@
-ia-translated: true
 Concorrência
 Go fornece construções de concorrência como parte da linguagem principal. Esta lição apresenta essas construções e fornece alguns exemplos de como elas podem ser usadas.
 
 The Go Authors
 https://golang.org
+
+# ia-translated: true
 
 * Goroutines
 

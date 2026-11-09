@@ -1,9 +1,10 @@
-# ia-translated: true
 Pacotes, variáveis e funções.
 Aprenda os componentes básicos de qualquer programa Go.
 
 The Go Authors
 https://golang.org
+
+# ia-translated: true
 
 * Pacotes
 
@@ -103,7 +104,7 @@ Uma declaração `var` pode estar no nível do pacote ou da função. Vemos ambo
 
 * Variáveis com inicializadores
 
-Uma declaração var pode incluir inicializadores, um por variável.
+Uma declaração `var` pode incluir inicializadores, um por variável.
 
 Se um inicializador estiver presente, o tipo pode ser omitido; a variável assumirá o tipo do inicializador.
 

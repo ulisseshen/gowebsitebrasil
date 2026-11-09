@@ -2,6 +2,7 @@
 ia-translated: true
 title: Estudos de Caso
 layout: none
+template: true
 ---
 
 {{$solutions := pages "/solutions/*"}}

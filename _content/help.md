@@ -55,6 +55,12 @@ para anúncios importantes, como a disponibilidade de novos lançamentos do Go.
 <h3 id="blog"><a href="/blog/" aria-describedby="help-description">Go Blog</a></h3>
 <p>O blog oficial do projeto Go.</p>
 
+<h3 id="bluesky"><a href="https://bsky.app/profile/golang.org" aria-describedby="help-description">@golang.org no Bluesky</a></h3>
+<p>A conta oficial do projeto Go no Bluesky.</p>
+
+<h3 id="mastodon"><a href="https://hachyderm.io/@golang" aria-describedby="help-description">@golang no Mastodon</a></h3>
+<p>A conta oficial do projeto Go no Mastodon.</p>
+
 <h3 id="twitter"><a href="https://twitter.com/golang" aria-describedby="help-description">@golang no Twitter</a></h3>
 <p>A conta oficial do projeto Go no Twitter.</p>
 

@@ -9,6 +9,7 @@ heroImgSrc: go_core_data_case_study.png
 carouselImgSrc: go_google_case_study_carousel.png
 series: Case Studies
 type: solutions
+template: true
 description: |-
   Google é uma empresa de tecnologia cuja missão é organizar as informações do mundo
   e torná-las universalmente acessíveis e úteis.

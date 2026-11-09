@@ -5,6 +5,7 @@ linkTitle: "Development Operations & Site Reliability Engineering"
 description: "Com tempos de build rápidos, sintaxe enxuta, um formatador automático e gerador de documentação, Go é construído para suportar tanto DevOps quanto SRE."
 date: 2019-10-03T17:16:43-04:00
 series: Use Cases
+template: true
 books:
 icon:
   file: devops-green.svg

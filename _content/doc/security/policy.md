@@ -15,16 +15,23 @@ All security bugs in the Go distribution should be reported by email to
 [security@golang.org](mailto:security@golang.org). This mail is delivered to
 the Go Security team.
 
-To ensure your report is not marked as spam, **please include the word
-"vulnerability"** anywhere in your email. Please use a descriptive subject line
-for your report email.
+Please format the subject of your email as "Vulnerability: {package name}:
+{one-line summary}", and **avoid sending attachments** in your email unless strictly
+necessary in order to avoid your message being marked as spam. Additionally,
+please send **one report per email.**
 
-Your email will be acknowledged within 7 days, and you'll be kept up to date
-with the progress until resolution. Your issue will be fixed or made public
-within 90 days.
+If desired, please include your preferred attribution as part of the report.
+This attribution will be added to the CVE, if one is published.
 
-If you have not received a reply to your email within 7 days, please follow up
-with the Go Security team again at
+Please keep reports succinct, including a description of the issue you've found,
+the way in which you believe it can be exploited, and a small reproduction test
+case or program which demonstrates the issue.
+
+We have a [list of decisions](/doc/security/decisions) about commonly-reported
+categories of issues.
+
+Your email will be acknowledged within 7 days. If you have not received a reply
+by then, please follow up with the Go Security team again at
 [security@golang.org](mailto:security@golang.org). Please make sure the word
 **vulnerability** is in your email.
 
@@ -34,6 +41,36 @@ case, please [file an issue here](https://g.co/vulnz). Select _"I want to
 report a technical security or an abuse risk related bug in a Google product
 (SQLi, XSS, etc.)"_, and list _"Go"_ as the affected product.
 
+Your issue will be fixed or made public within 90 days after our initial
+acknowledgement.
+
+Emails reporting security issues will be retained indefinitely
+to track remediation status and correctly attribute discoveries.
+
+### LLM-Generated Reports
+
+Please do not send LLM-generated reports without proper curation.
+
+Modern LLMs are very good at finding real and important security bugs.
+Unfortunately, they are also very good at finding imaginary issues, or real
+issues that are [not security bugs](/doc/security/decisions#non-vuln). LLM
+output is often verbose, buries important information in irrelevant text, and
+contains grandiose and unsupportable claims.
+
+For LLM-generated reports, the value lies in curation. Sending us dozens of
+possible security issues while relying on us to find the one significant result
+hidden among them asks us to do the curation, and ultimately hinders our goal of
+making Go secure. For this reason, we only attribute discoveries to reporters
+with a substantial percentage of real findings.
+
+While there are no hard and fast rules, as a general guideline, if most of your
+reports are not designated as security issues, and we do not believe that you
+are providing useful curation, we will not credit you for any discoveries in the
+remainder. We deliberately do not define a concrete threshold for "most" or what
+"curation" entails. However, our intent is that a good-faith reporter providing
+meaningful value will always receive credit, while a reporter forwarding large
+quantities of LLM output indiscriminately will not.
+
 ## Tracks
 
 Depending on the nature of your issue, it will be categorized by the Go
@@ -42,7 +79,12 @@ issues will be issued CVE numbers.
 
 The Go Security team does not assign traditional fine-grained severity labels
 (e.g CRITICAL, HIGH, MEDIUM, LOW) to security issues because severity depends
-highly on how a user is using the affected API or functionality.
+highly on how a user is using the affected API or functionality. Additionally,
+when issuing CVEs for Go security issues we do not assign CVSS scores, as we
+fundamentally disagree with the applicability of the scoring system to Go for
+the same reasons. Third parties, such as MITRE or NIST, via the NVD, may assign
+CVSS scores to our vulnerabilities, but we do not endorse these scores as
+accurate reflections of their impact.
 
 For example, the impact of a resource exhaustion issue in the `encoding/json`
 parser depends on what is being parsed. If the user is parsing trusted JSON
@@ -104,9 +146,10 @@ Some examples of past PRIVATE issues include:
 ### URGENT
 
 URGENT track issues are a threat to the Go ecosystem’s integrity, or are being
-actively exploited in the wild leading to severe damage. There are no recent
-examples, but they would include remote code execution in net/http, or
-practical key recovery in crypto/tls.
+actively exploited in the wild leading to severe damage. One such example is
+the [Go 1.27.3 and Go 1.26.10 release](https://groups.google.com/g/golang-announce/c/66pojueaQek).
+Others may include remote code execution in net/http or practical key
+recovery in crypto/tls.
 
 URGENT track issues are fixed in private, and **trigger an immediate dedicated
 security release**, possibly with no pre-announcement.

@@ -9,6 +9,7 @@ heroImgSrc: go_paypal_case_study_logo.png
 carouselImgSrc: go_paypal_case_study.png
 series: Case Studies
 quote: O valor do Go em produzir código limpo e eficiente que escala prontamente conforme a implantação de software cresce tornou a linguagem uma escolha forte para apoiar os objetivos do PayPal.
+template: true
 ---
 
 {{pullquote `

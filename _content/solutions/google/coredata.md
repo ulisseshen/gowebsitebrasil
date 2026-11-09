@@ -6,6 +6,7 @@ logoSrc: google.svg
 logoSrcDark: google.svg
 heroImgSrc: go_core_data_case_study.png
 series: Case Studies
+template: true
 quote: |
   Google é uma empresa de tecnologia cuja missão é organizar as informações
   do mundo e torná-las universalmente acessíveis e úteis.
