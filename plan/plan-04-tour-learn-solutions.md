@@ -137,7 +137,7 @@ Após traduzir cada arquivo, marque o checkpoint com `[x]`.
 
 ## Seção 6: Reference (ref/)
 
-- [ ] `_content/ref/mod.md` - Module Reference (arquivo grande ~219KB)
+- [x] `_content/ref/mod.md` - Module Reference (arquivo grande ~219KB)
 
 ---
 
@@ -161,9 +161,9 @@ Após traduzir cada arquivo, marque o checkpoint com `[x]`.
 | Google Solutions | 5 | 5 | 100% |
 | Root Pages | 6 | 6 | 100% |
 | gopls | 2 | 2 | 100% |
-| ref | 1 | 0 | 0% |
+| ref | 1 | 1 | 100% |
 | Wiki | 1 | 1 | 100% |
-| **TOTAL** | **72** | **66** | **92%** |
+| **TOTAL** | **72** | **67** | **93%** |
 
 ---
 
